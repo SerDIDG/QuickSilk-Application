@@ -1,0 +1,415 @@
+/* ************ APPLICATION STYLES ************ */
+
+/* ******* TAGS ******* */
+
+html {
+    width: 100%;
+    height: 100%;
+}
+
+body {
+    min-width: 320px;
+    height: 100%;
+    position: relative;
+}
+
+/* ******* STATIC CLASSES ******* */
+
+.app-module-default,
+.app-page-default {
+    margin: 0 0 @cm-indentMedium;
+
+    &.bottom {
+        margin: 0;
+    }
+
+    .app-footer-area &,
+    .app-header-area & {
+        margin: 0;
+    }
+}
+
+.app-page-title {
+    margin: 0 0 @cm-indentMedium;
+}
+
+/* ******* STRUCTURE ******* */
+
+.app-wrapper {
+    position: absolute;
+    .cm-position(0,0,0,0);
+    -webkit-transition: -webkit-transform @cm-transitionDuration ease-in-out;
+        -ms-transition:     -ms-transform @cm-transitionDuration ease-in-out;
+            transition:         transform @cm-transitionDuration ease-in-out;
+}
+
+.app-wrapper-inner {
+    position: absolute;
+    .cm-position(0,0,0,0);
+}
+
+.app-page-wrapper {
+    height: auto;
+    position: absolute;
+    .cm-position(0,0,0,0);
+    .cm-scroll-y;
+    overflow-x: auto;
+
+    > .inner {
+        min-height: 100%;
+        position: relative;
+    }
+}
+
+.app-wrapper.has-topmenu .app-wrapper-inner {
+    top: @AppTopMenu-size;
+}
+
+.app-wrapper-collapsible {
+    &.is-sidebar-left-collapsed {
+        .cm-draganddrop-area {
+            min-height: 0;
+            padding: 0;
+        }
+
+        .app-widget-container {
+            margin: 0;
+        }
+
+        .app-main-area {
+            min-height: 0;
+        }
+    }
+
+    &.is-sidebar-left-expanded {
+        .app-module-default,
+        .app-page-default {
+            margin: 0;
+        }
+    }
+}
+
+/* ****** COMPONENTS ******* */
+
+/* *** APPLICATION TABSET *** */
+
+.app-wrapper-tabset {
+    margin: 0;
+    position: absolute;
+    top: 10px;
+    right: 0;
+    bottom: 0;
+    left: 0;
+
+    > .com-tabset-head {
+        position: absolute;
+        top: 0;
+        right: 0;
+        left: 0;
+        bottom: auto;
+
+        ul li:first-child {
+            margin-left: 24px + (@cm-indentXSmall * 2);
+        }
+    }
+
+    > .com-tabset-content {
+        position: absolute;
+        top: @ComTabset-tabsHeight + 1;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        overflow: hidden;
+        background: transparent;
+        border-left: none;
+        border-bottom: none;
+        border-right: none;
+        border-radius: 0;
+    }
+}
+
+/* *** HEADER / FOOTER AREAS *** */
+
+.app-main-area {
+    min-height: 500px;
+}
+
+.app-footer-area:extend(.clear all),
+.app-header-area:extend(.clear all) {
+    min-width: 200px;
+    min-height: @cm-indentMedium * 2;
+    padding: 0;
+    position: absolute;
+    z-index: 1;
+
+    &.main {
+        min-width: 0;
+        position: relative;
+    }
+
+    &:hover {
+        z-index: 100 !important;
+    }
+}
+
+/* *** ARTICLE *** */
+
+.article {
+}
+.article-details {
+    margin: 0 0 18px 0;
+    font-size: 0;
+}
+.article-details ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+.article-details li {
+    font-size: 12px;
+    font-style: italic;
+}
+.article-details li a {
+    font-weight: normal;
+}
+.article-bottom {
+    margin: 0 0 18px;
+    padding: 18px 0 0;
+    border-top: 1px dotted #999999;
+    font-size: 12px;
+    font-style: italic;
+}
+.article-bottom p {
+    margin: 0;
+    font-size: 12px;
+}
+.article-bottom a {
+    font-weight: normal;
+}
+
+/* Blog */
+
+.blog-posts-list {
+}
+.blog-posts-list > ul {
+    padding: 0;
+    margin: 0;
+    list-style: none;
+    overflow: hidden;
+}
+.blog-posts-list > ul > li {
+    overflow: hidden;
+    margin: 0 0 32px;
+}
+.blog-posts-list h2 {
+    margin: 0;
+}
+.blog-posts-list p.more {
+    text-align: right;
+}
+
+/* News List */
+
+.news-list {
+}
+.news-list > ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+.news-list > ul > li {
+    margin: 18px 0 0 0;
+}
+.news-list > ul > li:first-child {
+    margin: 0;
+}
+.news-list h4,
+.news-list h4 a {
+    margin: 0;
+    color: #333333;
+}
+.news-list h4 a {
+    text-decoration: none;
+}
+.news-list h4 a:hover {
+    text-decoration: underline;
+}
+.news-list .article-details {
+    margin: 0;
+}
+.news-list .article-details .date {
+}
+.news-list .more {
+    text-align: right;
+}
+
+/* Comments */
+
+.comments-layout {
+    margin: 48px 0 0 0;
+}
+.comments-list {
+}
+.comments-list ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+.comments-list .replies {
+    margin: 0 0 0 32px;
+}
+.comments-list h2 {
+    margin: 0;
+}
+.comments-list h4 {
+    font-weight: normal;
+    font-size: 12px;
+    font-style: italic;
+}
+.comments-list .comment {
+    padding: 12px 0;
+    margin: 0 0 12px;
+    border-radius: 3px;
+}
+.comments-list .comment-top {
+    margin: 0 0 12px 0;
+}
+.comments-list .comment-top .date {
+    margin: 0 0 0 6px;
+    font-size: 11px;
+}
+.comments-list .comment-top .anchor {
+    margin: 0 0 0 12px;
+    font-size: 11px;
+}
+.comments-list .comment-top .anchor a {
+    text-decoration: none;
+}
+.comments-list .comment-buttons {
+    margin: 12px 0 0 0;
+}
+.comments-list .comment-buttons .sep {
+    margin: 0 4px;
+}
+.comments-editor {
+    margin: 32px 0 0 0;
+}
+
+/* Form Builder */
+
+.form-builder {
+}
+.form-builder .com-gridlist dl {
+    margin: 0;
+}
+
+/* Form Language */
+
+.form-language-top {
+    margin-bottom: 24px;
+}
+
+/* ******* PAGES ******* */
+
+/* *** LOGIN / FORGOT *** */
+
+.app-page-login,
+.app-page-forgot {
+    width: @AppLoginBox-width;
+    margin: 0 auto;
+}
+
+/* User Profile */
+
+.from-user-profile {
+}
+.from-user-profile > .cols.two > .col {
+    width: 30%;
+    margin: 0 0 0 4%;
+}
+.from-user-profile > .cols.two > .col:first-child {
+    width: 66%;
+}
+
+/* Admin */
+
+.admin-container .description p {
+    margin: 0;
+}
+.admin-container .description {
+    margin: 0 0 20px;
+}
+
+/* ******* ADDITIONAL FIXES ******* */
+
+.elfinder-button-search input {
+    height: 24px;
+    padding: 0 20px;
+    border: 1px solid #AAAAAA;
+}
+
+/* ******* ADAPTIVE ******* */
+
+@media only screen and (max-width : @cm-screenTabletPortrait) {
+
+    html.is-adaptive {
+
+        /* *** STRUCTURE *** */
+
+        .app-wrapper {
+            .app-topmenu {
+                .menu-holder {
+                    display: none;
+                }
+            }
+
+            &.is-expand {
+                -webkit-transform: translateX(-50%);
+                    -ms-transform: translateX(-50%);
+                        transform: translateX(-50%);
+
+                .ie9 &,
+                .ie8 & {
+                    left: -50%;
+                }
+            }
+        }
+
+    }
+
+}
+
+@media only screen and (max-width : @cm-screenMobilePortrait) and (orientation: portrait){
+
+    html.is-adaptive {
+
+        /* *** STRUCTURE *** */
+
+        .app-wrapper {
+            &.is-expand {
+                -webkit-transform: translateX(-80%);
+                    -ms-transform: translateX(-80%);
+                        transform: translateX(-80%);
+            }
+        }
+
+    }
+
+}
+
+@media only screen and (max-width : @cm-screenMobile) and (orientation: landscape),
+       only screen and (max-width : @cm-screenMobilePortrait) and (orientation: portrait) {
+
+    html.is-adaptive {
+
+        /* *** STRUCTURE *** */
+
+        .app-wrapper-collapsible {
+            > .sidebar {
+                display: none;
+            }
+        }
+
+    }
+
+}

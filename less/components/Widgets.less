@@ -1,0 +1,221 @@
+/* ******* WIDGETS ******* */
+
+/* Panel */
+
+.app-widgets-remove-zone {
+    position: absolute;
+    padding: 0;
+    .cm-position(0, 0, 0, 0);
+    z-index: 3;
+    opacity: 0;
+    background: fadeout(@cm-colorError, 50%);
+    border-radius: 0;
+    visibility: hidden;
+
+    .title {
+        padding: 6px @cm-indentXSmall;
+        background-color: @cm-colorError;
+        #cm > .font-title;
+        color: #fff;
+    }
+
+    &.cm-draganddrop-area {
+        &.is-available {
+            .cm-transition(all @cm-transitionDuration ease-in-out);
+
+            &.is-highlight {
+                visibility: visible;
+                opacity: 1;
+                background: fadeout(@cm-colorError, 75%);
+
+                &:before {
+                    display: none;
+                }
+            }
+
+            &.is-active {
+                visibility: visible;
+                opacity: 1;
+                background: fadeout(@cm-colorError, 50%);
+
+                &:before {
+                    display: none;
+                }
+            }
+        }
+    }
+}
+
+/* Category */
+
+.app-widgets-category {
+    width: 278px;
+    margin: 10px 0 0 0;
+
+    &:first-child {
+        margin: 0;
+    }
+
+    > dd {
+        margin: 0 -2px;
+        font-size: 0;
+        background: #ffffff;
+    }
+}
+
+/* Widget */
+
+.app-widget-container {
+    position: relative;
+    margin: 0 0 @AppWidget-indent;
+    z-index: 1;
+    .cm-transition(z-index 0.3s ease-in-out);
+    -webkit-transform: translateZ(0);
+
+    // /* Widget */
+
+    > .app-widget {
+        margin: 0;
+        #cm-editable-bundle > .normal;
+        .cm-transition(opacity 0.3s ease-in-out);
+
+        &.is-hidden {
+            display: none;
+        }
+
+        &.is-visible {
+            display: block;
+        }
+
+        &.is-editable {
+            #cm-editable-bundle > .editable;
+        }
+
+        &.is-hide {
+            overflow: hidden;
+            opacity: 0;
+            .cm-transition-none;
+        }
+
+        &.is-locked {
+        }
+    }
+
+    // /* Dummy */
+
+    > .app-widget-dummy {
+        position: relative;
+        border-radius: @AppWidget-dummyBorderRadius;
+        cursor: move;
+        .cm-transition(background-color @cm-transitionDuration ease-in-out);
+        .cm-transition(box-shadow @cm-transitionDuration ease-in-out);
+
+        > .inner {
+            padding: 2px 2px 4px;
+        }
+
+        .icon {
+            width: 90px;
+            height: 90px;
+            margin: 0 auto 6px;
+            background: @AppWidget-dummyBackground;
+            border-radius: @AppWidget-dummyBorderRadiusInner;
+            .cm-transition(background-color @cm-transitionDuration ease-in-out);
+
+            img {
+                width: 100%;
+                height: 100%;
+                display: block;
+                .cm-user-select(none);
+            }
+        }
+
+        .caption {
+            text-align: center;
+            line-height: 15px;
+            font-size: 12px;
+        }
+
+        .cm-loader-box {
+            background: @AppWidget-dummyBackground;
+            border: 1px solid @AppWidget-dummyBorderColor;
+            border-radius: @AppWidget-dummyBorderRadius;
+            opacity: 0;
+            .cm-transition(opacity @cm-transitionDuration ease-in-out);
+
+            &.fadein {
+                opacity: 1;
+            }
+        }
+
+        &.is-hide {
+            overflow: hidden;
+        }
+    }
+
+    &:hover {
+        z-index: 10;
+        .cm-transition(z-index 0.1s ease-in-out);
+
+        > .app-widget.is-editable {
+            #cm-editable-bundle > .hover;
+        }
+
+        > .app-widget-dummy {
+            .icon {
+                background: @AppWidget-dummyBackgroundHover;
+                .cm-transition(background-color @cm-transitionDurationReverse ease-in-out);
+            }
+        }
+    }
+
+    &.is-active {
+        z-index: 10;
+        .cm-transition(z-index 0.1s ease-in-out);
+
+        > .app-widget.is-editable {
+            #cm-editable-bundle > .hover;
+            #cm-editable-bundle > .active;
+            opacity: 0.7;
+            .cm-transition(opacity 0.1s ease-in-out);
+        }
+
+        > .app-widget-dummy {
+            background: #ffffff;
+            box-shadow: 0 1px 5px rgba(0,0,0,0.2);
+            .cm-transition(background-color @cm-transitionDurationReverse ease-in-out);
+            .cm-transition(box-shadow @cm-transitionDurationReverse ease-in-out);
+
+
+            .icon {
+                background: @AppWidget-dummyBackgroundActive;
+                .cm-transition(background-color @cm-transitionDurationReverse ease-in-out);
+            }
+        }
+    }
+
+    &.cm-draganddrop-helper {
+        .cm-draganddrop-helper;
+    }
+
+    &.is-hide {
+        overflow: hidden;
+    }
+
+    .app-widgets-category & {
+        width: 94px;
+        margin: 0;
+        display: inline-block;
+        vertical-align: top;
+    }
+}
+
+// /* *** BUNDLE *** */
+
+#app () {
+    .module {
+        .app-widget.is-editable & {
+            margin: 0;
+        }
+    }
+}

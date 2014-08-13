@@ -1,0 +1,87 @@
+/* ******* PART: ICONS ******* */
+
+.app-icon {
+    &.add-p {
+        width: 16px;
+        height: 16px;
+        background: url("@{AppPath-image}/icons/add-p.png");
+    }
+
+    &.add-l {
+        width: 16px;
+        height: 16px;
+        background: url("@{AppPath-image}/icons/add-l.png");
+    }
+
+    &.add-q {
+        width: 18px;
+        height: 16px;
+        background: url("@{AppPath-image}/icons/add-q.png");
+    }
+
+    &.add-r {
+        width: 18px;
+        height: 16px;
+        background: url("@{AppPath-image}/icons/add-r.png");
+    }
+
+    &.certificate {
+        width: 16px;
+        height: 16px;
+        background: url("@{AppPath-image}/icons/certificate.png");
+    }
+
+    &.rss {
+        width: 14px;
+        height: 14px;
+        background: url('@{AppPath-image}/icons/rss.png');
+    }
+
+    &.pdf {
+        width: 20px;
+        height: 20px;
+        background: url('@{AppPath-image}/icons/pdf.png');
+    }
+
+    &.video {
+        width: 20px;
+        height: 20px;
+        background: url('@{AppPath-image}/icons/video.png');
+    }
+
+    &.link {
+        width: 20px;
+        height: 20px;
+        background: url('@{AppPath-image}/icons/link.png');
+    }
+
+    // /* Large Size Icons */
+
+    &.large {
+        .for(facebook twitter linkedin google favorite); .-each(@name) {
+            &.@{name} {
+                background-image: url("@{AppPath-image}/icons/large/@{name}.png");
+            }
+        }
+    }
+
+    // /* Medium Size Icons */
+
+    &.medium {
+        .for(freetrial subscribe unsubscribe suspend); .-each(@name) {
+            &.@{name} {
+                background-image: url("@{AppPath-image}/icons/medium/@{name}.png");
+            }
+        }
+    }
+
+    // /* Small Size Icons */
+
+    &.small {
+        .for(plus); .-each(@name) {
+            &.@{name} {
+                background-image: url("@{AppPath-image}/icons/small/@{name}.png");
+            }
+        }
+    }
+}

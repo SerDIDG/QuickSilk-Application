@@ -1,0 +1,173 @@
+<!DOCTYPE HTML>
+<html class="is-adaptive">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <title>Modules</title>
+
+    <link type="text/css" rel="stylesheet" href="../../../../css/index.css">
+
+    <script type="text/javascript" src="../../../common/js/polyfill.js"></script>
+    <script type="text/javascript" src="../../../common/js/common.js"></script>
+    <script type="text/javascript" src="../../../common/js/parts.js"></script>
+    <script type="text/javascript" src="../../../common/js/modules.js"></script>
+    <script type="text/javascript" src="../../../common/js/init.js"></script>
+    <script type="text/javascript" src="../../../common/js/components/UA.js"></script>
+    <script type="text/javascript" src="../../../common/js/components/Collector.js"></script>
+    <script type="text/javascript" src="../../../common/js/components/Tooltip.js"></script>
+    <script type="text/javascript" src="../../../common/js/components/Select.js"></script>
+
+    <script type="text/javascript" src="../../js/Application.js"></script>
+
+    <script type="text/javascript">
+        cm.onReady(function(){
+            // Components
+            new Com.Collector()
+                    .add('select', function(node){
+                        new Com.Select({'select' : node});
+                    })
+                    .construct();
+        });
+    </script>
+</head>
+
+<body>
+
+<div class="cm-block-padding">
+    <div class="app-page-user-groups">
+        <div class="cm-box-content">
+            <div class="cm-itembox size-150">
+                <div class="l">
+                    <div class="cm-imagebox is-centered">
+                        <a class="inner">
+                            <img class="descr" alt="" src="../../../common/img/parts/no-image-150.png">
+                        </a>
+                    </div>
+                </div>
+                <div class="r">
+                    <div class="title">
+                        <h1>Item name</h1>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="cm-box-content">
+            <h2>Items (4)</h2>
+            <div class="cm-toolbar is-adaptive">
+                <div class="inner clear">
+                    <div class="left">
+                        <ul class="group">
+                            <li class="label">Sort by:</li>
+                            <li class="is-field large">
+                                <select data-element="select">
+                                    <option>Most Active</option>
+                                    <option>Latest Activity</option>
+                                    <option>Most Members</option>
+                                    <option>Latest</option>
+                                    <option>Alphabetical</option>
+                                </select>
+                            </li>
+                            <li>
+                                <a class="button">Sort</a>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="right">
+                        <ul class="group">
+                            <li class="label">Search: </li>
+                            <li class="is-field large">
+                                <div class="form-field has-icon-right">
+                                    <input type="text">
+                                    <input type="submit" class="icon small search" value="">
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="cm-grid col-2">
+                <ul>
+                    <li>
+                        <div class="cm-itembox size-80">
+                            <div class="l">
+                                <div class="cm-imagebox is-centered">
+                                    <a class="inner">
+                                        <img class="descr" alt="" src="../../../common/docs/images/gallery/1-th.jpg">
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="r">
+                                <div class="title">
+                                    <a>Item very long name</a>
+                                </div>
+                                <div class="count">15 items</div>
+                                <div class="descr">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer ultrices tristique purus nec interdum. Phasellus mollis purus ut ipsum vulputate interdum.</div>
+                            </div>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="cm-itembox size-80">
+                            <div class="l">
+                                <div class="cm-imagebox is-centered">
+                                    <a class="inner">
+                                        <img class="descr" alt="" src="../../../common/docs/images/gallery/1-th.jpg">
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="r">
+                                <div class="title">
+                                    <a>Item very long name</a>
+                                </div>
+                                <div class="count">15 items</div>
+                                <div class="descr">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer ultrices tristique purus nec interdum. Phasellus mollis purus ut ipsum vulputate interdum.</div>
+                            </div>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="cm-itembox size-80">
+                            <div class="l">
+                                <div class="cm-imagebox is-centered">
+                                    <a class="inner">
+                                        <img class="descr" alt="" src="../../../common/docs/images/gallery/1-th.jpg">
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="r">
+                                <div class="title">
+                                    <a>Item very long name</a>
+                                </div>
+                                <div class="count">15 items</div>
+                                <div class="descr">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer ultrices tristique purus nec interdum. Phasellus mollis purus ut ipsum vulputate interdum.</div>
+                            </div>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="cm-itembox size-80">
+                            <div class="l">
+                                <div class="cm-imagebox is-centered">
+                                    <a class="inner">
+                                        <img class="descr" alt="" src="../../../common/docs/images/gallery/1-th.jpg">
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="r">
+                                <div class="title">
+                                    <a>Item very long name</a>
+                                </div>
+                                <div class="count">15 items</div>
+                                <div class="descr">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer ultrices tristique purus nec interdum. Phasellus mollis purus ut ipsum vulputate interdum.</div>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+
+</html>

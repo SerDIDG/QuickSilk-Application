@@ -1,0 +1,143 @@
+<!DOCTYPE HTML>
+<html class="is-adaptive">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <title>Application Docs</title>
+
+    <link type="text/css" rel="stylesheet" href="../../../css/index.css">
+
+    <script type="text/javascript" src="../../common/js/polyfill.js"></script>
+    <script type="text/javascript" src="../../common/js/common.js"></script>
+    <script type="text/javascript" src="../../common/js/parts.js"></script>
+    <script type="text/javascript" src="../../common/js/modules.js"></script>
+    <script type="text/javascript" src="../../common/js/init.js"></script>
+    <script type="text/javascript" src="../../common/js/components/UA.js"></script>
+    <script type="text/javascript" src="../../common/js/components/Collector.js"></script>
+    <script type="text/javascript" src="../../common/js/components/CollapsibleLayout.js"></script>
+    <script type="text/javascript" src="../../common/js/components/ToggleBox.js"></script>
+
+    <script type="text/javascript">
+        cm.onReady(function(){
+            // Components
+            new Com.Collector()
+                .add('sidebar', function(node){
+                    new Com.CollapsibleLayout({
+                        'node' : node
+                    });
+                })
+                .add('togglebox', function(node){
+                    new Com.ToggleBox({'node' : node});
+                })
+                .construct();
+        });
+    </script>
+</head>
+
+<body>
+
+<div class="com-collapsible-layout" data-element="sidebar" data-config='{"remember" : true, "name" : "app-sidebar"}'>
+    <div class="sidebar left" data-node="ComCollapsibleLayout.leftContainer">
+        <div class="inner">
+            <div class="title">
+                <span class="icon medium linked arrow-left" data-node="ComCollapsibleLayout.leftButton"></span>
+                Application Docs
+            </div>
+            <div class="descr">
+                <dl class="com-togglebox is-show" data-element="togglebox" data-config='{"remember" : true, "name" : "app-sidebar-modules"}'>
+                    <dt data-node="ComToggleBox.button">
+                        <span class="icon default"></span>
+                        Modules
+                    </dt>
+                    <dd data-node="ComToggleBox.target">
+                        <div class="cm-items-list auto">
+                            <ul>
+                                <li>
+                                    <a href="content/Modules.html#menu" target="content"><b>Menu</b></a>
+                                </li>
+                                <li>
+                                    <a href="content/Modules.html#menu-default" target="content">» Default</a>
+                                </li>
+                                <li>
+                                    <a href="content/Modules.html#menu-primary" target="content">» Primary</a>
+                                </li>
+                                <li>
+                                    <a href="content/Modules.html#menu-secondary" target="content">» Secondary</a>
+                                </li>
+                                <li>
+                                    <a href="content/Modules.html#menu-vertical" target="content">» Vertical</a>
+                                </li>
+                                <li>
+                                    <a href="content/Modules.html#infoblock" target="content"><b>Infoblock</b></a>
+                                </li>
+                                <li>
+                                    <a href="content/Modules.html#sitemap" target="content"><b>Sitemap</b></a>
+                                </li>
+                                <li>
+                                    <a href="content/Modules.html#aggregator" target="content"><b>Social Aggregator</b></a>
+                                </li>
+                                <li>
+                                    <a href="content/Modules.html#search" target="content"><b>Search</b></a>
+                                </li>
+                                <li>
+                                    <a href="content/Modules.html#knowledge-centre" target="content"><b>Knowledge Centre</b></a>
+                                </li>
+                                <li>
+                                    <a href="content/ModuleListing.html" target="content"><b>Listing</b></a>
+                                </li>
+                                <li>
+                                    <a href="content/ModuleListing.html#default" target="content">» Default</a>
+                                </li>
+                                <li>
+                                    <a href="content/ModuleListing.html#archive" target="content">» Archive</a>
+                                </li>
+                                <li>
+                                    <a href="content/ModuleItems.html" target="content"><b>Items</b></a>
+                                </li>
+                                <li>
+                                    <a href="content/ModuleItemsPage.html" target="content">» Items Page</a>
+                                </li>
+                                <li>
+                                    <a href="content/ModuleSocialShare.html" target="content"><b>Social Share</b></a>
+                                </li>
+                            </ul>
+                        </div>
+                    </dd>
+                </dl>
+
+                <dl class="com-togglebox is-show" data-element="togglebox" data-config='{"remember" : true, "name" : "app-sidebar-pages"}'>
+                    <dt data-node="ComToggleBox.button">
+                        <span class="icon default"></span>
+                        Pages
+                    </dt>
+                    <dd data-node="ComToggleBox.target">
+                        <div class="cm-items-list auto">
+                            <ul>
+                                <li>
+                                    <a href="content/PageSearch.html" target="content"><b>Search</b></a>
+                                </li>
+                                <li>
+                                    <a href="content/PageUserGroups.html" target="content"><b>User Groups</b></a>
+                                </li>
+                                <li>
+                                    <a href="content/PageMemberProfile.html" target="content"><b>Member Profile</b></a>
+                                </li>
+                                <li>
+                                    <a href="content/PageGroupProfile.html" target="content"><b>Group Profile</b></a>
+                                </li>
+                            </ul>
+                        </div>
+                    </dd>
+                </dl>
+            </div>
+        </div>
+    </div>
+
+    <div class="inner">
+        <iframe name="content" src="content/Modules.html"></iframe>
+    </div>
+</div>
+
+</body>
+
+</html>

@@ -1,0 +1,31 @@
+/* ******* COMPONENT: LOGIN LINK MODULE ******* */
+
+.app-module-loginlink:extend(.app-module-default all) {
+    ul {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+        white-space: nowrap;
+        font-size: 0;
+
+        li {
+            margin: 0 0 0 @cm-indentXSmall;
+            display: inline-block;
+            vertical-align: top;
+            #cm > .font-base;
+
+            &:first-child {
+                margin: 0;
+            }
+
+            a {
+                display: block;
+            }
+
+            .icon {
+                display: none;
+                vertical-align: middle;
+            }
+        }
+    }
+}

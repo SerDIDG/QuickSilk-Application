@@ -1,0 +1,122 @@
+/* ******* LOGIN BOX ******* */
+
+.app-loginbox {
+    .check-forgot {
+        > .l {
+            overflow: hidden;
+        }
+
+        > .r {
+            float: right;
+        }
+    }
+
+    .links {
+        line-height: @cm-lineHeight;
+
+        ul {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+            text-align: left;
+            font-size: 0;
+
+            li {
+                display: inline-block;
+                margin: 0 0 0 @cm-indentXXSmall;
+                vertical-align: top;
+
+                &:first-child {
+                    margin: 0;
+                }
+
+                a {
+                    display: block;
+                    line-height: @CmForm-fieldHeight;
+                    font-size: @cm-fontSize;
+                }
+            }
+        }
+    }
+
+    .error {
+        color: @cm-colorError;
+    }
+}
+
+.app-loginbox-tooltip {
+    > .inner {
+        margin: 8px 0 0 0;
+        padding: @cm-indentXSmall @cm-indentMedium @cm-indentMedium;
+    }
+
+    .app-modular-sign {
+        width: @AppLoginBox-width;
+    }
+}
+
+/* Modular Sign */
+
+.app-modular-sign {
+    .socials {
+        font-size: 0;
+
+        .icon {
+            &:first-child {
+                margin-left: 0;
+            }
+        }
+    }
+
+    .or {
+        @margin: (@cm-indentMedium - (@cm-lineHeight / 2));
+
+        margin: @margin 0;
+        position: relative;
+        text-align: center;
+        line-height: @cm-lineHeight;
+
+        span {
+            position: relative;
+            z-index: 2;
+            display: inline-block;
+            padding: 0 10px;
+            background: #fff;
+        }
+
+        &:before {
+            height: 1px;
+            position: absolute;
+            z-index: 1;
+            top: 50%;
+            left: 0;
+            right: 0;
+            display: block;
+            background: @cm-colorBorder;
+            content: ' ';
+        }
+    }
+}
+
+/* *** ADAPTIVE *** */
+
+@media only screen and (max-width : @cm-screenMobile) {
+
+    .is-adaptive {
+        .app-loginbox-tooltip {
+            top: 46px !important;
+            left: 0 !important;
+            right: 0 !important;
+            position: absolute;
+
+            > .inner {
+                margin: 0;
+            }
+        }
+
+        .app-modular-sign {
+            width: auto;
+        }
+    }
+
+}

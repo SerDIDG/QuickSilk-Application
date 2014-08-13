@@ -1,0 +1,106 @@
+/* ******* ADVANCED EDITOR ******* */
+
+.app-advanced-editor {
+    height: 100%;
+    position: relative;
+
+    > .left-column {
+        width: 300px;
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+    }
+
+    > .right-column {
+        position: absolute;
+        top: 38px;
+        right: 0;
+        bottom: 38px;
+        left: 324px;
+    }
+}
+
+.app-advanced-editor-view {
+    position: absolute;
+    right: 0;
+    left: 0;
+    overflow: hidden;
+    .cm-transition(all 0.5s ease-in-out);
+
+    &.editor {
+        top: 0;
+        bottom: 100%;
+        margin: -38px 0 0 0;
+
+        &.is-show {
+            bottom: 50%;
+
+            &.is-show-full {
+                bottom: 0;
+            }
+        }
+    }
+
+    &.preview {
+        top: 100%;
+        bottom: 0;
+        margin: 0 0 -38px 0;
+
+        &.is-show {
+            top: 50%;
+
+            &.is-show-full {
+                top: 0;
+            }
+        }
+    }
+
+    > dt {
+        position: absolute;
+        top: 0;
+        right: 0;
+        left: 0;
+    }
+
+    > dd {
+        position: absolute;
+        top: 38px;
+        right: 0;
+        left: 0;
+        bottom: 0;
+        border: @cm-borderBox;
+
+        iframe,
+        .CodeMirror,
+        textarea {
+            height: 100%;
+            position: relative;
+        }
+    }
+
+    .cm-items-list {
+        height: 100%;
+
+        ul {
+            height: 100%;
+            max-height: none;
+        }
+    }
+
+    &.html,
+    &.css,
+    &.files {
+        height: 33%;
+        margin: 0;
+        position: relative;
+
+        > dt {
+            cursor: default;
+        }
+    }
+
+    &.files {
+        height: 34%;
+    }
+}

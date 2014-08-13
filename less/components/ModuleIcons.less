@@ -1,0 +1,97 @@
+/* ******* MODULE: ICONS ******* */
+
+.app-module-icons:extend(.app-module-default all) {
+
+    ul {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+        font-size: 0;
+        white-space: nowrap;
+    }
+
+    li {
+        margin-left: @cm-indentXXSmall;
+        display: inline-block;
+        vertical-align: top;
+
+        &:first-child {
+            margin: 0;
+        }
+
+        a {
+            display: block;
+
+            img {
+                display: block;
+            }
+
+            &:hover {
+                .icon.default {
+                    opacity: @cm-opacityLinkHover;
+                    .cm-transition(opacity @cm-transitionDurationReverse ease-in-out);
+                }
+
+                .count {
+                    background-color: @cm-colorLight-backgroundHover;
+                    .cm-transition(background @cm-transitionDurationReverse ease-in-out);
+                }
+            }
+
+            &:active {
+                .count {
+                    background-color: @cm-colorActive;
+                }
+            }
+        }
+    }
+
+    &.pull-left {
+        text-align: left;
+    }
+
+    &.pull-center {
+        text-align: center;
+    }
+
+    &.pull-right {
+        text-align: right;
+    }
+
+    .icon {
+        display: inline-block;
+        vertical-align: top;
+
+        &.default {
+            width: @AppModule-Icons-size;
+            height: @AppModule-Icons-size;
+            .cm-transition(opacity @cm-transitionDuration ease-in-out);
+
+            &.facebook {
+                .app-icon.large.facebook;
+            }
+
+            &.twitter {
+                .app-icon.large.twitter;
+            }
+
+            &.google {
+                .app-icon.large.google;
+            }
+
+            &.favorite {
+                .app-icon.large.favorite;
+            }
+        }
+    }
+
+    .count:extend(.cm-font-ui) {
+        display: inline-block;
+        vertical-align: top;
+        padding: 0 @cm-indentXSmall;
+        background: @cm-colorLight-background;
+        border-radius: 0 @cm-borderRadius @cm-borderRadius 0;
+        line-height: @AppModule-Icons-size;
+        .cm-transition(background @cm-transitionDuration ease-in-out);
+    }
+}

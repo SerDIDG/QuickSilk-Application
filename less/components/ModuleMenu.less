@@ -1,0 +1,119 @@
+/* ******* MODULE MENU ******* */
+
+.app-module-menu:extend(.app-module-default all) {
+    > ul {
+        padding: 0;
+        margin: 0;
+        list-style: none;
+        font-size: 0;
+
+        > li {
+            display: inline-block;
+            margin: 0 0 0 @cm-indentXSmall;
+            position: relative;
+            z-index: 1;
+            vertical-align: top;
+            .cm-font-base;
+
+            &:first-child {
+                margin: 0;
+            }
+
+            > a {
+                display: block;
+                white-space: nowrap;
+            }
+
+            &.sep {
+                display: none;
+            }
+
+            &.is-mobile {
+                display: none;
+            }
+
+            &:hover {
+                z-index: 2;
+            }
+        }
+    }
+
+    .menu-select {
+        display: none;
+        background: @cm-colorSecondary;
+        position: relative;
+
+        select {
+            position: relative;
+            z-index: 2;
+            border: none;
+            border-radius: 0;
+            background: transparent;
+            -webkit-appearance: none;
+               -moz-appearance: none;
+                    appearance: none;
+        }
+    }
+
+    .menu-button {
+        width: @cm-Medium;
+        height: @CmForm-fieldHeight;
+        position: absolute;
+        z-index: 1;
+        .cm-position(0, 0, 0, auto);
+        .icon.medium.menu;
+        .icon.linked;
+        background-position: 50% 50%;
+        background-repeat: no-repeat;
+    }
+
+    &.vertical {
+        ul {
+            margin: @cm-indentXSmall 0 0;
+            padding: 0;
+
+            &:first-child {
+                margin: 0;
+            }
+
+            ul {
+                margin-left: @cm-indentMedium;
+            }
+        }
+
+        li {
+            display: block;
+            margin: @cm-indentXSmall 0 0;
+
+            &:first-child {
+                margin: 0;
+            }
+        }
+
+        a {
+            display: inline-block;
+            vertical-align: middle;
+            color: @cm-colorFont;
+        }
+    }
+}
+
+/* *** ADAPTIVE *** */
+
+@media only screen and (max-width : @cm-screenTabletPortrait) {
+
+    html.is-adaptive {
+        .app-module-menu {
+            &:not(.vertical){
+                > ul {
+                    display: none;
+                }
+
+                .menu-select {
+                    display: block;
+                }
+            }
+        }
+    }
+
+}

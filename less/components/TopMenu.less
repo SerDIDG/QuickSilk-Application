@@ -1,0 +1,333 @@
+/* ******* TOPMENU ******* */
+
+.app-topmenu {
+    height: @AppTopMenu-size;
+    position: fixed;
+    top: 0;
+    right: 0;
+    left: 0;
+    z-index: 4;
+    background: #000;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+
+    > .inner {
+        height: 100%;
+        margin: 0 auto;
+        position: relative;
+    }
+
+    // /* Quicksilk Logo */
+
+    .logo {
+        width: 26px;
+        height: 24px;
+        position: relative;
+        z-index: 2;
+        display: block;
+        float: left;
+        margin: ((@AppTopMenu-size - 24px) / 2) 0 0 @cm-indentXSmall;
+        background-image: url("@{AppPath-image}/components/topmenu-logo.png");
+        .cm-transition(opacity 0.3s ease-in-out);
+
+        &:hover {
+            opacity: 0.7;
+        }
+    }
+
+    // /* Menu  */
+
+    .menu-button {
+        width: @AppTopMenu-size;
+        height: @AppTopMenu-size;
+        position: absolute;
+        .cm-position(0, 0, 0, auto);
+        .icon.medium.menu-white;
+        .icon.linked;
+        background-position: 50% 50%;
+        background-repeat: no-repeat;
+        display: none;
+    }
+
+    .menu-holder {
+        position: absolute;
+        z-index: 1;
+        .cm-position(0,0,0,0);
+
+        > .inner {
+            padding: 0 @cm-indentXSmall;
+            position: absolute;
+            .cm-position(0,0,0,0);
+        }
+    }
+
+    .menu {
+        padding: 0;
+        margin: 0;
+        list-style: none;
+        position: relative;
+        z-index: 2;
+        font-size: 0;
+
+        > li {
+            display: inline-block;
+            vertical-align: top;
+            position: relative;
+            margin: 0 0 0 (@cm-indentXSmall * 2 + 1px);
+            font-size: 13px;
+            font-weight: normal;
+            line-height: 40px;
+            color: #d6d6d6;
+            white-space: nowrap;
+
+            &:before {
+                width: 1px;
+                height: 16px;
+                display: block;
+                position: absolute;
+                .cm-position(12px, auto, auto, -@cm-indentXSmall);
+                background: #d6d6d6;
+                content: '';
+            }
+
+            > a {
+                display: block;
+                font-weight: @cm-boldWeight;
+                color: #d6d6d6;
+                text-decoration: none;
+
+                .icon {
+                    margin: 0 @cm-indentXXSmall 0 0;
+
+                    &.medium {
+                        margin-top: -2px;
+                    }
+                }
+
+                &:hover {
+                    text-decoration: underline;
+
+                    .icon {
+                        opacity: @cm-opacityLinkHover;
+                    }
+                }
+            }
+
+            > ul {
+                top: 100%;
+                left: -(@cm-indentXSmall - 1px);
+                border-top: none;
+                border-radius: 0 0 @cm-borderRadius @cm-borderRadius;
+            }
+
+            &:first-child {
+                margin: 0;
+
+                &:before {
+                    display: none;
+                }
+            }
+
+            &.has-dropdown {
+                a {
+                    padding-right: 20px;
+                    background: url("@{AppPath-image}/components/topmenu-arrow-down.png") 100% center no-repeat;
+                }
+            }
+
+            &.active {
+                color: #fff;
+
+                > a {
+                    color: #fff;
+                }
+            }
+        }
+
+        &.right {
+            float: right;
+        }
+
+        &.left {
+            float: left;
+            margin: 0 0 0 (24px + @cm-indentXSmall);
+        }
+    }
+
+    .menu-centered {
+        position: absolute;
+        .cm-position(0, auto, 0, auto);
+        z-index: 1;
+        margin: 0 50%;
+
+        > .inner {
+            height: 100%;
+            position: relative;
+            left: -50%;
+            padding: 0 @cm-indentXSmall;
+            background: rgba(255,255,255,0.2);
+            border-right: 1px solid rgba(255,255,255,0.3);
+            border-left: 1px solid rgba(255,255,255,0.3);
+        }
+    }
+}
+
+/* *** ADAPTIVE *** */
+
+@media only screen and (max-width : 1280px) and (min-width: @cm-screenTabletPortrait) and (orientation: landscape) {
+
+    html.is-adaptive {
+        .app-topmenu {
+            .menu-centered {
+                position: relative;
+                margin: 0 0 0 @cm-indentXSmall;
+                float: left;
+
+                > .inner {
+                    left: 0;
+                }
+            }
+        }
+    }
+
+}
+
+@media only screen and (max-width : @cm-screenTabletPortrait) {
+
+    html.is-adaptive {
+        .app-topmenu {
+
+            .menu-button {
+                display: block;
+            }
+
+            .menu-holder {
+                display: block;
+                padding: 0;
+                width: 50%;
+                height: 100%;
+                position: fixed;
+                .cm-position(0, -50%, 0, auto);
+
+                > .inner {
+                    .cm-scroll-a-y;
+                    padding: (@AppTopMenu-size + @cm-indentXSmall) @cm-indentXSmall @cm-indentXSmall;
+                }
+            }
+
+            .menu {
+                margin: @cm-indentSmall 0 0 0;
+                padding: 0;
+                position: relative;
+                float: none;
+
+                &:first-child {
+                    margin: 0;
+                }
+
+                li {
+                    display: block;
+                    margin: @cm-indentXXSmall 0 0 0;
+                    line-height: @cm-Medium;
+                    .cm-text-overflow;
+
+                    &:first-child {
+                        margin: 0;
+                    }
+
+                    &:before {
+                        display: none;
+                    }
+
+                    a {
+                        .cm-text-overflow;
+                    }
+
+                    &.has-dropdown {
+                        a {
+                            background: none;
+                            padding-right: 0;
+                        }
+                    }
+                }
+            }
+
+            .cm-menu-dropdown {
+                padding: 0;
+                margin: 0;
+                border: none;
+                background: none;
+                position: relative;
+                .cm-position(auto, auto, auto, auto);
+                display: block;
+                opacity: 1;
+                visibility: visible;
+                margin-left: @cm-indentMedium;
+
+                &:before,
+                &:after {
+                    display: none;
+                }
+
+                li {
+                    padding: 0;
+                    margin: 0;
+                    border: none;
+                    background: none;
+                    line-height: @cm-Medium;
+
+                    &:before,
+                    &:after {
+                        display: none;
+                    }
+
+                    a {
+                        margin: 0;
+                        padding: 0;
+                        border: none;
+                        background: none;
+                        font-size: 13px;
+                        font-weight: normal;
+                        color: #d6d6d6;
+                        .cm-text-overflow;
+
+                        &:before,
+                        &:after {
+                            display: none;
+                        }
+                    }
+                }
+            }
+
+            .menu-centered {
+                height: @AppTopMenu-size;
+                margin: 0;
+                .cm-position(0, 0, auto, 0);
+
+                > .inner {
+                    left: 0;
+                    border: none;
+                }
+
+                .menu {
+                    li {
+                        line-height: 40px;
+                    }
+                }
+            }
+        }
+    }
+
+}
+
+@media only screen and (max-width : @cm-screenMobilePortrait) and (orientation: portrait){
+
+    html.is-adaptive {
+        .app-topmenu {
+            .menu-holder {
+                width: 80%;
+                .cm-position(0, -80%, 0, auto);
+            }
+        }
+    }
+
+}

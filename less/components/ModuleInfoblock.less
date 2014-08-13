@@ -1,0 +1,36 @@
+/* ******* MODULE INFO BLOCK ******* */
+
+.app-module-infoblock:extend(.app-module-default all) {
+
+    > .inner {
+        #cm > .box;
+
+        > .title {
+            border-bottom: 1px solid @cm-colorBorder;
+
+            > .inner {
+                padding: @cm-indentXSmall;
+            }
+
+            dl, ol, ul, p, h1, h2, h3, h4, h5, h6 {
+                margin: 0;
+            }
+        }
+
+        > .descr {
+            > .inner {
+                padding: @cm-indentXSmall;
+            }
+        }
+    }
+}
+
+// /* *** BUNDLE *** */
+
+#app () {
+    .module {
+        .app-module-infoblock > .inner > .title & {
+            margin: 0;
+        }
+    }
+}

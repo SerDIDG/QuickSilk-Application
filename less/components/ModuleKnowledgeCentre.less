@@ -1,0 +1,43 @@
+.app-module-knowledge-centre:extend(.app-module-default all) {
+    > .inner {
+        width: 100%;
+        display: table;
+        table-layout: fixed;
+
+        > .l {
+            width: @AppKnowledgeCentre-titleMinWidth;
+            display: table-cell;
+            vertical-align: top;
+            padding: @cm-indentXSmall @cm-indentSmall @cm-indentXSmall 0;
+
+            .cm-list-counted {
+                li {
+                    &:after {
+                        width: 0;
+                        height: 0;
+                        display: block;
+                        position: absolute;
+                        .cm-position(((@CmListCounted-height - 12px) / 2), -@cm-indentSmall , auto, auto);
+                        content: '';
+                        border-style: solid;
+                        border-width: 6px 8px 6px 0;
+                        border-color: transparent;
+                        .cm-transition(border-color @cm-transitionDuration ease-in-out);
+                    }
+
+                    &.active {
+                        &:after {
+                            border-color: transparent @cm-colorBorder transparent transparent;
+                        }
+                    }
+                }
+            }
+        }
+
+        > .r:extend(.cm-box) {
+            display: table-cell;
+            padding: @cm-indentXSmall;
+            vertical-align: top;
+        }
+    }
+}

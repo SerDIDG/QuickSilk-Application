@@ -1,0 +1,89 @@
+/* ******* MODULE SITEMAP ******* */
+
+.app-module-sitemap:extend(.app-module-default all) {
+    > .inner {
+        font-size: 0;
+
+        dl {
+            min-width: 116px;
+            width: 12.2%;
+            display: inline-block;
+            margin: 0 2% 20px 0;
+            vertical-align: top;
+            font-size: @AppSitemap-fontSize;
+            font-weight: @cm-boldWeight;
+            color: @AppSitemap-color;
+
+            &:last-child {
+                margin-right: 0;
+            }
+
+            dt {
+                color: @AppSitemap-colorTitle;
+
+                a {
+                    color: @AppSitemap-colorTitle;
+                }
+            }
+
+            dd {
+                margin: 6px 0 0 0;
+                padding: 0;
+
+                a {
+                    color: @AppSitemap-color;
+                }
+            }
+        }
+    }
+}
+
+/* *** ADAPTIVE *** */
+
+@media only screen and (max-width : @cm-screenTabletPortrait) {
+
+    html.is-adaptive {
+        .app-module-sitemap {
+            > .inner {
+                dl {
+                    width: 21%;
+                    margin: 0;
+                    padding: 2%;
+                }
+            }
+        }
+    }
+
+}
+
+@media only screen and (max-width : @cm-screenMobile) {
+
+    html.is-adaptive {
+        .app-module-sitemap {
+            > .inner {
+                dl {
+                    width: 46%;
+                    margin: 0;
+                    padding: 2%;
+                }
+            }
+        }
+    }
+
+}
+
+@media only screen and (max-width : @cm-screenMobile) {
+
+    html.is-adaptive {
+        .app-module-sitemap {
+            > .inner {
+                dl {
+                    width: 46%;
+                    margin: 0;
+                    padding: 2%;
+                }
+            }
+        }
+    }
+
+}

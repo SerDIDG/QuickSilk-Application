@@ -1,0 +1,101 @@
+/* ******* TEMPLATES LISTING ******* */
+
+.app-templates-listing {
+    overflow: hidden;
+    padding-right: @cm-indentMedium;
+
+    > ul {
+        margin: -(@cm-indentMedium / 2);
+        padding: 0;
+        overflow: hidden;
+        list-style: none;
+
+        > li {
+            width: 100% / @AppTemplatePreview-count;
+            float: left;
+
+            > .inner {
+                padding: @cm-indentMedium / 2;
+            }
+        }
+    }
+
+}
+
+.app-template-preview {
+    @inner-padding: @cm-indentMedium / 2;
+    @gradient: to bottom, rgb(255,255,255) 0, rgba(255,255,255,0.5) 50%;
+
+    border: @cm-borderBox;
+    .cm-transition(border-color 0.1s ease-in-out);
+
+    > .inner {
+        position: relative;
+    }
+
+    .preview-image {
+        position: relative;
+        z-index: 1;
+
+        img {
+            .cm-image-resizable;
+        }
+    }
+
+    .preview-info {
+        position: absolute;
+        .cm-position(0,0,0,0);
+        z-index: 2;
+        opacity: 0;
+        -webkit-transform: translateZ(0);
+        .cm-transition(opacity 0.3s ease-in-out);
+        .cm-linear-gradient(@gradient);
+
+        h2 {
+            position: absolute;
+            .cm-position(@inner-padding, @inner-padding, auto, @inner-padding);
+        }
+
+        .btn-wrap {
+            position: absolute;
+            .cm-position(auto, @inner-padding, @inner-padding, @inner-padding);
+            margin: 0;
+            font-size: 0;
+
+            input, button, .button {
+                width: 32%;
+                margin: 0 0 0 2%;
+                padding: 0;
+
+                &:first-child {
+                    margin: 0;
+                }
+            }
+        }
+    }
+
+    &:hover {
+        border: @cm-borderBoxActive;
+        .cm-transition(border-color 0.1s ease-in-out);
+
+        .preview-info {
+            opacity: 1;
+            .cm-transition(opacity 0.1s ease-in-out);
+        }
+    }
+}
+
+.app-templates-layout {
+    height: 100%;
+    position: relative;
+
+    .app-templates-listing {
+        position: absolute;
+        top: @CmForm-fieldHeight + @cm-indentMedium;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        overflow-x: hidden;
+        overflow-y: auto;
+    }
+}
