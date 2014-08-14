@@ -1,6 +1,6 @@
-/* ******* MODULE INFO BLOCK ******* */
+/* ******* COMPONENT: MODULE INFO BLOCK ******* */
 
-.app-module-infoblock:extend(.app-module-default all) {
+.app-module-infoblock {
 
     > .inner {
         #cm > .box;
@@ -15,22 +15,18 @@
             dl, ol, ul, p, h1, h2, h3, h4, h5, h6 {
                 margin: 0;
             }
+
+            // /* Module */
+
+            .app-module {
+                margin: 0;
+            }
         }
 
         > .descr {
             > .inner {
                 padding: @cm-indentXSmall;
             }
-        }
-    }
-}
-
-// /* *** BUNDLE *** */
-
-#app () {
-    .module {
-        .app-module-infoblock > .inner > .title & {
-            margin: 0;
         }
     }
 }

@@ -16,6 +16,10 @@ App['TemplateEditor'] = function(o){
             'onReplace' : []
         },
         nodes = {
+            'AppNodes' : {
+                'wrapperCollapsible' : cm.Node('div'),
+                'scroll' : cm.Node('div')
+            },
             'AppWidgetsPanel' : {
                 'container' : cm.Node('div'),
                 'removeZone' : cm.Node('div'),
@@ -66,7 +70,8 @@ App['TemplateEditor'] = function(o){
         coms['dd'] = new Com.Draganddrop(
             cm.merge({
                 'container' : nodes['Template']['container'],
-                'scrollNode' : nodes['Template']['scroll']
+                'scrollNode' : nodes['Template']['scroll'],
+                'draggableContainer' : nodes['AppNodes']['wrapperCollapsible']
             }, config['Com.Draganddrop'])
         );
         // Register widgets areas and events

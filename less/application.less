@@ -15,16 +15,10 @@ body {
 
 /* ******* STATIC CLASSES ******* */
 
-.app-module-default,
-.app-page-default {
+.app-module {
     margin: 0 0 @cm-indentMedium;
 
     &.bottom {
-        margin: 0;
-    }
-
-    .app-footer-area &,
-    .app-header-area & {
         margin: 0;
     }
 }
@@ -41,6 +35,12 @@ body {
     -webkit-transition: -webkit-transform @cm-transitionDuration ease-in-out;
         -ms-transition:     -ms-transform @cm-transitionDuration ease-in-out;
             transition:         transform @cm-transitionDuration ease-in-out;
+
+    &.has-topmenu {
+        .app-wrapper-inner {
+            top: @AppTopMenu-size;
+        }
+    }
 }
 
 .app-wrapper-inner {
@@ -61,9 +61,38 @@ body {
     }
 }
 
-.app-wrapper.has-topmenu .app-wrapper-inner {
-    top: @AppTopMenu-size;
+.app-module-default:extend(.app-module all),
+.app-page-default:extend(.app-module all) {}
+
+/* *** HEADER / FOOTER AREAS *** */
+
+.app-main-area:extend(.clear all) {
+    min-height: 500px;
 }
+
+.app-footer-area:extend(.clear all),
+.app-header-area:extend(.clear all) {
+    min-width: 200px;
+    min-height: @cm-indentMedium * 2;
+    padding: 0;
+    position: absolute;
+    z-index: 1;
+
+    &.main {
+        min-width: 0;
+        position: relative;
+    }
+
+    &:hover {
+        z-index: 100 !important;
+    }
+
+    .app-module {
+        margin: 0;
+    }
+}
+
+/* *** COLLAPSIBLE WRAPPER *** */
 
 .app-wrapper-collapsible {
     &.is-sidebar-left-collapsed {
@@ -73,7 +102,9 @@ body {
         }
 
         .app-widget-container {
-            margin: 0;
+            &:last-child {
+                margin: 0;
+            }
         }
 
         .app-main-area {
@@ -81,10 +112,11 @@ body {
         }
     }
 
-    &.is-sidebar-left-expanded {
-        .app-module-default,
-        .app-page-default {
-            margin: 0;
+    &:not(.is-sidebar-left-collapsed):not(.is-sidebar-left-expanded) {
+        .app-module {
+            &:last-child {
+                margin: 0;
+            }
         }
     }
 }
@@ -125,30 +157,6 @@ body {
         border-bottom: none;
         border-right: none;
         border-radius: 0;
-    }
-}
-
-/* *** HEADER / FOOTER AREAS *** */
-
-.app-main-area {
-    min-height: 500px;
-}
-
-.app-footer-area:extend(.clear all),
-.app-header-area:extend(.clear all) {
-    min-width: 200px;
-    min-height: @cm-indentMedium * 2;
-    padding: 0;
-    position: absolute;
-    z-index: 1;
-
-    &.main {
-        min-width: 0;
-        position: relative;
-    }
-
-    &:hover {
-        z-index: 100 !important;
     }
 }
 
