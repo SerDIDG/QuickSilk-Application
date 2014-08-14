@@ -1,0 +1,107 @@
+<!DOCTYPE HTML>
+<html class="is-adaptive">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <title>Webex Meeting</title>
+
+    <link type="text/css" rel="stylesheet" href="../../../../css/index.css">
+
+    <script type="text/javascript" src="../../../common/js/polyfill.js"></script>
+    <script type="text/javascript" src="../../../common/js/common.js"></script>
+    <script type="text/javascript" src="../../../common/js/parts.js"></script>
+    <script type="text/javascript" src="../../../common/js/modules.js"></script>
+    <script type="text/javascript" src="../../../common/js/init.js"></script>
+    <script type="text/javascript" src="../../../common/js/components/UA.js"></script>
+    <script type="text/javascript" src="../../../common/js/components/Collector.js"></script>
+    <script type="text/javascript" src="../../../common/js/components/Tooltip.js"></script>
+    <script type="text/javascript" src="../../../common/js/components/Select.js"></script>
+
+    <script type="text/javascript" src="../../js/Application.js"></script>
+
+    <script type="text/javascript">
+        cm.onReady(function(){
+            // Components
+            new Com.Collector()
+                .add('select', function(node){
+                    new Com.Select({'select' : node});
+                })
+                .construct();
+        });
+    </script>
+</head>
+
+<body>
+
+<div class="cm-block-padding">
+    <div class="app-page com-profile app-page-webexmeeting">
+        <h1 class="app-page-title">WebExMeeting Help Description</h1>
+
+        <div class="inner">
+            <div class="l">
+                <div class="inner">
+
+                    <div class="cm-box-flat">
+                        <div class="inner">
+                            <div class="descr">
+                                <div class="inner">
+                                    <div class="cm-itembox is-no-overflow is-image-centered size-150">
+                                        <div class="cm-imagebox is-centered">
+                                            <a class="inner">
+                                                <img class="descr" alt="" src="../../../common/img/parts/no-avatar-150.png">
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <div class="btn-wrap is-block">
+                                        <a class="button">Start</a>
+                                        <a class="button">Join</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="r">
+                <div class="inner">
+
+                    <div class="cm-box-content">
+                        <h2>Meeting Information</h2>
+                        <div class="cm-box-info">
+                            <dl>
+                                <dt>Name:</dt>
+                                <dd>Meeting of the world problems</dd>
+                            </dl>
+                            <dl>
+                                <dt>Start time:</dt>
+                                <dd>August 8, 2014, 11:50</dd>
+                            </dl>
+                            <dl>
+                                <dt>Time zone:</dt>
+                                <dd>GMT+00:00, GMT (London)</dd>
+                            </dl>
+                            <dl>
+                                <dt>Duration:</dt>
+                                <dd>20 minutes</dd>
+                            </dl>
+                            <dl>
+                                <dt>Status:</dt>
+                                <dd>NOT INPROGRESS</dd>
+                            </dl>
+                        </div>
+                    </div>
+
+                    <div class="cm-box-content">
+                        <h2>Description</h2>
+                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer ultrices tristique purus nec interdum. Phasellus mollis purus ut ipsum vulputate interdum. Pellentesque dapibus tortor magna, hendrerit dictum ante vehicula sit amet. Nulla quis tempus magna, id interdum augue. Nullam lacinia ultrices tincidunt. Praesent dictum dui dapibus sagittis commodo. Suspendisse sit amet tortor sit amet nibh venenatis tristique eget eu dui. Ut in luctus metus. Nulla blandit, mauris sit amet placerat suscipit, nulla nulla eleifend orci, tristique sollicitudin metus leo eu purus. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Cras feugiat enim tincidunt leo sagittis, vitae eleifend justo tempor. Ut suscipit lectus orci. Donec eleifend id justo ut cursus. Nam ultricies leo ac ante lobortis pulvinar. Aenean facilisis condimentum lorem eu porttitor.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+
+</html>
