@@ -114,6 +114,12 @@ body {
     }
 
     &:not(.is-sidebar-left-collapsed):not(.is-sidebar-left-expanded) {
+        .app-footer-area,
+        .app-header-area,
+        .app-main-area {
+            min-height: 0;
+        }
+
         .app-module {
             &:last-child {
                 margin: 0;
