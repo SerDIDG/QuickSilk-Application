@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-    <title>Social Share Module</title>
+    <title>Module Rate</title>
 
     <link type="text/css" rel="stylesheet" href="../../../../css/index.css">
 
@@ -16,11 +16,17 @@
     <script type="text/javascript" src="../../../common/js/components/Collector.js"></script>
 
     <script type="text/javascript" src="../../js/Application.js"></script>
+    <script type="text/javascript" src="../../js/components/ModuleMenu.js"></script>
 
     <script type="text/javascript">
         cm.onReady(function(){
             // Components
             new Com.Collector()
+                .add('module-menu', function(node){
+                    new App.ModuleMenu({
+                        'node' : node
+                    });
+                })
                 .construct();
         });
     </script>
@@ -29,33 +35,33 @@
 <body>
 
 <div class="cm-block-padding">
-    <h1>Social Share Module</h1>
+    <h1>Module Rate</h1>
 
     <div class="cm-box-content">
         <h2>Left</h2>
-        <div class="app-module app-module-icons">
+        <div class="app-module app-module-icons pull-left">
             <ul>
                 <li>
                     <a>
-                        <div class="icon default facebook"></div>
+                        <div class="label">Excellent</div>
                         <div class="count">25</div>
                     </a>
                 </li>
                 <li>
                     <a>
-                        <div class="icon default twitter"></div>
+                        <div class="label">Interesting</div>
                         <div class="count">12</div>
                     </a>
                 </li>
                 <li>
                     <a>
-                        <div class="icon default google"></div>
+                        <div class="label">Useful</div>
                         <div class="count">1</div>
                     </a>
                 </li>
                 <li>
                     <a>
-                        <div class="icon default favorite"></div>
+                        <div class="label">Not useful</div>
                         <div class="count">7</div>
                     </a>
                 </li>
@@ -65,29 +71,30 @@
 
     <div class="cm-box-content">
         <h2>Center</h2>
+
         <div class="app-module app-module-icons pull-center">
             <ul>
                 <li>
                     <a>
-                        <div class="icon default facebook"></div>
+                        <div class="label">Excellent</div>
                         <div class="count">25</div>
                     </a>
                 </li>
                 <li>
                     <a>
-                        <div class="icon default twitter"></div>
+                        <div class="label">Interesting</div>
                         <div class="count">12</div>
                     </a>
                 </li>
                 <li>
                     <a>
-                        <div class="icon default google"></div>
+                        <div class="label">Useful</div>
                         <div class="count">1</div>
                     </a>
                 </li>
                 <li>
                     <a>
-                        <div class="icon default favorite"></div>
+                        <div class="label">Not useful</div>
                         <div class="count">7</div>
                     </a>
                 </li>
@@ -101,25 +108,25 @@
             <ul>
                 <li>
                     <a>
-                        <div class="icon default facebook"></div>
+                        <div class="label">Excellent</div>
                         <div class="count">25</div>
                     </a>
                 </li>
                 <li>
                     <a>
-                        <div class="icon default twitter"></div>
+                        <div class="label">Interesting</div>
                         <div class="count">12</div>
                     </a>
                 </li>
                 <li>
                     <a>
-                        <div class="icon default google"></div>
+                        <div class="label">Useful</div>
                         <div class="count">1</div>
                     </a>
                 </li>
                 <li>
                     <a>
-                        <div class="icon default favorite"></div>
+                        <div class="label">Not useful</div>
                         <div class="count">7</div>
                     </a>
                 </li>

@@ -32,14 +32,13 @@
                     .cm-transition(opacity @cm-transitionDurationReverse ease-in-out);
                 }
 
+                .label,
                 .count {
                     background-color: @cm-colorLight-backgroundHover;
                     .cm-transition(background @cm-transitionDurationReverse ease-in-out);
                 }
-            }
 
-            &:active {
-                .count {
+                .label {
                     background-color: @cm-colorActive;
                 }
             }
@@ -85,6 +84,7 @@
         }
     }
 
+    .label:extend(.cm-font-ui),
     .count:extend(.cm-font-ui) {
         display: inline-block;
         vertical-align: top;
@@ -93,5 +93,9 @@
         border-radius: 0 @cm-borderRadius @cm-borderRadius 0;
         line-height: @AppModule-Icons-size;
         .cm-transition(background @cm-transitionDuration ease-in-out);
+    }
+
+    .label {
+        background: @cm-colorLight-backgroundHover;
     }
 }
