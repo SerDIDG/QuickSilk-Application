@@ -1,0 +1,109 @@
+<!DOCTYPE HTML>
+<html class="is-adaptive">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <title>Modules: Infoblock</title>
+
+    <link type="text/css" rel="stylesheet" href="../../../../../css/index.css">
+    <link type="text/css" rel="stylesheet" href="../../styles/index.css">
+
+    <script type="text/javascript" src="../../../../common/js/polyfill.js"></script>
+    <script type="text/javascript" src="../../../../common/js/common.js"></script>
+    <script type="text/javascript" src="../../../../common/js/parts.js"></script>
+    <script type="text/javascript" src="../../../../common/js/modules.js"></script>
+    <script type="text/javascript" src="../../../../common/js/init.js"></script>
+    <script type="text/javascript" src="../../../../common/js/components/UA.js"></script>
+    <script type="text/javascript" src="../../../../common/js/components/Collector.js"></script>
+
+    <script type="text/javascript" src="../../../js/Application.js"></script>
+    <script type="text/javascript" src="../../../js/components/ModuleMenu.js"></script>
+
+    <script type="text/javascript">
+        cm.onReady(function(){
+            // Components
+            new Com.Collector()
+                .add('module-menu', function(node){
+                    new App.ModuleMenu({
+                        'node' : node
+                    });
+                })
+                .construct();
+        });
+    </script>
+</head>
+
+<body>
+
+<h1 class="cm-page-title">Modules: Infoblock</h1>
+<hr>
+
+<div class="cm-box-content">
+    <h2>Default:</h2>
+    <div class="app-module app-module-infoblock">
+        <div class="inner">
+            <div class="title">
+                <div class="inner" data-com-draganddrop="area">
+                    <div class="app-module app-module-richeditor">
+                        <h4>Title</h4>
+                    </div>
+                </div>
+            </div>
+            <div class="descr">
+                <div class="inner" data-com-draganddrop="area">
+                    <div class="app-module app-module-richeditor">
+                        <p>Description</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="cm-box-content">
+    <h2>Theme First:</h2>
+    <div class="app-module app-module-infoblock theme-first">
+        <div class="inner">
+            <div class="title">
+                <div class="inner" data-com-draganddrop="area">
+                    <div class="app-module app-module-richeditor">
+                        <h4>Title</h4>
+                    </div>
+                </div>
+            </div>
+            <div class="descr">
+                <div class="inner" data-com-draganddrop="area">
+                    <div class="app-module app-module-richeditor">
+                        <p>Description</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="cm-box-content">
+    <h2>Theme Second:</h2>
+    <div class="app-module app-module-infoblock theme-second">
+        <div class="inner">
+            <div class="title">
+                <div class="inner" data-com-draganddrop="area">
+                    <div class="app-module app-module-richeditor">
+                        <h4>Title</h4>
+                    </div>
+                </div>
+            </div>
+            <div class="descr">
+                <div class="inner" data-com-draganddrop="area">
+                    <div class="app-module app-module-richeditor">
+                        <p>Description</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+
+</html>

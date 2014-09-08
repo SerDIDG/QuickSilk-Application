@@ -1,0 +1,404 @@
+<!DOCTYPE HTML>
+<html class="is-adaptive">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <title>MModules: Menu</title>
+
+    <link type="text/css" rel="stylesheet" href="../../../../../css/index.css">
+    <link type="text/css" rel="stylesheet" href="../../styles/index.css">
+
+    <script type="text/javascript" src="../../../../common/js/polyfill.js"></script>
+    <script type="text/javascript" src="../../../../common/js/common.js"></script>
+    <script type="text/javascript" src="../../../../common/js/parts.js"></script>
+    <script type="text/javascript" src="../../../../common/js/modules.js"></script>
+    <script type="text/javascript" src="../../../../common/js/init.js"></script>
+    <script type="text/javascript" src="../../../../common/js/components/UA.js"></script>
+    <script type="text/javascript" src="../../../../common/js/components/Collector.js"></script>
+
+    <script type="text/javascript" src="../../../js/Application.js"></script>
+    <script type="text/javascript" src="../../../js/components/ModuleMenu.js"></script>
+
+    <script type="text/javascript">
+        cm.onReady(function(){
+            // Components
+            new Com.Collector()
+                .add('module-menu', function(node){
+                    new App.ModuleMenu({
+                        'node' : node
+                    });
+                })
+                .construct();
+        });
+    </script>
+</head>
+
+<body>
+
+<h1 class="cm-page-title">Modules: Menu</h1>
+<hr>
+
+<a name="default"></a>
+<h2>Default Menu:</h2>
+<div class="app-module app-module-menu" data-element="module-menu">
+    <ul>
+        <li class="active">
+            <a>QuickSilk</a>
+        </li>
+        <li>
+            <a>Solutions</a>
+        </li>
+        <li class="cm-menu has-dropdown">
+            <a>Services</a>
+            <ul class="cm-menu-dropdown">
+                <li class="cm-menu has-dropdown">
+                    <a>Web Hosting</a>
+                    <ul class="cm-menu-dropdown">
+                        <li>
+                            <a>Canadian Data Centre</a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="cm-menu has-dropdown">
+                    <a>Web Development</a>
+                    <ul class="cm-menu-dropdown">
+                        <li>
+                            <a>Qwwertty</a>
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <a>Domain Name Registration &amp; Transfers</a>
+                </li>
+                <li>
+                    <a>eCommerce Web Hosting</a>
+                </li>
+                <li>
+                    <a>Ecommerce Web Development</a>
+                </li>
+            </ul>
+        </li>
+        <li class="cm-menu has-dropdown">
+            <a>Customer Support</a>
+            <ul class="cm-menu-dropdown">
+                <li>
+                    <a>Desktop Email Setup</a>
+                </li>
+                <li>
+                    <a>Web Hosting Control Panel</a>
+                </li>
+                <li>
+                    <a>Domain Name Transfers</a>
+                </li>
+                <li>
+                    <a>FTP Tutorials</a>
+                </li>
+                <li class="cm-menu has-dropdown">
+                    <a>Database Tutorials</a>
+                    <ul class="cm-menu-dropdown">
+                        <li>
+                            <a>&nbsp; tesst</a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </li>
+        <li>
+            <a>Blog</a>
+        </li>
+        <li class="cm-menu has-dropdown">
+            <a>About</a>
+            <ul class="cm-menu-dropdown">
+                <li>
+                    <a>Management &amp; Advisory Board</a>
+                </li>
+                <li>
+                    <a>Community Initiatives</a>
+                </li>
+            </ul>
+        </li>
+        <li>
+            <a>Contact</a>
+        </li>
+    </ul>
+    <div class="menu-select">
+        <div class="menu-button"></div>
+        <select data-node="AppModuleMenu.select">
+            <option value="http://google.com">About</option>
+            <option>OUR PUBLICATIONS</option>
+        </select>
+    </div>
+</div>
+<hr>
+
+<a name="primary"></a>
+<h2>Primary Menu:</h2>
+<p>If styles not provided displays like default menu</p>
+<div class="app-module app-module-menu primary" data-element="module-menu">
+    <ul>
+        <li class="active">
+            <a>QuickSilk</a>
+        </li>
+        <li>
+            <a>Solutions</a>
+        </li>
+        <li class="cm-menu has-dropdown">
+            <a>Services</a>
+            <ul class="cm-menu-dropdown">
+                <li class="cm-menu has-dropdown">
+                    <a>Web Hosting</a>
+                    <ul class="cm-menu-dropdown">
+                        <li>
+                            <a>Canadian Data Centre</a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="cm-menu has-dropdown">
+                    <a>Web Development</a>
+                    <ul class="cm-menu-dropdown">
+                        <li>
+                            <a>Qwwertty</a>
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <a>Domain Name Registration &amp; Transfers</a>
+                </li>
+                <li>
+                    <a>eCommerce Web Hosting</a>
+                </li>
+                <li>
+                    <a>Ecommerce Web Development</a>
+                </li>
+            </ul>
+        </li>
+        <li class="cm-menu has-dropdown">
+            <a>Customer Support</a>
+            <ul class="cm-menu-dropdown">
+                <li>
+                    <a>Desktop Email Setup</a>
+                </li>
+                <li>
+                    <a>Web Hosting Control Panel</a>
+                </li>
+                <li>
+                    <a>Domain Name Transfers</a>
+                </li>
+                <li>
+                    <a>FTP Tutorials</a>
+                </li>
+                <li class="cm-menu has-dropdown">
+                    <a>Database Tutorials</a>
+                    <ul class="cm-menu-dropdown">
+                        <li>
+                            <a>&nbsp; tesst</a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </li>
+        <li>
+            <a>Blog</a>
+        </li>
+        <li class="cm-menu has-dropdown">
+            <a>About</a>
+            <ul class="cm-menu-dropdown">
+                <li>
+                    <a>Management &amp; Advisory Board</a>
+                </li>
+                <li>
+                    <a>Community Initiatives</a>
+                </li>
+            </ul>
+        </li>
+        <li>
+            <a>Contact</a>
+        </li>
+    </ul>
+    <div class="menu-select">
+        <div class="menu-button"></div>
+        <select data-node="AppModuleMenu.select">
+            <option value="http://google.com">About</option>
+            <option>OUR PUBLICATIONS</option>
+        </select>
+    </div>
+</div>
+<hr>
+
+<a name="secondary"></a>
+<h2>Secondary Menu:</h2>
+<p>If styles not provided displays like default menu</p>
+<div class="app-module app-module-menu secondary" data-element="module-menu">
+    <ul>
+        <li class="active">
+            <a>QuickSilk</a>
+        </li>
+        <li>
+            <a>Solutions</a>
+        </li>
+        <li class="cm-menu has-dropdown">
+            <a>Services</a>
+            <ul class="cm-menu-dropdown">
+                <li class="cm-menu has-dropdown">
+                    <a>Web Hosting</a>
+                    <ul class="cm-menu-dropdown">
+                        <li>
+                            <a>Canadian Data Centre</a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="cm-menu has-dropdown">
+                    <a>Web Development</a>
+                    <ul class="cm-menu-dropdown">
+                        <li>
+                            <a>Qwwertty</a>
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <a>Domain Name Registration &amp; Transfers</a>
+                </li>
+                <li>
+                    <a>eCommerce Web Hosting</a>
+                </li>
+                <li>
+                    <a>Ecommerce Web Development</a>
+                </li>
+            </ul>
+        </li>
+        <li class="cm-menu has-dropdown">
+            <a>Customer Support</a>
+            <ul class="cm-menu-dropdown">
+                <li>
+                    <a>Desktop Email Setup</a>
+                </li>
+                <li>
+                    <a>Web Hosting Control Panel</a>
+                </li>
+                <li>
+                    <a>Domain Name Transfers</a>
+                </li>
+                <li>
+                    <a>FTP Tutorials</a>
+                </li>
+                <li class="cm-menu has-dropdown">
+                    <a>Database Tutorials</a>
+                    <ul class="cm-menu-dropdown">
+                        <li>
+                            <a>tesst</a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </li>
+        <li>
+            <a>Blog</a>
+        </li>
+        <li class="cm-menu has-dropdown">
+            <a>About</a>
+            <ul class="cm-menu-dropdown">
+                <li>
+                    <a>Management &amp; Advisory Board</a>
+                </li>
+                <li>
+                    <a>Community Initiatives</a>
+                </li>
+            </ul>
+        </li>
+        <li>
+            <a>Contact</a>
+        </li>
+    </ul>
+    <div class="menu-select">
+        <div class="menu-button"></div>
+        <select data-node="AppModuleMenu.select">
+            <option value="http://google.com">About</option>
+            <option>OUR PUBLICATIONS</option>
+        </select>
+    </div>
+</div>
+<hr>
+
+<a name="vertical"></a>
+<h2>Vertical Menu:</h2>
+<div class="app-module app-module-menu vertical" data-element="module-menu">
+    <ul>
+        <li class="active">
+            <a>QuickSilk</a>
+        </li>
+        <li>
+            <a>Solutions</a>
+        </li>
+        <li class="has-dropdown">
+            <a>Services</a>
+            <ul>
+                <li class="has-dropdown">
+                    <a>Web Hosting</a>
+                    <ul>
+                        <li>
+                            <a>Canadian Data Centre</a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="has-dropdown">
+                    <a>Web Development</a>
+                    <ul>
+                        <li>
+                            <a>Qwwertty</a>
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <a>Domain Name Registration &amp; Transfers</a>
+                </li>
+                <li>
+                    <a>eCommerce Web Hosting</a>
+                </li>
+                <li>
+                    <a>Ecommerce Web Development</a>
+                </li>
+            </ul>
+        </li>
+        <li class="has-dropdown">
+            <a>Customer Support</a>
+            <ul>
+                <li>
+                    <a>Desktop Email Setup</a>
+                </li>
+                <li>
+                    <a>Web Hosting Control Panel</a>
+                </li>
+                <li>
+                    <a>Domain Name Transfers</a>
+                </li>
+                <li>
+                    <a>FTP Tutorials</a>
+                </li>
+                <li>
+                    <a>Database Tutorials</a>
+                </li>
+            </ul>
+        </li>
+        <li>
+            <a>Blog</a>
+        </li>
+        <li class="has-dropdown">
+            <a>About</a>
+            <ul>
+                <li>
+                    <a>Management &amp; Advisory Board</a>
+                </li>
+                <li>
+                    <a>Community Initiatives</a>
+                </li>
+            </ul>
+        </li>
+        <li>
+            <a>Contact</a>
+        </li>
+    </ul>
+</div>
+
+</body>
+
+</html>

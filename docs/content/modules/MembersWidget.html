@@ -1,0 +1,102 @@
+<!DOCTYPE HTML>
+<html class="is-adaptive">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <title>Modules: Members Widget</title>
+
+    <link type="text/css" rel="stylesheet" href="../../../../../css/index.css">
+    <link type="text/css" rel="stylesheet" href="../../styles/index.css">
+
+    <script type="text/javascript" src="../../../../common/js/polyfill.js"></script>
+    <script type="text/javascript" src="../../../../common/js/common.js"></script>
+    <script type="text/javascript" src="../../../../common/js/parts.js"></script>
+    <script type="text/javascript" src="../../../../common/js/modules.js"></script>
+    <script type="text/javascript" src="../../../../common/js/init.js"></script>
+    <script type="text/javascript" src="../../../../common/js/components/UA.js"></script>
+    <script type="text/javascript" src="../../../../common/js/components/Collector.js"></script>
+
+    <script type="text/javascript" src="../../../js/Application.js"></script>
+    <script type="text/javascript" src="../../../js/components/ModuleMenu.js"></script>
+
+    <script type="text/javascript">
+        cm.onReady(function(){
+            // Components
+            new Com.Collector()
+                .add('module-menu', function(node){
+                    new App.ModuleMenu({
+                        'node' : node
+                    });
+                })
+                .construct();
+        });
+    </script>
+</head>
+
+<body>
+
+<h1 class="cm-page-title">Modules: Members Widget</h1>
+<hr>
+
+<div class="app-module app-module-memberswidget">
+    <div class="cm-grid col-7 indent-4px bottom is-not-adaptive">
+        <ul>
+            <li>
+                <div class="cm-imagebox is-centered has-aspect cm-aspect-1x1">
+                    <a class="inner">
+                        <img src="../../../../common/img/parts/no-avatar-150.png" alt="" class="descr">
+                    </a>
+                </div>
+            </li>
+            <li>
+                <div class="cm-imagebox is-centered has-aspect cm-aspect-1x1">
+                    <a class="inner">
+                        <img src="../../../../common/img/parts/no-avatar-150.png" alt="" class="descr">
+                    </a>
+                </div>
+            </li>
+            <li>
+                <div class="cm-imagebox is-centered has-aspect cm-aspect-1x1">
+                    <a class="inner">
+                        <img src="../../../../common/img/parts/no-avatar-150.png" alt="" class="descr">
+                    </a>
+                </div>
+            </li>
+            <li>
+                <div class="cm-imagebox is-centered has-aspect cm-aspect-1x1">
+                    <a class="inner">
+                        <img src="../../../../common/img/parts/no-avatar-150.png" alt="" class="descr">
+                    </a>
+                </div>
+            </li>
+            <li>
+                <div class="cm-imagebox is-centered has-aspect cm-aspect-1x1">
+                    <a class="inner">
+                        <img src="../../../../common/img/parts/no-avatar-150.png" alt="" class="descr">
+                    </a>
+                </div>
+            </li>
+            <li>
+                <div class="cm-imagebox is-centered has-aspect cm-aspect-1x1">
+                    <a class="inner">
+                        <img src="../../../../common/img/parts/no-avatar-150.png" alt="" class="descr">
+                    </a>
+                </div>
+            </li>
+            <li>
+                <div class="cm-imagebox is-centered has-aspect cm-aspect-1x1">
+                    <a class="inner">
+                        <img src="../../../../common/img/parts/no-avatar-150.png" alt="" class="descr">
+                    </a>
+                </div>
+            </li>
+        </ul>
+    </div>
+    <div class="cm-view-all">
+        <a>View All</a>
+    </div>
+</div>
+
+</body>
+
+</html>

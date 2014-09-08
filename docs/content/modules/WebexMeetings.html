@@ -1,0 +1,172 @@
+<!DOCTYPE HTML>
+<html class="is-adaptive">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <title>Modules: Webex Meetings</title>
+
+    <link type="text/css" rel="stylesheet" href="../../../../../css/index.css">
+    <link type="text/css" rel="stylesheet" href="../../styles/index.css">
+
+    <script type="text/javascript" src="../../../../common/js/polyfill.js"></script>
+    <script type="text/javascript" src="../../../../common/js/common.js"></script>
+    <script type="text/javascript" src="../../../../common/js/parts.js"></script>
+    <script type="text/javascript" src="../../../../common/js/modules.js"></script>
+    <script type="text/javascript" src="../../../../common/js/init.js"></script>
+    <script type="text/javascript" src="../../../../common/js/components/UA.js"></script>
+    <script type="text/javascript" src="../../../../common/js/components/Collector.js"></script>
+    <script type="text/javascript" src="../../../../common/js/components/Tooltip.js"></script>
+    <script type="text/javascript" src="../../../../common/js/components/Select.js"></script>
+    <script type="text/javascript" src="../../../../common/js/components/TimeSelect.js"></script>
+    <script type="text/javascript" src="../../../../common/js/components/Calendar.js"></script>
+    <script type="text/javascript" src="../../../../common/js/components/Datepicker.js"></script>
+    <script type="text/javascript" src="../../../../common/js/components/ToggleBox.js"></script>
+
+    <script type="text/javascript" src="../../../js/Application.js"></script>
+
+    <script type="text/javascript">
+        cm.onReady(function(){
+            // Components
+            new Com.Collector()
+                .add('select', function(node){
+                    new Com.Select({'select' : node});
+                })
+                .add('datepicker', function(node){
+                    new Com.Datepicker({'input' : node});
+                })
+                .add('togglebox', function(node){
+                    new Com.ToggleBox({'node' : node});
+                })
+                .construct();
+        });
+    </script>
+</head>
+
+<body>
+
+<div class="app-module app-module-webex">
+    <h1>Meeting items</h1>
+    <div class="cm-toolbar is-adaptive">
+        <div class="inner clear">
+            <div class="left">
+                <ul class="group">
+                    <li>
+                        <a class="button">Schedule a meeting</a>
+                    </li>
+                    <li>
+                        <a class="button">Create Instant Meeting</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="com-gridlist is-adaptive">
+        <table>
+            <thead>
+                <tr>
+                    <th class="sort app-module-webex-cell-title">
+                        <a class="inner"><span>Title</span><span class="icon arrow asc"></span></a>
+                    </th>
+                    <th class="sort app-module-webex-cell-date">
+                        <a class="inner"><span>Start date</span></a>
+                    </th>
+                    <th class="sort app-module-webex-cell-timezone">
+                        <a class="inner"><span>Time zone</span></a>
+                    </th>
+                    <th class="sort app-module-webex-cell-duration">
+                        <a class="inner"><span>Duration</span></a>
+                    </th>
+                    <th class="app-module-webex-cell-links">
+                        <div class="inner">Actions</div>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="app-module-webex-cell-title">
+                        <div class="inner" title="Very long title of this created webex meeting">
+                            <a>Very long title of this created webex meeting</a>
+                        </div>
+                    </td>
+                    <td class="app-module-webex-cell-date">
+                        <div class="inner" title="08/08/2014 11:49">08/08/2014 11:49</div>
+                    </td>
+                    <td class="app-module-webex-cell-timezone">
+                        <div class="inner" title="GMT+00:00, GMT (London)">GMT+00:00, GMT (London)</div>
+                    </td>
+                    <td class="app-module-webex-cell-duration">
+                        <div class="inner" title="20 minutes">20 minutes</div>
+                    </td>
+                    <td class="app-module-webex-cell-links">
+                        <ul class="com-gridlist-links">
+                            <li><a class="gridlist-link" target="_blank">Start</a></li>
+                            <li><a class="gridlist-link" target="_blank">Join</a></li>
+                            <li><a class="gridlist-link" data-element="activenew">Edit</a></li>
+                            <li><a class="gridlist-link" data-element="activenew">Delete</a></li>
+                        </ul>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="app-module-webex-cell-title">
+                        <div class="inner" title="Very long title of this created webex meeting">
+                            <a>Very long title of this created webex meeting</a>
+                        </div>
+                    </td>
+                    <td class="app-module-webex-cell-date">
+                        <div class="inner" title="08/08/2014 11:49">08/08/2014 11:49</div>
+                    </td>
+                    <td class="app-module-webex-cell-timezone">
+                        <div class="inner" title="GMT+00:00, GMT (London)">GMT+00:00, GMT (London)</div>
+                    </td>
+                    <td class="app-module-webex-cell-duration">
+                        <div class="inner" title="20 minutes">20 minutes</div>
+                    </td>
+                    <td class="app-module-webex-cell-links">
+                        <ul class="com-gridlist-links">
+                            <li><a class="gridlist-link" target="_blank">Start</a></li>
+                            <li><a class="gridlist-link" target="_blank">Join</a></li>
+                            <li><a class="gridlist-link" data-element="activenew">Edit</a></li>
+                            <li><a class="gridlist-link" data-element="activenew">Delete</a></li>
+                        </ul>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <hr>
+    <form class="form">
+        <dl>
+            <dt>
+                <label>Title:</label>
+            </dt>
+            <dd>
+                <input type="text">
+            </dd>
+        </dl>
+        <dl>
+            <dt>
+                <label>From:</label>
+            </dt>
+            <dd>
+                <input type="text" value="00/00/0000 00:00:00" readonly data-element="datepicker" data-config='{"isDateTime" : true}'>
+            </dd>
+        </dl>
+        <dl>
+            <dt>
+                <label>To:</label>
+            </dt>
+            <dd>
+                <input type="text" value="00/00/0000 00:00:00" readonly data-element="datepicker" data-config='{"isDateTime" : true}'>
+            </dd>
+        </dl>
+        <hr>
+        <div class="btn-wrap">
+            <input type="submit" value="Filter">
+            <a class="button">Reset</a>
+        </div>
+    </form>
+</div>
+
+</body>
+
+</html>
