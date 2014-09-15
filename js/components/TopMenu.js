@@ -2,95 +2,71 @@ cm.define('App.TopMenu', {
     'modules' : [
         'Params',
         'Events',
+        'DataConfig',
         'DataNodes'
     ],
     'events' : [
         'onRender',
-        'onCollapseStart',
         'onCollapse',
-        'onExpandStart',
         'onExpand'
     ],
     'params' : {
         'node' : cm.Node('div'),
-        'nodesMarker' : false
+        'target' : 'document.html'
     }
 },
 function(params){
-    var that = this,
-        timeOut;
+    var that = this;
 
     that.nodes = {
-        'AppNodes' : {
-            'container' : cm.Node('div')
-        },
-        'AppTopMenu' : {
-            'button': cm.Node('div'),
-            'target': cm.Node('div')
-        }
+        'container': cm.Node('div'),
+        'button': cm.Node('div'),
+        'target': cm.Node('div')
     };
 
-    that.isExpand = false;
-
-    /* *** CLASS FUNCTIONS *** */
+    that.isExpanded = false;
 
     var init = function(){
         that.setParams(params);
         that.convertEvents(that.params['events']);
-        that.getDataNodes();
+        that.getDataNodes(that.params['node']);
+        that.getDataConfig(that.params['node']);
         render();
     };
 
     var render = function(){
-        that.isExpand = cm.isClass(that.nodes['AppNodes']['container'], 'is-expand');
-        cm.addEvent(that.nodes['AppTopMenu']['button'], 'click', toggle);
-        cm.addEvent(window, 'resize', resizeHandler);
+        cm.addEvent(that.nodes['button'], 'click', toggle);
+        that.isExpanded = cm.isClass(that.nodes['container'], 'is-expanded');
+        // Add to global arrays
+        App.Elements[that.className] = that;
+        App.Nodes[that.className] = that.nodes;
+        // Trigger render event
         that.triggerEvent('onRender');
     };
 
     var toggle = function(){
-        if(that.isExpand){
+        if(that.isExpanded){
             that.collapse();
         }else{
             that.expand();
         }
     };
 
-    var resizeHandler = function(){
-        that.collapse(true);
-    };
+    /* ******* MAIN ******* */
 
-    /* *** MAIN *** */
-
-    that.expand = function(isImmediately){
-        that.isExpand = true;
-        that.nodes['AppTopMenu']['target'].style.display = 'block';
-        that.triggerEvent('onExpandStart');
-        isImmediately && cm.addClass(that.nodes['AppNodes']['container'], 'is-immediately');
-        cm.addClass(that.nodes['AppNodes']['container'], 'is-expand', true);
-        isImmediately && cm.removeClass(that.nodes['AppNodes']['container'], 'is-immediately');
-        timeOut && clearTimeout(timeOut);
-        timeOut = setTimeout(function(){
-            that.triggerEvent('onExpand');
-        }, isImmediately? 0 : 300);
+    that.expand = function(){
+        that.isExpanded = true;
+        cm.replaceClass(that.nodes['container'], 'is-collapsed', 'is-expanded');
+        cm.replaceClass(that.params['target'], 'is-app-topmenu--collapsed', 'is-app-topmenu--expanded', true);
+        that.triggerEvent('onExpand');
         return that;
     };
 
-    that.collapse = function(isImmediately){
-        that.isExpand = false;
-        that.triggerEvent('onCollapseStart');
-        isImmediately && cm.addClass(that.nodes['AppNodes']['container'], 'is-immediately');
-        cm.removeClass(that.nodes['AppNodes']['container'], 'is-expand', true);
-        isImmediately && cm.removeClass(that.nodes['AppNodes']['container'], 'is-immediately');
-        timeOut && clearTimeout(timeOut);
-        timeOut = setTimeout(function(){
-            if(cm._deviceType == 'desktop' || (cm._deviceType == 'tablet' && cm._deviceOrientation == 'landscape')){
-                that.nodes['AppTopMenu']['target'].style.display = 'block';
-            }else{
-                that.nodes['AppTopMenu']['target'].style.display = 'none';
-            }
-            that.triggerEvent('onCollapse');
-        }, isImmediately? 0 : 300);
+    that.collapse = function(){
+        that.isExpanded = false;
+        cm.replaceClass(that.nodes['container'], 'is-expanded', 'is-collapsed');
+        cm.replaceClass(that.params['target'], 'is-app-topmenu--expanded', 'is-app-topmenu--collapsed', true);
+        that.triggerEvent('onCollapse');
         return that;
     };
 

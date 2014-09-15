@@ -1,13 +1,11 @@
 /* ******* TOPMENU ******* */
 
 .app-topmenu {
-    height: @AppTopMenu-size;
+    height: @App-TopMenu-height;
     position: fixed;
-    top: 0;
-    right: 0;
-    left: 0;
-    z-index: 4;
-    background: #000;
+    .cm-position(0, 0, auto, 0);
+    z-index: 104;
+    background-color: @App-TopMenu-background;
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
 
     > .inner {
@@ -25,7 +23,7 @@
         z-index: 2;
         display: block;
         float: left;
-        margin: ((@AppTopMenu-size - 24px) / 2) 0 0 @cm-indentXSmall;
+        margin: ((@App-TopMenu-height - 24px) / 2) 0 0 @cm-indentXSmall;
         background-image: url("@{AppPath-image}/components/topmenu-logo.png");
         .cm-transition(opacity 0.3s ease-in-out);
 
@@ -37,8 +35,8 @@
     // /* Menu  */
 
     .menu-button {
-        width: @AppTopMenu-size;
-        height: @AppTopMenu-size;
+        width: @App-TopMenu-height;
+        height: @App-TopMenu-height;
         position: absolute;
         .cm-position(0, 0, 0, auto);
         .icon.medium.menu-white;
@@ -76,7 +74,7 @@
             font-size: 13px;
             font-weight: normal;
             line-height: 40px;
-            color: #d6d6d6;
+            color: @App-TopMenu-color;
             white-space: nowrap;
 
             &:before {
@@ -85,14 +83,14 @@
                 display: block;
                 position: absolute;
                 .cm-position(12px, auto, auto, -@cm-indentXSmall);
-                background: #d6d6d6;
+                background: @App-TopMenu-color;
                 content: '';
             }
 
             > a {
                 display: block;
                 font-weight: @cm-boldWeight;
-                color: #d6d6d6;
+                color: @App-TopMenu-color;
                 text-decoration: none;
 
                 .icon {
@@ -173,7 +171,9 @@
 
 /* *** ADAPTIVE *** */
 
-@media only screen and (max-width : 1280px) and (min-width: @cm-screenTabletPortrait) and (orientation: landscape) {
+@media only screen and (max-width : 1280px)
+                   and (min-width: @cm-screenTabletPortrait)
+                   and (orientation: landscape) {
 
     html.is-adaptive {
         .app-topmenu {
@@ -195,6 +195,7 @@
 
     html.is-adaptive {
         .app-topmenu {
+            .cm-transition(height @App-TopMenu-duration ease-in-out);
 
             .menu-button {
                 display: block;
@@ -203,14 +204,13 @@
             .menu-holder {
                 display: block;
                 padding: 0;
-                width: 50%;
-                height: 100%;
-                position: fixed;
-                .cm-position(0, -50%, 0, auto);
+                position: absolute;
+                .cm-position(@App-TopMenu-height, 0, 0, 0);
+                overflow: hidden;
 
                 > .inner {
                     .cm-scroll-a-y;
-                    padding: (@AppTopMenu-size + @cm-indentXSmall) @cm-indentXSmall @cm-indentXSmall;
+                    padding: (@App-TopMenu-height + @cm-indentXSmall) @cm-indentXSmall @cm-indentXSmall;
                 }
             }
 
@@ -287,8 +287,12 @@
                         background: none;
                         font-size: 13px;
                         font-weight: normal;
-                        color: #d6d6d6;
+                        color: @App-TopMenu-color;
                         .cm-text-overflow;
+
+                        &:hover {
+                            text-decoration: underline;
+                        }
 
                         &:before,
                         &:after {
@@ -299,7 +303,7 @@
             }
 
             .menu-centered {
-                height: @AppTopMenu-size;
+                height: @App-TopMenu-height;
                 margin: 0;
                 .cm-position(0, 0, auto, 0);
 
@@ -314,18 +318,9 @@
                     }
                 }
             }
-        }
-    }
 
-}
-
-@media only screen and (max-width : @cm-screenMobilePortrait) and (orientation: portrait){
-
-    html.is-adaptive {
-        .app-topmenu {
-            .menu-holder {
-                width: 80%;
-                .cm-position(0, -80%, 0, auto);
+            &.is-expanded {
+                height: 100%;
             }
         }
     }

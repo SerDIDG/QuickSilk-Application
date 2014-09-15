@@ -1,0 +1,149 @@
+/* ******* PART: UI ******* */
+
+/* *** MODULES / PAGES *** */
+
+.app-page,
+.app-module {
+    margin: 0 0 @cm-indentMedium;
+
+    &.bottom {
+        margin: 0;
+    }
+}
+
+.app-page-title {
+    margin: 0 0 @cm-indentMedium;
+}
+
+.app-module-default:extend(.app-module all),
+.app-page-default:extend(.app-module all) {}
+
+/* *** AREAS *** */
+
+.app-main-area:extend(.clear all) {
+    min-height: 500px;
+}
+
+.app-footer-area:extend(.clear all),
+.app-header-area:extend(.clear all) {
+    min-width: 200px;
+    min-height: @cm-indentMedium * 2;
+    padding: 0;
+    position: absolute;
+    z-index: 1;
+
+    &.main {
+        min-width: 0;
+        position: relative;
+    }
+
+    &:hover {
+        z-index: 100 !important;
+    }
+
+    .app-module {
+        margin: 0;
+    }
+}
+
+/* *** WRAPPERS *** */
+
+.app-template {
+    min-height: 100%;
+    position: relative;
+}
+
+html {
+    &.is-app-topmenu {
+        .app-template {
+            margin-top: @App-TopMenu-height;
+        }
+
+        .app-sidebar {
+            top: @App-TopMenu-height;
+        }
+    }
+
+    &.is-app-sidebar {
+        .app-template {
+            margin-left: @App-Sidebar-width;
+            .cm-transition(margin @App-Sidebar-duration ease-in-out);
+        }
+
+        &.is-app-sidebar--collapsed {
+            .app-template {
+                margin-left: @App-Sidebar-widthCollapsed;
+            }
+        }
+    }
+
+    &.is-app-sidebar--collapsed,
+    &:not(.is-app-sidebar--expanded):not(.is-app-sidebar--collapsed) {
+        .app-footer-area,
+        .app-header-area,
+        .app-main-area {
+            min-height: 0;
+        }
+
+        .app-module {
+            &:last-child {
+                margin: 0;
+            }
+        }
+
+        .cm-draganddrop-area {
+            min-height: 0;
+            padding: 0;
+        }
+
+        .app-widget-container {
+            &:last-child {
+                margin: 0;
+            }
+        }
+    }
+
+    &.is-immediately {
+        .app-template {
+            .cm-transition-none;
+        }
+    }
+}
+
+/* ******* PART: UI: ADAPTIVE ******* */
+
+@media only screen and (max-width : @cm-screenTablet) {
+
+    html.is-adaptive {
+        &.is-app-sidebar {
+            .app-template {
+                margin-left: @App-Sidebar-widthTablet;
+            }
+
+            &.is-app-sidebar--collapsed {
+                .app-template {
+                    margin-left: @App-Sidebar-widthCollapsed;
+                }
+            }
+        }
+    }
+
+}
+
+@media only screen and (max-width : @cm-screenMobilePortrait) {
+
+    html.is-adaptive {
+        &.is-app-sidebar {
+            .app-template {
+                margin-left: 0;
+            }
+
+            &.is-app-sidebar--collapsed {
+                .app-template {
+                    margin-left: 0;
+                }
+            }
+        }
+    }
+
+}

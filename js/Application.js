@@ -1,18 +1,4 @@
 var App = {
     'Elements': {},
-    'Nodes' : {},
-    'config' : {
-        'App.LoginBox' : {
-            'width' : 350
-        }
-    }
+    'Nodes' : {}
 };
-
-App['Application'] = function(){
-
-};
-
-
-
-
-

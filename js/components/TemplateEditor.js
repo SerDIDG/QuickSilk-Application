@@ -1,56 +1,112 @@
-App['TemplateEditor'] = function(o){
-    var that = this,
-        config = cm.merge({
-            'node' : cm.Node('div'),
-            'events' : {},
-            'nodes' : {},
-            'Com.Draganddrop' : {
-                'renderTemporaryAria' : true
-            }
-        }, o),
-        API = {
-            'onDrop' : [],
-            'onAppend' : [],
-            'onRemove' : [],
-            'onEmbed' : [],
-            'onReplace' : []
+cm.define('App.TemplateEditor', {
+    'modules' : [
+        'Params',
+        'Events',
+        'DataConfig',
+        'DataNodes',
+        'Storage'
+    ],
+    'events' : [
+        'onRender',
+        'onDrop',
+        'onAppend',
+        'onRemove',
+        'onEmbed',
+        'onReplace'
+    ],
+    'params' : {
+        'node' : cm.Node('div'),
+        'Com.Draganddrop' : {
+            'renderTemporaryAria' : true
+        }
+    }
+},
+function(params){
+    var that = this;
+    
+    that.components = {};
+    that.nodes = {
+        'Template' : {
+            'container' : cm.Node('div')
         },
-        nodes = {
-            'AppNodes' : {
-                'wrapperCollapsible' : cm.Node('div'),
-                'scroll' : cm.Node('div')
-            },
-            'AppWidgetsPanel' : {
-                'container' : cm.Node('div'),
-                'removeZone' : cm.Node('div'),
-                'widgetsContainer' : cm.Node('div'),
-                'widgets' : []
-            },
-            'Template' : {
-                'container' : cm.Node('div'),
-                'scroll' : cm.Node('div')
-            }
-        },
-        coms = {},
-        components;
+        'AppSidebar' : {
+            'removeZone' : cm.Node('div'),
+            'widgetsContainer' : cm.Node('div'),
+            'widgets' : []
+        }
+    };
 
     /* *** INIT *** */
 
     var init = function(){
-        // Init collector
-        components = new Com.Collector();
-        // Convert events to API
-        convertEvents(config['events']);
-        // Collect nodes
-        getNodes(config['node']);
-        // Process panel widgets
-        processPanelWidgets();
-        // Drag & Drop
-        initDragAndDrop();
-        // Construct components
-        components.construct();
+        that.setParams(params);
+        that.convertEvents(that.params['events']);
+        that.getDataNodes(that.params['node'], that.params['nodesDataMarker'], null);
+        that.getDataConfig(that.params['node']);
+        render();
     };
-    
+
+    var render = function(){
+        initSidebar();
+        processPanelWidgets();
+        initDragAndDrop();
+        that.triggerEvent('onRender');
+    };
+
+    var initSidebar = function(){
+        if(App.Elements['App.Sidebar']){
+            App.Elements['App.Sidebar']
+                .addEvent('onExpand', onSidebarExpand)
+                .addEvent('onCollapse', onSidebarCollapse);
+
+            if(App.Elements['App.Sidebar'].isExpanded){
+                onSidebarExpand();
+            }else{
+                onSidebarCollapse();
+            }
+        }else{
+            onSidebarCollapse();
+        }
+    };
+
+    var onSidebarExpand = function(){
+        var columns, widgets;
+        // Enable columns editable
+        columns = cm.getByClass('app-module-columns');
+        cm.forEach(columns, function(column){
+            if(!cm.isClass(column, 'is-locked')){
+                cm.addClass(column, 'is-editable');
+            }
+            if(cm.isClass(column, 'is-hidden')){
+                cm.addClass(column, 'is-visible');
+            }
+        });
+        // Enable widgets editable
+        widgets = cm.getByClass('app-widget');
+        cm.forEach(widgets, function(widget){
+            if(!cm.isClass(widget, 'is-locked')){
+                cm.addClass(widget, 'is-editable');
+            }
+            if(cm.isClass(widget, 'is-hidden')){
+                cm.addClass(widget, 'is-visible');
+            }
+        });
+    };
+
+    var onSidebarCollapse = function(){
+        var columns, widgets;
+        // Disable columns editable
+        columns = cm.getByClass('app-module-columns');
+        cm.forEach(columns, function(column){
+            cm.removeClass(column, 'is-editable is-visible');
+        });
+        // Disable widgets editable
+        widgets = cm.getByClass('app-widget');
+        cm.forEach(widgets, function(widget){
+            cm.removeClass(widget, 'is-editable is-visible');
+        });
+    };
+
     var renderLoaderBox = function(){
         var node;
         node = cm.Node('div', {'class' : 'cm-loader-box position'},
@@ -60,30 +116,28 @@ App['TemplateEditor'] = function(o){
     };
 
     var processPanelWidgets = function(){
-        cm.forEach(nodes['AppWidgetsPanel']['widgets'], function(item){
+        cm.forEach(that.nodes['AppSidebar']['widgets'], function(item){
             item['container'].setAttribute('data-com-draganddrop', 'draggable');
             item['dummy'].setAttribute('data-com-draganddrop', 'drag');
         });
     };
 
     var initDragAndDrop = function(){
-        coms['dd'] = new Com.Draganddrop(
+        that.components['dd'] = new Com.Draganddrop(
             cm.merge({
-                'container' : nodes['Template']['container'],
-                'scrollNode' : nodes['Template']['scroll'],
-                'draggableContainer' : nodes['AppNodes']['wrapperCollapsible']
-            }, config['Com.Draganddrop'])
+                'container' : that.nodes['Template']['container']
+            }, that.params['Com.Draganddrop'])
         );
         // Register widgets areas and events
-        coms['dd']
-            .registerArea(nodes['AppWidgetsPanel']['widgetsContainer'], {
+        that.components['dd']
+            .registerArea(that.nodes['AppSidebar']['widgetsContainer'], {
                 'isLocked' : true,
                 'isSystem' : true,
                 'hasPadding' : false,
                 'draggableInChildNodes' : false,
                 'cloneDraggable' : true
             })
-            .registerArea(nodes['AppWidgetsPanel']['removeZone'], {
+            .registerArea(that.nodes['AppSidebar']['removeZone'], {
                 'isSystem' : true,
                 'isRemoveZone': true,
                 'hasPadding' : false
@@ -103,7 +157,7 @@ App['TemplateEditor'] = function(o){
             widget['dummy'].appendChild(widget['loaderBox']);
             cm.addClass(widget['loaderBox'], 'fadein', true);
             // API onAppend event
-            executeEvent('onAppend', {
+            that.triggerEvent('onAppend', {
                 'item' : widget,
                 'node' : widget['node'],
                 'to' : widget['to'],
@@ -111,86 +165,41 @@ App['TemplateEditor'] = function(o){
             });
         }else{
             // API onDrop event
-            executeEvent('onDrop', widget);
+            that.triggerEvent('onDrop', widget);
         }
     };
 
     var onRemove = function(dd, widget){
         // API onRemove event
-        executeEvent('onRemove', widget);
+        that.triggerEvent('onRemove', widget);
     };
 
     var onReplace = function(dd, widget){
         // API onRemove event
-        executeEvent('onReplace', widget);
-    };
-
-    /* *** MISC FUNCTIONS *** */
-
-    var convertEvents = function(o){
-        cm.forEach(o, function(item, key){
-            if(API[key] && typeof item == 'function'){
-                API[key].push(item);
-            }
-        });
-    };
-
-    var getNodes = function(container, marker){
-        if(container){
-            var sourceNodes = {};
-            if(marker){
-                sourceNodes = cm.getNodes(container)[marker] || {};
-            }else{
-                sourceNodes = cm.getNodes(container);
-            }
-            nodes = cm.merge(nodes, sourceNodes);
-        }
-        nodes = cm.merge(nodes, config['nodes']);
-    };
-
-    var executeEvent = function(event, params){
-        API[event].forEach(function(item){
-            item(that, params || {});
-        });
+        that.triggerEvent('onReplace', widget);
     };
 
     /* ******* MAIN ******* */
 
     that.registerArea = function(area, params){
-        coms['dd'].registerArea(area, params);
+        that.components['dd'].registerArea(area, params);
         return that;
     };
 
     that.removeArea = function(area, params){
-        coms['dd'].removeArea(area, params);
+        that.components['dd'].removeArea(area, params);
         return that;
     };
 
     that.removeWidget = function(widget, params){
-        coms['dd'].removeDraggable(widget, params);
+        that.components['dd'].removeDraggable(widget, params);
         return that;
     };
 
     that.replaceWidget = function(oldNode, newNode, params){
-        coms['dd'].replaceDraggable(oldNode, newNode, params);
-        return that;
-    };
-
-    that.addEvent = function(event, handler){
-        if(API[event] && typeof handler == 'function'){
-            API[event].push(handler);
-        }
-        return that;
-    };
-
-    that.removeEvent = function(event, handler){
-        if(API[event] && typeof handler == 'function'){
-            API[event] = API[event].filter(function(item){
-                return item != handler;
-            });
-        }
+        that.components['dd'].replaceDraggable(oldNode, newNode, params);
         return that;
     };
 
     init();
-};
+});

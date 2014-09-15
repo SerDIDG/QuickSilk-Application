@@ -1,0 +1,183 @@
+/* ******* COMPONENT: SIDEBAR ******* */
+
+.app-sidebar {
+    width: @App-Sidebar-width;
+    position: fixed;
+    .cm-position(0, auto, 0, 0);
+    z-index: 102;
+    overflow: hidden;
+    background: @App-Sidebar-background;
+    box-shadow: @cm-ui-shadow;
+    -webkit-transition: -webkit-transform @App-Sidebar-duration ease-in-out;
+        -ms-transition:     -ms-transform @App-Sidebar-duration ease-in-out;
+            transition:         transform @App-Sidebar-duration ease-in-out;
+
+    > .inner {
+        position: absolute;
+        .cm-position(0, 0, 0, 0);
+
+        > .title {
+            padding: 6px @App-Sidebar-padding;
+            position: absolute;
+            .cm-position(0, 0, auto, 0);
+            background: @App-Sidebar-background;
+            .cm-user-select(none);
+            #cm > .font-title;
+            text-align: left;
+
+            .icon {
+                position: absolute;
+                .cm-position(14px, @cm-indentXSmall, auto, auto);
+                cursor: pointer;
+                -webkit-transition: -webkit-transform @App-Sidebar-duration ease-in-out;
+                    -ms-transition:     -ms-transform @App-Sidebar-duration ease-in-out;
+                        transition:         transform @App-Sidebar-duration ease-in-out;
+            }
+        }
+
+        > .descr {
+            padding: @App-Sidebar-padding;
+            .cm-scroll-y;
+            position: absolute;
+            .cm-position(50px, 0, 0, 0);
+            background: @App-Sidebar-background;
+            .cm-transition(opacity @App-Sidebar-duration ease-in-out);
+        }
+    }
+
+    &.is-collapsed {
+        @translate: @App-Sidebar-widthCollapsed - @App-Sidebar-width;
+        -webkit-transform: translateX(@translate);
+            -ms-transform: translateX(@translate);
+                transform: translateX(@translate);
+
+        > .inner {
+            > .title {
+                .icon {
+                    -webkit-transform: rotate(180deg);
+                        -ms-transform: rotate(180deg);
+                            transform: rotate(180deg);
+                }
+            }
+
+            > .descr {
+                opacity: 0;
+                .cm-opacity-ie(0);
+            }
+        }
+    }
+
+    &.is-immediately {
+        .cm-transition-none;
+
+        > .inner {
+            > .title {
+                .icon {
+                    .cm-transition-none;
+                }
+            }
+
+            > .descr {
+                .cm-transition-none;
+            }
+        }
+    }
+
+    // /* *** REMOVE ZONE *** */
+
+    .remove-zone {
+        position: absolute;
+        padding: 0;
+        .cm-position(0, 0, 0, 0);
+        z-index: 3;
+        opacity: 0;
+        background: fadeout(@cm-colorError, 50%);
+        border-radius: 0;
+        visibility: hidden;
+
+        .title {
+            padding: 6px @cm-indentXSmall;
+            background-color: @cm-colorError;
+            #cm > .font-title;
+            color: #fff;
+        }
+
+        &.cm-draganddrop-area {
+            &.is-available {
+                .cm-transition(all @cm-transitionDuration ease-in-out);
+
+                &.is-highlight {
+                    visibility: visible;
+                    opacity: 1;
+                    background: fadeout(@cm-colorError, 75%);
+
+                    &:before {
+                        display: none;
+                    }
+                }
+
+                &.is-active {
+                    visibility: visible;
+                    opacity: 1;
+                    background: fadeout(@cm-colorError, 50%);
+
+                    &:before {
+                        display: none;
+                    }
+                }
+            }
+        }
+    }
+}
+
+/* *** WIDGETS CATEGORY *** */
+
+.app-widgets-category {
+    margin: 10px 0 0 0;
+
+    &:first-child {
+        margin: 0;
+    }
+
+    > dd {
+        margin: 0 -@AppWidget-dummyPadding;
+        font-size: 0;
+        background: @App-Sidebar-background;  /* Fix blinked blocks on collapse in Firefox. */
+    }
+
+    .app-widget-container {
+        width: @App-Sidebar-dummyWidth;
+        margin: 0;
+        display: inline-block;
+        vertical-align: top;
+    }
+}
+
+/* ******* COMPONENT: SIDEBAR: ADAPTIVE ******* */
+
+@media only screen and (max-width : @cm-screenTablet) {
+
+    html.is-adaptive {
+        .app-sidebar {
+            width: @App-Sidebar-widthTablet;
+
+            &.is-collapsed {
+                @translate: @App-Sidebar-widthCollapsed - @App-Sidebar-widthTablet;
+                -webkit-transform: translateX(@translate);
+                -ms-transform: translateX(@translate);
+                transform: translateX(@translate);
+            }
+        }
+    }
+
+}
+
+@media only screen and (max-width : @cm-screenMobilePortrait) {
+
+    html.is-adaptive {
+        .app-sidebar {
+            display: none;
+        }
+    }
+
+}

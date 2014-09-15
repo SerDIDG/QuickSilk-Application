@@ -1,168 +1,15 @@
-/* ************ APPLICATION STYLES ************ */
+/* ************ APPLICATION: STYLES ************ */
 
 /* ******* TAGS ******* */
 
 html {
-    width: 100%;
     height: 100%;
+    .cm-scroll-y;
 }
 
 body {
     min-width: 320px;
     height: 100%;
-    position: relative;
-}
-
-/* ******* STATIC CLASSES ******* */
-
-.app-page,
-.app-module {
-    margin: 0 0 @cm-indentMedium;
-
-    &.bottom {
-        margin: 0;
-    }
-}
-
-.app-page-title {
-    margin: 0 0 @cm-indentMedium;
-}
-
-/* ******* STRUCTURE ******* */
-
-.app-wrapper {
-    position: absolute;
-    .cm-position(0,0,0,0);
-    -webkit-transition: -webkit-transform @cm-transitionDuration ease-in-out;
-        -ms-transition:     -ms-transform @cm-transitionDuration ease-in-out;
-            transition:         transform @cm-transitionDuration ease-in-out;
-
-    &.has-topmenu {
-        .app-wrapper-inner {
-            top: @AppTopMenu-size;
-        }
-    }
-}
-
-.app-wrapper-inner {
-    position: absolute;
-    .cm-position(0,0,0,0);
-}
-
-.app-page-wrapper {
-    height: auto;
-    position: absolute;
-    .cm-position(0,0,0,0);
-    .cm-scroll-y;
-    overflow-x: auto;
-
-    > .inner {
-        min-height: 100%;
-        position: relative;
-    }
-}
-
-.app-module-default:extend(.app-module all),
-.app-page-default:extend(.app-module all) {}
-
-/* *** HEADER / FOOTER AREAS *** */
-
-.app-main-area:extend(.clear all) {
-    min-height: 500px;
-}
-
-.app-footer-area:extend(.clear all),
-.app-header-area:extend(.clear all) {
-    min-width: 200px;
-    min-height: @cm-indentMedium * 2;
-    padding: 0;
-    position: absolute;
-    z-index: 1;
-
-    &.main {
-        min-width: 0;
-        position: relative;
-    }
-
-    &:hover {
-        z-index: 100 !important;
-    }
-
-    .app-module {
-        margin: 0;
-    }
-}
-
-/* *** COLLAPSIBLE WRAPPER *** */
-
-.app-wrapper-collapsible {
-    &.is-sidebar-left-collapsed {
-        .cm-draganddrop-area {
-            min-height: 0;
-            padding: 0;
-        }
-
-        .app-widget-container {
-            &:last-child {
-                margin: 0;
-            }
-        }
-
-        .app-main-area {
-            min-height: 0;
-        }
-    }
-
-    &:not(.is-sidebar-left-collapsed):not(.is-sidebar-left-expanded) {
-        .app-footer-area,
-        .app-header-area,
-        .app-main-area {
-            min-height: 0;
-        }
-
-        .app-module {
-            &:last-child {
-                margin: 0;
-            }
-        }
-    }
-}
-
-/* *** APPLICATION TABSET *** */
-
-.app-wrapper-tabset {
-    margin: 0;
-    position: absolute;
-    top: 10px;
-    right: 0;
-    bottom: 0;
-    left: 0;
-
-    > .com-tabset-head {
-        position: absolute;
-        top: 0;
-        right: 0;
-        left: 0;
-        bottom: auto;
-
-        ul li:first-child {
-            margin-left: 24px + (@cm-indentXSmall * 2);
-        }
-    }
-
-    > .com-tabset-content {
-        position: absolute;
-        top: @ComTabset-tabsHeight + 1;
-        right: 0;
-        bottom: 0;
-        left: 0;
-        overflow: hidden;
-        background: transparent;
-        border-left: none;
-        border-bottom: none;
-        border-right: none;
-        border-radius: 0;
-    }
 }
 
 /* ****** COMPONENTS ******* */
@@ -218,26 +65,6 @@ body {
 
 /* ******* PAGES ******* */
 
-/* *** LOGIN / FORGOT *** */
-
-.app-page-login,
-.app-page-forgot {
-    width: @AppLoginBox-width;
-    margin: 0 auto;
-}
-
-/* User Profile */
-
-.from-user-profile {
-}
-.from-user-profile > .cols.two > .col {
-    width: 30%;
-    margin: 0 0 0 4%;
-}
-.from-user-profile > .cols.two > .col:first-child {
-    width: 66%;
-}
-
 /* Admin */
 
 .admin-container .description p {
@@ -253,70 +80,4 @@ body {
     height: 24px;
     padding: 0 20px;
     border: 1px solid #AAAAAA;
-}
-
-/* ******* ADAPTIVE ******* */
-
-@media only screen and (max-width : @cm-screenTabletPortrait) {
-
-    html.is-adaptive {
-
-        /* *** STRUCTURE *** */
-
-        .app-wrapper {
-            .app-topmenu {
-                .menu-holder {
-                    display: none;
-                }
-            }
-
-            &.is-expand {
-                -webkit-transform: translateX(-50%);
-                    -ms-transform: translateX(-50%);
-                        transform: translateX(-50%);
-
-                .ie9 &,
-                .ie8 & {
-                    left: -50%;
-                }
-            }
-        }
-
-    }
-
-}
-
-@media only screen and (max-width : @cm-screenMobilePortrait) and (orientation: portrait){
-
-    html.is-adaptive {
-
-        /* *** STRUCTURE *** */
-
-        .app-wrapper {
-            &.is-expand {
-                -webkit-transform: translateX(-80%);
-                    -ms-transform: translateX(-80%);
-                        transform: translateX(-80%);
-            }
-        }
-
-    }
-
-}
-
-@media only screen and (max-width : @cm-screenMobile) and (orientation: landscape),
-       only screen and (max-width : @cm-screenMobilePortrait) and (orientation: portrait) {
-
-    html.is-adaptive {
-
-        /* *** STRUCTURE *** */
-
-        .app-wrapper-collapsible {
-            > .sidebar {
-                display: none;
-            }
-        }
-
-    }
-
 }
