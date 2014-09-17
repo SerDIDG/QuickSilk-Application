@@ -1,154 +1,125 @@
-App['SiteMap'] = function(o){
+cm.define('App.SiteMap', {
+    'modules' : [
+        'Params',
+        'Events',
+        'DataConfig',
+        'DataNodes'
+    ],
+    'events' : [
+        'onRender'
+    ],
+    'params' : {
+        'node' : cm.Node('div'),
+        'scroll' : true,
+        'scrollNode' : 'document.html',
+        'animatePadding' : true,
+        'duration' : 500
+    }
+},
+function(params){
     var that = this,
-        config = cm.merge({
-            'node' : cm.Node('div'),
-            'configMarker' : 'data-config',
-            'scroll' : true,
-            'animatePadding' : true,
-            'duration' : 500,
-            'nodes' : {}
-        }, o),
-        nodes = {
-            'AppNodes' : {
-                'container' : cm.Node('div')
-            },
-            'Template' : {
-                'content' : cm.Node('div'),
-                'footer' : cm.Node('div')
-            },
-            'AppSitemap' : {
-                'button' : cm.Node('div'),
-                'target' : cm.Node('div')
-            }
+        animations = {};
+
+    that.nodes = {
+        'Template' : {
+            'container' : cm.Node('div'),
+            'content' : cm.Node('div'),
+            'footer' : cm.Node('div')
         },
-        animations = {},
-        isHide = true,
-        animScrollType;
+        'AppSitemap' : {
+            'button' : cm.Node('div'),
+            'target' : cm.Node('div')
+        }
+    };
+
+    that.isExpanded = false;
 
     var init = function(){
-        getConfig(config['node'], config['configMarker']);
-        getNodes(document.body);
-        // Init
-        if(cm.inDOM(nodes['AppSitemap']['button'])){
-            set();
+        that.setParams(params);
+        that.convertEvents(that.params['events']);
+        that.getDataNodes(document.body, that.params['nodesDataMarker'], null);
+        that.getDataConfig(that.params['node']);
+        render();
+    };
 
-            animations['container'] = new cm.Animation(nodes['AppSitemap']['target']);
-            animations['content'] = new cm.Animation(nodes['Template']['content']);
+    var render = function(){
+        if(cm.inDOM(that.nodes['AppSitemap']['button'])){
+            setPadding();
 
-            cm.addEvent(window, 'resize', set);
-            cm.addEvent(nodes['AppSitemap']['button'], 'click', function(){
-                getScrollAnim();
-                if(isHide){
-                    show();
-                }else{
-                    hide();
-                }
-            });
+            animations['container'] = new cm.Animation(that.nodes['AppSitemap']['target']);
+            animations['content'] = new cm.Animation(that.nodes['Template']['content']);
+            animations['scroll'] = new cm.Animation(that.params['scrollNode']);
+
+            cm.addEvent(window, 'resize', setPadding);
+            cm.addEvent(that.nodes['AppSitemap']['button'], 'click', toggle);
+        }
+        that.triggerEvent('onRender');
+    };
+
+    var toggle = function(){
+        if(that.isExpanded){
+            that.collapse();
+        }else{
+            that.expand();
         }
     };
 
-    var getScrollAnim = function(){
-        if(config['scroll']){
-            animScrollType = 'node';
-            animations['scroll'] = new cm.Animation(nodes['Template']['container']);
-            /*
-            if(cm.isClass(nodes['AppNodes']['container'], 'has-topmenu') || cm.isClass(nodes['AppNodes']['container'], 'has-widgets')){
-                animScrollType = 'node';
-                animations['scroll'] = new cm.Animation(nodes['Template']['container']);
-            }else{
-                animScrollType = 'document';
-                animations['scroll'] = new cm.Animation(document.body);
-            }
-            */
+    var setPadding = function(){
+        if(that.params['animatePadding']){
+            that.nodes['Template']['content'].style.paddingBottom = [that.nodes['Template']['footer'].offsetHeight, 'px'].join('');
         }
     };
 
-    var set = function(){
-        if(config['animatePadding']){
-            nodes['Template']['content'].style.paddingBottom = [nodes['Template']['footer'].offsetHeight, 'px'].join('');
+    var getScrollStyle = function(height){
+        var styles = {};
+        if(that.params['scrollNode'] == document.body || that.params['scrollNode'] == document.documentElement){
+            styles['docScrollTop'] = [cm.getBodyScrollHeight() + height, 'px'].join('');
+        }else{
+            styles['scrollTop'] = [that.params['scrollNode'].scrollHeight + height, 'px'].join('');
         }
-    };
-
-    var show = function(){
-        var containerHeight, footerHeight;
-        if(isHide){
-            isHide = false;
-            // Add css class to button
-            cm.addClass(nodes['AppSitemap']['button'], 'is-show');
-            // Get sitemap height
-            containerHeight = cm.getRealHeight(nodes['AppSitemap']['target']);
-            // Animate map height
-            animations['container'].go({'style': {'height' : [containerHeight,'px'].join('')}, 'anim' : 'smooth', 'duration' : config['duration'], 'onStop' : function(){
-                nodes['AppSitemap']['target'].style.height = 'auto';
-                nodes['AppSitemap']['target'].style.overflow = 'visible';
-            }});
-            // Animate content padding-bottom
-            if(config['animatePadding']){
-                footerHeight = nodes['Template']['footer'].offsetHeight;
-                animations['content'].go({'style': {'paddingBottom' : [containerHeight + footerHeight,'px'].join('')}, 'anim' : 'smooth', 'duration' : config['duration']});
-            }
-            // Scroll to document bottom
-            config['scroll'] && animations['scroll'].go({
-                'style' : getScrollStyle(animScrollType),
-                'anim' : 'smooth',
-                'duration' : config['duration']
-            });
-        }
-    };
-
-    var hide = function(){
-        var footerHeight;
-        if(!isHide){
-            isHide = true;
-            // Remove css class from button
-            cm.removeClass(nodes['AppSitemap']['button'], 'is-show');
-            // Animate map height
-            nodes['AppSitemap']['target'].style.overflow = 'hidden';
-            animations['container'].go({'style' : {'height': '0px'}, 'anim' : 'acceleration', 'duration' : config['duration']});
-            // Animate content padding-bottom
-            if(config['animatePadding']){
-                nodes['AppSitemap']['target'].style.height = 0;
-                footerHeight = nodes['Template']['footer'].offsetHeight;
-                nodes['AppSitemap']['target'].style.height = 'auto';
-                animations['content'].go({'style': {'paddingBottom' : [footerHeight,'px'].join('')}, 'anim' : 'acceleration', 'duration' : config['duration']});
-            }
-        }
-    };
-
-    var getScrollStyle = function(type){
-        var types = {
-            'document' : {'docScrollTop' : cm.getPageSize('height')},
-            'node' : {'scrollTop' : nodes['Template']['container'].scrollHeight}
-        };
-        return types[type];
-    };
-
-    /* *** MISC FUNCTIONS **** */
-
-    var getNodes = function(container, marker){
-        if(container){
-            var sourceNodes = {};
-            if(marker){
-                sourceNodes = cm.getNodes(container)[marker] || {};
-            }else{
-                sourceNodes = cm.getNodes(container);
-            }
-            nodes = cm.merge(nodes, sourceNodes);
-        }
-        nodes = cm.merge(nodes, config['nodes']);
-    };
-
-    var getConfig = function(container, marker){
-        if(container){
-            marker = marker || 'data-config';
-            var sourceConfig = container.getAttribute(marker);
-            if(sourceConfig){
-                config = cm.merge(config, JSON.parse(sourceConfig));
-            }
-        }
+        return styles;
     };
 
     /* ******* MAIN ******* */
 
+    that.expand = function(){
+        var containerHeight, footerHeight;
+        that.isExpanded = true;
+        // Add css class to button
+        cm.replaceClass(that.nodes['AppSitemap']['button'], 'is-collapsed', 'is-expanded');
+        // Get sitemap height
+        containerHeight = cm.getRealHeight(that.nodes['AppSitemap']['target']);
+        // Animate map height
+        animations['container'].go({'style': {'height' : [containerHeight,'px'].join('')}, 'anim' : 'smooth', 'duration' : that.params['duration'], 'onStop' : function(){
+            that.nodes['AppSitemap']['target'].style.height = 'auto';
+            that.nodes['AppSitemap']['target'].style.overflow = 'visible';
+        }});
+        // Animate content padding-bottom
+        if(that.params['animatePadding']){
+            footerHeight = that.nodes['Template']['footer'].offsetHeight;
+            animations['content'].go({'style': {'paddingBottom' : [containerHeight + footerHeight,'px'].join('')}, 'anim' : 'smooth', 'duration' : that.params['duration']});
+        }
+        // Scroll to document bottom
+        if(that.params.scroll){
+            animations['scroll'].go({'style' : getScrollStyle(footerHeight), 'anim' : 'smooth', 'duration' : that.params['duration']});
+        }
+    };
+
+    that.collapse = function(){
+        var footerHeight;
+        that.isExpanded = false;
+        cm.replaceClass(that.nodes['AppSitemap']['button'], 'is-expanded', 'is-collapsed');
+        // Animate map height
+        that.nodes['AppSitemap']['target'].style.overflow = 'hidden';
+        animations['container'].go({'style' : {'height': '0px'}, 'anim' : 'acceleration', 'duration' : that.params['duration']});
+        // Animate content padding-bottom
+        if(that.params['animatePadding']){
+            that.nodes['AppSitemap']['target'].style.height = 0;
+            footerHeight = that.nodes['Template']['footer'].offsetHeight;
+            that.nodes['AppSitemap']['target'].style.height = 'auto';
+            animations['content'].go({'style': {'paddingBottom' : [footerHeight,'px'].join('')}, 'anim' : 'acceleration', 'duration' : that.params['duration']});
+        }
+    };
+
     init();
-};
+});
