@@ -2,6 +2,7 @@ html {
     width: auto;
     height: auto;
     overflow: auto;
+    background: #ffffff none;
 }
 
 body {
@@ -10,4 +11,5 @@ body {
     margin: 0;
     padding: 24px;
     position: static;
+    background: #ffffff none;
 }

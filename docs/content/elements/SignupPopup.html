@@ -1,0 +1,191 @@
+<!DOCTYPE HTML>
+<html class="is-adaptive">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <title>Elements: Sign Up Popup</title>
+
+    <link type="text/css" rel="stylesheet" href="../../../../../css/index.css">
+    <link type="text/css" rel="stylesheet" href="../../styles/index.css">
+
+    <script type="text/javascript" src="../../../../common/js/polyfill.js"></script>
+    <script type="text/javascript" src="../../../../common/js/common.js"></script>
+    <script type="text/javascript" src="../../../../common/js/parts.js"></script>
+    <script type="text/javascript" src="../../../../common/js/modules.js"></script>
+    <script type="text/javascript" src="../../../../common/js/init.js"></script>
+    <script type="text/javascript" src="../../../../common/js/components/UA.js"></script>
+    <script type="text/javascript" src="../../../../common/js/components/Collector.js"></script>
+    <script type="text/javascript" src="../../../../common/js/components/Dialog.js"></script>
+
+    <script type="text/javascript" src="../../../js/Application.js"></script>
+
+    <script type="text/javascript">
+        cm.onReady(function(){
+            // Components
+            new Com.Collector()
+                .addEvent('onConstruct', function(collector, data){
+                    Part.Menu();
+                    Part.Autoresize(data['node']);
+                })
+                .add('signup-popup', function(node){
+                    var dialog = new Com.Dialog({
+                        'content' : cm.getEl('sample-signupPopup'),
+                        'autoOpen' : false,
+                        'removeOnClose' : false,
+                        'titleReserve' : false,
+                        'width' : 800
+                    });
+                    cm.addEvent(node, 'click', dialog.open);
+                })
+                .construct();
+        });
+    </script>
+</head>
+
+<body>
+
+<h1 class="app-page-title">Elements: Sign Up Popup</h1>
+<hr>
+
+<div class="cm-toolbar">
+    <div class="inner clear">
+        <ul class="group">
+            <li>
+                <a class="button" data-element="signup-popup">Open Popup</a>
+            </li>
+        </ul>
+    </div>
+</div>
+
+<h2>Dialog Settings:</h2>
+
+<textarea class="cm-codebox cm-autoresize" readonly>
+<script type="text/javascript">
+    new Com.Dialog({
+        'autoOpen' : false,
+        'removeOnClose' : false,
+        'titleReserve' : false,
+        'width' : 800
+    });
+</script></textarea>
+
+<div class="display-none">
+    <div class="app-box-sign" id="sample-signupPopup">
+        <div class="inner">
+            <div class="l">
+                <div class="app-modular-sign">
+                    <h1>Login to Quicksilk</h1>
+                    <div class="app-loginbox">
+                        <form class="form">
+                            <dl class="form-box">
+                                <dt>Email:</dt>
+                                <dd>
+                                    <input type="text" name="email" tabindex="1">
+                                </dd>
+                            </dl>
+                            <dl class="form-box">
+                                <dt>Password:</dt>
+                                <dd>
+                                    <input type="password" name="password" tabindex="2">
+                                </dd>
+                            </dl>
+                            <div class="btn-wrap">
+                                <input class="wide" type="submit" value="Login" tabindex="3">
+                            </div>
+                            <dl>
+                                <dd>
+                                    <div class="check-forgot">
+                                        <div class="r">
+                                            <div class="links">
+                                                <ul>
+                                                    <li><a>Forgot your password?</a></li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                        <div class="l">
+                                            <div class="check-line outside">
+                                                <input type="checkbox" id="remember" tabindex="4">
+                                                <label for="remember">Stay signed in</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </dd>
+                            </dl>
+                        </form>
+                    </div>
+
+                    <div class="or">
+                        <span>or</span>
+                    </div>
+
+                    <p>Login with your social network account:</p>
+                    <div class="socials">
+                        <div class="icon app-icon inline large linked facebook"></div>
+                        <div class="icon app-icon inline large linked twitter"></div>
+                        <div class="icon app-icon inline large linked linkedin"></div>
+                        <div class="icon app-icon inline large linked google"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="c"></div>
+
+            <div class="r">
+                <div class="app-modular-sign">
+                    <h1>Sign up. It's free.</h1>
+                    <div class="app-loginbox">
+                        <form class="form">
+                            <dl class="form-box">
+                                <dt>First Name:</dt>
+                                <dd>
+                                    <input type="text" tabindex="1">
+                                </dd>
+                            </dl>
+                            <dl class="form-box">
+                                <dt>Last Name:</dt>
+                                <dd>
+                                    <input type="text" tabindex="2">
+                                </dd>
+                            </dl>
+                            <dl class="form-box">
+                                <dt>Email Address:</dt>
+                                <dd>
+                                    <input type="text" tabindex="3">
+                                </dd>
+                            </dl>
+                            <div class="btn-wrap">
+                                <input class="wide" type="submit" value="Sign Up" tabindex="4">
+                            </div>
+                            <dl>
+                                <dd>
+                                    <div class="check-forgot">
+                                        <div class="check-line outside">
+                                            <input type="checkbox" id="accept" tabindex="5">
+                                            <label for="accept">I accept the <a>Terms of Service</a></label>
+                                        </div>
+                                    </div>
+                                </dd>
+                            </dl>
+                        </form>
+                    </div>
+
+                    <div class="or">
+                        <span>or</span>
+                    </div>
+
+                    <p>Sign Up with your social network account:</p>
+                    <div class="socials">
+                        <div class="icon app-icon inline large linked facebook"></div>
+                        <div class="icon app-icon inline large linked twitter"></div>
+                        <div class="icon app-icon inline large linked linkedin"></div>
+                        <div class="icon app-icon inline large linked google"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+
+</html>

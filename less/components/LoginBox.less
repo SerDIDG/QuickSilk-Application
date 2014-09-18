@@ -1,4 +1,4 @@
-/* ******* LOGIN BOX ******* */
+/* ******* COMPONENT: LOGIN BOX ******* */
 
 .app-loginbox {
     .check-forgot {
@@ -44,20 +44,18 @@
     }
 }
 
-.com-tooltip {
-    &.app-loginbox-tooltip {
-        > .inner {
-            margin: 8px 0 0 0;
-            padding: @cm-indentXSmall @cm-indentMedium @cm-indentMedium;
-        }
+.com-tooltip.app-loginbox-tooltip {
+    > .inner {
+        margin: 8px 0 0 0;
+        padding: @cm-indentXSmall @cm-indentMedium @cm-indentMedium;
+    }
 
-        .app-modular-sign {
-            width: @AppLoginBox-width;
-        }
+    .app-modular-sign {
+        width: @AppLoginBox-width;
     }
 }
 
-/* Modular Sign */
+/* *** MODULAR SIGN *** */
 
 .app-modular-sign {
     .socials {
@@ -100,25 +98,84 @@
     }
 }
 
-/* *** ADAPTIVE *** */
+/* *** BOX SIGN *** */
+
+.app-box-sign {
+    padding: @cm-indentMedium;
+
+    > .inner {
+        &:extend(.clear all);
+
+        position: relative;
+
+        > .l,
+        > .r {
+            width: 50%;
+            .cm-box-sizing();
+            float: left;
+        }
+
+        > .c {
+            margin-left: -(@cm-borderBoxWidth / 2);
+            position: absolute;
+            .cm-position(0, auto, 0, 50%);
+            border-right: @cm-borderBox;
+        }
+
+        > .l {
+            padding: 0 @cm-indentXLarge 0 0;
+        }
+
+        > .r {
+            padding: 0 0 0 @cm-indentXLarge;
+        }
+    }
+}
+
+/* ******* COMPONENT: LOGIN BOX: ADAPTIVE ******* */
+
+@media only screen and (max-width : @cm-screenTabletPortrait) {
+
+    html.is-adaptive {
+        .app-box-sign {
+            padding: 0;
+
+            > .inner {
+                > .l,
+                > .r {
+                    width: auto;
+                    padding: 0;
+                    float: none;
+                }
+
+                > .c {
+                    margin: @cm-indentMedium 0;
+                    position: static;
+                    .cm-position(auto, auto, auto, auto);
+                    border: none;
+                    border-bottom: @cm-borderBox;
+                }
+            }
+        }
+    }
+
+}
 
 @media only screen and (max-width : @cm-screenMobile) {
 
     html.is-adaptive {
-        .com-tooltip {
-            &.app-loginbox-tooltip {
-                top: 46px !important;
-                left: 0 !important;
-                right: 0 !important;
-                position: absolute;
+        .com-tooltip.app-loginbox-tooltip {
+            top: 46px !important;
+            left: 0 !important;
+            right: 0 !important;
+            position: absolute;
 
-                > .inner {
-                    margin: 0;
-                }
+            > .inner {
+                margin: 0;
+            }
 
-                .app-modular-sign {
-                    width: auto;
-                }
+            .app-modular-sign {
+                width: auto;
             }
         }
     }
