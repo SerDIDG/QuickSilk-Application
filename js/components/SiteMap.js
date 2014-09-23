@@ -88,7 +88,7 @@ function(params){
         // Add css class to button
         cm.replaceClass(that.nodes['AppSitemap']['button'], 'is-collapsed', 'is-expanded');
         // Get sitemap height
-        containerHeight = cm.getRealHeight(that.nodes['AppSitemap']['target']);
+        containerHeight = cm.getRealHeight(that.nodes['AppSitemap']['target'], 'offset', 'current');
         // Animate map height
         animations['container'].go({'style': {'height' : [containerHeight,'px'].join('')}, 'anim' : 'smooth', 'duration' : that.params['duration'], 'onStop' : function(){
             that.nodes['AppSitemap']['target'].style.height = 'auto';

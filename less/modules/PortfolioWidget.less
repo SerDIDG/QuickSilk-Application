@@ -1,0 +1,34 @@
+/* ******* MODULES: PORTFOLIO WIDGET ******* */
+
+.mod__portfolio-widget {
+    .com-slider:last-child,
+    .com-slider-layout:last-child,
+    .cm-toolbar:last-child {
+        margin: 0;
+    }
+}
+
+/* *** ITEM *** */
+
+.mod__portfolio-widget__item {
+    > .inner {
+        &:extend(.clear all);
+
+        .image {
+            img {
+                &:extend(.cm-image-resizable all);
+                display: block;
+            }
+
+            &.pull-left {
+                float: left;
+                margin: 0 @cm-indentXSmall @cm-indentXSmall 0;
+            }
+
+            &.pull-right {
+                float: right;
+                margin: 0 0 @cm-indentXSmall @cm-indentXSmall;
+            }
+        }
+    }
+}

@@ -1,0 +1,88 @@
+<!DOCTYPE HTML>
+<html class="is-adaptive">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <title>Modules: Portfolio Widget</title>
+
+    <link type="text/css" rel="stylesheet" href="../../../../../css/index.css">
+    <link type="text/css" rel="stylesheet" href="../../styles/index.css">
+
+    <script type="text/javascript" src="../../../../common/js/polyfill.js"></script>
+    <script type="text/javascript" src="../../../../common/js/common.js"></script>
+    <script type="text/javascript" src="../../../../common/js/parts.js"></script>
+    <script type="text/javascript" src="../../../../common/js/modules.js"></script>
+    <script type="text/javascript" src="../../../../common/js/init.js"></script>
+    <script type="text/javascript" src="../../../../common/js/components/UA.js"></script>
+    <script type="text/javascript" src="../../../../common/js/components/Collector.js"></script>
+    <script type="text/javascript" src="../../../../common/js/components/Slider.js"></script>
+
+    <script type="text/javascript" src="../../../js/Application.js"></script>
+    <script type="text/javascript" src="../../../js/components/ModuleMenu.js"></script>
+
+    <script type="text/javascript">
+        cm.onReady(function(){
+            // Components
+            new Com.Collector()
+                .add('module-menu', function(node){
+                    new App.ModuleMenu({
+                        'node' : node
+                    });
+                })
+                .add('slider', function(node){
+                    new Com.Slider({
+                        'node' : node
+                    });
+                })
+                .construct();
+        });
+    </script>
+</head>
+
+<body>
+
+<h1 class="cm-page-title">Modules: Portfolio Widget</h1>
+<hr>
+
+<div style="width: 400px">
+    <div class="app-module mod__portfolio-widget">
+        <div class="com-slider"  data-element="slider" data-node="ComSlider:{}:container" data-config='{"buttons" : false, "arrows" : "false", "fadePrevious" : true, "calculateMaxHeight" : true}'>
+            <div class="inner" data-node="inner">
+                <div class="slides" data-node="slides">
+                    <ul data-node="slidesInner">
+                        <li data-node="items:[]:container">
+                            <div class="mod__portfolio-widget__item">
+                                <div class="inner">
+                                    <div class="image pull-right">
+                                        <img src="../../images/modules/portfolio-widget/logo-1.jpg" alt="">
+                                    </div>
+                                    <div class="text">
+                                        <h3>iVote-jeVote</h3>
+                                        <p>The iVote-jeVote website is a youth democratic engagement event website with the express goal of bringing together Canada's national political leaders to challenge them to motivate youth to get involved in the political process.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+
+                        <li data-node="items:[]:container">
+                            <div class="mod__portfolio-widget__item">
+                                <div class="inner">
+                                    <div class="image pull-right">
+                                        <img src="../../images/modules/portfolio-widget/logo-2.jpg" alt="">
+                                    </div>
+                                    <div class="text">
+                                        <h3>Office of the Parliamentary Budget Officer</h3>
+                                        <p>QuickSilk has developed a highly-commended integrated monitoring database that helps Members of Parliament, Senators and Citizens scrutinize the government’s financial performance.</p>                                </div>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+
+</html>
