@@ -56,23 +56,27 @@
 html {
     &.is-app-topmenu {
         .app-template {
-            margin-top: @App-TopMenu-height;
+            margin-top: @AppLT-TopMenu-Height;
         }
 
         .app-sidebar {
-            top: @App-TopMenu-height;
+            top: @AppLT-TopMenu-Height;
+        }
+
+        &.is-app-topmenu--expanded {
+            overflow: hidden;
         }
     }
 
     &.is-app-sidebar {
         .app-template {
-            margin-left: @App-Sidebar-width;
-            .cm-transition(margin @App-Sidebar-duration ease-in-out);
+            margin-left: @AppLT-Sidebar-width;
+            .cm-transition(margin @AppLT-Sidebar-duration ease-in-out);
         }
 
         &.is-app-sidebar--collapsed {
             .app-template {
-                margin-left: @App-Sidebar-widthCollapsed;
+                margin-left: @AppLT-Sidebar-widthCollapsed;
             }
         }
     }
@@ -117,12 +121,12 @@ html {
     html.is-adaptive {
         &.is-app-sidebar {
             .app-template {
-                margin-left: @App-Sidebar-widthTablet;
+                margin-left: @AppLT-Sidebar-widthTablet;
             }
 
             &.is-app-sidebar--collapsed {
                 .app-template {
-                    margin-left: @App-Sidebar-widthCollapsed;
+                    margin-left: @AppLT-Sidebar-widthCollapsed;
                 }
             }
         }

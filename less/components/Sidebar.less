@@ -1,52 +1,52 @@
 /* ******* COMPONENT: SIDEBAR ******* */
 
 .app-sidebar {
-    width: @App-Sidebar-width;
+    width: @AppLT-Sidebar-width;
     position: fixed;
-    .cm-position(0, auto, 0, 0);
     z-index: 102;
     overflow: hidden;
-    background: @App-Sidebar-background;
+    background: @AppLT-Sidebar-background;
     box-shadow: @cm-ui-shadow;
-    -webkit-transition: -webkit-transform @App-Sidebar-duration ease-in-out;
-        -ms-transition:     -ms-transform @App-Sidebar-duration ease-in-out;
-            transition:         transform @App-Sidebar-duration ease-in-out;
+    -webkit-transition: -webkit-transform @AppLT-Sidebar-duration ease-in-out;
+        -ms-transition:     -ms-transform @AppLT-Sidebar-duration ease-in-out;
+            transition:         transform @AppLT-Sidebar-duration ease-in-out;
+    .cm-position(0, auto, 0, 0);
 
     > .inner {
         position: absolute;
         .cm-position(0, 0, 0, 0);
 
         > .title {
-            padding: 6px @App-Sidebar-padding;
-            position: absolute;
-            .cm-position(0, 0, auto, 0);
-            background: @App-Sidebar-background;
-            .cm-user-select(none);
             #cm > .font-title;
+            padding: 6px @AppLT-Sidebar-padding;
+            position: absolute;
+            background: @AppLT-Sidebar-background;
             text-align: left;
+            .cm-user-select(none);
+            .cm-position(0, 0, auto, 0);
 
             .icon {
                 position: absolute;
-                .cm-position(14px, @cm-indentXSmall, auto, auto);
                 cursor: pointer;
-                -webkit-transition: -webkit-transform @App-Sidebar-duration ease-in-out;
-                    -ms-transition:     -ms-transform @App-Sidebar-duration ease-in-out;
-                        transition:         transform @App-Sidebar-duration ease-in-out;
+                -webkit-transition: -webkit-transform @AppLT-Sidebar-duration ease-in-out;
+                    -ms-transition:     -ms-transform @AppLT-Sidebar-duration ease-in-out;
+                        transition:         transform @AppLT-Sidebar-duration ease-in-out;
+                .cm-position(14px, @cm-indentXSmall, auto, auto);
             }
         }
 
         > .descr {
-            padding: @App-Sidebar-padding;
-            .cm-scroll-y;
+            padding: @AppLT-Sidebar-padding;
             position: absolute;
+            background: @AppLT-Sidebar-background;
+            .cm-scroll-y;
             .cm-position(50px, 0, 0, 0);
-            background: @App-Sidebar-background;
-            .cm-transition(opacity @App-Sidebar-duration ease-in-out);
+            .cm-transition(opacity @AppLT-Sidebar-duration ease-in-out);
         }
     }
 
     &.is-collapsed {
-        @translate: @App-Sidebar-widthCollapsed - @App-Sidebar-width;
+        @translate: @AppLT-Sidebar-widthCollapsed - @AppLT-Sidebar-width;
         -webkit-transform: translateX(@translate);
             -ms-transform: translateX(@translate);
                 transform: translateX(@translate);
@@ -104,7 +104,7 @@
 
         &.cm-draganddrop-area {
             &.is-available {
-                .cm-transition(all @cm-transitionDuration ease-in-out);
+                .cm-transition(all @CM-Transition-Duration ease-in-out);
 
                 &.is-highlight {
                     visibility: visible;
@@ -142,11 +142,11 @@
     > dd {
         margin: 0 -@AppWidget-dummyPadding;
         font-size: 0;
-        background: @App-Sidebar-background;  /* Fix blinked blocks on collapse in Firefox. */
+        background: @AppLT-Sidebar-background;  /* Fix blinked blocks on collapse in Firefox. */
     }
 
     .app-widget-container {
-        width: @App-Sidebar-dummyWidth;
+        width: @AppLT-Sidebar-dummyWidth;
         margin: 0;
         display: inline-block;
         vertical-align: top;
@@ -159,10 +159,10 @@
 
     html.is-adaptive {
         .app-sidebar {
-            width: @App-Sidebar-widthTablet;
+            width: @AppLT-Sidebar-widthTablet;
 
             &.is-collapsed {
-                @translate: @App-Sidebar-widthCollapsed - @App-Sidebar-widthTablet;
+                @translate: @AppLT-Sidebar-widthCollapsed - @AppLT-Sidebar-widthTablet;
                 -webkit-transform: translateX(@translate);
                 -ms-transform: translateX(@translate);
                 transform: translateX(@translate);

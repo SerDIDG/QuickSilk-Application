@@ -8,7 +8,7 @@
 .app-lt__templates__item {
     border: @cm-borderBox;
     cursor: pointer;
-    .cm-transition(border-color @cm-transitionDuration ease-in-out);
+    .cm-transition(border-color @CM-Transition-Duration ease-in-out);
 
     > .inner {
         position: relative;
@@ -28,12 +28,12 @@
         z-index: 2;
         opacity: 0;
         .cm-position(0, 0, 0, 0);
-        .cm-transition(opacity @cm-transitionDuration ease-in-out);
+        .cm-transition(opacity @CM-Transition-Duration ease-in-out);
         .cm-linear-gradient(~"to bottom, rgb(255,255,255) 0, rgba(255,255,255,0.5) 50%");
 
         > .inner {
             position: absolute;
-            .cm-position(@LT-Templates-ItemPadding, @LT-Templates-ItemPadding, @LT-Templates-ItemPadding, @LT-Templates-ItemPadding);
+            .cm-position(@AppLT-Templates-ItemPadding, @AppLT-Templates-ItemPadding, @AppLT-Templates-ItemPadding, @AppLT-Templates-ItemPadding);
         }
 
         .btn-wrap {
@@ -46,11 +46,11 @@
 
     &:hover {
         border: @cm-borderBoxActive;
-        .cm-transition(border-color @cm-transitionDurationReverse ease-in-out);
+        .cm-transition(border-color @CM-Transition-DurationReverse ease-in-out);
 
         .info {
             opacity: 1;
-            .cm-transition(opacity @cm-transitionDurationReverse ease-in-out);
+            .cm-transition(opacity @CM-Transition-DurationReverse ease-in-out);
         }
     }
 
