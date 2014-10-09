@@ -98,68 +98,7 @@
     }
 }
 
-/* *** BOX SIGN *** */
-
-.app-box-sign {
-    padding: @cm-indentMedium;
-
-    > .inner {
-        &:extend(.clear all);
-
-        position: relative;
-
-        > .l,
-        > .r {
-            width: 50%;
-            .cm-box-sizing();
-            float: left;
-        }
-
-        > .c {
-            margin-left: -(@cm-borderBoxWidth / 2);
-            position: absolute;
-            .cm-position(0, auto, 0, 50%);
-            border-right: @cm-borderBox;
-        }
-
-        > .l {
-            padding: 0 @cm-indentXLarge 0 0;
-        }
-
-        > .r {
-            padding: 0 0 0 @cm-indentXLarge;
-        }
-    }
-}
-
 /* ******* COMPONENT: LOGIN BOX: ADAPTIVE ******* */
-
-@media only screen and (max-width : @cm-screenTabletPortrait) {
-
-    html.is-adaptive {
-        .app-box-sign {
-            padding: 0;
-
-            > .inner {
-                > .l,
-                > .r {
-                    width: auto;
-                    padding: 0;
-                    float: none;
-                }
-
-                > .c {
-                    margin: @cm-indentMedium 0;
-                    position: static;
-                    .cm-position(auto, auto, auto, auto);
-                    border: none;
-                    border-bottom: @cm-borderBox;
-                }
-            }
-        }
-    }
-
-}
 
 @media only screen and (max-width : @cm-screenMobile) {
 
