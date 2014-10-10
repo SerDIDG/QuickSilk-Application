@@ -56,8 +56,8 @@ function(params){
             that.collapse(true);
         }
         // Add to global arrays
-        App.Elements[that.className] = that;
-        App.Nodes[that.className] = that.nodes;
+        App.Elements[that._name['full']] = that;
+        App.Nodes[that._name['full']] = that.nodes;
         // Trigger render event
         that.triggerEvent('onRender');
     };

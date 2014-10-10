@@ -29,7 +29,8 @@ function(params){
         render();
     };
 
-    var render = function(){// Render tooltip
+    var render = function(){
+        // Render tooltip
         components['tooltip'] = new Com.Tooltip({
             'target' : that.nodes['button'],
             'targetEvent' : 'click',

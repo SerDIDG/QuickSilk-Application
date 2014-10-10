@@ -38,8 +38,8 @@ function(params){
         cm.addEvent(that.nodes['button'], 'click', toggle);
         that.isExpanded = cm.isClass(that.nodes['container'], 'is-expanded');
         // Add to global arrays
-        App.Elements[that.className] = that;
-        App.Nodes[that.className] = that.nodes;
+        App.Elements[that._name['full']] = that;
+        App.Nodes[that._name['full']] = that.nodes;
         // Trigger render event
         that.triggerEvent('onRender');
     };
