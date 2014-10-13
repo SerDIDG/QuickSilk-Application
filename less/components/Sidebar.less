@@ -96,9 +96,9 @@
         visibility: hidden;
 
         .title {
+            #cm > .font-title;
             padding: 6px @cm-indentXSmall;
             background-color: @cm-colorError;
-            #cm > .font-title;
             color: #fff;
         }
 
@@ -178,6 +178,16 @@
         .app-sidebar {
             display: none;
         }
+    }
+
+}
+
+/* *** COMPONENT: SIDEBAR: PRINT *** */
+
+@media print {
+
+    .app-sidebar {
+        display: none;
     }
 
 }
