@@ -108,26 +108,9 @@
     }
 
     .menu-centered {
-        position: absolute;
-        z-index: 1;
-        margin: 0 50%;
-        .cm-position(0, auto, 0, auto);
-
-        > .inner {
-            height: 100%;
-            position: relative;
-            left: -50%;
-        }
-
         .menu {
-            li {
-                border-right: @AppLT-TopMenu-ItemBorder;
-                border-left: @AppLT-TopMenu-ItemBorder;
-
-                a {
-                    padding: 0 @cm-indentXSmall;
-                    background: @AppLT-TopMenu-ItemBackground;
-                }
+            a {
+                background: @AppLT-TopMenu-ItemBackground;
             }
         }
     }
@@ -195,26 +178,28 @@
                     margin: 0 0 0 (24px + @cm-indentXSmall);
                 }
             }
-        }
-    }
-}
 
-@media only screen and (max-width : 1280px)
-                   and (min-width: (@cm-screenTabletPortrait + 1px)) {
-
-    html.is-adaptive {
-        .app-topmenu {
             .menu-centered {
-                position: relative;
+                float: right;
                 margin: 0 0 0 @cm-indentXSmall;
-                float: left;
-
-                > .inner {
-                    left: 0;
-                }
 
                 .menu {
+                    li {
+                        margin: 0;
+                        float: left;
+                        border-left: @AppLT-TopMenu-ItemBorder;
+
+                        &:last-child {
+                            border-right: @AppLT-TopMenu-ItemBorder;
+                        }
+
+                        &:before {
+                            display: none;
+                        }
+                    }
+                    
                     a {
+                        padding: 0 @cm-indentXSmall;
                         font-size: 0;
 
                         .icon.medium {
@@ -225,7 +210,6 @@
             }
         }
     }
-
 }
 
 /* *** TABLET VIEW *** */
@@ -263,7 +247,7 @@
                 > .inner {
                     .cm-scroll-y-a;
                     position: absolute;
-                    padding: (@AppLT-TopMenu-Height + @cm-borderWidth) 0 0;
+                    padding: 0;
                     background-color: @AppLT-TopMenu-Background;
                     .cm-position(@AppLT-TopMenu-Height, 0, 0, 0);
                 }
@@ -315,16 +299,6 @@
                             padding-left: @cm-indentMedium;
                         }
                     }
-                }
-            }
-
-            .menu-centered {
-                height: @AppLT-TopMenu-Height;
-                margin: 0;
-                .cm-position(0, 0, auto, 0);
-
-                > .inner {
-                    left: 0;
                 }
             }
 
