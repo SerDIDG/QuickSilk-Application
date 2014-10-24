@@ -1,0 +1,98 @@
+<!DOCTYPE HTML>
+<html class="is-adaptive">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <title>Modules: Slider</title>
+
+    <link type="text/css" rel="stylesheet" href="../../../../../css/index.css">
+    <link type="text/css" rel="stylesheet" href="../../styles/index.css">
+
+    <script type="text/javascript" src="../../../../common/js/polyfill.js"></script>
+    <script type="text/javascript" src="../../../../common/js/common.js"></script>
+    <script type="text/javascript" src="../../../../common/js/parts.js"></script>
+    <script type="text/javascript" src="../../../../common/js/modules.js"></script>
+    <script type="text/javascript" src="../../../../common/js/init.js"></script>
+    <script type="text/javascript" src="../../../../common/js/components/UA.js"></script>
+    <script type="text/javascript" src="../../../../common/js/components/Collector.js"></script>
+    <script type="text/javascript" src="../../../../common/js/components/Tabset.js"></script>
+    <script type="text/javascript" src="../../../../common/js/components/Slider.js"></script>
+    <script type="text/javascript" src="../../../../common/js/components/Scroll.js"></script>
+
+    <script type="text/javascript">
+        cm.onReady(function(){
+            // Components
+            new Com.Collector()
+                .addEvent('onConstruct', function(collector, data){
+                    Part.Menu();
+                    Part.Autoresize(data['node']);
+                })
+                .add('tabset', function(node){
+                    new Com.Tabset({'node' : node});
+                })
+                .add('slider', function(node){
+                    new Com.Slider({
+                        'node' : node
+                    });
+                })
+                .construct();
+        });
+    </script>
+</head>
+
+<body>
+
+<h1 class="app-page-title">Modules: Slider</h1>
+<hr>
+
+<div style="max-width: 1000px">
+    <div class="app-module mod__slider">
+        <div class="com-slider theme-template" data-element="slider" data-config='{"pauseOnHover" : true, "delay" : 5000, "buttons" : true, "arrows" : true, "effect" : "fade", "transition" : "smooth"}' data-node="ComSlider:{}:container">
+            <div class="inner" data-node="inner">
+                <div class="size cm-aspect-21x9"></div>
+                <div class="slides" data-node="slides">
+                    <ul data-node="slidesInner">
+                        <li data-node="items:[]:container">
+                            <div class="cm-imagebox is-flexible is-no-hover">
+                                <div class="inner">
+                                    <img class="descr" src="../../images/modules/slider/1.jpg" alt="">
+                                    <div class="mod__slider__featured"></div>
+                                </div>
+                            </div>
+                        </li>
+                        <li data-node="items:[]:container">
+                            <div class="cm-imagebox is-flexible is-no-hover">
+                                <div class="inner">
+                                    <img class="descr" src="../../images/modules/slider/2.jpg" alt="">
+                                </div>
+                            </div>
+                        </li>
+                        <li data-node="items:[]:container">
+                            <div class="cm-imagebox is-flexible is-no-hover">
+                                <div class="inner">
+                                    <img class="descr" src="../../images/modules/slider/3.jpg" alt="">
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <div class="com-gallery-controls is-small">
+                    <div class="inner">
+                        <div class="bar-arrow prev" data-node="prev">
+                            <div class="icon default prev"></div>
+                        </div>
+                        <div class="bar-arrow next" data-node="next">
+                            <div class="icon default next"></div>
+                        </div>
+                        <div class="bar-buttons">
+                            <ul data-node="buttons"></ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
