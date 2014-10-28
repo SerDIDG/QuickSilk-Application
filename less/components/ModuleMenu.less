@@ -1,4 +1,4 @@
-/* ******* MODULE MENU ******* */
+/* ******* MODULES: MENU ******* */
 
 .app-module-menu {
     > ul {
@@ -120,7 +120,7 @@
     }
 }
 
-/* *** ADAPTIVE *** */
+/* ******* MODULES: MENU: ADAPTIVE ******* */
 
 @media only screen and (max-width : @cm-screenTabletPortrait) {
 
@@ -136,6 +136,16 @@
                 }
             }
         }
+    }
+
+}
+
+/* *******  MODULES: MENU: PRINT ******* */
+
+@media print {
+
+    .app-module-menu {
+        display: none !important;
     }
 
 }
