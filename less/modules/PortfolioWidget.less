@@ -15,6 +15,8 @@
         &:extend(.clear all);
 
         .image {
+            max-width: 156px;
+
             img {
                 &:extend(.cm-image-resizable all);
             }
@@ -28,6 +30,28 @@
                 float: right;
                 margin: 0 0 @cm-indentXSmall @cm-indentXSmall;
             }
+
+            &.pull-center {
+                float: none;
+                margin: 0 auto @cm-indentXSmall auto;
+            }
         }
     }
+}
+
+/* ******* MODULES: PORTFOLIO WIDGET: ADAPTIVE ******* */
+
+@media only screen and (max-width : @cm-screenMobile) {
+
+    html.is-adaptive {
+        .mod__portfolio-widget__item {
+            > .inner {
+                .image {
+                    float: none;
+                    margin: 0 auto @cm-indentXSmall auto;
+                }
+            }
+        }
+    }
+
 }
