@@ -1,0 +1,95 @@
+<!DOCTYPE HTML>
+<html class="is-adaptive">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <title>MModules: Lang Switch</title>
+
+    <link type="text/css" rel="stylesheet" href="../../../../../css/index.css">
+    <link type="text/css" rel="stylesheet" href="../../styles/index.css">
+
+    <script type="text/javascript" src="../../../../common/js/polyfill.js"></script>
+    <script type="text/javascript" src="../../../../common/js/common.js"></script>
+    <script type="text/javascript" src="../../../../common/js/parts.js"></script>
+    <script type="text/javascript" src="../../../../common/js/modules.js"></script>
+    <script type="text/javascript" src="../../../../common/js/init.js"></script>
+    <script type="text/javascript" src="../../../../common/js/components/UA.js"></script>
+    <script type="text/javascript" src="../../../../common/js/components/Collector.js"></script>
+
+    <script type="text/javascript" src="../../../js/Application.js"></script>
+    <script type="text/javascript" src="../../../js/components/ModuleMenu.js"></script>
+
+    <script type="text/javascript">
+        cm.onReady(function(){
+            // Components
+            new Com.Collector()
+                .add('module-menu', function(node){
+                    new App.ModuleMenu({
+                        'node' : node
+                    });
+                })
+                .construct();
+        });
+    </script>
+</head>
+
+<body>
+
+<h1 class="cm-page-title">Modules: Lang Switch</h1>
+<hr>
+
+<h2>Left:</h2>
+<div class="app-module mod__lang-switch pull-left">
+    <ul>
+        <li class="active">
+            <a>
+                <div class="icon default en"></div>EN
+            </a>
+        </li>
+        <li>
+            <a>
+                <div class="icon default fr"></div>FR
+            </a>
+        </li>
+    </ul>
+</div>
+
+<hr>
+
+<h2>Center:</h2>
+<div class="app-module mod__lang-switch pull-center">
+    <ul>
+        <li class="active">
+            <a>
+                <div class="icon default en"></div>EN
+            </a>
+        </li>
+        <li>
+            <a>
+                <div class="icon default fr"></div>FR
+            </a>
+        </li>
+    </ul>
+</div>
+
+<hr>
+
+<h2>Right:</h2>
+<div class="app-module mod__lang-switch pull-right">
+    <ul>
+        <li class="active">
+            <a>
+                <div class="icon default en"></div>EN
+            </a>
+        </li>
+        <li>
+            <a>
+                <div class="icon default fr"></div>FR
+            </a>
+        </li>
+    </ul>
+</div>
+
+</body>
+
+</html>
