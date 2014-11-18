@@ -43,16 +43,14 @@ function(params){
     };
 
     var render = function(){
-        if(cm.inDOM(that.nodes['AppSitemap']['button'])){
-            setPadding();
+        setPadding();
 
-            animations['container'] = new cm.Animation(that.nodes['AppSitemap']['target']);
-            animations['content'] = new cm.Animation(that.nodes['Template']['content']);
-            animations['scroll'] = new cm.Animation(that.params['scrollNode']);
+        animations['container'] = new cm.Animation(that.nodes['AppSitemap']['target']);
+        animations['content'] = new cm.Animation(that.nodes['Template']['content']);
+        animations['scroll'] = new cm.Animation(that.params['scrollNode']);
 
-            cm.addEvent(window, 'resize', setPadding);
-            cm.addEvent(that.nodes['AppSitemap']['button'], 'click', toggle);
-        }
+        cm.addEvent(window, 'resize', setPadding);
+        cm.addEvent(that.nodes['AppSitemap']['button'], 'click', toggle);
         that.triggerEvent('onRender');
     };
 
