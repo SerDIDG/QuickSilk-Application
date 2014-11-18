@@ -1,20 +1,15 @@
-/* ******* MODULES: LOGIN LINK ******* */
+/* ******* MODULES: LANG SWITCH ******* */
 
-.app-module-loginlink {
+.mod__lang-switch {
     ul {
-        margin: 0;
-        padding: 0;
-        list-style: none;
+        &:extend(.cm-ul-clear all);
+        &:extend(.cm-ul-inline all);
         white-space: nowrap;
-        font-size: 0;
 
         li {
-            margin: 0 0 0 @cm-indentXSmall;
-            display: inline-block;
-            vertical-align: top;
-            #cm > .font-base;
+            margin: 0 @cm-indentXSmall 0 0;
 
-            &:first-child {
+            &:last-child {
                 margin: 0;
             }
 
@@ -48,11 +43,11 @@
     }
 }
 
-/* ******* MODULES: LOGIN LINK: PRINT ******* */
+/* ******* MODULES: LANG SWITCH: PRINT ******* */
 
 @media print {
 
-    .app-module-loginlink {
+    .mod__lang-switch {
         display: none !important;
     }
 
