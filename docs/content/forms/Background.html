@@ -1,0 +1,127 @@
+<!DOCTYPE HTML>
+<html class="is-adaptive">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <title>Forms: Background</title>
+
+    <link type="text/css" rel="stylesheet" href="../../../../../css/index.css">
+    <link type="text/css" rel="stylesheet" href="../../styles/index.css">
+
+    <script type="text/javascript" src="../../../../common/vendors/bgrins/TinyColor/tinycolor.js"></script>
+
+    <script type="text/javascript" src="../../../../common/js/polyfill.js"></script>
+    <script type="text/javascript" src="../../../../common/js/common.js"></script>
+    <script type="text/javascript" src="../../../../common/js/parts.js"></script>
+    <script type="text/javascript" src="../../../../common/js/modules.js"></script>
+    <script type="text/javascript" src="../../../../common/js/init.js"></script>
+    <script type="text/javascript" src="../../../../common/js/components/UA.js"></script>
+    <script type="text/javascript" src="../../../../common/js/components/Collector.js"></script>
+    <script type="text/javascript" src="../../../../common/js/components/Tabset.js"></script>
+    <script type="text/javascript" src="../../../../common/js/components/Draggable.js"></script>
+    <script type="text/javascript" src="../../../../common/js/components/Tooltip.js"></script>
+    <script type="text/javascript" src="../../../../common/js/components/Select.js"></script>
+    <script type="text/javascript" src="../../../../common/js/components/Palette.js"></script>
+    <script type="text/javascript" src="../../../../common/js/components/ColorPicker.js"></script>
+
+    <script type="text/javascript" src="../../../js/Application.js"></script>
+
+    <script type="text/javascript">
+        cm.onReady(function(){
+            // Components
+            new Com.Collector()
+                .add('tabset', function(node){
+                    new Com.Tabset({'node' : node});
+                })
+                .add('color-picker', function(node){
+                    new Com.ColorPicker({'input' : node});
+                })
+                .add('select', function(node){
+                    new Com.Select({'select' : node});
+                })
+                .construct();
+        });
+    </script>
+</head>
+
+<body>
+
+<h1 class="app-page-title">Forms: Background</h1>
+<hr>
+
+<div class="form app-fm__background">
+    <dl>
+        <dt>Background Color:</dt>
+        <dd>
+            <input type="text" data-element="color-picker">
+        </dd>
+    </dl>
+    <dl>
+        <dt>Background Image:</dt>
+        <dd>
+            <div class="browse-button">
+                <input type="button" value="Browse">
+                <div class="inner">
+                    <input type="file">
+                </div>
+            </div>
+        </dd>
+    </dl>
+    <dl>
+        <dt>Image Repeat:</dt>
+        <dd>
+            <select data-element="select">
+                <option>No repeat</option>
+                <option>Repeat vertically</option>
+                <option>Repeat horizontally</option>
+                <option>Repeat both horizontally and vertically</option>
+            </select>
+        </dd>
+    </dl>
+    <dl>
+        <dt>Image Position:</dt>
+        <dd>
+            <div class="check-line">
+                <input id="image-position-select" type="radio" name="image-position" checked>
+                <label for="image-position-select">Predefined</label>
+                <div class="unveil">
+                    <select data-element="select">
+                        <option>Top Left</option>
+                        <option>Top Center</option>
+                        <option>Top Right</option>
+                        <option>Middle Left</option>
+                        <option>Middle Center</option>
+                        <option>Middle Right</option>
+                        <option>Bottom Left</option>
+                        <option>Bottom Center</option>
+                        <option>Bottom Right</option>
+                    </select>
+                </div>
+            </div>
+            <div class="check-line">
+                <input id="image-position-input" type="radio" name="image-position">
+                <label for="image-position-input">Custom values</label>
+                <div class="unveil">
+                    <input type="text" placeholder="0px 0px">
+                </div>
+            </div>
+        </dd>
+    </dl>
+    <dl>
+        <dt>Image Parallax:</dt>
+        <dd>
+            <div class="check-line">
+                <input type="checkbox">
+            </div>
+        </dd>
+    </dl>
+    <hr>
+    <div class="btn-wrap">
+        <input class="button" type="submit" value="Save" name="save">
+        <input class="transparent" type="button" value="Cancel" name="cancel">
+    </div>
+</div>
+
+</body>
+
+</html>
