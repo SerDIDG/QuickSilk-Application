@@ -50,8 +50,8 @@
         position: relative;
         border-radius: @AppWidget-dummyBorderRadius;
         cursor: move;
-        .cm-transition(background-color @CM-Transition-Duration ease-in-out);
-        .cm-transition(box-shadow @CM-Transition-Duration ease-in-out);
+        .cm-transition(background-color @Cm-Transition-Duration ease-in-out);
+        .cm-transition(box-shadow @Cm-Transition-Duration ease-in-out);
 
         > .inner {
             padding: @AppWidget-dummyPadding;
@@ -63,7 +63,7 @@
             margin: 0 auto;
             background: @AppWidget-dummyBackground;
             border-radius: @AppWidget-dummyBorderRadiusInner;
-            .cm-transition(background-color @CM-Transition-Duration ease-in-out);
+            .cm-transition(background-color @Cm-Transition-Duration ease-in-out);
 
             img {
                 width: 100%;
@@ -86,7 +86,7 @@
             border: 1px solid @AppWidget-dummyBorderColor;
             border-radius: @AppWidget-dummyBorderRadius;
             opacity: 0;
-            .cm-transition(opacity @CM-Transition-Duration ease-in-out);
+            .cm-transition(opacity @Cm-Transition-Duration ease-in-out);
 
             &.fadein {
                 opacity: 1;
@@ -109,7 +109,7 @@
         > .app-widget-dummy {
             .icon {
                 background: @AppWidget-dummyBackgroundHover;
-                .cm-transition(background-color @CM-Transition-DurationReverse ease-in-out);
+                .cm-transition(background-color @Cm-Transition-DurationReverse ease-in-out);
             }
         }
     }
@@ -128,13 +128,13 @@
         > .app-widget-dummy {
             background: #ffffff;
             box-shadow: 0 1px 5px rgba(0,0,0,0.2);
-            .cm-transition(background-color @CM-Transition-DurationReverse ease-in-out);
-            .cm-transition(box-shadow @CM-Transition-DurationReverse ease-in-out);
+            .cm-transition(background-color @Cm-Transition-DurationReverse ease-in-out);
+            .cm-transition(box-shadow @Cm-Transition-DurationReverse ease-in-out);
 
 
             .icon {
                 background: @AppWidget-dummyBackgroundActive;
-                .cm-transition(background-color @CM-Transition-DurationReverse ease-in-out);
+                .cm-transition(background-color @Cm-Transition-DurationReverse ease-in-out);
             }
         }
     }

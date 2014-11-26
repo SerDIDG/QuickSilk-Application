@@ -23,12 +23,12 @@
         z-index: 3;
         display: block;
         float: left;
-        margin: ((@AppLT-TopMenu-Height - 24px) / 2) 0 0 @cm-indentXSmall;
-        background-image: url("@{AppPath-image}/layouts/topmenu/logo.png");
+        margin: ((@AppLT-TopMenu-Height - 24px) / 2) 0 0 @Cm-indentXSmall;
+        background-image: url("@{AppPath-Images}/layouts/topmenu/logo.png");
         .cm-transition(opacity 0.3s ease-in-out);
 
         &:hover {
-            opacity: @CM-Opacity-Hover;
+            opacity: @Cm-Opacity-Hover;
         }
     }
 
@@ -53,7 +53,7 @@
         .cm-position(0,0,0,0);
 
         > .inner {
-            padding: 0 @cm-indentXSmall;
+            padding: 0 @Cm-indentXSmall;
             position: absolute;
             .cm-position(0,0,0,0);
         }
@@ -77,7 +77,7 @@
                 text-decoration: none;
 
                 .icon {
-                    margin: 0 @cm-indentXXSmall 0 0;
+                    margin: 0 @Cm-indentXXSmall 0 0;
 
                     &.medium {
                         margin-top: -2px;
@@ -88,7 +88,7 @@
                     text-decoration: underline;
 
                     .icon {
-                        opacity: @CM-Opacity-Hover;
+                        opacity: @Cm-Opacity-Hover;
                     }
                 }
             }
@@ -120,19 +120,19 @@
 
 /* *** DESKTOP VIEW *** */
 
-@media only screen and (min-width : (@cm-screenTabletPortrait + 1px)) {
+@media only screen and (min-width : (@CmScreen-TabletPortrait + 1px)) {
     html.is-adaptive {
         .app-topmenu {
             .menu {
                 .cm-ul-inline;
 
                 > li {
-                    margin: 0 0 0 (@cm-indentXSmall * 2 + 1px);
+                    margin: 0 0 0 (@Cm-indentXSmall * 2 + 1px);
 
                     &.has-dropdown {
                         > a {
                             padding-right: 20px;
-                            background: url("@{AppPath-image}/layouts/topmenu/arrow-down.png") 100% center no-repeat;
+                            background: url("@{AppPath-Images}/layouts/topmenu/arrow-down.png") 100% center no-repeat;
                         }
                     }
 
@@ -143,7 +143,7 @@
                         position: absolute;
                         background: @AppLT-TopMenu-Color;
                         content: '';
-                        .cm-position(12px, auto, auto, -@cm-indentXSmall);
+                        .cm-position(12px, auto, auto, -@Cm-indentXSmall);
                     }
 
                     &:first-child {
@@ -164,9 +164,9 @@
                 ul {
                     .cm-menu-dropdown--base;
                     top: 100%;
-                    left: -(@cm-indentXSmall - 1px);
+                    left: -(@Cm-indentXSmall - 1px);
                     border-top: none;
-                    border-radius: 0 0 @cm-borderRadius @cm-borderRadius;
+                    border-radius: 0 0 @Cm-borderRadius @Cm-borderRadius;
                 }
 
                 &.right {
@@ -175,7 +175,7 @@
 
                 &.left {
                     float: left;
-                    margin: 0 0 0 (24px + @cm-indentXSmall);
+                    margin: 0 0 0 (24px + @Cm-indentXSmall);
                 }
             }
 
@@ -195,7 +195,7 @@
                     }
                     
                     a {
-                        padding: 0 @cm-indentXSmall;
+                        padding: 0 @Cm-indentXSmall;
                         font-size: 0;
 
                         .icon.medium {
@@ -229,12 +229,12 @@
     }
 }
 
-@media only screen and (min-width : (@cm-screenTabletPortrait + 1px)) and (max-width: 1280px) {
+@media only screen and (min-width : (@CmScreen-TabletPortrait + 1px)) and (max-width: 1280px) {
     html.is-adaptive {
         .app-topmenu {
             .menu-centered {
                 float: right;
-                margin: 0 0 0 @cm-indentXSmall;
+                margin: 0 0 0 @Cm-indentXSmall;
             }
         }
     }
@@ -242,7 +242,7 @@
 
 /* *** TABLET VIEW *** */
 
-@media only screen and (max-width : @cm-screenTabletPortrait) {
+@media only screen and (max-width : @CmScreen-TabletPortrait) {
 
     html.is-adaptive {
         .app-topmenu {
@@ -308,7 +308,7 @@
 
                     a {
                         .cm-text-overflow;
-                        padding: 0 @cm-indentXSmall;
+                        padding: 0 @Cm-indentXSmall;
                         line-height: @AppLT-TopMenu-Height;
                     }
 
@@ -324,7 +324,7 @@
                     li {
                         a {
                             background: @AppLT-TopMenu-ItemBackground;
-                            padding-left: @cm-indentMedium;
+                            padding-left: @Cm-indentMedium;
                         }
                     }
                 }

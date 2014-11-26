@@ -9,7 +9,7 @@
 
         > li {
             display: inline-block;
-            margin: 0 0 0 @cm-indentXSmall;
+            margin: 0 0 0 @Cm-indentXSmall;
             position: relative;
             z-index: 1;
             vertical-align: top;
@@ -48,7 +48,7 @@
 
     .menu-select {
         display: none;
-        background: @cm-colorSecondary;
+        background: @Cm-colorSecondary;
         position: relative;
 
         select {
@@ -64,7 +64,7 @@
     }
 
     .menu-button {
-        width: @cm-Medium;
+        width: @Cm-Medium;
         height: @CmForm-fieldHeight;
         position: absolute;
         z-index: 1;
@@ -77,7 +77,7 @@
 
     &.vertical {
         ul {
-            margin: @cm-indentXSmall 0 0;
+            margin: @Cm-indentXSmall 0 0;
             padding: 0;
 
             &:first-child {
@@ -85,13 +85,13 @@
             }
 
             ul {
-                margin-left: @cm-indentMedium;
+                margin-left: @Cm-indentMedium;
             }
         }
 
         li {
             display: block;
-            margin: @cm-indentXSmall 0 0;
+            margin: @Cm-indentXSmall 0 0;
 
             &:first-child {
                 margin: 0;
@@ -101,14 +101,14 @@
         a {
             display: inline-block;
             vertical-align: middle;
-            color: @cm-colorFont;
+            color: @Cm-colorFont;
         }
 
         &.pull-right {
             ul {
                 ul {
                     margin-left: 0;
-                    margin-right: @cm-indentMedium;
+                    margin-right: @Cm-indentMedium;
                 }
             }
         }
@@ -144,7 +144,7 @@
 
 /* ******* MODULES: MENU: ADAPTIVE ******* */
 
-@media only screen and (max-width : @cm-screenTabletPortrait) {
+@media only screen and (max-width : @CmScreen-TabletPortrait) {
 
     html.is-adaptive {
         .app-module-menu {

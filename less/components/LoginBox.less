@@ -12,7 +12,7 @@
     }
 
     .links {
-        line-height: @cm-lineHeight;
+        line-height: @Cm-lineHeight;
 
         ul {
             margin: 0;
@@ -23,7 +23,7 @@
 
             li {
                 display: inline-block;
-                margin: 0 0 0 @cm-indentXXSmall;
+                margin: 0 0 0 @Cm-indentXXSmall;
                 vertical-align: top;
 
                 &:first-child {
@@ -33,21 +33,21 @@
                 a {
                     display: block;
                     line-height: @CmForm-fieldHeight;
-                    font-size: @cm-fontSize;
+                    font-size: @Cm-fontSize;
                 }
             }
         }
     }
 
     .error {
-        color: @cm-colorError;
+        color: @Cm-colorError;
     }
 }
 
 .com-tooltip.app-loginbox-tooltip {
     > .inner {
         margin: 8px 0 0 0;
-        padding: @cm-indentXSmall @cm-indentMedium @cm-indentMedium;
+        padding: @Cm-indentXSmall @Cm-indentMedium @Cm-indentMedium;
     }
 
     .app-modular-sign {
@@ -69,12 +69,12 @@
     }
 
     .or {
-        @margin: (@cm-indentMedium - (@cm-lineHeight / 2));
+        @margin: (@Cm-indentMedium - (@Cm-lineHeight / 2));
 
         margin: @margin 0;
         position: relative;
         text-align: center;
-        line-height: @cm-lineHeight;
+        line-height: @Cm-lineHeight;
 
         span {
             position: relative;
@@ -92,7 +92,7 @@
             left: 0;
             right: 0;
             display: block;
-            background: @cm-colorBorder;
+            background: @Cm-colorBorder;
             content: ' ';
         }
     }
@@ -100,7 +100,7 @@
 
 /* ******* COMPONENT: LOGIN BOX: ADAPTIVE ******* */
 
-@media only screen and (max-width : @cm-screenMobile) {
+@media only screen and (max-width : @CmScreen-Mobile) {
 
     html.is-adaptive {
         .com-tooltip.app-loginbox-tooltip {

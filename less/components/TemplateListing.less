@@ -2,10 +2,10 @@
 
 .app-templates-listing {
     overflow: hidden;
-    padding-right: @cm-indentMedium;
+    padding-right: @Cm-indentMedium;
 
     > ul {
-        margin: -(@cm-indentMedium / 2);
+        margin: -(@Cm-indentMedium / 2);
         padding: 0;
         overflow: hidden;
         list-style: none;
@@ -15,7 +15,7 @@
             float: left;
 
             > .inner {
-                padding: @cm-indentMedium / 2;
+                padding: @Cm-indentMedium / 2;
             }
         }
     }
@@ -23,10 +23,10 @@
 }
 
 .app-template-preview {
-    @inner-padding: @cm-indentMedium / 2;
+    @inner-padding: @Cm-indentMedium / 2;
     @gradient: to bottom, rgb(255,255,255) 0, rgba(255,255,255,0.5) 50%;
 
-    border: @cm-borderBox;
+    border: @Cm-borderBox;
     .cm-transition(border-color 0.1s ease-in-out);
 
     > .inner {
@@ -75,7 +75,7 @@
     }
 
     &:hover {
-        border: @cm-borderBoxActive;
+        border: @Cm-borderBoxActive;
         .cm-transition(border-color 0.1s ease-in-out);
 
         .preview-info {
@@ -91,7 +91,7 @@
 
     .app-templates-listing {
         position: absolute;
-        top: @CmForm-fieldHeight + @cm-indentMedium;
+        top: @CmForm-fieldHeight + @Cm-indentMedium;
         right: 0;
         bottom: 0;
         left: 0;

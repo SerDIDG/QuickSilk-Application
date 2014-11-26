@@ -6,7 +6,7 @@
     z-index: 102;
     overflow: hidden;
     background: @AppLT-Sidebar-background;
-    box-shadow: @cm-ui-shadow;
+    box-shadow: @Cm-ui-shadow;
     -webkit-transition: -webkit-transform @AppLT-Sidebar-duration ease-in-out;
         -ms-transition:     -ms-transform @AppLT-Sidebar-duration ease-in-out;
             transition:         transform @AppLT-Sidebar-duration ease-in-out;
@@ -31,7 +31,7 @@
                 -webkit-transition: -webkit-transform @AppLT-Sidebar-duration ease-in-out;
                     -ms-transition:     -ms-transform @AppLT-Sidebar-duration ease-in-out;
                         transition:         transform @AppLT-Sidebar-duration ease-in-out;
-                .cm-position(14px, @cm-indentXSmall, auto, auto);
+                .cm-position(14px, @Cm-indentXSmall, auto, auto);
             }
         }
 
@@ -91,25 +91,25 @@
         .cm-position(0, 0, 0, 0);
         z-index: 3;
         opacity: 0;
-        background: fadeout(@cm-colorError, 50%);
+        background: fadeout(@Cm-colorError, 50%);
         border-radius: 0;
         visibility: hidden;
 
         .title {
             #cm > .font-title;
-            padding: 6px @cm-indentXSmall;
-            background-color: @cm-colorError;
+            padding: 6px @Cm-indentXSmall;
+            background-color: @Cm-colorError;
             color: #fff;
         }
 
         &.cm-draganddrop-area {
             &.is-available {
-                .cm-transition(all @CM-Transition-Duration ease-in-out);
+                .cm-transition(all @Cm-Transition-Duration ease-in-out);
 
                 &.is-highlight {
                     visibility: visible;
                     opacity: 1;
-                    background: fadeout(@cm-colorError, 75%);
+                    background: fadeout(@Cm-colorError, 75%);
 
                     &:before {
                         display: none;
@@ -119,7 +119,7 @@
                 &.is-active {
                     visibility: visible;
                     opacity: 1;
-                    background: fadeout(@cm-colorError, 50%);
+                    background: fadeout(@Cm-colorError, 50%);
 
                     &:before {
                         display: none;
@@ -155,7 +155,7 @@
 
 /* ******* COMPONENT: SIDEBAR: ADAPTIVE ******* */
 
-@media only screen and (max-width : @cm-screenTablet) {
+@media only screen and (max-width : @CmScreen-Tablet) {
 
     html.is-adaptive {
         .app-sidebar {
@@ -172,7 +172,7 @@
 
 }
 
-@media only screen and (max-width : @cm-screenMobilePortrait) {
+@media only screen and (max-width : @CmScreen-MobilePortrait) {
 
     html.is-adaptive {
         .app-sidebar {

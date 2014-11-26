@@ -23,17 +23,17 @@
 
             &.pull-left {
                 float: left;
-                margin: 0 @cm-indentXSmall @cm-indentXSmall 0;
+                margin: 0 @Cm-indentXSmall @Cm-indentXSmall 0;
             }
 
             &.pull-right {
                 float: right;
-                margin: 0 0 @cm-indentXSmall @cm-indentXSmall;
+                margin: 0 0 @Cm-indentXSmall @Cm-indentXSmall;
             }
 
             &.pull-center {
                 float: none;
-                margin: 0 auto @cm-indentXSmall auto;
+                margin: 0 auto @Cm-indentXSmall auto;
             }
         }
     }
@@ -41,14 +41,14 @@
 
 /* ******* MODULES: PORTFOLIO WIDGET: ADAPTIVE ******* */
 
-@media only screen and (max-width : @cm-screenMobile) {
+@media only screen and (max-width : @CmScreen-Mobile) {
 
     html.is-adaptive {
         .mod__portfolio-widget__item {
             > .inner {
                 .image {
                     float: none;
-                    margin: 0 auto @cm-indentXSmall auto;
+                    margin: 0 auto @Cm-indentXSmall auto;
                 }
             }
         }
