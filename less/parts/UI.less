@@ -4,7 +4,7 @@
 
 .app-page,
 .app-module {
-    margin: 0 0 @Cm-indentMedium;
+    margin: 0 0 @CmIndent-Medium;
 
     &.bottom {
         margin: 0;
@@ -12,7 +12,7 @@
 }
 
 .app-page-title {
-    margin: 0 0 @Cm-indentMedium;
+    margin: 0 0 @CmIndent-Medium;
 }
 
 .app-module-default:extend(.app-module all),
@@ -27,7 +27,7 @@
 .app-footer-area,
 .app-header-area {
     min-width: 200px;
-    min-height: @Cm-indentMedium * 2;
+    min-height: @CmIndent-Medium * 2;
     padding: 0;
     position: absolute;
     z-index: 1;
@@ -71,7 +71,7 @@ html {
     &.is-app-sidebar {
         .app-template {
             margin-left: @AppLT-Sidebar-width;
-            .cm-transition(margin @AppLT-Sidebar-duration ease-in-out);
+            .mx__transition(margin @AppLT-Sidebar-duration ease-in-out);
         }
 
         &.is-app-sidebar--collapsed {
@@ -109,7 +109,7 @@ html {
 
     &.is-immediately {
         .app-template {
-            .cm-transition-none;
+            .cm__transition-none;
         }
     }
 }

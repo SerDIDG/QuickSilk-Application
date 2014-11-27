@@ -8,7 +8,7 @@
             width: @AppKnowledgeCentre-titleMinWidth;
             display: table-cell;
             vertical-align: top;
-            padding: @Cm-indentXSmall @Cm-indentSmall @Cm-indentXSmall 0;
+            padding: @CmIndent-XSmall @CmIndent-Small @CmIndent-XSmall 0;
 
             .cm-list-counted {
                 li {
@@ -17,12 +17,12 @@
                         height: 0;
                         display: block;
                         position: absolute;
-                        .cm-position(((@CmListCounted-height - 12px) / 2), -@Cm-indentSmall , auto, auto);
+                        .mx__position(((@CmListCounted-height - 12px) / 2), -@CmIndent-Small , auto, auto);
                         content: '';
                         border-style: solid;
                         border-width: 6px 8px 6px 0;
                         border-color: transparent;
-                        .cm-transition(border-color @Cm-Transition-Duration ease-in-out);
+                        .mx__transition(border-color @CmVar-Transition-Duration ease-in-out);
                     }
 
                     &.active {
@@ -34,9 +34,9 @@
             }
         }
 
-        > .r:extend(.cm-box) {
+        > .r:extend(.pt__box) {
             display: table-cell;
-            padding: @Cm-indentXSmall;
+            padding: @CmIndent-XSmall;
             vertical-align: top;
         }
     }

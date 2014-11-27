@@ -2,10 +2,10 @@
 
 .app-templates-listing {
     overflow: hidden;
-    padding-right: @Cm-indentMedium;
+    padding-right: @CmIndent-Medium;
 
     > ul {
-        margin: -(@Cm-indentMedium / 2);
+        margin: -(@CmIndent-Medium / 2);
         padding: 0;
         overflow: hidden;
         list-style: none;
@@ -15,7 +15,7 @@
             float: left;
 
             > .inner {
-                padding: @Cm-indentMedium / 2;
+                padding: @CmIndent-Medium / 2;
             }
         }
     }
@@ -23,11 +23,11 @@
 }
 
 .app-template-preview {
-    @inner-padding: @Cm-indentMedium / 2;
+    @inner-padding: @CmIndent-Medium / 2;
     @gradient: to bottom, rgb(255,255,255) 0, rgba(255,255,255,0.5) 50%;
 
     border: @Cm-borderBox;
-    .cm-transition(border-color 0.1s ease-in-out);
+    .mx__transition(border-color 0.1s ease-in-out);
 
     > .inner {
         position: relative;
@@ -44,23 +44,23 @@
 
     .preview-info {
         position: absolute;
-        .cm-position(0,0,0,0);
         z-index: 2;
         opacity: 0;
         -webkit-transform: translateZ(0);
-        .cm-transition(opacity 0.3s ease-in-out);
-        .cm-linear-gradient(@gradient);
+        .mx__position(0, 0, 0, 0);
+        .mx__linear-gradient(@gradient);
+        .mx__transition(opacity 0.3s ease-in-out);
 
         h2 {
             position: absolute;
-            .cm-position(@inner-padding, @inner-padding, auto, @inner-padding);
+            .mx__position(@inner-padding, @inner-padding, auto, @inner-padding);
         }
 
         .btn-wrap {
             position: absolute;
-            .cm-position(auto, @inner-padding, @inner-padding, @inner-padding);
             margin: 0;
             font-size: 0;
+            .mx__position(auto, @inner-padding, @inner-padding, @inner-padding);
 
             input, button, .button {
                 width: 32%;
@@ -76,11 +76,11 @@
 
     &:hover {
         border: @Cm-borderBoxActive;
-        .cm-transition(border-color 0.1s ease-in-out);
+        .mx__transition(border-color 0.1s ease-in-out);
 
         .preview-info {
             opacity: 1;
-            .cm-transition(opacity 0.1s ease-in-out);
+            .mx__transition(opacity 0.1s ease-in-out);
         }
     }
 }
@@ -91,7 +91,7 @@
 
     .app-templates-listing {
         position: absolute;
-        top: @CmForm-fieldHeight + @Cm-indentMedium;
+        top: @CmForm-fieldHeight + @CmIndent-Medium;
         right: 0;
         bottom: 0;
         left: 0;

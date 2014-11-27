@@ -20,14 +20,13 @@
 // /* ******* CONFIGURE FIORA UI ******* */
 
 @Cm-color: @App-UI-Color;
-@Cm-fontSizeUI: @App-UI-Size;
-@Cm-boldWeight: @App-UI-BoldWeight;
+@CmBase-Font-BoldWeight: @App-UI-BoldWeight;
 @Cm-borderRadius: @App-UI-BorderRadius;
 
-@Cm-colorFont: @App-Base-Color;
-@Cm-lineHeight: @App-Base-LineHeight;
-@Cm-fontSize: @App-Base-Size;
-@Cm-fontFamily: @App-Base-Family;
+@CmBase-Font-Color: @App-Base-Color;
+@CmBase-Font-LineHeight: @App-Base-LineHeight;
+@CmBase-Font-Size: @App-Base-Size;
+@CmBase-Font-Family: @App-Base-Family;
 @Cm-colorLink: @App-Base-Color-Link;
 
 // /* ******* COMPONENTS  ******* */
@@ -41,7 +40,7 @@
 @AppWidget-dummyBorderRadius: @Cm-borderRadius;
 @AppWidget-dummyBorderRadiusInner: 0px;
 @AppWidget-dummyPadding: 2px;
-@AppWidget-indent: @Cm-indentMedium;
+@AppWidget-indent: @CmIndent-Medium;
 
 // /* *** LOGIN BOX *** */
 
@@ -50,7 +49,7 @@
 // /* *** SITEMAP *** */
 
 @AppSitemap-fontSize: 11px;
-@AppSitemap-color: @Cm-colorFont;
+@AppSitemap-color: @CmBase-Font-Color;
 @AppSitemap-colorTitle: @AppSitemap-color;
 
 // /* *** KNOWLEDGE CENTRE *** */
@@ -59,8 +58,8 @@
 
 // /* *** AGGREGATOR *** */
 
-@AppAggregator-stuffFontSize: @Cm-fontSizeUI;
-@AppAggregator-stuffColor: @Cm-colorFontMedium;
+@AppAggregator-stuffFontSize: @CmUI-Font-Size;
+@AppAggregator-stuffColor: @CmUI-FontTitleMedium-Color;
 
 // /* *** SOCIAL **** */
 
@@ -74,7 +73,7 @@
 @AppLT-TopMenu-Duration: 300ms;
 @AppLT-TopMenu-Background: #000000;
 @AppLT-TopMenu-Color: #d6d6d6;
-@AppLT-TopMenu-FontSize: @Cm-fontSize;
+@AppLT-TopMenu-FontSize: @CmBase-Font-Size;
 @AppLT-TopMenu-ItemBorder: @Cm-borderWidth solid rgba(255,255,255,0.4);
 @AppLT-TopMenu-ItemBackground: rgba(255,255,255,0.2);
 
@@ -82,7 +81,7 @@
 
 @AppLT-Sidebar-width: 319px;
 @AppLT-Sidebar-widthTablet: 208px;
-@AppLT-Sidebar-padding: @Cm-indentXSmall;
+@AppLT-Sidebar-padding: @CmIndent-XSmall;
 @AppLT-Sidebar-widthCollapsed: 24px + (@AppLT-Sidebar-padding * 2);
 @AppLT-Sidebar-dummyWidth: 94px;
 @AppLT-Sidebar-duration: 500ms;
@@ -90,6 +89,6 @@
 
 // /* *** TEMPLATES *** */
 
-@AppLT-Templates-ItemPadding: @Cm-indentXSmall;
+@AppLT-Templates-ItemPadding: @CmIndent-XSmall;
 
 // /* ******* PAGES ******* */

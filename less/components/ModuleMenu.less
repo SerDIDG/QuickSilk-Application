@@ -9,11 +9,11 @@
 
         > li {
             display: inline-block;
-            margin: 0 0 0 @Cm-indentXSmall;
+            margin: 0 0 0 @CmIndent-XSmall;
             position: relative;
             z-index: 1;
             vertical-align: top;
-            .cm-font-base;
+            .cm__font;
 
             &:first-child {
                 margin: 0;
@@ -68,7 +68,7 @@
         height: @CmForm-fieldHeight;
         position: absolute;
         z-index: 1;
-        .cm-position(0, 0, 0, auto);
+        .mx__position(0, 0, 0, auto);
         .icon.medium.menu;
         .icon.linked;
         background-position: 50% 50%;
@@ -77,7 +77,7 @@
 
     &.vertical {
         ul {
-            margin: @Cm-indentXSmall 0 0;
+            margin: @CmIndent-XSmall 0 0;
             padding: 0;
 
             &:first-child {
@@ -85,13 +85,13 @@
             }
 
             ul {
-                margin-left: @Cm-indentMedium;
+                margin-left: @CmIndent-Medium;
             }
         }
 
         li {
             display: block;
-            margin: @Cm-indentXSmall 0 0;
+            margin: @CmIndent-XSmall 0 0;
 
             &:first-child {
                 margin: 0;
@@ -101,14 +101,14 @@
         a {
             display: inline-block;
             vertical-align: middle;
-            color: @Cm-colorFont;
+            color: @CmBase-Font-Color;
         }
 
         &.pull-right {
             ul {
                 ul {
                     margin-left: 0;
-                    margin-right: @Cm-indentMedium;
+                    margin-right: @CmIndent-Medium;
                 }
             }
         }

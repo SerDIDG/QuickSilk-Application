@@ -12,7 +12,7 @@
     }
 
     .links {
-        line-height: @Cm-lineHeight;
+        line-height: @CmBase-Font-LineHeight;
 
         ul {
             margin: 0;
@@ -23,7 +23,7 @@
 
             li {
                 display: inline-block;
-                margin: 0 0 0 @Cm-indentXXSmall;
+                margin: 0 0 0 @CmIndent-XXSmall;
                 vertical-align: top;
 
                 &:first-child {
@@ -33,7 +33,7 @@
                 a {
                     display: block;
                     line-height: @CmForm-fieldHeight;
-                    font-size: @Cm-fontSize;
+                    font-size: @CmBase-Font-Size;
                 }
             }
         }
@@ -47,7 +47,7 @@
 .com-tooltip.app-loginbox-tooltip {
     > .inner {
         margin: 8px 0 0 0;
-        padding: @Cm-indentXSmall @Cm-indentMedium @Cm-indentMedium;
+        padding: @CmIndent-XSmall @CmIndent-Medium @CmIndent-Medium;
     }
 
     .app-modular-sign {
@@ -69,12 +69,12 @@
     }
 
     .or {
-        @margin: (@Cm-indentMedium - (@Cm-lineHeight / 2));
+        @margin: (@CmIndent-Medium - (@CmBase-Font-LineHeight / 2));
 
         margin: @margin 0;
         position: relative;
         text-align: center;
-        line-height: @Cm-lineHeight;
+        line-height: @CmBase-Font-LineHeight;
 
         span {
             position: relative;
