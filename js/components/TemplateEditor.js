@@ -109,7 +109,7 @@ function(params){
 
     var renderLoaderBox = function(){
         var node;
-        node = cm.Node('div', {'class' : 'cm-loader-box position'},
+        node = cm.Node('div', {'class' : 'pt__box-loader position'},
             cm.Node('div', {'class' : 'inner'})
         );
         return node;
