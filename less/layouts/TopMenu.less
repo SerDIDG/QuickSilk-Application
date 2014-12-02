@@ -25,7 +25,7 @@
         float: left;
         margin: ((@AppLT-TopMenu-Height - 24px) / 2) 0 0 @CmIndent-XSmall;
         background-image: url("@{AppPath-Images}/layouts/topmenu/logo.png");
-        .mx__transition(opacity 0.3s ease-in-out);
+        .mx__transition(opacity, @CmVar-Transition-Duration);
 
         &:hover {
             opacity: @CmVar-Opacity-Hover;
@@ -60,7 +60,7 @@
     }
 
     .menu {
-        &:extend(.cm-ul-clear all);
+        .cm__list-clear;
         position: relative;
         z-index: 2;
 
@@ -103,7 +103,7 @@
         }
 
         ul {
-            &:extend(.cm-ul-clear all);
+            .cm__list-clear;
         }
     }
 
@@ -124,7 +124,7 @@
     html.is-adaptive {
         .app-topmenu {
             .menu {
-                .cm-ul-inline;
+                .cm__list-inline;
 
                 > li {
                     margin: 0 0 0 (@CmIndent-XSmall * 2 + 1px);
@@ -267,9 +267,7 @@
                 -webkit-transform: translateY(-100%);
                     -ms-transform: translateY(-100%);
                         transform: translateY(-100%);
-                -webkit-transition: -webkit-transform @AppLT-TopMenu-Duration ease-in-out;
-                    -ms-transition:     -ms-transform @AppLT-TopMenu-Duration ease-in-out;
-                        transition:         transform @AppLT-TopMenu-Duration ease-in-out;
+                .mx__transition(-webkit-transform -ms-transform transform, @AppLT-TopMenu-Duration);
                 .mx__position(0, 0, 0, 0);
 
                 > .inner {

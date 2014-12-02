@@ -6,7 +6,7 @@
     position: relative;
     margin: 0 0 @AppWidget-indent;
     z-index: 1;
-    .mx__transition(z-index 0.3s ease-in-out);
+    .mx__transition(z-index, @CmVar-Transition-Duration);
     -webkit-transform: translateZ(0);
 
     // /* Widget */
@@ -14,7 +14,7 @@
     > .app-widget {
         margin: 0;
         #cm-editable-bundle > .normal;
-        .mx__transition(opacity 0.3s ease-in-out);
+        .mx__transition(opacity, @CmVar-Transition-Duration);
 
         &.is-hidden {
             display: none;
@@ -50,8 +50,7 @@
         position: relative;
         border-radius: @AppWidget-dummyBorderRadius;
         cursor: move;
-        .mx__transition(background-color @CmVar-Transition-Duration ease-in-out);
-        .mx__transition(box-shadow @CmVar-Transition-Duration ease-in-out);
+        .mx__transition(background-color box-shadow, @CmVar-Transition-Duration);
 
         > .inner {
             padding: @AppWidget-dummyPadding;
@@ -63,7 +62,7 @@
             margin: 0 auto;
             background: @AppWidget-dummyBackground;
             border-radius: @AppWidget-dummyBorderRadiusInner;
-            .mx__transition(background-color @CmVar-Transition-Duration ease-in-out);
+            .mx__transition(background-color, @CmVar-Transition-Duration);
 
             img {
                 width: 100%;
@@ -86,7 +85,7 @@
             border: 1px solid @AppWidget-dummyBorderColor;
             border-radius: @AppWidget-dummyBorderRadius;
             opacity: 0;
-            .mx__transition(opacity @CmVar-Transition-Duration ease-in-out);
+            .mx__transition(opacity, @CmVar-Transition-Duration);
 
             &.fadein {
                 opacity: 1;
@@ -100,7 +99,7 @@
 
     &:hover {
         z-index: 10;
-        .mx__transition(z-index 0.1s ease-in-out);
+        .mx__transition(z-index, @CmVar-Transition-DurationReverse);
 
         > .app-widget.is-editable {
             #cm-editable-bundle > .hover;
@@ -109,32 +108,30 @@
         > .app-widget-dummy {
             .icon {
                 background: @AppWidget-dummyBackgroundHover;
-                .mx__transition(background-color @CmVar-Transition-DurationReverse ease-in-out);
+                .mx__transition(background-color, @CmVar-Transition-DurationReverse);
             }
         }
     }
 
     &.is-active {
         z-index: 10;
-        .mx__transition(z-index 0.1s ease-in-out);
+        .mx__transition(z-index, @CmVar-Transition-DurationReverse);
 
         > .app-widget.is-editable {
             #cm-editable-bundle > .hover;
             #cm-editable-bundle > .active;
             opacity: 0.7;
-            .mx__transition(opacity 0.1s ease-in-out);
+            .mx__transition(opacity, @CmVar-Transition-DurationReverse);
         }
 
         > .app-widget-dummy {
             background: #ffffff;
             box-shadow: 0 1px 5px rgba(0,0,0,0.2);
-            .mx__transition(background-color @CmVar-Transition-DurationReverse ease-in-out);
-            .mx__transition(box-shadow @CmVar-Transition-DurationReverse ease-in-out);
-
+            .mx__transition(background-color box-shadow, @CmVar-Transition-DurationReverse);
 
             .icon {
                 background: @AppWidget-dummyBackgroundActive;
-                .mx__transition(background-color @CmVar-Transition-DurationReverse ease-in-out);
+                .mx__transition(background-color, @CmVar-Transition-DurationReverse);
             }
         }
     }

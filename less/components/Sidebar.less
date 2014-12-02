@@ -28,9 +28,7 @@
             .icon {
                 position: absolute;
                 cursor: pointer;
-                -webkit-transition: -webkit-transform @AppLT-Sidebar-duration ease-in-out;
-                    -ms-transition:     -ms-transform @AppLT-Sidebar-duration ease-in-out;
-                        transition:         transform @AppLT-Sidebar-duration ease-in-out;
+                .mx__transition(-webkit-transform -ms-transform transform, @AppLT-Sidebar-duration);
                 .mx__position(14px, @CmIndent-XSmall, auto, auto);
             }
         }
@@ -41,7 +39,7 @@
             position: absolute;
             background: @AppLT-Sidebar-background;
             .mx__position(50px, 0, 0, 0);
-            .mx__transition(opacity @AppLT-Sidebar-duration ease-in-out);
+            .mx__transition(opacity, @AppLT-Sidebar-duration);
         }
     }
 
@@ -104,7 +102,7 @@
 
         &.cm-draganddrop-area {
             &.is-available {
-                .mx__transition(all @CmVar-Transition-Duration ease-in-out);
+                .mx__transition(all, @CmVar-Transition-Duration);
 
                 &.is-highlight {
                     visibility: visible;

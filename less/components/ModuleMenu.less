@@ -2,18 +2,13 @@
 
 .app-module-menu {
     > ul {
-        padding: 0;
-        margin: 0;
-        list-style: none;
-        font-size: 0;
+        .cm__list-clear;
+        .cm__list-inline--base;
 
         > li {
-            display: inline-block;
             margin: 0 0 0 @CmIndent-XSmall;
             position: relative;
             z-index: 1;
-            vertical-align: top;
-            .cm__font;
 
             &:first-child {
                 margin: 0;
@@ -57,22 +52,20 @@
             border: none;
             border-radius: 0;
             background: transparent;
-            -webkit-appearance: none;
-               -moz-appearance: none;
-                    appearance: none;
+            .mx__appearance(none);
         }
     }
 
     .menu-button {
+        .icon.linked;
+        .icon.medium.menu;
         width: @Cm-Medium;
         height: @CmForm-fieldHeight;
         position: absolute;
         z-index: 1;
-        .mx__position(0, 0, 0, auto);
-        .icon.medium.menu;
-        .icon.linked;
         background-position: 50% 50%;
         background-repeat: no-repeat;
+        .mx__position(0, 0, 0, auto);
     }
 
     &.vertical {
