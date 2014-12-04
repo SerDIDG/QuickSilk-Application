@@ -13,7 +13,7 @@
 
     > .app-widget {
         margin: 0;
-        #cm-editable-bundle > .normal;
+        .pt__editable__bundle > .normal;
         .mx__transition(opacity, @CmVar-Transition-Duration);
 
         &.is-hidden {
@@ -25,7 +25,7 @@
         }
 
         &.is-editable {
-            #cm-editable-bundle > .editable;
+            .pt__editable__bundle > .editable;
         }
 
         &.is-hide {
@@ -102,7 +102,7 @@
         .mx__transition(z-index, @CmVar-Transition-DurationReverse);
 
         > .app-widget.is-editable {
-            #cm-editable-bundle > .hover;
+            .pt__editable__bundle > .hover;
         }
 
         > .app-widget-dummy {
@@ -118,8 +118,8 @@
         .mx__transition(z-index, @CmVar-Transition-DurationReverse);
 
         > .app-widget.is-editable {
-            #cm-editable-bundle > .hover;
-            #cm-editable-bundle > .active;
+            .pt__editable__bundle > .hover;
+            .pt__editable__bundle > .active;
             opacity: 0.7;
             .mx__transition(opacity, @CmVar-Transition-DurationReverse);
         }
