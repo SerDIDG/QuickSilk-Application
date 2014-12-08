@@ -25,10 +25,10 @@
         float: left;
         margin: ((@AppLT-TopMenu-Height - 24px) / 2) 0 0 @CmIndent-XSmall;
         background-image: url("@{AppPath-Images}/layouts/topmenu/logo.png");
-        .mx__transition(opacity, @CmVar-Transition-Duration);
+        .mx__transition(opacity, @CmUI-Transition-Duration);
 
         &:hover {
-            opacity: @CmVar-Opacity-Hover;
+            opacity: @CmUI-Opacity-Hover;
         }
     }
 
@@ -88,7 +88,7 @@
                     text-decoration: underline;
 
                     .icon {
-                        opacity: @CmVar-Opacity-Hover;
+                        opacity: @CmUI-Opacity-Hover;
                     }
                 }
             }
@@ -166,7 +166,7 @@
                     top: 100%;
                     left: -(@CmIndent-XSmall - 1px);
                     border-top: none;
-                    border-radius: 0 0 @Cm-borderRadius @Cm-borderRadius;
+                    border-radius: 0 0 @CmBorder-Radius @CmBorder-Radius;
                 }
 
                 &.right {

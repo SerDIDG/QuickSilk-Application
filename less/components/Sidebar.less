@@ -6,10 +6,8 @@
     z-index: 102;
     overflow: hidden;
     background: @AppLT-Sidebar-background;
-    box-shadow: @Cm-ui-shadow;
-    -webkit-transition: -webkit-transform @AppLT-Sidebar-duration ease-in-out;
-        -ms-transition:     -ms-transform @AppLT-Sidebar-duration ease-in-out;
-            transition:         transform @AppLT-Sidebar-duration ease-in-out;
+    box-shadow: @CmUI-Shadow;
+    .mx__transition(-webkit-transform -ms-transform transform, @AppLT-Sidebar-duration);
     .mx__position(0, auto, 0, 0);
 
     > .inner {
@@ -102,7 +100,7 @@
 
         &.cm-draganddrop-area {
             &.is-available {
-                .mx__transition(all, @CmVar-Transition-Duration);
+                .mx__transition(all, @CmUI-Transition-Duration);
 
                 &.is-highlight {
                     visibility: visible;

@@ -20,13 +20,13 @@
 // /* ******* CONFIGURE FIORA UI ******* */
 
 @Cm-color: @App-UI-Color;
-@CmBase-Font-BoldWeight: @App-UI-BoldWeight;
-@Cm-borderRadius: @App-UI-BorderRadius;
+@CmFont-Base-BoldWeight: @App-UI-BoldWeight;
+@CmBorder-Radius: @App-UI-BorderRadius;
 
-@CmBase-Font-Color: @App-Base-Color;
-@CmBase-Font-LineHeight: @App-Base-LineHeight;
-@CmBase-Font-Size: @App-Base-Size;
-@CmBase-Font-Family: @App-Base-Family;
+@CmFont-Base-Color: @App-Base-Color;
+@CmFont-Base-LineHeight: @App-Base-LineHeight;
+@CmFont-Base-Size: @App-Base-Size;
+@CmFont-Base-Family: @App-Base-Family;
 @Cm-colorLink: @App-Base-Color-Link;
 
 // /* ******* COMPONENTS  ******* */
@@ -37,7 +37,7 @@
 @AppWidget-dummyBackgroundHover: @Cm-colorActive;
 @AppWidget-dummyBackgroundActive: @Cm-colorActive;
 @AppWidget-dummyBorderColor: @Cm-colorBorder;
-@AppWidget-dummyBorderRadius: @Cm-borderRadius;
+@AppWidget-dummyBorderRadius: @CmBorder-Radius;
 @AppWidget-dummyBorderRadiusInner: 0px;
 @AppWidget-dummyPadding: 2px;
 @AppWidget-indent: @CmIndent-Medium;
@@ -49,7 +49,7 @@
 // /* *** SITEMAP *** */
 
 @AppSitemap-fontSize: 11px;
-@AppSitemap-color: @CmBase-Font-Color;
+@AppSitemap-color: @CmFont-Base-Color;
 @AppSitemap-colorTitle: @AppSitemap-color;
 
 // /* *** KNOWLEDGE CENTRE *** */
@@ -58,12 +58,12 @@
 
 // /* *** AGGREGATOR *** */
 
-@AppAggregator-stuffFontSize: @CmUI-Font-Size;
-@AppAggregator-stuffColor: @CmUI-FontTitleMedium-Color;
+@AppAggregator-stuffFontSize: @CmFont-UI-Size;
+@AppAggregator-stuffColor: @CmFont-UI-TitleMedium-Color;
 
 // /* *** SOCIAL **** */
 
-@AppModule-Icons-size: @Cm-Large;
+@AppModule-Icons-size: @CmSize-Large;
 
 // /* ******* LAYOUTS ******* */
 
@@ -73,8 +73,8 @@
 @AppLT-TopMenu-Duration: 300ms;
 @AppLT-TopMenu-Background: #000000;
 @AppLT-TopMenu-Color: #d6d6d6;
-@AppLT-TopMenu-FontSize: @CmBase-Font-Size;
-@AppLT-TopMenu-ItemBorder: @Cm-borderWidth solid rgba(255,255,255,0.4);
+@AppLT-TopMenu-FontSize: @CmFont-Base-Size;
+@AppLT-TopMenu-ItemBorder: @CmBorder-Width solid rgba(255,255,255,0.4);
 @AppLT-TopMenu-ItemBackground: rgba(255,255,255,0.2);
 
 // /* *** SIDEBAR *** */
