@@ -25,7 +25,7 @@ App['Stylizer'] = function(o){
 
     var renderTooltip = function(){
         // Structure
-        nodes['tooltip']['container'] = cm.Node('div', {'class' : 'cm-toolbar app-stylizer-toolbar'},
+        nodes['tooltip']['container'] = cm.Node('div', {'class' : 'pt__toolbar app-stylizer-toolbar'},
             cm.Node('ul', {'class' : 'group'},
                 cm.Node('li', {'class' : 'button secondary is-icon'},
                     cm.Node('span', {'class' : 'icon toolbar bold'})
