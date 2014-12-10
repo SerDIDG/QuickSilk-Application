@@ -15,7 +15,7 @@
         .mx__position(0, 0, 0, 0);
 
         > .title {
-            .cm__font--ui-title;
+            .cm__font--ui-h1;
             padding: 6px @AppLT-Sidebar-padding;
             position: absolute;
             background: @AppLT-Sidebar-background;
@@ -86,15 +86,15 @@
         padding: 0;
         z-index: 3;
         opacity: 0;
-        background: fadeout(@CmColor-Invalid-DarkDefault, 50%);
+        background: fadeout(@CmColor-Danger-DarkDefault, 50%);
         border-radius: 0;
         visibility: hidden;
         .mx__position(0, 0, 0, 0);
 
         .title {
-            .cm__font--ui-title;
+            .cm__font--ui-h1;
             padding: 6px @CmIndent-XSmall;
-            background-color: @CmColor-Invalid-DarkDefault;
+            background-color: @CmColor-Danger-DarkDefault;
             color: #fff;
         }
 
@@ -105,7 +105,7 @@
                 &.is-highlight {
                     visibility: visible;
                     opacity: 1;
-                    background: fadeout(@CmColor-Invalid-DarkDefault, 75%);
+                    background: fadeout(@CmColor-Danger-DarkDefault, 75%);
 
                     &:before {
                         display: none;
@@ -115,7 +115,7 @@
                 &.is-active {
                     visibility: visible;
                     opacity: 1;
-                    background: fadeout(@CmColor-Invalid-DarkDefault, 50%);
+                    background: fadeout(@CmColor-Danger-DarkDefault, 50%);
 
                     &:before {
                         display: none;

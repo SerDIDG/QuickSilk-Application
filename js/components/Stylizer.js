@@ -104,7 +104,7 @@ App['Stylizer'] = function(o){
             'components' : {}
         };
         // Set selectable class
-        cm.addClass(item['container'], 'cm-selectable');
+        cm.addClass(item['container'], 'pt__selectable');
         // Show tooltip on click
         cm.addEvent(item['container'], 'click', function(){
             if(current != item){
