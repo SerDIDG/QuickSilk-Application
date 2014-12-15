@@ -67,9 +67,9 @@
                                 '<div class="drag is-bottom" data-com-draganddrop="drag-bottom">' +
                                 '<div class="icon draggable"></div>' +
                                 '</div>' +
-                                '<div class="cm-menu menu">' +
+                                '<div class="pt__menu menu">' +
                                 '<div class="icon small settings"></div>' +
-                                '<ul class="cm-menu-dropdown">' +
+                                '<ul class="pt__menu-dropdown">' +
                                 '<li><a>Remove</a></li>' +
                                 '</ul>' +
                                 '</div>' +
@@ -77,20 +77,20 @@
                                 '</div>';
 
                         var types = {
-                            'columns' : '<div class="app-module com-columns app-module-columns is-chassis-visible is-editable" data-element="columns">' +
-                                        '<div class="inner" data-com-columns="inner">' +
-                                        '<div class="container" data-com-columns="holder">' +
-                                        '<div class="com-column" data-com-columns="column" style="width: 30%;">' +
-                                        '<div class="inner" data-com-columns="column-inner" data-com-draganddrop="area"></div>' +
+                            'columns' : '<div class="app-module com__columns app-module-columns is-chassis-visible is-editable" data-element="columns">' +
+                                        '<div class="inner" data-com__columns="inner">' +
+                                        '<div class="container" data-com__columns="holder">' +
+                                        '<div class="com__column" data-com__columns="column" style="width: 30%;">' +
+                                        '<div class="inner" data-com__columns="column-inner" data-com-draganddrop="area"></div>' +
                                         '</div>' +
-                                        '<div class="com-column" data-com-columns="column" style="width: 70%;">' +
-                                        '<div class="inner" data-com-columns="column-inner" data-com-draganddrop="area"></div>' +
+                                        '<div class="com__column" data-com__columns="column" style="width: 70%;">' +
+                                        '<div class="inner" data-com__columns="column-inner" data-com-draganddrop="area"></div>' +
                                         '</div>' +
                                         '</div>' +
                                         '</div>' +
                                         '</div>' +
                                         '</div>',
-                            'content' : '<div class="app-module com-columns app-module-columns is-chassis-visible is-editable" contenteditable="true">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla ipsum est, consectetur nec viverra nec, vestibulum id tellus. Cras neque risus, gravida ornare blandit ut, porttitor placerat leo. Maecenas sodales turpis lacus, ac ultricies odio finibus nec. Nulla et efficitur diam, et lobortis ex. Maecenas dapibus feugiat ligula, vitae dignissim est malesuada sed. Maecenas dictum erat nisl. In non neque lacus. Ut vitae massa purus. Etiam facilisis rhoncus eros quis fermentum. Proin sed libero vel mauris feugiat volutpat sed non ligula. Fusce ultricies in mi a lacinia. Donec faucibus arcu nibh, a pellentesque orci venenatis id. Mauris fringilla eleifend nibh eget finibus.</div>'
+                            'content' : '<div class="app-module com__columns app-module-columns is-chassis-visible is-editable" contenteditable="true">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla ipsum est, consectetur nec viverra nec, vestibulum id tellus. Cras neque risus, gravida ornare blandit ut, porttitor placerat leo. Maecenas sodales turpis lacus, ac ultricies odio finibus nec. Nulla et efficitur diam, et lobortis ex. Maecenas dapibus feugiat ligula, vitae dignissim est malesuada sed. Maecenas dictum erat nisl. In non neque lacus. Ut vitae massa purus. Etiam facilisis rhoncus eros quis fermentum. Proin sed libero vel mauris feugiat volutpat sed non ligula. Fusce ultricies in mi a lacinia. Donec faucibus arcu nibh, a pellentesque orci venenatis id. Mauris fringilla eleifend nibh eget finibus.</div>'
                         };
 
                         var content = widget.replace('$content$', types[config['type'] || 'columns']);
@@ -153,9 +153,9 @@
                 </div>
 
                 <ul class="menu right">
-                    <li class="cm-menu has-dropdown">
+                    <li class="pt__menu has-dropdown">
                         <a>Welcome, User Userberg</a>
-                        <ul class="cm-menu-dropdown">
+                        <ul class="pt__menu-dropdown">
                             <li><a>Admin</a></li>
                             <li><a>View Profile</a></li>
                             <li><a>Logout</a></li>
@@ -167,9 +167,9 @@
                     <li>
                         <a>User Manager</a>
                     </li>
-                    <li class="cm-menu has-dropdown">
+                    <li class="pt__menu has-dropdown">
                         <a href="http://google.com">Modules</a>
-                        <ul class="cm-menu-dropdown">
+                        <ul class="pt__menu-dropdown">
                             <li>
                                 <a>File Manager</a>
                             </li>
@@ -238,7 +238,7 @@
         </div>
 
         <div class="descr" data-node="widgetsContainer">
-            <dl class="com-togglebox app-widgets-category is-show" data-element="togglebox" data-config='{"remember" : true, "name" : "app-sidebar-main"}'>
+            <dl class="com__togglebox app-widgets-category is-show" data-element="togglebox" data-config='{"remember" : true, "name" : "app-sidebar-main"}'>
                 <dt data-node="ComToggleBox.button">
                     <span class="icon default"></span>
                     <span class="title">Main</span>
@@ -307,7 +307,7 @@
                 </dd>
             </dl>
 
-            <dl class="com-togglebox app-widgets-category is-show" data-element="togglebox" data-config='{"remember" : true, "name" : "app-sidebar-service"}'>
+            <dl class="com__togglebox app-widgets-category is-show" data-element="togglebox" data-config='{"remember" : true, "name" : "app-sidebar-service"}'>
                 <dt data-node="ComToggleBox.button">
                     <span class="icon default"></span>
                     <span class="title">Service</span>
@@ -356,7 +356,7 @@
                 </dd>
             </dl>
 
-            <dl class="com-togglebox app-widgets-category is-show" data-element="togglebox" data-config='{"remember" : true, "name" : "app-sidebar-media"}'>
+            <dl class="com__togglebox app-widgets-category is-show" data-element="togglebox" data-config='{"remember" : true, "name" : "app-sidebar-media"}'>
                 <dt data-node="ComToggleBox.button">
                     <span class="icon default"></span>
                     <span class="title">Media</span>
@@ -405,7 +405,7 @@
                 </dd>
             </dl>
 
-            <dl class="com-togglebox app-widgets-category is-show" data-element="togglebox" data-config='{"remember" : true, "name" : "app-sidebar-social"}'>
+            <dl class="com__togglebox app-widgets-category is-show" data-element="togglebox" data-config='{"remember" : true, "name" : "app-sidebar-social"}'>
                 <dt data-node="ComToggleBox.button">
                     <span class="icon default"></span>
                     <span class="title">Social</span>
@@ -504,7 +504,7 @@
                 </dd>
             </dl>
 
-            <dl class="com-togglebox app-widgets-category is-show" data-element="togglebox" data-config='{"remember" : true, "name" : "app-sidebar-blog"}'>
+            <dl class="com__togglebox app-widgets-category is-show" data-element="togglebox" data-config='{"remember" : true, "name" : "app-sidebar-blog"}'>
                 <dt data-node="ComToggleBox.button">
                     <span class="icon default"></span>
                     <span class="title">Blog</span>
@@ -573,7 +573,7 @@
                 </dd>
             </dl>
 
-            <dl class="com-togglebox app-widgets-category is-show" data-element="togglebox" data-config='{"remember" : true, "name" : "app-sidebar-events"}'>
+            <dl class="com__togglebox app-widgets-category is-show" data-element="togglebox" data-config='{"remember" : true, "name" : "app-sidebar-events"}'>
                 <dt data-node="ComToggleBox.button">
                     <span class="icon default"></span>
                     <span class="title">Events</span>
@@ -612,7 +612,7 @@
                 </dd>
             </dl>
 
-            <dl class="com-togglebox app-widgets-category is-show" data-element="togglebox" data-config='{"remember" : true, "name" : "app-sidebar-other"}'>
+            <dl class="com__togglebox app-widgets-category is-show" data-element="togglebox" data-config='{"remember" : true, "name" : "app-sidebar-other"}'>
                 <dt data-node="ComToggleBox.button">
                     <span class="icon default"></span>
                     <span class="title">Other</span>
