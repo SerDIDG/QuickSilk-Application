@@ -4,16 +4,16 @@
 
 .app-widget-container {
     position: relative;
-    margin: 0 0 @AppWidget-indent;
+    margin: 0 0 @AppWidget-Indent;
     z-index: 1;
-    .mx__transition(z-index, @CmUI-Transition-Duration);
     -webkit-transform: translateZ(0);
+    .mx__transition(z-index, @CmUI-Transition-Duration);
 
     // /* Widget */
 
     > .app-widget {
-        margin: 0;
         .pt__editable__bundle > .normal;
+        margin: 0;
         .mx__transition(opacity, @CmUI-Transition-Duration);
 
         &.is-hidden {
@@ -29,9 +29,9 @@
         }
 
         &.is-hide {
+            .cm__transition-none;
             overflow: hidden;
             opacity: 0;
-            .cm__transition-none;
         }
 
         &.is-locked {
@@ -48,20 +48,20 @@
 
     > .app-widget-dummy {
         position: relative;
-        border-radius: @AppWidget-dummyBorderRadius;
+        border-radius: @AppWidget-Dummy-BorderRadius;
         cursor: move;
         .mx__transition(background-color box-shadow, @CmUI-Transition-Duration);
 
         > .inner {
-            padding: @AppWidget-dummyPadding;
+            padding: @AppWidget-Dummy-Padding;
         }
 
         .icon {
             width: 90px;
             height: 90px;
             margin: 0 auto;
-            background: @AppWidget-dummyBackground;
-            border-radius: @AppWidget-dummyBorderRadiusInner;
+            background: @AppWidget-Dummy-Background;
+            border-radius: @AppWidget-Dummy-BorderRadiusInner;
             .mx__transition(background-color, @CmUI-Transition-Duration);
 
             img {
@@ -77,13 +77,13 @@
             overflow: hidden;
             text-align: center;
             line-height: 15px;
-            font-size: 12px;
+            font-size: @CmFont-UI-SizeSmall;
         }
 
         .pt__box-loader {
-            background: @AppWidget-dummyBackground;
-            border: 1px solid @AppWidget-dummyBorderColor;
-            border-radius: @AppWidget-dummyBorderRadius;
+            background: @AppWidget-Dummy-Background;
+            border: 1px solid @AppWidget-Dummy-BorderColor;
+            border-radius: @AppWidget-Dummy-BorderRadius;
             opacity: 0;
             .mx__transition(opacity, @CmUI-Transition-Duration);
 
@@ -107,7 +107,7 @@
 
         > .app-widget-dummy {
             .icon {
-                background: @AppWidget-dummyBackgroundHover;
+                background: @AppWidget-Dummy-HoverBackground;
                 .mx__transition(background-color, @CmUI-Transition-DurationReverse);
             }
         }
@@ -130,7 +130,7 @@
             .mx__transition(background-color box-shadow, @CmUI-Transition-DurationReverse);
 
             .icon {
-                background: @AppWidget-dummyBackgroundActive;
+                background: @AppWidget-Dummy-ActiveBackground;
                 .mx__transition(background-color, @CmUI-Transition-DurationReverse);
             }
         }

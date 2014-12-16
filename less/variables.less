@@ -4,7 +4,6 @@
 
 // /* ******* VARIABLES ******* */
 
-@App-UI-Color: hsl(210, 80%, 55%);
 @App-UI-Family: 'Open Sans', arial, helvetica, sans-serif;
 @App-UI-Size: 11px;
 @App-UI-BoldWeight: 600;
@@ -19,7 +18,6 @@
 
 // /* ******* CONFIGURE FIORA UI ******* */
 
-@Cm-color: @App-UI-Color;
 @CmFont-Base-BoldWeight: @App-UI-BoldWeight;
 @CmBorder-Radius: @App-UI-BorderRadius;
 
@@ -33,14 +31,14 @@
 
 // /* *** WIDGETS *** */
 
-@AppWidget-dummyBackground: @Cm-colorSecondary;
-@AppWidget-dummyBackgroundHover: @Cm-colorActive;
-@AppWidget-dummyBackgroundActive: @Cm-colorActive;
-@AppWidget-dummyBorderColor: @CmColor-Border;
-@AppWidget-dummyBorderRadius: @CmBorder-Radius;
-@AppWidget-dummyBorderRadiusInner: 0px;
-@AppWidget-dummyPadding: 2px;
-@AppWidget-indent: @CmIndent-Medium;
+@AppWidget-Indent: @CmIndent-Medium;
+@AppWidget-Dummy-Background: @CmColor-Secondary-LightHover;
+@AppWidget-Dummy-HoverBackground: @CmColor-Primary-LightHover;
+@AppWidget-Dummy-ActiveBackground: @CmColor-Primary-LightActive;
+@AppWidget-Dummy-BorderColor: @CmColor-Border;
+@AppWidget-Dummy-BorderRadius: @CmBorder-Radius;
+@AppWidget-Dummy-BorderRadiusInner: 0px;
+@AppWidget-Dummy-Padding: 2px;
 
 // /* *** LOGIN BOX *** */
 
@@ -73,7 +71,8 @@
 @AppLT-TopMenu-Duration: 300ms;
 @AppLT-TopMenu-Background: #000000;
 @AppLT-TopMenu-Color: #d6d6d6;
-@AppLT-TopMenu-FontSize: @CmFont-Base-Size;
+@AppLT-TopMenu-FontSize: @CmFont-UI-Size;
+@AppLT-TopMenu-FontWeight: @CmFont-UI-BoldWeight;
 @AppLT-TopMenu-ItemBorder: @CmBorder-Width solid rgba(255,255,255,0.4);
 @AppLT-TopMenu-ItemBackground: rgba(255,255,255,0.2);
 
