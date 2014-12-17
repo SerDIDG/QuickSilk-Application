@@ -4,7 +4,7 @@
 
 .app-widget-container {
     position: relative;
-    margin: 0 0 @AppWidget-Indent;
+    margin: 0 0 @AppPtWidget-Indent;
     z-index: 1;
     -webkit-transform: translateZ(0);
     .mx__transition(z-index, @CmUI-Transition-Duration);
@@ -48,20 +48,20 @@
 
     > .app-widget-dummy {
         position: relative;
-        border-radius: @AppWidget-Dummy-BorderRadius;
+        border-radius: @AppPtWidget-Dummy-BorderRadius;
         cursor: move;
         .mx__transition(background-color box-shadow, @CmUI-Transition-Duration);
 
         > .inner {
-            padding: @AppWidget-Dummy-Padding;
+            padding: @AppPtWidget-Dummy-Padding;
         }
 
         .icon {
             width: 90px;
             height: 90px;
             margin: 0 auto;
-            background: @AppWidget-Dummy-Background;
-            border-radius: @AppWidget-Dummy-BorderRadiusInner;
+            background: @AppPtWidget-Dummy-Background;
+            border-radius: @AppPtWidget-Dummy-BorderRadiusInner;
             .mx__transition(background-color, @CmUI-Transition-Duration);
 
             img {
@@ -81,9 +81,9 @@
         }
 
         .pt__box-loader {
-            background: @AppWidget-Dummy-Background;
-            border: 1px solid @AppWidget-Dummy-BorderColor;
-            border-radius: @AppWidget-Dummy-BorderRadius;
+            background: @AppPtWidget-Dummy-Background;
+            border: 1px solid @AppPtWidget-Dummy-BorderColor;
+            border-radius: @AppPtWidget-Dummy-BorderRadius;
             opacity: 0;
             .mx__transition(opacity, @CmUI-Transition-Duration);
 
@@ -107,7 +107,7 @@
 
         > .app-widget-dummy {
             .icon {
-                background: @AppWidget-Dummy-HoverBackground;
+                background: @AppPtWidget-Dummy-HoverBackground;
                 .mx__transition(background-color, @CmUI-Transition-DurationReverse);
             }
         }
@@ -130,7 +130,7 @@
             .mx__transition(background-color box-shadow, @CmUI-Transition-DurationReverse);
 
             .icon {
-                background: @AppWidget-Dummy-ActiveBackground;
+                background: @AppPtWidget-Dummy-ActiveBackground;
                 .mx__transition(background-color, @CmUI-Transition-DurationReverse);
             }
         }

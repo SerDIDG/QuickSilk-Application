@@ -72,7 +72,7 @@ function(params){
     var onSidebarExpand = function(){
         var columns, widgets;
         // Enable columns editable
-        columns = cm.getByClass('app-module-columns');
+        columns = cm.getByClass('app-mod__columns');
         cm.forEach(columns, function(column){
             if(!cm.isClass(column, 'is-locked')){
                 cm.addClass(column, 'is-editable');
@@ -96,7 +96,7 @@ function(params){
     var onSidebarCollapse = function(){
         var columns, widgets;
         // Disable columns editable
-        columns = cm.getByClass('app-module-columns');
+        columns = cm.getByClass('app-mod__columns');
         cm.forEach(columns, function(column){
             cm.removeClass(column, 'is-editable is-visible');
         });

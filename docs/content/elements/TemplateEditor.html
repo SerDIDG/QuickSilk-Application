@@ -1,5 +1,5 @@
 <!DOCTYPE HTML>
-<html class="is-adaptive is-logged is-app-topmenu is-app-sidebar">
+<html class="is-adaptive is-logged is-app-lt__topmenu is-app-lt__sidebar">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
@@ -39,12 +39,12 @@
                 .addEvent('onConstruct', function(){
                     Part.Menu();
                 })
-                .add('app-topmenu', function(node){
+                .add('app-lt__topmenu', function(node){
                     new App.TopMenu({
                         'node' : node
                     });
                 })
-                .add('app-sidebar', function(node){
+                .add('app-lt__sidebar', function(node){
                     new App.Sidebar({
                         'node' : node
                     });
@@ -77,7 +77,7 @@
                                 '</div>';
 
                         var types = {
-                            'columns' : '<div class="app-module com__columns app-module-columns is-chassis-visible is-editable" data-element="columns">' +
+                            'columns' : '<div class="app-module com__columns app-mod__columns is-chassis-visible is-editable" data-element="columns">' +
                                         '<div class="inner" data-com__columns="inner">' +
                                         '<div class="container" data-com__columns="holder">' +
                                         '<div class="com__column" data-com__columns="column" style="width: 30%;">' +
@@ -90,7 +90,7 @@
                                         '</div>' +
                                         '</div>' +
                                         '</div>',
-                            'content' : '<div class="app-module com__columns app-module-columns is-chassis-visible is-editable" contenteditable="true">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla ipsum est, consectetur nec viverra nec, vestibulum id tellus. Cras neque risus, gravida ornare blandit ut, porttitor placerat leo. Maecenas sodales turpis lacus, ac ultricies odio finibus nec. Nulla et efficitur diam, et lobortis ex. Maecenas dapibus feugiat ligula, vitae dignissim est malesuada sed. Maecenas dictum erat nisl. In non neque lacus. Ut vitae massa purus. Etiam facilisis rhoncus eros quis fermentum. Proin sed libero vel mauris feugiat volutpat sed non ligula. Fusce ultricies in mi a lacinia. Donec faucibus arcu nibh, a pellentesque orci venenatis id. Mauris fringilla eleifend nibh eget finibus.</div>'
+                            'content' : '<div class="app-module com__columns app-mod__columns is-chassis-visible is-editable" contenteditable="true">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla ipsum est, consectetur nec viverra nec, vestibulum id tellus. Cras neque risus, gravida ornare blandit ut, porttitor placerat leo. Maecenas sodales turpis lacus, ac ultricies odio finibus nec. Nulla et efficitur diam, et lobortis ex. Maecenas dapibus feugiat ligula, vitae dignissim est malesuada sed. Maecenas dictum erat nisl. In non neque lacus. Ut vitae massa purus. Etiam facilisis rhoncus eros quis fermentum. Proin sed libero vel mauris feugiat volutpat sed non ligula. Fusce ultricies in mi a lacinia. Donec faucibus arcu nibh, a pellentesque orci venenatis id. Mauris fringilla eleifend nibh eget finibus.</div>'
                         };
 
                         var content = widget.replace('$content$', types[config['type'] || 'columns']);
@@ -129,7 +129,7 @@
 
 <!-- [* ******* TOPMENU START ******* *] -->
 
-<div class="app-topmenu" data-node=".AppTopMenu:{}:container" data-element="app-topmenu">
+<div class="app-lt__topmenu" data-node=".AppTopMenu:{}:container" data-element="app-lt__topmenu">
     <div class="inner clear">
         <a class="logo"></a>
         <div class="menu-button" data-node="button"></div>
@@ -227,7 +227,7 @@
 
 <!-- [* ******* SIDEBAR START ******* *] -->
 
-<div class="app-sidebar is-expanded" data-node=".AppSidebar:{}:container" data-element="app-sidebar" data-config='{"remember" : true, "name" : "app-sidebar"}'>
+<div class="app-lt__sidebar is-expanded" data-node=".AppSidebar:{}:container" data-element="app-lt__sidebar" data-config='{"remember" : true, "name" : "app-lt__sidebar"}'>
     <div class="inner">
         <div class="remove-zone" data-node="removeZone">
             <div class="title">Drop here to remove</div>
@@ -238,7 +238,7 @@
         </div>
 
         <div class="descr" data-node="widgetsContainer">
-            <dl class="com__togglebox app-widgets-category is-show" data-element="togglebox" data-config='{"remember" : true, "name" : "app-sidebar-main"}'>
+            <dl class="com__togglebox app-widgets-category is-show" data-element="togglebox" data-config='{"remember" : true, "name" : "app-lt__sidebar-main"}'>
                 <dt data-node="ComToggleBox.button">
                     <span class="icon default"></span>
                     <span class="title">Main</span>
@@ -307,7 +307,7 @@
                 </dd>
             </dl>
 
-            <dl class="com__togglebox app-widgets-category is-show" data-element="togglebox" data-config='{"remember" : true, "name" : "app-sidebar-service"}'>
+            <dl class="com__togglebox app-widgets-category is-show" data-element="togglebox" data-config='{"remember" : true, "name" : "app-lt__sidebar-service"}'>
                 <dt data-node="ComToggleBox.button">
                     <span class="icon default"></span>
                     <span class="title">Service</span>
@@ -356,7 +356,7 @@
                 </dd>
             </dl>
 
-            <dl class="com__togglebox app-widgets-category is-show" data-element="togglebox" data-config='{"remember" : true, "name" : "app-sidebar-media"}'>
+            <dl class="com__togglebox app-widgets-category is-show" data-element="togglebox" data-config='{"remember" : true, "name" : "app-lt__sidebar-media"}'>
                 <dt data-node="ComToggleBox.button">
                     <span class="icon default"></span>
                     <span class="title">Media</span>
@@ -405,7 +405,7 @@
                 </dd>
             </dl>
 
-            <dl class="com__togglebox app-widgets-category is-show" data-element="togglebox" data-config='{"remember" : true, "name" : "app-sidebar-social"}'>
+            <dl class="com__togglebox app-widgets-category is-show" data-element="togglebox" data-config='{"remember" : true, "name" : "app-lt__sidebar-social"}'>
                 <dt data-node="ComToggleBox.button">
                     <span class="icon default"></span>
                     <span class="title">Social</span>
@@ -504,7 +504,7 @@
                 </dd>
             </dl>
 
-            <dl class="com__togglebox app-widgets-category is-show" data-element="togglebox" data-config='{"remember" : true, "name" : "app-sidebar-blog"}'>
+            <dl class="com__togglebox app-widgets-category is-show" data-element="togglebox" data-config='{"remember" : true, "name" : "app-lt__sidebar-blog"}'>
                 <dt data-node="ComToggleBox.button">
                     <span class="icon default"></span>
                     <span class="title">Blog</span>
@@ -573,7 +573,7 @@
                 </dd>
             </dl>
 
-            <dl class="com__togglebox app-widgets-category is-show" data-element="togglebox" data-config='{"remember" : true, "name" : "app-sidebar-events"}'>
+            <dl class="com__togglebox app-widgets-category is-show" data-element="togglebox" data-config='{"remember" : true, "name" : "app-lt__sidebar-events"}'>
                 <dt data-node="ComToggleBox.button">
                     <span class="icon default"></span>
                     <span class="title">Events</span>
@@ -612,7 +612,7 @@
                 </dd>
             </dl>
 
-            <dl class="com__togglebox app-widgets-category is-show" data-element="togglebox" data-config='{"remember" : true, "name" : "app-sidebar-other"}'>
+            <dl class="com__togglebox app-widgets-category is-show" data-element="togglebox" data-config='{"remember" : true, "name" : "app-lt__sidebar-other"}'>
                 <dt data-node="ComToggleBox.button">
                     <span class="icon default"></span>
                     <span class="title">Other</span>

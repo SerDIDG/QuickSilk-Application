@@ -1,13 +1,13 @@
-/* ******* COMPONENT: SIDEBAR ******* */
+/* ******* LAYOUTS: SIDEBAR ******* */
 
-.app-sidebar {
-    width: @AppLT-Sidebar-width;
+.app-lt__sidebar {
+    width: @AppLT-Sidebar-Width;
     position: fixed;
     z-index: 102;
     overflow: hidden;
-    background: @AppLT-Sidebar-background;
+    background: @AppLT-Sidebar-Background;
     box-shadow: @CmUI-Shadow;
-    .mx__transition(-webkit-transform -ms-transform transform, @AppLT-Sidebar-duration);
+    .mx__transition(-webkit-transform -ms-transform transform, @AppLT-Sidebar-Duration);
     .mx__position(0, auto, 0, 0);
 
     > .inner {
@@ -16,9 +16,9 @@
 
         > .title {
             .cm__font--ui-h1;
-            padding: 6px @AppLT-Sidebar-padding;
+            padding: 6px @AppLT-Sidebar-Padding;
             position: absolute;
-            background: @AppLT-Sidebar-background;
+            background: @AppLT-Sidebar-Background;
             text-align: left;
             .mx__position(0, 0, auto, 0);
             .mx__user-select(none);
@@ -26,23 +26,23 @@
             .icon {
                 position: absolute;
                 cursor: pointer;
-                .mx__transition(-webkit-transform -ms-transform transform, @AppLT-Sidebar-duration);
+                .mx__transition(-webkit-transform -ms-transform transform, @AppLT-Sidebar-Duration);
                 .mx__position(14px, @CmIndent-XSmall, auto, auto);
             }
         }
 
         > .descr {
             .cm__scroll-y;
-            padding: @AppLT-Sidebar-padding;
+            padding: @AppLT-Sidebar-Padding;
             position: absolute;
-            background: @AppLT-Sidebar-background;
+            background: @AppLT-Sidebar-Background;
             .mx__position(50px, 0, 0, 0);
-            .mx__transition(opacity, @AppLT-Sidebar-duration);
+            .mx__transition(opacity, @AppLT-Sidebar-Duration);
         }
     }
 
     &.is-collapsed {
-        @translate: @AppLT-Sidebar-widthCollapsed - @AppLT-Sidebar-width;
+        @translate: @AppLT-Sidebar-WidthCollapsed - @AppLT-Sidebar-Width;
         -webkit-transform: translateX(@translate);
             -ms-transform: translateX(@translate);
                 transform: translateX(@translate);
@@ -136,13 +136,13 @@
     }
 
     > dd {
-        margin: 0 -@AppWidget-Dummy-Padding;
+        margin: 0 -@AppPtWidget-Dummy-Padding;
         font-size: 0;
-        background: @AppLT-Sidebar-background;  /* Fix blinked blocks on collapse in Firefox. */
+        background: @AppLT-Sidebar-Background;  /* Fix blinked blocks on collapse in Firefox. */
     }
 
     .app-widget-container {
-        width: @AppLT-Sidebar-dummyWidth;
+        width: @AppLT-Sidebar-Dummy-Width;
         margin: 0;
         display: inline-block;
         vertical-align: top;
@@ -154,11 +154,11 @@
 @media only screen and (max-width : @CmScreen-Tablet) {
 
     html.is-adaptive {
-        .app-sidebar {
-            width: @AppLT-Sidebar-widthTablet;
+        .app-lt__sidebar {
+            width: @AppLT-Sidebar-WidthTablet;
 
             &.is-collapsed {
-                @translate: @AppLT-Sidebar-widthCollapsed - @AppLT-Sidebar-widthTablet;
+                @translate: @AppLT-Sidebar-WidthCollapsed - @AppLT-Sidebar-WidthTablet;
                 -webkit-transform: translateX(@translate);
                     -ms-transform: translateX(@translate);
                         transform: translateX(@translate);
@@ -171,7 +171,7 @@
 @media only screen and (max-width : @CmScreen-MobilePortrait) {
 
     html.is-adaptive {
-        .app-sidebar {
+        .app-lt__sidebar {
             display: none;
         }
     }
@@ -182,7 +182,7 @@
 
 @media print {
 
-    .app-sidebar {
+    .app-lt__sidebar {
         display: none;
     }
 

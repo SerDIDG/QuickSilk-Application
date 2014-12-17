@@ -57,7 +57,7 @@ function(params){
     that.expand = function(){
         that.isExpanded = true;
         cm.replaceClass(that.nodes['container'], 'is-collapsed', 'is-expanded');
-        cm.replaceClass(that.params['target'], 'is-app-topmenu--collapsed', 'is-app-topmenu--expanded', true);
+        cm.replaceClass(that.params['target'], 'is-app-lt__topmenu--collapsed', 'is-app-lt__topmenu--expanded', true);
         that.triggerEvent('onExpand');
         return that;
     };
@@ -65,7 +65,7 @@ function(params){
     that.collapse = function(){
         that.isExpanded = false;
         cm.replaceClass(that.nodes['container'], 'is-expanded', 'is-collapsed');
-        cm.replaceClass(that.params['target'], 'is-app-topmenu--expanded', 'is-app-topmenu--collapsed', true);
+        cm.replaceClass(that.params['target'], 'is-app-lt__topmenu--expanded', 'is-app-lt__topmenu--collapsed', true);
         that.triggerEvent('onCollapse');
         return that;
     };

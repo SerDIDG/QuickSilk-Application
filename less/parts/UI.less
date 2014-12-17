@@ -54,35 +54,35 @@
 }
 
 html {
-    &.is-app-topmenu {
+    &.is-app-lt__topmenu {
         .app-template {
             margin-top: @AppLT-TopMenu-Height;
         }
 
-        .app-sidebar {
+        .app-lt__sidebar {
             top: @AppLT-TopMenu-Height;
         }
 
-        &.is-app-topmenu--expanded {
+        &.is-app-lt__topmenu--expanded {
             overflow: hidden;
         }
     }
 
-    &.is-app-sidebar {
+    &.is-app-lt__sidebar {
         .app-template {
-            margin-left: @AppLT-Sidebar-width;
-            .mx__transition(margin, @AppLT-Sidebar-duration);
+            margin-left: @AppLT-Sidebar-Width;
+            .mx__transition(margin, @AppLT-Sidebar-Duration);
         }
 
-        &.is-app-sidebar--collapsed {
+        &.is-app-lt__sidebar--collapsed {
             .app-template {
-                margin-left: @AppLT-Sidebar-widthCollapsed;
+                margin-left: @AppLT-Sidebar-WidthCollapsed;
             }
         }
     }
 
-    &.is-app-sidebar--collapsed,
-    &:not(.is-app-sidebar--expanded):not(.is-app-sidebar--collapsed) {
+    &.is-app-lt__sidebar--collapsed,
+    &:not(.is-app-lt__sidebar--expanded):not(.is-app-lt__sidebar--collapsed) {
         .app-footer-area,
         .app-header-area,
         .app-main-area {
@@ -119,14 +119,14 @@ html {
 @media only screen and (max-width : @CmScreen-Tablet) {
 
     html.is-adaptive {
-        &.is-app-sidebar {
+        &.is-app-lt__sidebar {
             .app-template {
-                margin-left: @AppLT-Sidebar-widthTablet;
+                margin-left: @AppLT-Sidebar-WidthTablet;
             }
 
-            &.is-app-sidebar--collapsed {
+            &.is-app-lt__sidebar--collapsed {
                 .app-template {
-                    margin-left: @AppLT-Sidebar-widthCollapsed;
+                    margin-left: @AppLT-Sidebar-WidthCollapsed;
                 }
             }
         }
@@ -137,12 +137,12 @@ html {
 @media only screen and (max-width : @CmScreen-MobilePortrait) {
 
     html.is-adaptive {
-        &.is-app-sidebar {
+        &.is-app-lt__sidebar {
             .app-template {
                 margin-left: 0;
             }
 
-            &.is-app-sidebar--collapsed {
+            &.is-app-lt__sidebar--collapsed {
                 .app-template {
                     margin-left: 0;
                 }

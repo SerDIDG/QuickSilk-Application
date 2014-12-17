@@ -1,6 +1,6 @@
 /* ******* LAYOUTS: TOP MENU ******* */
 
-.app-topmenu {
+.app-lt__topmenu {
     height: @AppLT-TopMenu-Height;
     position: fixed;
     z-index: 104;
@@ -122,7 +122,7 @@
 
 @media only screen and (min-width : (@CmScreen-TabletPortrait + 1px)) {
     html.is-adaptive {
-        .app-topmenu {
+        .app-lt__topmenu {
             .menu {
                 .cm__list-inline;
 
@@ -210,7 +210,7 @@
 
 @media only screen and (min-width: 1281px) {
     html.is-adaptive {
-        .app-topmenu {
+        .app-lt__topmenu {
             .menu-centered {
                 position: absolute;
                 margin: 0 50%;
@@ -231,7 +231,7 @@
 
 @media only screen and (min-width : (@CmScreen-TabletPortrait + 1px)) and (max-width: 1280px) {
     html.is-adaptive {
-        .app-topmenu {
+        .app-lt__topmenu {
             .menu-centered {
                 float: right;
                 margin: 0 0 0 @CmIndent-XSmall;
@@ -245,7 +245,7 @@
 @media only screen and (max-width : @CmScreen-TabletPortrait) {
 
     html.is-adaptive {
-        .app-topmenu {
+        .app-lt__topmenu {
             > .inner {
                 &:before {
                     position: absolute;
@@ -344,7 +344,7 @@
 
 @media print {
 
-    .app-topmenu {
+    .app-lt__topmenu {
         display: none !important;
     }
 

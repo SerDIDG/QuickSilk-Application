@@ -1,44 +1,59 @@
-// /* ******* PATCHES ******* */
+
+// /* ************************************************ */
+// /* ******* VARIABLES ******* */
+// /* ************************************************ */
+
+// /* ******* PATH ******* */
 
 @AppPath-Images: '../img';
 
-// /* ******* VARIABLES ******* */
+// /* ************************************************ */
+// /* ******* PARTS ******* */
+// /* ************************************************ */
 
-@App-UI-Family: 'Open Sans', arial, helvetica, sans-serif;
-@App-UI-Size: 11px;
-@App-UI-BoldWeight: 600;
-@App-UI-BorderRadius: 3px;
+// /* ******* WIDGETS ******* */
 
-@App-Base-Color: #666666;
-@App-Base-Color-Link: @App-Base-Color;
-@App-Base-Family: 'Open Sans', arial, helvetica, sans-serif;
-@App-Base-LineHeight: 18px;
-@App-Base-Size: 13px;
-@App-Base-BoldWeight: 600;
+@AppPtWidget-Indent: @CmIndent-Medium;
+@AppPtWidget-Dummy-Background: @CmColor-Secondary-LightHover;
+@AppPtWidget-Dummy-HoverBackground: @CmColor-Primary-LightActive;
+@AppPtWidget-Dummy-ActiveBackground: @CmColor-Primary-LightActive;
+@AppPtWidget-Dummy-BorderColor: @CmColor-Border;
+@AppPtWidget-Dummy-BorderRadius: @CmBorder-Radius;
+@AppPtWidget-Dummy-BorderRadiusInner: 0px;
+@AppPtWidget-Dummy-Padding: 2px;
 
-// /* ******* CONFIGURE FIORA UI ******* */
+// /* ************************************************ */
+// /* ******* LAYOUTS ******* */
+// /* ************************************************ */
 
-@CmFont-Base-BoldWeight: @App-UI-BoldWeight;
-@CmBorder-Radius: @App-UI-BorderRadius;
+// /* ******* TOP MENU ******* */
 
-@CmFont-Base-Color: @App-Base-Color;
-@CmFont-Base-LineHeight: @App-Base-LineHeight;
-@CmFont-Base-Size: @App-Base-Size;
-@CmFont-Base-Family: @App-Base-Family;
-@CmColor-Font-Link: @App-Base-Color-Link;
+@AppLT-TopMenu-Height: 40px;
+@AppLT-TopMenu-Duration: 300ms;
+@AppLT-TopMenu-Background: #000000;
+@AppLT-TopMenu-Color: #d6d6d6;
+@AppLT-TopMenu-FontSize: @CmFont-UI-Size;
+@AppLT-TopMenu-FontWeight: @CmFont-UI-BoldWeight;
+@AppLT-TopMenu-ItemBorder: @CmBorder-Width solid rgba(255,255,255,0.4);
+@AppLT-TopMenu-ItemBackground: rgba(255,255,255,0.2);
 
-// /* ******* COMPONENTS  ******* */
+// /* ******* SIDEBAR ******* */
 
-// /* *** WIDGETS *** */
+@AppLT-Sidebar-Width: 319px;
+@AppLT-Sidebar-WidthTablet: 208px;
+@AppLT-Sidebar-WidthCollapsed: 24px + (@AppLT-Sidebar-Padding * 2);
+@AppLT-Sidebar-Padding: @CmIndent-XSmall;
+@AppLT-Sidebar-Duration: 500ms;
+@AppLT-Sidebar-Background: #ffffff;
+@AppLT-Sidebar-Dummy-Width: 94px;
 
-@AppWidget-Indent: @CmIndent-Medium;
-@AppWidget-Dummy-Background: @CmColor-Secondary-LightHover;
-@AppWidget-Dummy-HoverBackground: @CmColor-Primary-LightHover;
-@AppWidget-Dummy-ActiveBackground: @CmColor-Primary-LightActive;
-@AppWidget-Dummy-BorderColor: @CmColor-Border;
-@AppWidget-Dummy-BorderRadius: @CmBorder-Radius;
-@AppWidget-Dummy-BorderRadiusInner: 0px;
-@AppWidget-Dummy-Padding: 2px;
+// /* ******* TEMPLATES ******* */
+
+@AppLT-Templates-Item-Padding: @CmIndent-XSmall;
+
+// /* ************************************************ */
+// /* ******* COMPONENTS ******* */
+// /* ************************************************ */
 
 // /* *** LOGIN BOX *** */
 
@@ -50,44 +65,22 @@
 @AppSitemap-color: @CmFont-Base-Color;
 @AppSitemap-colorTitle: @AppSitemap-color;
 
-// /* *** KNOWLEDGE CENTRE *** */
 
-@AppKnowledgeCentre-titleMinWidth: 170px;
 
-// /* *** AGGREGATOR *** */
-
-@AppAggregator-stuffFontSize: @CmFont-UI-Size;
-@AppAggregator-stuffColor: @CmFont-UI-H4-Color;
 
 // /* *** SOCIAL **** */
 
 @AppModule-Icons-size: @CmSize-Large;
 
-// /* ******* LAYOUTS ******* */
 
-// /* *** TOP MENU *** */
+// /* ************************************************ */
+// /* ******* MODULES ******* */
+// /* ************************************************ */
 
-@AppLT-TopMenu-Height: 40px;
-@AppLT-TopMenu-Duration: 300ms;
-@AppLT-TopMenu-Background: #000000;
-@AppLT-TopMenu-Color: #d6d6d6;
-@AppLT-TopMenu-FontSize: @CmFont-UI-Size;
-@AppLT-TopMenu-FontWeight: @CmFont-UI-BoldWeight;
-@AppLT-TopMenu-ItemBorder: @CmBorder-Width solid rgba(255,255,255,0.4);
-@AppLT-TopMenu-ItemBackground: rgba(255,255,255,0.2);
+// /* ******* KNOWLEDGE CENTRE ******* */
 
-// /* *** SIDEBAR *** */
+@AppModKnowledgeCentre-Title-MinWidth: 170px;
 
-@AppLT-Sidebar-width: 319px;
-@AppLT-Sidebar-widthTablet: 208px;
-@AppLT-Sidebar-padding: @CmIndent-XSmall;
-@AppLT-Sidebar-widthCollapsed: 24px + (@AppLT-Sidebar-padding * 2);
-@AppLT-Sidebar-dummyWidth: 94px;
-@AppLT-Sidebar-duration: 500ms;
-@AppLT-Sidebar-background: #ffffff;
-
-// /* *** TEMPLATES *** */
-
-@AppLT-Templates-ItemPadding: @CmIndent-XSmall;
-
+// /* ************************************************ */
 // /* ******* PAGES ******* */
+// /* ************************************************ */

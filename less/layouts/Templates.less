@@ -1,6 +1,7 @@
-.app-lt__templates__scroll {
-    &:extend(.cm__scroll-y);
+/* ******* LAYOUTS: TEMPLATES ******* */
 
+.app-lt__templates__scroll {
+    .cm__scroll-y;
     min-height: 200px;
     padding: 0 @CmIndent-Medium 0 0;
 }
@@ -33,7 +34,7 @@
 
         > .inner {
             position: absolute;
-            .mx__position(@AppLT-Templates-ItemPadding, @AppLT-Templates-ItemPadding, @AppLT-Templates-ItemPadding, @AppLT-Templates-ItemPadding);
+            .mx__position(@AppLT-Templates-Item-Padding, @AppLT-Templates-Item-Padding, @AppLT-Templates-Item-Padding, @AppLT-Templates-Item-Padding);
         }
 
         .btn-wrap {

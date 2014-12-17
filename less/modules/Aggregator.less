@@ -1,10 +1,8 @@
-/* ******* COMPONENT: MODULE AGGREGATOR ******* */
+/* ******* MODULES: AGGREGATOR ******* */
 
-.app-module-aggregator:extend(.app-module-default all) {
+.app-mod__aggregator {
     > ul {
-        margin: 0;
-        padding: 0;
-        list-style: none;
+        .cm__list-clear;
 
         > li {
             margin: @CmIndent-Small 0 0 0;
@@ -13,8 +11,8 @@
                 padding: 0 8px;
                 display: inline-block;
                 vertical-align: top;
-                background: @Cm-color;
-                font-size: 11px;
+                background: @CmColor-Primary-DarkDefault;
+                font-size: @CmFont-Base-Hint-Size;
                 color: #ffffff;
 
                 &.facebook {
@@ -30,8 +28,8 @@
                 display: inline-block;
                 vertical-align: top;
                 margin: 0 0 0 @CmIndent-XXSmall;
-                color: @AppAggregator-stuffColor;
-                font-size: @AppAggregator-stuffFontSize;
+                font-size: @CmFont-Base-Hint-Size;
+                color: @CmFont-Base-Hint-Color;
             }
 
             .text {
