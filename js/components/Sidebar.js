@@ -80,7 +80,7 @@ function(params){
             cm.addClass(that.params['target'], 'is-immediately');
         }
         cm.replaceClass(that.nodes['container'], 'is-expanded', 'is-collapsed', true);
-        cm.replaceClass(that.params['target'], 'is-app-lt__sidebar--expanded', 'is-app-lt__sidebar--collapsed', true);
+        cm.replaceClass(that.params['target'], 'is-sidebar--expanded', 'is-sidebar--collapsed', true);
         // Remove immediately animation hack
         if(isImmediately){
             setTimeout(function(){
@@ -104,7 +104,7 @@ function(params){
             cm.addClass(that.params['target'], 'is-immediately');
         }
         cm.replaceClass(that.nodes['container'], 'is-collapsed', 'is-expanded', true);
-        cm.replaceClass(that.params['target'], 'is-app-lt__sidebar--collapsed', 'is-app-lt__sidebar--expanded', true);
+        cm.replaceClass(that.params['target'], 'is-sidebar--collapsed', 'is-sidebar--expanded', true);
         // Remove immediately animation hack
         if(isImmediately){
             setTimeout(function(){

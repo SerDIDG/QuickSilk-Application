@@ -1,6 +1,8 @@
-/* ******* COMPONENT: LOGIN BOX ******* */
+/* ******* COMPONENTS: LOGIN BOX ******* */
 
-.app-loginbox {
+/* *** LOGIN *** */
+
+.app__box-login {
     .check-forgot {
         > .l {
             overflow: hidden;
@@ -15,16 +17,12 @@
         line-height: @CmFont-Base-LineHeight;
 
         ul {
-            margin: 0;
-            padding: 0;
-            list-style: none;
+            .cm__list-clear;
+            .cm__list-inline--base;
             text-align: left;
-            font-size: 0;
 
             li {
-                display: inline-block;
                 margin: 0 0 0 @CmIndent-XXSmall;
-                vertical-align: top;
 
                 &:first-child {
                     margin: 0;
@@ -44,20 +42,20 @@
     }
 }
 
-.com__tooltip.app-loginbox-tooltip {
+.com__tooltip.app__box-login-tooltip {
     > .inner {
         margin: 8px 0 0 0;
         padding: @CmIndent-XSmall @CmIndent-Medium @CmIndent-Medium;
     }
 
-    .app-modular-sign {
-        width: @AppLoginBox-width;
+    .app__box-sign {
+        width: @AppBoxLogin-Width;
     }
 }
 
-/* *** MODULAR SIGN *** */
+/* *** SIGN *** */
 
-.app-modular-sign {
+.app__box-sign {
     .socials {
         font-size: 0;
 
@@ -103,7 +101,7 @@
 @media only screen and (max-width : @CmScreen-Mobile) {
 
     html.is-adaptive {
-        .com__tooltip.app-loginbox-tooltip {
+        .com__tooltip.app__box-login-tooltip {
             top: 46px !important;
             left: 0 !important;
             right: 0 !important;
@@ -113,7 +111,7 @@
                 margin: 0;
             }
 
-            .app-modular-sign {
+            .app__box-sign {
                 width: auto;
             }
         }

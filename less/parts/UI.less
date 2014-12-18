@@ -68,21 +68,21 @@ html {
         }
     }
 
-    &.is-app-lt__sidebar {
+    &.is-sidebar {
         .app-template {
             margin-left: @AppLT-Sidebar-Width;
             .mx__transition(margin, @AppLT-Sidebar-Duration);
         }
 
-        &.is-app-lt__sidebar--collapsed {
+        &.is-sidebar--collapsed {
             .app-template {
                 margin-left: @AppLT-Sidebar-WidthCollapsed;
             }
         }
     }
 
-    &.is-app-lt__sidebar--collapsed,
-    &:not(.is-app-lt__sidebar--expanded):not(.is-app-lt__sidebar--collapsed) {
+    &.is-sidebar--collapsed,
+    &:not(.is-sidebar--expanded):not(.is-sidebar--collapsed) {
         .app-footer-area,
         .app-header-area,
         .app-main-area {
@@ -119,12 +119,12 @@ html {
 @media only screen and (max-width : @CmScreen-Tablet) {
 
     html.is-adaptive {
-        &.is-app-lt__sidebar {
+        &.is-sidebar {
             .app-template {
                 margin-left: @AppLT-Sidebar-WidthTablet;
             }
 
-            &.is-app-lt__sidebar--collapsed {
+            &.is-sidebar--collapsed {
                 .app-template {
                     margin-left: @AppLT-Sidebar-WidthCollapsed;
                 }
@@ -137,12 +137,12 @@ html {
 @media only screen and (max-width : @CmScreen-MobilePortrait) {
 
     html.is-adaptive {
-        &.is-app-lt__sidebar {
+        &.is-sidebar {
             .app-template {
                 margin-left: 0;
             }
 
-            &.is-app-lt__sidebar--collapsed {
+            &.is-sidebar--collapsed {
                 .app-template {
                     margin-left: 0;
                 }

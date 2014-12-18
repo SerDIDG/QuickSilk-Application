@@ -39,7 +39,7 @@ function(params){
             'left' : that.params['direction'] == 'right' ? '-selfWidth+targetWidth' : 0,
             'top' : 'targetHeight',
             'adaptive' : that.params['adaptive'],
-            'className' : 'app-loginbox-tooltip',
+            'className' : 'app__box-login-tooltip',
             'content' : that.nodes['target'],
             'events' : {
                 'onShow' : show

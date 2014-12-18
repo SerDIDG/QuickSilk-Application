@@ -1,6 +1,6 @@
-/* ******* MODULE SITEMAP ******* */
+/* ******* MODULES: SITEMAP ******* */
 
-.app-module-sitemap:extend(.app-module-default all) {
+.app-mod__sitemap {
     > .inner {
         font-size: 0;
 
@@ -10,19 +10,19 @@
             display: inline-block;
             margin: 0 2% 20px 0;
             vertical-align: top;
-            font-size: @AppSitemap-fontSize;
+            font-size: @AppModSitemap-FontSize;
             font-weight: @CmFont-Base-BoldWeight;
-            color: @AppSitemap-color;
+            color: @AppModSitemap-Color;
 
             &:last-child {
                 margin-right: 0;
             }
 
             dt {
-                color: @AppSitemap-colorTitle;
+                color: @AppModSitemap-Title-Color;
 
                 a {
-                    color: @AppSitemap-colorTitle;
+                    color: @AppModSitemap-Title-Color;
                 }
             }
 
@@ -31,19 +31,19 @@
                 padding: 0;
 
                 a {
-                    color: @AppSitemap-color;
+                    color: @AppModSitemap-Color;
                 }
             }
         }
     }
 }
 
-/* *** ADAPTIVE *** */
+/* ******* MODULES: SITEMAP: ADAPTIVE ******* */
 
 @media only screen and (max-width : @CmScreen-TabletPortrait) {
 
     html.is-adaptive {
-        .app-module-sitemap {
+        .app-mod__sitemap {
             > .inner {
                 dl {
                     width: 21%;
@@ -59,23 +59,7 @@
 @media only screen and (max-width : @CmScreen-Mobile) {
 
     html.is-adaptive {
-        .app-module-sitemap {
-            > .inner {
-                dl {
-                    width: 46%;
-                    margin: 0;
-                    padding: 2%;
-                }
-            }
-        }
-    }
-
-}
-
-@media only screen and (max-width : @CmScreen-Mobile) {
-
-    html.is-adaptive {
-        .app-module-sitemap {
+        .app-mod__sitemap {
             > .inner {
                 dl {
                     width: 46%;

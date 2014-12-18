@@ -1,6 +1,6 @@
 /* ******* MODULES: SEARCH ******* */
 
-.app-module-search {
+.app-mod__search {
     dt {
         display: none;
     }
@@ -8,6 +8,10 @@
     .icon {
         &.default {
             .icon.small.search;
+
+            &:hover {
+                .icon.small.search-white;
+            }
         }
     }
 }
@@ -16,7 +20,7 @@
 
 @media print {
 
-    .app-module-search {
+    .app-mod__search {
         display: none !important;
     }
 

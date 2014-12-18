@@ -1,18 +1,20 @@
 /* ******* MODULES: PORTFOLIO WIDGET ******* */
 
-.mod__portfolio-widget {
-    .com-slider:last-child,
-    .com-slider-layout:last-child,
-    .pt__toolbar:last-child {
-        margin: 0;
+.app-mod__portfolio-widget {
+    .com__slider:last-child,
+    .com__slider-layout,
+    .pt__toolbar {
+        &:last-child {
+            margin: 0;
+        }
     }
 }
 
 /* *** ITEM *** */
 
-.mod__portfolio-widget__item {
+.app-mod__portfolio-widget__item {
     > .inner {
-        &:extend(.clear all);
+        .clearfix;
 
         .image {
             max-width: 156px;
@@ -44,7 +46,7 @@
 @media only screen and (max-width : @CmScreen-Mobile) {
 
     html.is-adaptive {
-        .mod__portfolio-widget__item {
+        .app-mod__portfolio-widget__item {
             > .inner {
                 .image {
                     float: none;
