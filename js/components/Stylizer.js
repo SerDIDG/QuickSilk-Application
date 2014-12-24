@@ -1,131 +1,136 @@
-App['Stylizer'] = function(o){
-    var that = this,
-        config = cm.merge({
-            'container' : document.body,
-            'langs' : {
-                'Font' : 'Font'
-            }
-        }, o),
-        nodes = {
-            'tooltip' : {}
-        },
-        components = {},
-        itemsNodes = [],
-        items = [],
+cm.define('App.Stylizer', {
+    'modules' : [
+        'Params',
+        'Events',
+        'Langs',
+        'DataConfig',
+        'DataNodes'
+    ],
+    'events' : [
+        'onRender'
+    ],
+    'params' : {
+        'node' : cm.Node('div'),
+        'Com.Tooltip' : {
+            'targetEvent' : 'click',
+            'hideOnReClick' : true,
+            'top' : 'targetHeight + 6',
+            'left' : '-6',
+            'className' : 'app__stylizer-tooltip'
+        }
+    }
+},
+function(params){
+    var that = this;
 
-        current;
+    that.nodes = {
+        'items' : [],
+        'tooltip' : {}
+    };
+    that.components = {};
+    that.items = [];
+    that.current = null;
 
     var init = function(){
-        // Render tooltip
+        that.setParams(params);
+        that.convertEvents(that.params['events']);
+        that.getDataNodes(that.params['node']);
+        that.getDataConfig(that.params['node']);
+        render();
+    };
+
+    var render = function(){
+        // Render editor toolbar
         renderTooltip();
-        // Collect items
-        itemsNodes = cm.getByAttr('data-app-stylizer', 'item', config['container']);
-        cm.forEach(itemsNodes, renderItem);
+        // Process items
+        cm.forEach(that.nodes['items'], renderItem);
+        // Trigger events
+        that.triggerEvent('onRender');
     };
 
     var renderTooltip = function(){
         // Structure
-        nodes['tooltip']['container'] = cm.Node('div', {'class' : 'pt__toolbar app-stylizer-toolbar'},
-            cm.Node('ul', {'class' : 'group'},
-                cm.Node('li', {'class' : 'button secondary is-icon'},
-                    cm.Node('span', {'class' : 'icon toolbar bold'})
-                ),
-                cm.Node('li', {'class' : 'button secondary is-icon'},
-                    cm.Node('span', {'class' : 'icon toolbar italic'})
-                ),
-                cm.Node('li', {'class' : 'button secondary is-icon'},
-                    cm.Node('span', {'class' : 'icon toolbar underline'})
-                )
-            ),
-            cm.Node('ul', {'class' : 'group'},
-                cm.Node('li', {'class' : 'is-select medium'},
-                    nodes['tooltip']['selectFont'] = cm.Node('select',
-                        cm.Node('option', lang('Font'))
+        that.nodes['tooltip']['container'] = cm.Node('div', {'class' : 'pt__toolbar'},
+            cm.Node('div', {'class' : 'inner'},
+                cm.Node('ul', {'class' : 'group'},
+                    cm.Node('li', {'class' : 'button button-secondary is-icon'},
+                        cm.Node('span', {'class' : 'icon toolbar bold'})
+                    ),
+                    cm.Node('li', {'class' : 'button button-secondary is-icon'},
+                        cm.Node('span', {'class' : 'icon toolbar italic'})
+                    ),
+                    cm.Node('li', {'class' : 'button button-secondary is-icon'},
+                        cm.Node('span', {'class' : 'icon toolbar underline'})
                     )
                 ),
-                cm.Node('li', {'class' : 'is-select medium'},
-                    nodes['tooltip']['selectSize'] = cm.Node('select',
-                        cm.Node('option', lang('Size'))
-                    )
-                ),
-                cm.Node('li', {'class' : 'is-select medium'},
-                    nodes['tooltip']['selectColor'] = cm.Node('select',
-                        cm.Node('option', lang('Color'))
-                    )
-                ),
-                cm.Node('li', {'class' : 'is-select medium'},
-                    nodes['tooltip']['selectStyle'] = cm.Node('select',
-                        cm.Node('option', lang('Style'))
+                cm.Node('ul', {'class' : 'group'},
+                    cm.Node('li', {'class' : 'is-select medium'},
+                        that.nodes['tooltip']['selectFont'] = cm.Node('select',
+                            cm.Node('option', that.lang('Font'))
+                        )
+                    ),
+                    cm.Node('li', {'class' : 'is-select medium'},
+                        that.nodes['tooltip']['selectSize'] = cm.Node('select',
+                            cm.Node('option', that.lang('Size'))
+                        )
+                    ),
+                    cm.Node('li', {'class' : 'is-select medium'},
+                        that.nodes['tooltip']['inputColor'] = cm.Node('input', {'type' : 'text'})
                     )
                 )
             )
         );
         // Components
-        components['selectFont'] = new Com.Select({
-            'select' : nodes['tooltip']['selectFont'],
+        that.components['selectFont'] = new Com.Select({
+            'select' : that.nodes['tooltip']['selectFont'],
             'renderInBody' : false
         });
-        components['selectSize'] = new Com.Select({
-            'select' : nodes['tooltip']['selectSize'],
+        that.components['selectSize'] = new Com.Select({
+            'select' : that.nodes['tooltip']['selectSize'],
             'renderInBody' : false
         });
-        components['selectColor'] = new Com.Select({
-            'select' : nodes['tooltip']['selectColor'],
-            'renderInBody' : false
-        });
-        components['selectStyle'] = new Com.Select({
-            'select' : nodes['tooltip']['selectStyle'],
+        that.components['inputColor'] = new Com.ColorPicker({
+            'input' : that.nodes['tooltip']['inputColor'],
             'renderInBody' : false
         });
         // Render tooltip
-        components['tooltip'] = new Com.Tooltip({
-            'targetEvent' : 'click',
-            'hideOnReClick' : true,
-            'top' : 'targetHeight + 6',
-            'left' : '-6',
-            'className' : 'app-stylizer-tooltip',
-            'content' : nodes['tooltip']['container'],
-            'events' : {
-                'onShowStart' : function(){
-                    cm.addClass(current['container'], 'active')
-                },
-                'onHideStart' : function(){
-                    cm.removeClass(current['container'], 'active')
+        that.components['tooltip'] = new Com.Tooltip(
+            cm.merge(that.params['Com.Tooltip'], {
+                'content' : that.nodes['tooltip']['container'],
+                'events' : {
+                    'onShowStart' : function(){
+                        cm.addClass(that.current['container'], 'active')
+                    },
+                    'onHideStart' : function(){
+                        cm.removeClass(that.current['container'], 'active')
+                    }
                 }
-            }
-        });
+            })
+        );
     };
 
-    var renderItem = function(container){
-        var item = {
-            'container' : container,
-            'node' : cm.getByAttr('data-app-stylizer', 'node') || cm.Node('div'),
-            'nodes' : {},
-            'components' : {}
-        };
+    var renderItem = function(nodes){
+        var item = cm.merge({
+            'container' : cm.Node('div'),
+            'input' : cm.Node('input', {'type' : 'hidden'}),
+            'preview' : cm.Node('div')
+        }, nodes);
         // Set selectable class
         cm.addClass(item['container'], 'pt__selectable');
         // Show tooltip on click
         cm.addEvent(item['container'], 'click', function(){
-            if(current != item){
-                current = item;
-                components['tooltip']
+            if(that.current != item){
+                that.current = item;
+                that.components['tooltip']
                     .setTarget(item['container'])
                     .show();
             }
         });
         // Push to global array
-        items.push(item);
+        that.items.push(item);
     };
 
-    var lang = function(str){
-        if(!config['langs'][str]){
-            config['langs'][str] = str;
-        }
-        return config['langs'][str];
-    };
-
-    /* *** MAIN *** */
+    /* ******* MAIN ******* */
 
     init();
-};
+});

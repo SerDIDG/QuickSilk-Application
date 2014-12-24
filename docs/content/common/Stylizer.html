@@ -1,0 +1,77 @@
+<!DOCTYPE HTML>
+<html class="is-adaptive">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <title>Elements: Stylizer</title>
+
+    <link type="text/css" rel="stylesheet" href="../../../../../css/index.css">
+    <link type="text/css" rel="stylesheet" href="../../styles/index.css">
+
+    <script type="text/javascript" src="../../../../common/vendors/bgrins/TinyColor/tinycolor.js"></script>
+
+    <script type="text/javascript" src="../../../../common/js/polyfill.js"></script>
+    <script type="text/javascript" src="../../../../common/js/common.js"></script>
+    <script type="text/javascript" src="../../../../common/js/parts.js"></script>
+    <script type="text/javascript" src="../../../../common/js/modules.js"></script>
+    <script type="text/javascript" src="../../../../common/js/init.js"></script>
+    <script type="text/javascript" src="../../../../common/js/components/UA.js"></script>
+    <script type="text/javascript" src="../../../../common/js/components/Collector.js"></script>
+    <script type="text/javascript" src="../../../../common/js/components/Dialog.js"></script>
+    <script type="text/javascript" src="../../../../common/js/components/Tooltip.js"></script>
+    <script type="text/javascript" src="../../../../common/js/components/Draggable.js"></script>
+    <script type="text/javascript" src="../../../../common/js/components/Select.js"></script>
+    <script type="text/javascript" src="../../../../common/js/components/Palette.js"></script>
+    <script type="text/javascript" src="../../../../common/js/components/ColorPicker.js"></script>
+
+    <script type="text/javascript" src="../../../js/Application.js"></script>
+    <script type="text/javascript" src="../../../js/components/Stylizer.js"></script>
+
+    <script type="text/javascript">
+        cm.onReady(function(){
+            // Components
+            new Com.Collector()
+                .addEvent('onConstruct', function(collector, data){
+                    Part.Menu();
+                    Part.Autoresize(data['node']);
+                })
+                .add('module-menu', function(node){
+                    new App.ModuleMenu({
+                        'node' : node
+                    });
+                })
+                .add('glossary', function(node){
+                    new Com.Glossary({'node' : node});
+                })
+                .add('app-stylizer', function(node){
+                    new App.Stylizer({'node' : node});
+                })
+                .construct();
+        });
+    </script>
+</head>
+
+<body>
+
+<h1 class="app-pt__box-title">Elements: Stylizer</h1>
+<hr>
+
+<div class="app__stylizer" data-element="app-stylizer" data-node="AppStylizer:{}:container">
+    <div class="app__stylizer-listing">
+        <ul>
+            <li data-node="items:[]:container">
+                <input data-node="input" type="hidden" name="H1" value='{"line-height" : "34px", "font-size" : "24px", "font-weight" : "700", "color" : "#005694"}'>
+                <h1 data-node="preview">Heading 1</h1>
+            </li>
+
+            <li data-node="items:[]:container">
+                <input data-node="input" type="hidden" name="H2" value='{"line-height" : "24px", "font-size" : "18px", "font-weight" : "700", "color" : "#005694"}'>
+                <h2 data-node="preview">Heading 2</h2>
+            </li>
+        </ul>
+    </div>
+</div>
+
+</body>
+
+</html>
