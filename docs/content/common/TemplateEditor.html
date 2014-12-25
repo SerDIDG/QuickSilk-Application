@@ -58,8 +58,8 @@
                     var onRequest = function(TE, data){
                         var config = cm.parseJSON(data['node'].getAttribute('data-config')) || {};
 
-                        var widget = '<div class="app__widget-container" data-com-draganddrop="draggable">' +
-                                '<div class="app__widget is-editable">' +
+                        var widget = '<div class="app-pt__widget-container" data-com-draganddrop="draggable">' +
+                                '<div class="app-pt__widget is-editable">' +
                                 '<div class="border"></div>' +
                                 '<div class="drag" data-com-draganddrop="drag">' +
                                 '<div class="icon draggable"></div>' +
@@ -238,14 +238,14 @@
         </div>
 
         <div class="descr" data-node="widgetsContainer">
-            <dl class="com__togglebox app__widgets-category is-show" data-element="togglebox" data-config='{"remember" : true, "name" : "app-lt__sidebar-main"}'>
+            <dl class="com__togglebox app-pt__widgets-category is-show" data-element="togglebox" data-config='{"remember" : true, "name" : "app-lt__sidebar-main"}'>
                 <dt data-node="ComToggleBox.button">
                     <span class="icon default"></span>
                     <span class="title">Main</span>
                 </dt>
                 <dd data-node="ComToggleBox.target">
-                    <div class="app__widget-container" data-node="widgets:[]:container">
-                        <div class="app__widget-dummy" data-node="dummy">
+                    <div class="app-pt__widget-container" data-node="widgets:[]:container">
+                        <div class="app-pt__widget-dummy" data-node="dummy">
                             <div class="inner">
                                 <div class="icon">
                                     <img src="../../../img/widgets/site-logo.png" alt="">
@@ -254,8 +254,8 @@
                             </div>
                         </div>
                     </div>
-                    <div class="app__widget-container" data-node="widgets:[]:container" data-config='{"type" : "content"}'>
-                        <div class="app__widget-dummy" data-node="dummy">
+                    <div class="app-pt__widget-container" data-node="widgets:[]:container" data-config='{"type" : "content"}'>
+                        <div class="app-pt__widget-dummy" data-node="dummy">
                             <div class="inner">
                                 <div class="icon">
                                     <img src="../../../img/widgets/rich-editor.png" alt="">
@@ -264,8 +264,8 @@
                             </div>
                         </div>
                     </div>
-                    <div class="app__widget-container" data-node="widgets:[]:container">
-                        <div class="app__widget-dummy" data-node="dummy">
+                    <div class="app-pt__widget-container" data-node="widgets:[]:container">
+                        <div class="app-pt__widget-dummy" data-node="dummy">
                             <div class="inner">
                                 <div class="icon">
                                     <img src="../../../img/widgets/menu.png" alt="">
@@ -274,8 +274,8 @@
                             </div>
                         </div>
                     </div>
-                    <div class="app__widget-container" data-node="widgets:[]:container">
-                        <div class="app__widget-dummy" data-node="dummy">
+                    <div class="app-pt__widget-container" data-node="widgets:[]:container">
+                        <div class="app-pt__widget-dummy" data-node="dummy">
                             <div class="inner">
                                 <div class="icon">
                                     <img src="../../../img/widgets/infoblock.png" alt="">
@@ -284,8 +284,8 @@
                             </div>
                         </div>
                     </div>
-                    <div class="app__widget-container" data-node="widgets:[]:container">
-                        <div class="app__widget-dummy" data-node="dummy">
+                    <div class="app-pt__widget-container" data-node="widgets:[]:container">
+                        <div class="app-pt__widget-dummy" data-node="dummy">
                             <div class="inner">
                                 <div class="icon">
                                     <img src="../../../img/widgets/columns.png" alt="">
@@ -294,8 +294,8 @@
                             </div>
                         </div>
                     </div>
-                    <div class="app__widget-container" data-node="widgets:[]:container">
-                        <div class="app__widget-dummy" data-node="dummy">
+                    <div class="app-pt__widget-container" data-node="widgets:[]:container">
+                        <div class="app-pt__widget-dummy" data-node="dummy">
                             <div class="inner">
                                 <div class="icon">
                                     <img src="../../../img/widgets/divider.png" alt="">
@@ -307,14 +307,14 @@
                 </dd>
             </dl>
 
-            <dl class="com__togglebox app__widgets-category is-show" data-element="togglebox" data-config='{"remember" : true, "name" : "app-lt__sidebar-service"}'>
+            <dl class="com__togglebox app-pt__widgets-category is-show" data-element="togglebox" data-config='{"remember" : true, "name" : "app-lt__sidebar-service"}'>
                 <dt data-node="ComToggleBox.button">
                     <span class="icon default"></span>
                     <span class="title">Service</span>
                 </dt>
                 <dd data-node="ComToggleBox.target">
-                    <div class="app__widget-container" data-node="widgets:[]:container">
-                        <div class="app__widget-dummy" data-node="dummy">
+                    <div class="app-pt__widget-container" data-node="widgets:[]:container">
+                        <div class="app-pt__widget-dummy" data-node="dummy">
                             <div class="inner">
                                 <div class="icon">
                                     <img src="../../../img/widgets/login.png" alt="">
@@ -323,8 +323,8 @@
                             </div>
                         </div>
                     </div>
-                    <div class="app__widget-container" data-node="widgets:[]:container">
-                        <div class="app__widget-dummy" data-node="dummy">
+                    <div class="app-pt__widget-container" data-node="widgets:[]:container">
+                        <div class="app-pt__widget-dummy" data-node="dummy">
                             <div class="inner">
                                 <div class="icon">
                                     <img src="../../../img/widgets/login.png" alt="">
@@ -333,8 +333,8 @@
                             </div>
                         </div>
                     </div>
-                    <div class="app__widget-container" data-node="widgets:[]:container">
-                        <div class="app__widget-dummy" data-node="dummy">
+                    <div class="app-pt__widget-container" data-node="widgets:[]:container">
+                        <div class="app-pt__widget-dummy" data-node="dummy">
                             <div class="inner">
                                 <div class="icon">
                                     <img src="../../../img/widgets/search.png" alt="">
@@ -343,8 +343,8 @@
                             </div>
                         </div>
                     </div>
-                    <div class="app__widget-container" data-node="widgets:[]:container">
-                        <div class="app__widget-dummy" data-node="dummy">
+                    <div class="app-pt__widget-container" data-node="widgets:[]:container">
+                        <div class="app-pt__widget-dummy" data-node="dummy">
                             <div class="inner">
                                 <div class="icon">
                                     <img src="../../../img/widgets/map.png" alt="">
@@ -356,14 +356,14 @@
                 </dd>
             </dl>
 
-            <dl class="com__togglebox app__widgets-category is-show" data-element="togglebox" data-config='{"remember" : true, "name" : "app-lt__sidebar-media"}'>
+            <dl class="com__togglebox app-pt__widgets-category is-show" data-element="togglebox" data-config='{"remember" : true, "name" : "app-lt__sidebar-media"}'>
                 <dt data-node="ComToggleBox.button">
                     <span class="icon default"></span>
                     <span class="title">Media</span>
                 </dt>
                 <dd data-node="ComToggleBox.target">
-                    <div class="app__widget-container" data-node="widgets:[]:container">
-                        <div class="app__widget-dummy" data-node="dummy">
+                    <div class="app-pt__widget-container" data-node="widgets:[]:container">
+                        <div class="app-pt__widget-dummy" data-node="dummy">
                             <div class="inner">
                                 <div class="icon">
                                     <img src="../../../img/widgets/image.png" alt="">
@@ -372,8 +372,8 @@
                             </div>
                         </div>
                     </div>
-                    <div class="app__widget-container" data-node="widgets:[]:container">
-                        <div class="app__widget-dummy" data-node="dummy">
+                    <div class="app-pt__widget-container" data-node="widgets:[]:container">
+                        <div class="app-pt__widget-dummy" data-node="dummy">
                             <div class="inner">
                                 <div class="icon">
                                     <img src="../../../img/widgets/slider.png" alt="">
@@ -382,8 +382,8 @@
                             </div>
                         </div>
                     </div>
-                    <div class="app__widget-container" data-node="widgets:[]:container">
-                        <div class="app__widget-dummy" data-node="dummy">
+                    <div class="app-pt__widget-container" data-node="widgets:[]:container">
+                        <div class="app-pt__widget-dummy" data-node="dummy">
                             <div class="inner">
                                 <div class="icon">
                                     <img src="../../../img/widgets/gallery.png" alt="">
@@ -392,8 +392,8 @@
                             </div>
                         </div>
                     </div>
-                    <div class="app__widget-container" data-node="widgets:[]:container">
-                        <div class="app__widget-dummy" data-node="dummy">
+                    <div class="app-pt__widget-container" data-node="widgets:[]:container">
+                        <div class="app-pt__widget-dummy" data-node="dummy">
                             <div class="inner">
                                 <div class="icon">
                                     <img src="../../../img/widgets/video.png" alt="">
@@ -405,14 +405,14 @@
                 </dd>
             </dl>
 
-            <dl class="com__togglebox app__widgets-category is-show" data-element="togglebox" data-config='{"remember" : true, "name" : "app-lt__sidebar-social"}'>
+            <dl class="com__togglebox app-pt__widgets-category is-show" data-element="togglebox" data-config='{"remember" : true, "name" : "app-lt__sidebar-social"}'>
                 <dt data-node="ComToggleBox.button">
                     <span class="icon default"></span>
                     <span class="title">Social</span>
                 </dt>
                 <dd data-node="ComToggleBox.target">
-                    <div class="app__widget-container" data-node="widgets:[]:container">
-                        <div class="app__widget-dummy" data-node="dummy">
+                    <div class="app-pt__widget-container" data-node="widgets:[]:container">
+                        <div class="app-pt__widget-dummy" data-node="dummy">
                             <div class="inner">
                                 <div class="icon">
                                     <img src="../../../img/widgets/social.png" alt="">
@@ -421,8 +421,8 @@
                             </div>
                         </div>
                     </div>
-                    <div class="app__widget-container" data-node="widgets:[]:container">
-                        <div class="app__widget-dummy" data-node="dummy">
+                    <div class="app-pt__widget-container" data-node="widgets:[]:container">
+                        <div class="app-pt__widget-dummy" data-node="dummy">
                             <div class="inner">
                                 <div class="icon">
                                     <img src="../../../img/widgets/social.png" alt="">
@@ -431,8 +431,8 @@
                             </div>
                         </div>
                     </div>
-                    <div class="app__widget-container" data-node="widgets:[]:container">
-                        <div class="app__widget-dummy" data-node="dummy">
+                    <div class="app-pt__widget-container" data-node="widgets:[]:container">
+                        <div class="app-pt__widget-dummy" data-node="dummy">
                             <div class="inner">
                                 <div class="icon">
                                     <img src="../../../img/widgets/social.png" alt="">
@@ -441,8 +441,8 @@
                             </div>
                         </div>
                     </div>
-                    <div class="app__widget-container" data-node="widgets:[]:container">
-                        <div class="app__widget-dummy" data-node="dummy">
+                    <div class="app-pt__widget-container" data-node="widgets:[]:container">
+                        <div class="app-pt__widget-dummy" data-node="dummy">
                             <div class="inner">
                                 <div class="icon">
                                     <img src="../../../img/widgets/comments.png" alt="">
@@ -451,8 +451,8 @@
                             </div>
                         </div>
                     </div>
-                    <div class="app__widget-container" data-node="widgets:[]:container">
-                        <div class="app__widget-dummy" data-node="dummy">
+                    <div class="app-pt__widget-container" data-node="widgets:[]:container">
+                        <div class="app-pt__widget-dummy" data-node="dummy">
                             <div class="inner">
                                 <div class="icon">
                                     <img src="../../../img/widgets/member.png" alt="">
@@ -461,8 +461,8 @@
                             </div>
                         </div>
                     </div>
-                    <div class="app__widget-container" data-node="widgets:[]:container">
-                        <div class="app__widget-dummy" data-node="dummy">
+                    <div class="app-pt__widget-container" data-node="widgets:[]:container">
+                        <div class="app-pt__widget-dummy" data-node="dummy">
                             <div class="inner">
                                 <div class="icon">
                                     <img src="../../../img/widgets/member-widget.png" alt="">
@@ -471,8 +471,8 @@
                             </div>
                         </div>
                     </div>
-                    <div class="app__widget-container" data-node="widgets:[]:container">
-                        <div class="app__widget-dummy" data-node="dummy">
+                    <div class="app-pt__widget-container" data-node="widgets:[]:container">
+                        <div class="app-pt__widget-dummy" data-node="dummy">
                             <div class="inner">
                                 <div class="icon">
                                     <img src="../../../img/widgets/file.png" alt="">
@@ -481,8 +481,8 @@
                             </div>
                         </div>
                     </div>
-                    <div class="app__widget-container" data-node="widgets:[]:container">
-                        <div class="app__widget-dummy" data-node="dummy">
+                    <div class="app-pt__widget-container" data-node="widgets:[]:container">
+                        <div class="app-pt__widget-dummy" data-node="dummy">
                             <div class="inner">
                                 <div class="icon">
                                     <img src="../../../img/widgets/forum.png" alt="">
@@ -491,8 +491,8 @@
                             </div>
                         </div>
                     </div>
-                    <div class="app__widget-container" data-node="widgets:[]:container">
-                        <div class="app__widget-dummy" data-node="dummy">
+                    <div class="app-pt__widget-container" data-node="widgets:[]:container">
+                        <div class="app-pt__widget-dummy" data-node="dummy">
                             <div class="inner">
                                 <div class="icon">
                                     <img src="../../../img/widgets/forum-widget.png" alt="">
@@ -504,14 +504,14 @@
                 </dd>
             </dl>
 
-            <dl class="com__togglebox app__widgets-category is-show" data-element="togglebox" data-config='{"remember" : true, "name" : "app-lt__sidebar-blog"}'>
+            <dl class="com__togglebox app-pt__widgets-category is-show" data-element="togglebox" data-config='{"remember" : true, "name" : "app-lt__sidebar-blog"}'>
                 <dt data-node="ComToggleBox.button">
                     <span class="icon default"></span>
                     <span class="title">Blog</span>
                 </dt>
                 <dd data-node="ComToggleBox.target">
-                    <div class="app__widget-container" data-node="widgets:[]:container">
-                        <div class="app__widget-dummy" data-node="dummy">
+                    <div class="app-pt__widget-container" data-node="widgets:[]:container">
+                        <div class="app-pt__widget-dummy" data-node="dummy">
                             <div class="inner">
                                 <div class="icon">
                                     <img src="../../../img/widgets/blog.png" alt="">
@@ -520,8 +520,8 @@
                             </div>
                         </div>
                     </div>
-                    <div class="app__widget-container" data-node="widgets:[]:container">
-                        <div class="app__widget-dummy" data-node="dummy">
+                    <div class="app-pt__widget-container" data-node="widgets:[]:container">
+                        <div class="app-pt__widget-dummy" data-node="dummy">
                             <div class="inner">
                                 <div class="icon">
                                     <img src="../../../img/widgets/blog-widget.png" alt="">
@@ -530,8 +530,8 @@
                             </div>
                         </div>
                     </div>
-                    <div class="app__widget-container" data-node="widgets:[]:container">
-                        <div class="app__widget-dummy" data-node="dummy">
+                    <div class="app-pt__widget-container" data-node="widgets:[]:container">
+                        <div class="app-pt__widget-dummy" data-node="dummy">
                             <div class="inner">
                                 <div class="icon">
                                     <img src="../../../img/widgets/blog-categories.png" alt="">
@@ -540,8 +540,8 @@
                             </div>
                         </div>
                     </div>
-                    <div class="app__widget-container" data-node="widgets:[]:container">
-                        <div class="app__widget-dummy" data-node="dummy">
+                    <div class="app-pt__widget-container" data-node="widgets:[]:container">
+                        <div class="app-pt__widget-dummy" data-node="dummy">
                             <div class="inner">
                                 <div class="icon">
                                     <img src="../../../img/widgets/blog-calendar.png" alt="">
@@ -550,8 +550,8 @@
                             </div>
                         </div>
                     </div>
-                    <div class="app__widget-container" data-node="widgets:[]:container">
-                        <div class="app__widget-dummy" data-node="dummy">
+                    <div class="app-pt__widget-container" data-node="widgets:[]:container">
+                        <div class="app-pt__widget-dummy" data-node="dummy">
                             <div class="inner">
                                 <div class="icon">
                                     <img src="../../../img/widgets/blog-archive.png" alt="">
@@ -560,8 +560,8 @@
                             </div>
                         </div>
                     </div>
-                    <div class="app__widget-container" data-node="widgets:[]:container">
-                        <div class="app__widget-dummy" data-node="dummy">
+                    <div class="app-pt__widget-container" data-node="widgets:[]:container">
+                        <div class="app-pt__widget-dummy" data-node="dummy">
                             <div class="inner">
                                 <div class="icon">
                                     <img src="../../../img/widgets/blog-roll.png" alt="">
@@ -573,14 +573,14 @@
                 </dd>
             </dl>
 
-            <dl class="com__togglebox app__widgets-category is-show" data-element="togglebox" data-config='{"remember" : true, "name" : "app-lt__sidebar-events"}'>
+            <dl class="com__togglebox app-pt__widgets-category is-show" data-element="togglebox" data-config='{"remember" : true, "name" : "app-lt__sidebar-events"}'>
                 <dt data-node="ComToggleBox.button">
                     <span class="icon default"></span>
                     <span class="title">Events</span>
                 </dt>
                 <dd data-node="ComToggleBox.target">
-                    <div class="app__widget-container" data-node="widgets:[]:container">
-                        <div class="app__widget-dummy" data-node="dummy">
+                    <div class="app-pt__widget-container" data-node="widgets:[]:container">
+                        <div class="app-pt__widget-dummy" data-node="dummy">
                             <div class="inner">
                                 <div class="icon">
                                     <img src="../../../img/widgets/events.png" alt="">
@@ -589,8 +589,8 @@
                             </div>
                         </div>
                     </div>
-                    <div class="app__widget-container" data-node="widgets:[]:container">
-                        <div class="app__widget-dummy" data-node="dummy">
+                    <div class="app-pt__widget-container" data-node="widgets:[]:container">
+                        <div class="app-pt__widget-dummy" data-node="dummy">
                             <div class="inner">
                                 <div class="icon">
                                     <img src="../../../img/widgets/events-widget.png" alt="">
@@ -599,8 +599,8 @@
                             </div>
                         </div>
                     </div>
-                    <div class="app__widget-container" data-node="widgets:[]:container">
-                        <div class="app__widget-dummy" data-node="dummy">
+                    <div class="app-pt__widget-container" data-node="widgets:[]:container">
+                        <div class="app-pt__widget-dummy" data-node="dummy">
                             <div class="inner">
                                 <div class="icon">
                                     <img src="../../../img/widgets/events-calendar.png" alt="">
@@ -612,14 +612,14 @@
                 </dd>
             </dl>
 
-            <dl class="com__togglebox app__widgets-category is-show" data-element="togglebox" data-config='{"remember" : true, "name" : "app-lt__sidebar-other"}'>
+            <dl class="com__togglebox app-pt__widgets-category is-show" data-element="togglebox" data-config='{"remember" : true, "name" : "app-lt__sidebar-other"}'>
                 <dt data-node="ComToggleBox.button">
                     <span class="icon default"></span>
                     <span class="title">Other</span>
                 </dt>
                 <dd data-node="ComToggleBox.target">
-                    <div class="app__widget-container" data-node="widgets:[]:container">
-                        <div class="app__widget-dummy" data-node="dummy">
+                    <div class="app-pt__widget-container" data-node="widgets:[]:container">
+                        <div class="app-pt__widget-dummy" data-node="dummy">
                             <div class="inner">
                                 <div class="icon">
                                     <img src="../../../img/widgets/default.png" alt="">

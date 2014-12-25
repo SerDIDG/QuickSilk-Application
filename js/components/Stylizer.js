@@ -54,9 +54,6 @@ function(params){
             cm.Node('div', {'class' : 'inner'},
                 cm.Node('ul', {'class' : 'group'},
                     cm.Node('li', {'class' : 'button button-secondary is-icon'},
-                        cm.Node('span', {'class' : 'icon toolbar bold'})
-                    ),
-                    cm.Node('li', {'class' : 'button button-secondary is-icon'},
                         cm.Node('span', {'class' : 'icon toolbar italic'})
                     ),
                     cm.Node('li', {'class' : 'button button-secondary is-icon'},

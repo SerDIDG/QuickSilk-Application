@@ -95,7 +95,7 @@
             .cm__font--ui-h1;
             padding: 6px @CmIndent-XSmall;
             background-color: @CmColor-Danger-DarkDefault;
-            color: #fff;
+            color: @CmFont-UI-ColorOpposite;
         }
 
         &.pt__dnd-area {
@@ -128,7 +128,7 @@
 
 /* *** WIDGETS CATEGORY *** */
 
-.app__widgets-category {
+.app-pt__widgets-category {
     margin: 10px 0 0 0;
 
     &:first-child {
@@ -136,12 +136,12 @@
     }
 
     > dd {
-        margin: 0 -@AppPtWidget-Dummy-Padding;
+        margin: 0 -@AppPT-Widget-Dummy-Padding;
         font-size: 0;
         background: @AppLT-Sidebar-Background;  /* Fix blinked blocks on collapse in Firefox. */
     }
 
-    .app__widget-container {
+    .app-pt__widget-container {
         width: @AppLT-Sidebar-Dummy-Width;
         margin: 0;
         display: inline-block;

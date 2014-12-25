@@ -82,7 +82,7 @@ function(params){
             }
         });
         // Enable widgets editable
-        widgets = cm.getByClass('app__widget');
+        widgets = cm.getByClass('app-pt__widget');
         cm.forEach(widgets, function(widget){
             if(!cm.isClass(widget, 'is-locked')){
                 cm.addClass(widget, 'is-editable');
@@ -101,7 +101,7 @@ function(params){
             cm.removeClass(column, 'is-editable is-visible');
         });
         // Disable widgets editable
-        widgets = cm.getByClass('app__widget');
+        widgets = cm.getByClass('app-pt__widget');
         cm.forEach(widgets, function(widget){
             cm.removeClass(widget, 'is-editable is-visible');
         });
