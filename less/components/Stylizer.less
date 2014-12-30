@@ -16,11 +16,19 @@
             &:first-child {
                 margin: 0;
             }
-
-            .cm__tags {
-                margin: 0;
-            }
         }
+    }
+}
+
+/* *** ITEM *** */
+
+.app__stylizer__item {
+    .pt__selectable;
+
+    > .item-preview {
+        margin: 0;
+        .mx__transition(all, @CmUI-Transition-Duration);
+        .mx__user-select(none);
     }
 }
 

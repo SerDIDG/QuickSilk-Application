@@ -56,17 +56,28 @@
 <h1 class="app-pt__box-title">Elements: Stylizer</h1>
 <hr>
 
-<div class="app__stylizer" data-element="app-stylizer" data-node="AppStylizer:{}:container">
+<div class="app__stylizer">
     <div class="app__stylizer-listing">
         <ul>
-            <li data-node="items:[]:container">
-                <input data-node="input" type="hidden" name="H1" data-default='{"font-family" : "Tahoma, Geneva, sans-serif", "line-height" : "34px", "font-size" : "24px", "font-weight" : "700", "color" : "#005694"}' value='{"font-family" : "Arial, Helvetica, sans-serif", "line-height" : "30px", "font-size" : "20px", "font-weight" : "400", "color" : "#999999"}'>
-                <h1 data-node="preview">Heading 1</h1>
+            <li>
+                <div class="app__stylizer__item" data-element="app-stylizer" data-node="AppStylizer:{}:container" data-config='{"default" : {"font-family" : "Tahoma, Geneva, sans-serif", "line-height" : "34px", "font-size" : "24px", "font-weight" : "700", "color" : "#005694", "font-style" : "normal", "text-decoration" : "none"}}'>
+                    <input data-node="input" type="hidden" name="H1" value='{"font-family" : "Verdana, Geneva, sans-serif", "line-height" : "30px", "font-size" : "20px", "font-weight" : "600", "color" : "#999999", "font-style" : "normal", "text-decoration" : "underline"}'>
+                    <h1 class="item-preview" data-node="preview">Heading 1</h1>
+                </div>
             </li>
 
-            <li data-node="items:[]:container">
-                <input data-node="input" type="hidden" name="H2" data-default='{"font-family" : "Tahoma, Geneva, sans-serif", "line-height" : "24px", "font-size" : "18px", "font-weight" : "700", "color" : "#005694"}' value='{"font-family" : "Arial, Helvetica, sans-serif", "line-height" : "20px", "font-size" : "16px", "font-weight" : "400", "color" : "#999999"}'>
-                <h2 data-node="preview">Heading 2</h2>
+            <li>
+                <div class="app__stylizer__item" data-element="app-stylizer" data-node="AppStylizer:{}:container" data-config='{"default" : {"font-family" : "Tahoma, Geneva, sans-serif", "line-height" : "24px", "font-size" : "18px", "font-weight" : "700", "color" : "#005694", "font-style" : "normal", "text-decoration" : "none"}}'>
+                    <input data-node="input" type="hidden" name="H2" value='{"font-family" : "Arial, Helvetica, sans-serif", "line-height" : "20px", "font-size" : "16px", "font-weight" : "400", "color" : "#999999", "text-decoration" : "underline", "font-style" : "normal"}'>
+                    <h2 class="item-preview"  data-node="preview">Heading 2</h2>
+                </div>
+            </li>
+
+            <li>
+                <div class="app__stylizer__item" data-element="app-stylizer" data-node="AppStylizer:{}:container" data-config='{"default" : {"font-weight" : "400", "color" : "#666666", "font-style" : "normal", "text-decoration" : "none"}}'>
+                    <input data-node="input" type="hidden" name="A" value='{"font-weight" : "400", "color" : "#999999", "font-style" : "normal", "text-decoration" : "underline"}'>
+                    <a class="item-preview"  data-node="preview">Link</a>
+                </div>
             </li>
         </ul>
     </div>
