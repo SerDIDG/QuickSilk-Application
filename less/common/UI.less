@@ -1,4 +1,41 @@
-/* ******* PART: UI ******* */
+/* ******* COMMON: UI ******* */
+
+/* *** TEMPLATE *** */
+
+.tpl__container {
+    min-height: 100%;
+    position: relative;
+    background: @AppTpl-Container-Background;
+}
+
+.tpl__header,
+.tpl__footer {
+    padding: @AppTpl-Block-Padding;
+}
+
+.tpl__header,
+.tpl__content,
+.tpl__footer {
+    max-width: @AppTpl-Container-Width;
+    position: relative;
+    .mx__align(@AppTpl-Container-Align);
+}
+
+.tpl__header__inner {
+    max-width: @AppTpl-Header-Width;
+    position: relative;
+    .mx__align(@AppTpl-Header-Align);
+}
+
+.tpl__content__inner {
+    position: relative;
+}
+
+.tpl__footer__inner {
+    max-width: @AppTpl-Footer-Width;
+    position: relative;
+    .mx__align(@AppTpl-Footer-Align);
+}
 
 /* *** MODULES / PAGES *** */
 
@@ -50,14 +87,9 @@
 
 /* *** WRAPPERS *** */
 
-.app-lt__template {
-    min-height: 100%;
-    position: relative;
-}
-
 html {
     &.is-topmenu {
-        .app-lt__template {
+        .tpl__container {
             margin-top: @AppLT-TopMenu-Height;
         }
 
@@ -71,13 +103,13 @@ html {
     }
 
     &.is-sidebar {
-        .app-lt__template {
+        .tpl__container {
             margin-left: @AppLT-Sidebar-Width;
             .mx__transition(margin, @AppLT-Sidebar-Duration);
         }
 
         &.is-sidebar--collapsed {
-            .app-lt__template {
+            .tpl__container {
                 margin-left: @AppLT-Sidebar-WidthCollapsed;
             }
         }
@@ -110,7 +142,7 @@ html {
     }
 
     &.is-immediately {
-        .app-lt__template {
+        .tpl__container {
             .cm__transition-none;
         }
     }
@@ -122,12 +154,12 @@ html {
 
     html.is-adaptive {
         &.is-sidebar {
-            .app-lt__template {
+            .tpl__container {
                 margin-left: @AppLT-Sidebar-WidthTablet;
             }
 
             &.is-sidebar--collapsed {
-                .app-lt__template {
+                .tpl__container {
                     margin-left: @AppLT-Sidebar-WidthCollapsed;
                 }
             }
@@ -140,12 +172,12 @@ html {
 
     html.is-adaptive {
         &.is-sidebar {
-            .app-lt__template {
+            .tpl__container {
                 margin-left: 0;
             }
 
             &.is-sidebar--collapsed {
-                .app-lt__template {
+                .tpl__container {
                     margin-left: 0;
                 }
             }
@@ -158,7 +190,7 @@ html {
 
 @media print {
 
-    .app-lt__template {
+    .tpl__container {
         margin: 0 !important;
     }
 
