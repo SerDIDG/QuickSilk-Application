@@ -20,16 +20,16 @@ cm.define('App.Stylizer', {
         'styles' : {
             'font-family' : [
                 "Arial, Helvetica, sans-serif",
-                "'Arial Black', Gadget, sans-serif",
-                "'Courier New', Courier, monospace",
+                "Arial Black, Gadget, sans-serif",
+                "Courier New, Courier, monospace",
                 "Georgia, serif",
                 "Impact, Charcoal, sans-serif",
-                "'Lucida Console', Monaco, monospace",
-                "'Lucida Sans Unicode', 'Lucida Grande', sans-serif",
-                "'Palatino Linotype', 'Book Antiqua', Palatino, serif",
+                "Lucida Console, Monaco, monospace",
+                "Lucida Sans Unicode, Lucida Grande, sans-serif",
+                "Palatino Linotype, Book Antiqua, Palatino, serif",
                 "Tahoma, Geneva, sans-serif",
-                "'Times New Roman', Times, serif",
-                "'Trebuchet MS', Helvetica, sans-serif",
+                "Times New Roman, Times, serif",
+                "Trebuchet MS, Helvetica, sans-serif",
                 "Verdana, Geneva, sans-serif"
             ],
             'line-height' : ['normal', 8, 10, 12, 16, 20, 24, 28, 32, 36, 40, 48, 56, 64, 72, 80, 88, 96, 108, 120],
@@ -111,13 +111,13 @@ function(params){
             that.params['name'] = that.nodes['input'].getAttribute('name') || that.params['name'];
         }
         // Get config
-        that.params['active'] = cm.merge(
-            that.params['active'],
-            that.getNodeDataConfig(that.nodes['input'], 'value')
-        );
         that.params['default'] = cm.merge(
             that.params['default'],
             that.getNodeDataConfig(that.nodes['input'], 'data-default')
+        );
+        that.params['active'] = cm.merge(
+            cm.merge(that.params['default'], that.params['active']),
+            that.getNodeDataConfig(that.nodes['input'], 'value')
         );
         // Validate config
         validateItemConfig(that.params['active']);
@@ -159,13 +159,13 @@ function(params){
     };
 
     var extendGlobalConfig = function(config){
-        if(!cm.inArray(that.params['styles']['font-size'], config['font-size'])){
+        if(config['font-size'] && !cm.inArray(that.params['styles']['font-size'], config['font-size'])){
             that.params['styles']['font-size'].push(config['font-size']);
             that.params['styles']['font-size'].sort(function(a, b){
                 return a - b;
             });
         }
-        if(!cm.inArray(that.params['styles']['line-height'], config['line-height'])){
+        if(config['line-height'] && !cm.inArray(that.params['styles']['line-height'], config['line-height'])){
             that.params['styles']['line-height'].push(config['line-height']);
             that.params['styles']['line-height'].sort(function(a, b){
                 if(a == 'normal'){
@@ -176,7 +176,7 @@ function(params){
                 return a - b;
             });
         }
-        if(!cm.inArray(that.params['styles']['font-family'], config['font-family'])){
+        if(config['font-family'] && !cm.inArray(that.params['styles']['font-family'], config['font-family'])){
             that.params['styles']['font-family'].push(config['font-family']);
             that.params['styles']['font-family'].sort(function(a, b){
                 var t1 = a.toLowerCase().replace(/["']/g, ''),
