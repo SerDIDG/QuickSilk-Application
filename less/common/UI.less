@@ -11,27 +11,48 @@
 .tpl__header,
 .tpl__content,
 .tpl__footer {
-    max-width: @AppTpl-Container-Width;
-    position: relative;
-    padding: @AppTpl-Block-Padding;
-    .mx__align(@AppTpl-Container-Align);
-}
-
-.tpl__header__inner {
-    max-width: @AppTpl-Header-Width;
-    position: relative;
-    .mx__align(@AppTpl-Header-Align);
-}
-
-.tpl__content__inner {
     position: relative;
 }
 
+.tpl__header__inner,
+.tpl__content__inner,
 .tpl__footer__inner {
-    max-width: @AppTpl-Footer-Width;
     position: relative;
-    .mx__align(@AppTpl-Footer-Align);
 }
+
+.tpl__container__size (@value) when (@value = wide) {
+    .tpl__header,
+    .tpl__footer {
+        padding: @AppTpl-Block-Padding;
+    }
+
+    .tpl__header__inner {
+        max-width: @AppTpl-Header-Width;
+        .mx__align(@AppTpl-Header-Align);
+    }
+
+    .tpl__footer__inner {
+        max-width: @AppTpl-Footer-Width;
+        .mx__align(@AppTpl-Footer-Align);
+    }
+}
+
+.tpl__container__size (@value) when (@value = box) {
+    .tpl__header,
+    .tpl__footer,
+    .tpl__content {
+        padding: @AppTpl-Block-Padding;
+    }
+
+    .tpl__header__inner,
+    .tpl__content__inner,
+    .tpl__footer__inner {
+        max-width: @AppTpl-Container-Width;
+        .mx__align(@AppTpl-Container-Align);
+    }
+}
+
+.tpl__container__size(@AppTpl-Container-Size);
 
 /* *** MODULES / PAGES *** */
 
