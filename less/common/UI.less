@@ -58,19 +58,13 @@
 
 .app__page,
 .app__module {
-    margin: 0 0 @CmIndent-Medium;
-
-    &.bottom {
-        margin: 0;
-    }
+    .clearfix;
 }
 
 .app-mod__default {
-    &:extend(.app__module all);
 }
 
 .app-page__default {
-    &:extend(.app__page all);
 }
 
 /* *** AREAS *** */
@@ -95,10 +89,6 @@
 
     &:hover {
         z-index: 100 !important;
-    }
-
-    .app__module {
-        margin: 0;
     }
 }
 
@@ -132,18 +122,18 @@ html {
         }
     }
 
+    &.is-sidebar--expanded {
+        .app-pt__widget-container {
+            margin: 0 0 @AppPT-Widget-Indent !important;
+        }
+    }
+
     &.is-sidebar--collapsed,
     &:not(.is-sidebar--expanded):not(.is-sidebar--collapsed) {
         .app__area-footer,
         .app__area-header,
         .app__area-main {
             min-height: 0;
-        }
-
-        .app__module {
-            &:last-child {
-                margin: 0;
-            }
         }
 
         .pt__dnd-area {

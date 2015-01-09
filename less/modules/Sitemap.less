@@ -11,7 +11,6 @@
             margin: 0 2% 20px 0;
             vertical-align: top;
             font-size: @AppMod-Sitemap-FontSize;
-            font-weight: @CmFont-Base-BoldWeight;
             color: @AppMod-Sitemap-Color;
 
             &:last-child {
@@ -19,10 +18,12 @@
             }
 
             dt {
+                font-weight: @CmFont-Base-BoldWeight;
                 color: @AppMod-Sitemap-Title-Color;
 
                 a {
-                    color: @AppMod-Sitemap-Title-Color;
+                    font-weight: inherit;
+                    color: inherit;
                 }
             }
 
