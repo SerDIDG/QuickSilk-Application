@@ -45,6 +45,7 @@
         }
     }
 
+    &.active,
     &:hover {
         border: @CmBorder-BoxActive;
         .mx__transition(border-color, @CmUI-Transition-DurationReverse);
@@ -53,9 +54,5 @@
             opacity: 1;
             .mx__transition(opacity, @CmUI-Transition-DurationReverse);
         }
-    }
-
-    &.active {
-        border: @CmBorder-BoxSelected;
     }
 }

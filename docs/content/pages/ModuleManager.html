@@ -44,44 +44,131 @@
 
 <body>
 
-<div class="app__page page__module-manager">
-    <div class="app-pt__admin-description">
-        <div class="pt__editable is-editable">
-            <div class="border"></div>
-            <div class="inner">
-                <div class="app__module app-mod__richeditor">
-                    <h1>Module title</h1>
+<div class="app__page app-page__module-manager">
+    <div class="pt__box-content">
+        <div class="app-pt__admin-description bottom">
+            <div class="pt__editable is-editable">
+                <div class="border"></div>
+                <div class="inner">
+                    <div class="app__module app-mod__richeditor">
+                        <h1>Module Manager</h1>
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <div class="pt__editable is-editable">
-            <div class="border"></div>
-            <div class="inner">
-                <div class="app__module app-mod__richeditor">
-                    <p>Module description text</p>
+            <div class="pt__editable is-editable">
+                <div class="border"></div>
+                <div class="inner">
+                    <div class="app__module app-mod__richeditor">
+                        <p>From here you can Start, Stop, Install and Uninstall modules.</p>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <div class="pt__gridlist is-adaptive">
-        <table>
-            <thead>
+    <div class="pt__box-content">
+        <h2>Modules included in your plan</h2>
+        <div class="pt__gridlist is-adaptive valign-middle bottom">
+            <table>
+                <thead>
+                    <tr>
+                        <th class="cell-auto sort">
+                            <div class="inner">
+                                <span>Name</span>
+                                <div class="icon arrow"></div>
+                            </div>
+                        </th>
+                        <th class="cell-auto sort">
+                            <div class="inner">
+                                <span>Monthly Free</span>
+                                <div class="icon arrow"></div>
+                            </div>
+                        </th>
+                        <th class="cell-auto sort">
+                            <div class="inner">
+                                <span>Last Updated</span>
+                                <div class="icon arrow"></div>
+                            </div>
+                        </th>
+                        <th class="cell-auto sort">
+                            <div class="inner">
+                                <span>Status</span>
+                                <div class="icon arrow desc"></div>
+                            </div>
+                        </th>
+                        <th class="cell-links">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Forum</td>
+                        <td>13</td>
+                        <td>2014.12.01</td>
+                        <td>Not Subscribed</td>
+                        <td>
+                            <div class="cm__form__icons-inside">
+                                <a class="icon linked app-icon medium freetrial"></a>
+                                <a class="icon linked app-icon medium start"></a>
+                                <a class="icon linked app-icon medium unsubscribe"></a>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Links</td>
+                        <td>50</td>
+                        <td>2015.01.10</td>
+                        <td>Not Subscribed</td>
+                        <td>
+                            <div class="cm__form__icons-inside">
+                                <a class="icon linked app-icon medium freetrial"></a>
+                                <a class="icon linked app-icon medium stop"></a>
+                                <a class="icon linked app-icon medium unsubscribe"></a>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Member DIrectory</td>
+                        <td>13</td>
+                        <td>2012.01.10</td>
+                        <td>Not Subscribed</td>
+                        <td>
+                            <div class="cm__form__icons-inside">
+                                <a class="icon linked app-icon medium freetrial"></a>
+                                <a class="icon linked app-icon medium purchase"></a>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="pt__box-content">
+        <h2>Modules that you purchased</h2>
+        <div class="pt__gridlist is-adaptive valign-middle bottom">
+            <table>
+                <thead>
                 <tr>
-                    <th class="cell-title sort">
+                    <th class="cell-auto sort">
                         <div class="inner">
                             <span>Name</span>
                             <div class="icon arrow"></div>
                         </div>
                     </th>
-                    <th class="cell-description sort">
+                    <th class="cell-auto sort">
                         <div class="inner">
-                            <span>Description</span>
+                            <span>Monthly Free</span>
                             <div class="icon arrow"></div>
                         </div>
                     </th>
-                    <th class="cell-status sort">
+                    <th class="cell-auto sort">
+                        <div class="inner">
+                            <span>Last Updated</span>
+                            <div class="icon arrow"></div>
+                        </div>
+                    </th>
+                    <th class="cell-auto sort">
                         <div class="inner">
                             <span>Status</span>
                             <div class="icon arrow desc"></div>
@@ -89,106 +176,72 @@
                     </th>
                     <th class="cell-links">Actions</th>
                 </tr>
-            </thead>
-            <tbody>
-                <tr class="valid">
+                </thead>
+                <tbody>
+                <tr>
+                    <td>Forum</td>
+                    <td>13</td>
+                    <td>2014.12.01</td>
+                    <td>Not Subscribed</td>
                     <td>
-                        <div class="pt__box-cell">
-                            <div class="b-title">Forum</div>
-                        </div>
-                    </td>
-                    <td>
-                        <div class="pt__box-cell">
-                            <div class="b-descr">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus vel ullamcorper magna, eget eleifend diam. Nullam tincidunt justo in mi dictum rutrum. Fusce porttitor ut quam in commodo.</div>
-                            <div class="pt__line-info">
-                                <div class="item">Version: 2.3</div>
-                                <div class="item">Updates: <a>Available new version 2.4</a></div>
-                                <div class="date">Last Updated: November 17, 2014</div>
-                            </div>
-                        </div>
-                    </td>
-                    <td>
-                        Active
-                    </td>
-                    <td>
-                        <div class="pt__links">
-                            <ul>
-                                <li>
-                                    <a>Deactivate</a>
-                                </li>
-                                <li>
-                                    <a>Uninstall</a>
-                                </li>
-                            </ul>
-                        </div>
-                    </td>
-                </tr>
-                <tr class="invalid">
-                    <td>
-                        <div class="pt__box-cell">
-                            <div class="b-title">Image Gallery</div>
-                        </div>
-                    </td>
-                    <td>
-                        <div class="pt__box-cell">
-                            <div class="b-descr">Proin velit quam, laoreet a urna sit amet, malesuada convallis dolor. Morbi cursus maximus mi ac volutpat. Aenean mi lectus, ultrices non erat at, dictum scelerisque nibh. Nullam vitae laoreet purus. Vivamus lacinia, massa non interdum eleifend, ante tortor tincidunt odio, id consequat metus turpis lobortis leo. Sed accumsan rhoncus ipsum et bibendum.</div>
-                            <div class="pt__line-info">
-                                <div class="item">Version: 1.7</div>
-                                <div class="item">Updates: Not available</div>
-                                <div class="date">Last Updated: November 17, 2014</div>
-                            </div>
-                        </div>
-                    </td>
-                    <td>
-                        Active
-                    </td>
-                    <td>
-                        <div class="pt__links">
-                            <ul>
-                                <li>
-                                    <a>Deactivate</a>
-                                </li>
-                                <li>
-                                    <a>Uninstall</a>
-                                </li>
-                            </ul>
+                        <div class="cm__form__icons-inside">
+                            <a class="icon linked app-icon medium freetrial"></a>
+                            <a class="icon linked app-icon medium start"></a>
+                            <a class="icon linked app-icon medium unsubscribe"></a>
                         </div>
                     </td>
                 </tr>
                 <tr>
+                    <td>Links</td>
+                    <td>50</td>
+                    <td>2015.01.10</td>
+                    <td>Not Subscribed</td>
                     <td>
-                        <div class="pt__box-cell">
-                            <div class="b-title">Blog</div>
-                        </div>
-                    </td>
-                    <td>
-                        <div class="pt__box-cell">
-                            <div class="b-descr">Aenean massa risus, porta semper tortor sed, tempus malesuada diam. In hac habitasse platea dictumst. Donec cursus, nisl at porta eleifend, quam massa laoreet ipsum, id imperdiet ex nunc sollicitudin felis. Proin vel scelerisque magna, convallis gravida lacus.</div>
-                            <div class="pt__line-info">
-                                <div class="item">Version: 1.3</div>
-                                <div class="item">Updates: Not available</div>
-                                <div class="date">Last Updated: November 17, 2014</div>
-                            </div>
-                        </div>
-                    </td>
-                    <td>
-                        Inactive
-                    </td>
-                    <td>
-                        <div class="pt__links">
-                            <ul>
-                                <li>
-                                    <a>Activate</a>
-                                </li>
-                                <li>
-                                    <a>Install</a>
-                                </li>
-                            </ul>
+                        <div class="cm__form__icons-inside">
+                            <a class="icon linked app-icon medium freetrial"></a>
+                            <a class="icon linked app-icon medium stop"></a>
+                            <a class="icon linked app-icon medium unsubscribe"></a>
                         </div>
                     </td>
                 </tr>
-            </tbody>
-        </table>
+                <tr>
+                    <td>Member DIrectory</td>
+                    <td>13</td>
+                    <td>2012.01.10</td>
+                    <td>Not Subscribed</td>
+                    <td>
+                        <div class="cm__form__icons-inside">
+                            <a class="icon linked app-icon medium freetrial"></a>
+                            <a class="icon linked app-icon medium purchase"></a>
+                        </div>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="pt__box-content">
+        <h2>Legend</h2>
+        <div class="pt__listing-legend">
+            <ul>
+                <li>
+                    <div class="icon app-icon medium freetrial"></div> Trial - try a module for free before purchasing it
+                </li>
+                <li>
+                    <div class="icon app-icon medium start"></div> Start - start a module that you previously disabled
+                </li>
+                <li>
+                    <div class="icon app-icon medium stop"></div> Stop - temporary disable a module
+                </li>
+                <li>
+                    <div class="icon app-icon medium purchase"></div> Subscribe - purchase a module
+                </li>
+                <li>
+                    <div class="icon app-icon medium unsubscribe"></div> Unsubscribe - uninstall a module that you purchased
+                </li>
+            </ul>
+        </div>
     </div>
 </div>
 
