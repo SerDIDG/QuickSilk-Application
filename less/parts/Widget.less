@@ -58,7 +58,6 @@
             width: 90px;
             height: 90px;
             margin: 0 auto;
-            background: @AppPT-Widget-Dummy-Background;
             border-radius: @AppPT-Widget-Dummy-BorderRadiusInner;
             .mx__transition(background-color, @CmUI-Transition-Duration);
 
@@ -105,7 +104,6 @@
 
         > .app-pt__widget-dummy {
             .icon {
-                background: @AppPT-Widget-Dummy-HoverBackground;
                 .mx__transition(background-color, @CmUI-Transition-DurationReverse);
             }
         }
@@ -128,7 +126,6 @@
             .mx__transition(background-color box-shadow, @CmUI-Transition-DurationReverse);
 
             .icon {
-                background: @AppPT-Widget-Dummy-ActiveBackground;
                 .mx__transition(background-color, @CmUI-Transition-DurationReverse);
             }
         }
@@ -140,5 +137,35 @@
 
     &.is-hide {
         overflow: hidden;
+    }
+}
+
+.app-pt__widget__color();
+
+// /* *** MIXINS **** */
+
+.app-pt__widget__color(@normal: @AppPT-Widget-Dummy-Background, @hover: @AppPT-Widget-Dummy-HoverBackground, @active: @AppPT-Widget-Dummy-ActiveBackground) {
+    .app-pt__widget-container {
+        > .app-pt__widget-dummy {
+            .icon {
+                background-color: @normal;
+            }
+        }
+
+        &:hover {
+            > .app-pt__widget-dummy {
+                .icon {
+                    background-color: @hover;
+                }
+            }
+        }
+
+        &.is-active {
+            > .app-pt__widget-dummy {
+                .icon {
+                    background-color: @active;
+                }
+            }
+        }
     }
 }

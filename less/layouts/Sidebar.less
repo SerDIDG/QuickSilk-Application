@@ -147,6 +147,23 @@
         display: inline-block;
         vertical-align: top;
     }
+
+    /*
+    @length: length(@AppLT-Sidebar-Dummy-Colors);
+
+    .loop(@counter) when (@counter > 0) {
+        .loop((@counter - 1));
+
+        @color: extract(@AppLT-Sidebar-Dummy-Colors, @counter);
+        @name: e('@{length}n -') @length - @counter;
+
+        &:nth-child(@{name}) {
+            .app-pt__widget__color(@color, lighten(@color, 10%), @color);
+        }
+    }
+
+    .loop(@length);
+    */
 }
 
 /* ******* COMPONENT: SIDEBAR: ADAPTIVE ******* */
