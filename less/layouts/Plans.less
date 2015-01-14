@@ -31,19 +31,24 @@
         text-align: center;
     }
 
-    .plan-price {
-        .cm__font--ui-h1;
+    .plan-block,
+    .plan-price,
+    .plan-abstract,
+    .plan-info {
         margin: 0 0 @CmIndent-Medium;
-        text-align: center;
-    }
-
-    .plan-abstract {
-        margin: 0 0 @CmIndent-Medium;
-        .mx__flex(1 1 auto);
 
         &:last-child {
             margin-bottom: 0;
         }
+    }
+
+    .plan-price {
+        .cm__font--ui-h1;
+        text-align: center;
+    }
+
+    .plan-abstract {
+        .mx__flex(1 1 auto);
 
         ul {
             .cm__list;
@@ -56,11 +61,41 @@
         }
     }
 
+    .plan-info {
+        ul {
+            .cm__list-clear;
+        }
+    }
+
     .plan-actions {
         .mx__flex(0 0 auto);
 
         .btn-wrap {
             margin: 0;
+        }
+    }
+
+    &.is-wide {
+        > .inner {
+            margin: 0 -6px;
+            .mx__flex-direction(row);
+            .mx__align-items(center);
+
+            .plan-block,
+            .plan-price,
+            .plan-abstract,
+            .plan-info {
+                margin: 0 6px;
+            }
+
+            .plan-block {
+                width: 174px;
+                .mx__flex(0 0 auto);
+            }
+
+            .plan-info {
+                width: 25%;
+            }
         }
     }
 }
