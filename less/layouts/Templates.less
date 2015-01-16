@@ -4,15 +4,20 @@
     .cm__scroll-y;
     min-height: 200px;
     padding: 0 @CmIndent-Medium 0 0;
+
+    > .pt__grid {
+        margin: 0;
+    }
 }
 
 .app-lt__templates__item {
-    border: @CmBorder-Box;
     cursor: pointer;
+    border: @CmBorder-Box;
     .mx__transition(border-color, @CmUI-Transition-Duration);
 
     > .inner {
         position: relative;
+        overflow: hidden;
     }
 
     .image {
@@ -20,39 +25,87 @@
         z-index: 1;
 
         img {
-            &:extend(.cm__image-resizable all);
+            .cm__image-resizable;
         }
     }
 
     .info {
         position: absolute;
         z-index: 2;
+        background-color: fade(#ffffff, 85%);
         opacity: 0;
         .mx__position(0, 0, 0, 0);
-        .mx__transition(opacity, @CmUI-Transition-Duration);
-        .mx__linear-gradient(~"to bottom, rgb(255,255,255) 0, rgba(255,255,255,0.5) 50%");
+        .mx__transition(background opacity, @CmUI-Transition-Duration);
 
         > .inner {
             position: absolute;
-            .mx__position(@AppLT-Templates-Item-Padding, @AppLT-Templates-Item-Padding, @AppLT-Templates-Item-Padding, @AppLT-Templates-Item-Padding);
+            .mx__position(0, 0, 0, 0);
+        }
+
+        .title {
+            position: absolute;
+            padding: @AppLT-Templates-Item-Padding;
+            transform: translateY(-100%);
+            .mx__position(0, 0, auto, 0);
+            .mx__transition(background transform, @CmUI-Transition-Duration);
+
+            .icon {
+                opacity: 0;
+                float: right;
+                .mx__transition(opacity, @CmUI-Transition-Duration);
+            }
+
+            .cm__tags--title {
+                margin: 0;
+            }
         }
 
         .btn-wrap {
             position: absolute;
             margin: 0;
-            font-size: 0;
+            padding: @AppLT-Templates-Item-Padding;
+            transform: translateY(100%);
             .mx__position(auto, 0, 0, 0);
+            .mx__transition(transform, @CmUI-Transition-Duration);
         }
     }
 
-    &.active,
-    &:hover {
-        border: @CmBorder-BoxActive;
-        .mx__transition(border-color, @CmUI-Transition-DurationReverse);
+    &.active {
+        border: @CmBorder-BoxWidth solid @CmColor-Success-DarkDefault;
 
         .info {
             opacity: 1;
-            .mx__transition(opacity, @CmUI-Transition-DurationReverse);
+            background-color: transparent;
+
+            .title {
+                transform: translateY(0);
+                background-color: fade(#ffffff, 85%);
+
+                .icon {
+                    opacity: 1;
+                }
+            }
+
+            .ie9 & {
+                background-color: fade(#ffffff, 85%);
+            }
+        }
+    }
+
+    &:hover {
+        border: @CmBorder-BoxHover;
+
+        .info {
+            opacity: 1;
+            background-color: fade(#ffffff, 85%);
+
+            .title {
+                transform: translateY(0);
+            }
+
+            .btn-wrap {
+                transform: translateY(0);
+            }
         }
     }
 }
