@@ -70,7 +70,7 @@ function(params){
     };
 
     var onSidebarExpand = function(){
-        var columns, widgets;
+        var columns, widgets, spacers;
         // Enable columns editable
         columns = cm.getByClass('app-mod__columns');
         cm.forEach(columns, function(column){
@@ -91,10 +91,20 @@ function(params){
                 cm.addClass(widget, 'is-visible');
             }
         });
+        // Enable spacers editable
+        spacers = cm.getByClass('app-pt__spacer');
+        cm.forEach(spacers, function(spacer){
+            if(!cm.isClass(spacer, 'is-locked')){
+                cm.addClass(spacer, 'is-editable');
+            }
+            if(cm.isClass(spacer, 'is-hidden')){
+                cm.addClass(spacer, 'is-visible');
+            }
+        });
     };
 
     var onSidebarCollapse = function(){
-        var columns, widgets;
+        var columns, widgets, spacers;
         // Disable columns editable
         columns = cm.getByClass('app-mod__columns');
         cm.forEach(columns, function(column){
@@ -104,6 +114,11 @@ function(params){
         widgets = cm.getByClass('app-pt__widget');
         cm.forEach(widgets, function(widget){
             cm.removeClass(widget, 'is-editable is-visible');
+        });
+        // Disable spacers editable
+        spacers = cm.getByClass('app-pt__spacer');
+        cm.forEach(spacers, function(spacer){
+            cm.removeClass(spacer, 'is-editable is-visible');
         });
     };
 
