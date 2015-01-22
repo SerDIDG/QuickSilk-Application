@@ -70,10 +70,10 @@ function(params){
     };
 
     var onSidebarExpand = function(){
-        var columns, widgets, spacers;
+        var elements;
         // Enable columns editable
-        columns = cm.getByClass('app-mod__columns');
-        cm.forEach(columns, function(column){
+        elements = cm.getByClass('app-mod__columns');
+        cm.forEach(elements, function(column){
             if(!cm.isClass(column, 'is-locked')){
                 cm.addClass(column, 'is-editable');
             }
@@ -82,8 +82,8 @@ function(params){
             }
         });
         // Enable widgets editable
-        widgets = cm.getByClass('app-pt__widget');
-        cm.forEach(widgets, function(widget){
+        elements = cm.getByClass('app-pt__widget');
+        cm.forEach(elements, function(widget){
             if(!cm.isClass(widget, 'is-locked')){
                 cm.addClass(widget, 'is-editable');
             }
@@ -92,8 +92,8 @@ function(params){
             }
         });
         // Enable spacers editable
-        spacers = cm.getByClass('app-pt__spacer');
-        cm.forEach(spacers, function(spacer){
+        elements = cm.getByClass('app-mod__spacer');
+        cm.forEach(elements, function(spacer){
             if(!cm.isClass(spacer, 'is-locked')){
                 cm.addClass(spacer, 'is-editable');
             }
@@ -101,25 +101,52 @@ function(params){
                 cm.addClass(spacer, 'is-visible');
             }
         });
+        // Enable slider editable
+        elements = cm.getByClass('app-mod__slider');
+        cm.forEach(elements, function(slider){
+            if(!cm.isClass(slider, 'is-locked')){
+                cm.addClass(slider, 'is-editable');
+            }
+            if(cm.isClass(slider, 'is-hidden')){
+                cm.addClass(slider, 'is-visible');
+            }
+        });
+        if(typeof Com.Slider != 'undefined'){
+            elements = Com.Slider.prototype.findInStack();
+            cm.forEach(elements, function(slider){
+                slider['class'].pause();
+            });
+        }
     };
 
     var onSidebarCollapse = function(){
-        var columns, widgets, spacers;
+        var elements;
         // Disable columns editable
-        columns = cm.getByClass('app-mod__columns');
-        cm.forEach(columns, function(column){
+        elements = cm.getByClass('app-mod__columns');
+        cm.forEach(elements, function(column){
             cm.removeClass(column, 'is-editable is-visible');
         });
         // Disable widgets editable
-        widgets = cm.getByClass('app-pt__widget');
-        cm.forEach(widgets, function(widget){
+        elements = cm.getByClass('app-pt__widget');
+        cm.forEach(elements, function(widget){
             cm.removeClass(widget, 'is-editable is-visible');
         });
         // Disable spacers editable
-        spacers = cm.getByClass('app-pt__spacer');
-        cm.forEach(spacers, function(spacer){
+        elements = cm.getByClass('app-mod__spacer');
+        cm.forEach(elements, function(spacer){
             cm.removeClass(spacer, 'is-editable is-visible');
         });
+        // Disable slider editable
+        elements = cm.getByClass('app-mod__slider');
+        cm.forEach(elements, function(slider){
+            cm.removeClass(slider, 'is-editable is-visible');
+        });
+        if(typeof Com.Slider != 'undefined'){
+            elements = Com.Slider.prototype.findInStack();
+            cm.forEach(elements, function(slider){
+                slider['class'].unpause();
+            });
+        }
     };
 
     var renderLoaderBox = function(){

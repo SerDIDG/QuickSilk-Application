@@ -6,6 +6,28 @@
     .pt__toolbar:last-child {
         margin: 0;
     }
+
+    &.is-editable {
+        .com__slider {
+            > .inner {
+                > .slides {
+                    > ul {
+                        overflow: visible;
+
+                        > li {
+                            &.pt__dnd-area {
+                                padding: @PtDnD-Area-Padding;
+                            }
+
+                            > .slider-link {
+                                display: none;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
 }
 
 .app-mod__slider__featured {

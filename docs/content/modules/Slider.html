@@ -45,34 +45,109 @@
 <h1 class="app-pt__box-title">Modules: Slider</h1>
 <hr>
 
+<h2>Aspect Specific</h2>
+<ul class="cm__list">
+    <li>background-position: center center;</li>
+    <li>background-size: cover;</li>
+</ul>
 <div style="max-width: 1000px">
     <div class="app__module app-mod__slider">
-        <div class="com__slider theme-template" data-element="slider" data-config='{"pauseOnHover" : true, "delay" : 5000, "buttons" : true, "arrows" : true, "effect" : "fade", "transition" : "smooth"}' data-node="ComSlider:{}:container">
+        <div class="com__slider" data-element="slider" data-config='{"pauseOnHover" : true, "delay" : 5000, "buttons" : true, "arrows" : true, "effect" : "fade", "transition" : "smooth"}' data-node="ComSlider:{}:container">
             <div class="inner" data-node="inner">
                 <div class="size cm__aspect-21x9"></div>
                 <div class="slides" data-node="slides">
                     <ul data-node="slidesInner">
-                        <li data-node="items:[]:container">
-                            <div class="pt__image is-flexible is-no-hover">
-                                <div class="inner">
-                                    <img class="descr" src="../../images/modules/slider/1.jpg" alt="">
-                                    <div class="app-mod__slider__featured"></div>
-                                </div>
-                            </div>
+                        <li data-node="items:[]:container" style="background: url(../../images/modules/slider/1.jpg) 50% 50% / cover;">
+
                         </li>
-                        <li data-node="items:[]:container">
-                            <div class="pt__image is-flexible is-no-hover">
-                                <div class="inner">
-                                    <img class="descr" src="../../images/modules/slider/2.jpg" alt="">
-                                </div>
-                            </div>
+                        <li data-node="items:[]:container" style="background: url(../../images/modules/slider/2.jpg) 50% 50% / cover">
+
                         </li>
-                        <li data-node="items:[]:container">
-                            <div class="pt__image is-flexible is-no-hover">
-                                <div class="inner">
-                                    <img class="descr" src="../../images/modules/slider/3.jpg" alt="">
-                                </div>
-                            </div>
+                        <li data-node="items:[]:container" style="background: url(../../images/modules/slider/3.jpg) 50% 50% / cover">
+
+                        </li>
+                    </ul>
+                </div>
+                <div class="com__gallery-controls is-small">
+                    <div class="inner">
+                        <div class="bar-arrow prev" data-node="prev">
+                            <div class="icon default prev"></div>
+                        </div>
+                        <div class="bar-arrow next" data-node="next">
+                            <div class="icon default next"></div>
+                        </div>
+                        <div class="bar-buttons">
+                            <ul data-node="buttons"></ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<hr>
+
+<h2>Slide links</h2>
+<div style="max-width: 1000px">
+    <div class="app__module app-mod__slider">
+        <div class="com__slider" data-element="slider" data-config='{"pauseOnHover" : true, "delay" : 5000, "buttons" : true, "arrows" : true, "effect" : "fade", "transition" : "smooth"}' data-node="ComSlider:{}:container">
+            <div class="inner" data-node="inner">
+                <div class="size cm__aspect-21x9"></div>
+                <div class="slides" data-node="slides">
+                    <ul data-node="slidesInner">
+                        <li data-node="items:[]:container" style="background: url(../../images/modules/slider/1.jpg) 50% 50% / cover;">
+                            <a class="slider-link" href="http://google.com"></a>
+                        </li>
+                        <li data-node="items:[]:container" style="background: url(../../images/modules/slider/2.jpg) 50% 50% / cover">
+                            <a class="slider-link" href="http://twitter.com"></a>
+                        </li>
+                        <li data-node="items:[]:container" style="background: url(../../images/modules/slider/3.jpg) 50% 50% / cover">
+                            <a class="slider-link" href="http://facebook.com"></a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="com__gallery-controls is-small">
+                    <div class="inner">
+                        <div class="bar-arrow prev" data-node="prev">
+                            <div class="icon default prev"></div>
+                        </div>
+                        <div class="bar-arrow next" data-node="next">
+                            <div class="icon default next"></div>
+                        </div>
+                        <div class="bar-buttons">
+                            <ul data-node="buttons"></ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<hr>
+
+<h2>Editable</h2>
+<ul>
+    <li>Add <code>is-editable</code> class on module container.</li>
+    <li>Add <code>data-com-draganddrop="area"</code> attribute on slides.</li>
+</ul>
+<p>Slider links is disabled in this mode.</p>
+<div style="max-width: 1000px">
+    <div class="app__module app-mod__slider is-editable">
+        <div class="com__slider" data-element="slider" data-config='{"pauseOnHover" : true, "delay" : 5000, "buttons" : true, "arrows" : true, "effect" : "fade", "transition" : "smooth"}' data-node="ComSlider:{}:container">
+            <div class="inner" data-node="inner">
+                <div class="size cm__aspect-21x9"></div>
+                <div class="slides" data-node="slides">
+                    <ul data-node="slidesInner">
+                        <li data-com-draganddrop="area" data-node="items:[]:container" style="background: url(../../images/modules/slider/1.jpg) 50% 50% / cover;">
+                            <a class="slider-link" href="http://google.com"></a>
+                        </li>
+                        <li data-com-draganddrop="area" data-node="items:[]:container" style="background: url(../../images/modules/slider/2.jpg) 50% 50% / cover">
+                            <a class="slider-link" href="http://twitter.com"></a>
+                        </li>
+                        <li data-com-draganddrop="area" data-node="items:[]:container" style="background: url(../../images/modules/slider/3.jpg) 50% 50% / cover">
+                            <a class="slider-link" href="http://facebook.com"></a>
                         </li>
                     </ul>
                 </div>
