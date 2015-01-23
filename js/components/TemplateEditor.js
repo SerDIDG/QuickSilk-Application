@@ -144,7 +144,7 @@ function(params){
         if(typeof Com.Slider != 'undefined'){
             elements = Com.Slider.prototype.findInStack();
             cm.forEach(elements, function(slider){
-                slider['class'].unpause();
+                slider['class'].start();
             });
         }
     };
