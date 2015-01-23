@@ -39,6 +39,16 @@
                 .addEvent('onConstruct', function(){
                     Part.Menu();
                 })
+                .add('columns', function(node){
+                    new Com.Columns({
+                        'columns' : node
+                    });
+                })
+                .add('togglebox', function(node){
+                    new Com.ToggleBox({
+                        'node' : node
+                    });
+                })
                 .add('app-lt__topmenu', function(node){
                     new App.TopMenu({
                         'node' : node
@@ -47,11 +57,6 @@
                 .add('app-lt__sidebar', function(node){
                     new App.Sidebar({
                         'node' : node
-                    });
-                })
-                .add('columns', function(node){
-                    new Com.Columns({
-                        'columns' : node
                     });
                 })
                 .add('template-editor', function(node){
@@ -113,11 +118,6 @@
                                 });
                             }
                         }
-                    });
-                })
-                .add('togglebox', function(node){
-                    new Com.ToggleBox({
-                        'node' : node
                     });
                 })
                 .construct();
