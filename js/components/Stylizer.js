@@ -32,9 +32,9 @@ cm.define('App.Stylizer', {
                 "Trebuchet MS, Helvetica, sans-serif",
                 "Verdana, Geneva, sans-serif"
             ],
-            'line-height' : ['normal', 8, 10, 12, 16, 20, 24, 28, 32, 36, 40, 48, 56, 64, 72, 80, 88, 96, 108, 120],
+            'line-height' : [8, 10, 12, 16, 20, 24, 28, 32, 36, 40, 48, 56, 64, 72, 80, 88, 96, 108, 120],
             'font-size' : [8, 9, 10, 11, 12, 13, 14, 18, 10, 22, 24, 28, 32, 36, 42, 48, 54, 60, 72, 96],
-            'font-weight' : [300, 400, 600, 700, 800],
+            'font-weight' : [100, 300, 400, 600, 700, 800],
             'font-style' : ['normal', 'italic'],
             'text-decoration' : ['none', 'underline']
         },
@@ -69,6 +69,7 @@ cm.define('App.Stylizer', {
             'renderInBody' : false
         },
         'langs' : {
+            '100' : 'Thin',
             '300' : 'Light',
             '400' : 'Regular',
             '600' : 'Semi-Bold',

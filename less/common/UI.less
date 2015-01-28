@@ -76,11 +76,15 @@
 
 .app__area-footer,
 .app__area-header {
+    .clearfix;
     min-width: 200px;
     min-height: @CmIndent-Medium * 2;
-    padding: 0;
     position: absolute;
     z-index: 1;
+
+    &:not(.main) {
+        padding: 0;
+    }
 
     &.main {
         min-width: 0;

@@ -17,6 +17,11 @@
             > a {
                 display: block;
                 white-space: nowrap;
+                .mx__transition(color, @CmUI-Transition-Duration);
+
+                &:hover {
+                    .mx__transition(color, @CmUI-Transition-DurationReverse);
+                }
             }
 
             .pt__menu-dropdown {
@@ -59,7 +64,7 @@
     .menu-button {
         .icon.linked;
         .icon.medium.menu;
-        width: @CmSize-Medium;
+        width: @CmForm-FieldHeight;
         height: @CmForm-FieldHeight;
         position: absolute;
         z-index: 1;
@@ -94,7 +99,13 @@
         a {
             display: inline-block;
             vertical-align: middle;
-            color: @CmFont-Base-Color;
+            white-space: normal;
+
+            .mx__transition(color, @CmUI-Transition-Duration);
+
+            &:hover {
+                .mx__transition(color, @CmUI-Transition-DurationReverse);
+            }
         }
 
         &.pull-right {

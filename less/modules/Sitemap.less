@@ -2,13 +2,14 @@
 
 .app-mod__sitemap {
     > .inner {
+        margin-bottom: -@AppMod-Sitemap-IndentY;
         font-size: 0;
 
         dl {
             min-width: 116px;
             width: 12.2%;
             display: inline-block;
-            margin: 0 2% 20px 0;
+            margin: 0 2% @AppMod-Sitemap-IndentY 0;
             vertical-align: top;
             font-size: @AppMod-Sitemap-FontSize;
             color: @AppMod-Sitemap-Color;
@@ -47,9 +48,7 @@
         .app-mod__sitemap {
             > .inner {
                 dl {
-                    width: 21%;
-                    margin: 0;
-                    padding: 2%;
+                    width: 47%;
                 }
             }
         }
@@ -62,10 +61,15 @@
     html.is-adaptive {
         .app-mod__sitemap {
             > .inner {
+                margin-bottom: 0;
+
                 dl {
-                    width: 46%;
-                    margin: 0;
-                    padding: 2%;
+                    width: 100%;
+                    margin-left: 0;
+
+                    &:last-child {
+                        margin-bottom: 0;
+                    }
                 }
             }
         }

@@ -6,9 +6,10 @@
     z-index: 102;
     overflow: hidden;
     background: @AppLT-Sidebar-Background;
-    box-shadow: @CmUI-Shadow;
-    .mx__transition(-webkit-transform -ms-transform transform, @AppLT-Sidebar-Duration);
+    box-shadow: @CmUI-Shadow-Right;
+    .mx__transition(transform, @AppLT-Sidebar-Duration);
     .mx__position(0, auto, 0, 0);
+    .mx__backface-visibility(hidden);
 
     > .inner {
         position: absolute;
@@ -26,7 +27,7 @@
             .icon {
                 position: absolute;
                 cursor: pointer;
-                .mx__transition(-webkit-transform -ms-transform transform, @AppLT-Sidebar-Duration);
+                .mx__transition(transform, @AppLT-Sidebar-Duration);
                 .mx__position(14px, @CmIndent-XSmall, auto, auto);
             }
         }
@@ -43,16 +44,12 @@
 
     &.is-collapsed {
         @translate: @AppLT-Sidebar-WidthCollapsed - @AppLT-Sidebar-Width;
-        -webkit-transform: translateX(@translate);
-            -ms-transform: translateX(@translate);
-                transform: translateX(@translate);
+        .mx__transform(translateX(@translate));
 
         > .inner {
             > .title {
                 .icon {
-                    -webkit-transform: rotate(180deg);
-                        -ms-transform: rotate(180deg);
-                            transform: rotate(180deg);
+                    .mx__transform(rotate(180deg));
                 }
             }
 
@@ -148,6 +145,7 @@
         vertical-align: top;
     }
 
+    // Styles for colorized plates
     /*
     @length: length(@AppLT-Sidebar-Dummy-Colors);
 
@@ -176,9 +174,7 @@
 
             &.is-collapsed {
                 @translate: @AppLT-Sidebar-WidthCollapsed - @AppLT-Sidebar-WidthTablet;
-                -webkit-transform: translateX(@translate);
-                    -ms-transform: translateX(@translate);
-                        transform: translateX(@translate);
+                .mx__transform(translateX(@translate));
             }
         }
     }
@@ -195,7 +191,7 @@
 
 }
 
-/* *** COMPONENT: SIDEBAR: PRINT *** */
+/* ******* COMPONENT: SIDEBAR: PRINT ******* */
 
 @media print {
 
