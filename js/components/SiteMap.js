@@ -21,7 +21,7 @@ function(params){
         animations = {};
 
     that.nodes = {
-        'Template' : {
+        'AppTemplate' : {
             'container' : cm.Node('div'),
             'content' : cm.Node('div'),
             'footer' : cm.Node('div')
@@ -46,7 +46,7 @@ function(params){
         setPadding();
 
         animations['container'] = new cm.Animation(that.nodes['AppSitemap']['target']);
-        animations['content'] = new cm.Animation(that.nodes['Template']['content']);
+        animations['content'] = new cm.Animation(that.nodes['AppTemplate']['content']);
         animations['scroll'] = new cm.Animation(that.params['scrollNode']);
 
         cm.addEvent(window, 'resize', setPadding);
@@ -64,7 +64,7 @@ function(params){
 
     var setPadding = function(){
         if(that.params['animatePadding']){
-            that.nodes['Template']['content'].style.paddingBottom = [that.nodes['Template']['footer'].offsetHeight, 'px'].join('');
+            that.nodes['AppTemplate']['content'].style.paddingBottom = [that.nodes['AppTemplate']['footer'].offsetHeight, 'px'].join('');
         }
     };
 
@@ -94,7 +94,7 @@ function(params){
         }});
         // Animate content padding-bottom
         if(that.params['animatePadding']){
-            footerHeight = that.nodes['Template']['footer'].offsetHeight;
+            footerHeight = that.nodes['AppTemplate']['footer'].offsetHeight;
             animations['content'].go({'style': {'paddingBottom' : [containerHeight + footerHeight,'px'].join('')}, 'anim' : 'smooth', 'duration' : that.params['duration']});
         }
         // Scroll to document bottom
@@ -113,7 +113,7 @@ function(params){
         // Animate content padding-bottom
         if(that.params['animatePadding']){
             that.nodes['AppSitemap']['target'].style.height = 0;
-            footerHeight = that.nodes['Template']['footer'].offsetHeight;
+            footerHeight = that.nodes['AppTemplate']['footer'].offsetHeight;
             that.nodes['AppSitemap']['target'].style.height = 'auto';
             animations['content'].go({'style': {'paddingBottom' : [footerHeight,'px'].join('')}, 'anim' : 'acceleration', 'duration' : that.params['duration']});
         }

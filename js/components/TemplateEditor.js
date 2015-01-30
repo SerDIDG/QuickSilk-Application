@@ -26,7 +26,7 @@ function(params){
     
     that.components = {};
     that.nodes = {
-        'Template' : {
+        'AppTemplate' : {
             'container' : cm.Node('div')
         },
         'AppSidebar' : {
@@ -117,6 +117,12 @@ function(params){
                 slider['class'].pause();
             });
         }
+        if(typeof App.Template != 'undefined'){
+            elements = App.Template.prototype.findInStack();
+            cm.forEach(elements, function(template){
+                template['class'].redraw();
+            });
+        }
     };
 
     var onSidebarCollapse = function(){
@@ -147,6 +153,12 @@ function(params){
                 slider['class'].start();
             });
         }
+        if(typeof App.Template != 'undefined'){
+            elements = App.Template.prototype.findInStack();
+            cm.forEach(elements, function(template){
+                template['class'].redraw();
+            });
+        }
     };
 
     var renderLoaderBox = function(){
@@ -167,7 +179,7 @@ function(params){
     var initDragAndDrop = function(){
         that.components['dd'] = new Com.Draganddrop(
             cm.merge({
-                'container' : that.nodes['Template']['container']
+                'container' : that.nodes['AppTemplate']['container']
             }, that.params['Com.Draganddrop'])
         );
         // Register widgets areas and events
