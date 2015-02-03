@@ -24,10 +24,6 @@
                 }
             }
 
-            .pt__menu-dropdown {
-                .pt__menu-dropdown--base;
-            }
-
             &.sep {
                 display: none;
             }
@@ -44,6 +40,7 @@
 
     .pt__menu-dropdown {
         text-align: left;
+        .pt__menu-dropdown--base;
     }
 
     .menu-select {
@@ -142,6 +139,10 @@
     &.pull-right {
         > ul {
             text-align: right;
+        }
+
+        .pt__menu-dropdown {
+            .pt__menu-dropdown--base.pull-right;
         }
     }
 }
