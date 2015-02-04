@@ -116,6 +116,16 @@
     }
 }
 
+// /* *** MIXINS *** */
+
+.app-lt__topmenu__dropdown--desktop () {
+    .pt__menu-dropdown--base;
+    top: 100%;
+    left: -(@CmIndent-XSmall - 1px);
+    border-top: none;
+    border-radius: 0 0 @CmBorder-Radius @CmBorder-Radius;
+}
+
 /* ******* LAYOUTS: TOP MENU: ADAPTIVE *** */
 
 /* *** DESKTOP VIEW *** */
@@ -162,11 +172,7 @@
                 }
 
                 ul {
-                    .pt__menu-dropdown--base;
-                    top: 100%;
-                    left: -(@CmIndent-XSmall - 1px);
-                    border-top: none;
-                    border-radius: 0 0 @CmBorder-Radius @CmBorder-Radius;
+                    .app-lt__topmenu__dropdown--desktop();
                 }
 
                 &.right {

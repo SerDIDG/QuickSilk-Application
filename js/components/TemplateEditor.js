@@ -47,9 +47,9 @@ function(params){
     };
 
     var render = function(){
-        initSidebar();
         processPanelWidgets();
         initDragAndDrop();
+        initSidebar();
         that.triggerEvent('onRender');
     };
 

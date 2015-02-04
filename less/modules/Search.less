@@ -8,12 +8,50 @@
     .icon {
         &.default {
             .icon.small.search;
+            .mx__transition(all, @CmUI-Transition-Duration);
 
             &:hover {
                 .icon.small.search-white;
+                .mx__transition(all, @CmUI-Transition-DurationReverse);
             }
         }
     }
+
+    .search-box {
+        display: none;
+    }
+}
+
+/* *** TOOLTIP *** */
+
+.app-mod__search__box {
+    width: 240px;
+}
+
+.com__tooltip.app-mod__search__tooltip {
+    > .inner {
+        padding: 8px;
+    }
+}
+
+/* *******  MODULES: SEARCH: ADAPTIVE ******* */
+
+@media only screen and (max-width : @CmScreen-Mobile) {
+
+    html.is-adaptive {
+        .app-mod__search {
+            .clearfix;
+
+            .search-icon {
+                display: none;
+            }
+
+            .search-box {
+                display: block;
+            }
+        }
+    }
+
 }
 
 /* *******  MODULES: SEARCH: PRINT ******* */

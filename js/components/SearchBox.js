@@ -1,4 +1,4 @@
-cm.define('App.LoginBox', {
+cm.define('App.SearchBox', {
     'modules' : [
         'Params',
         'DataConfig',
@@ -17,7 +17,7 @@ cm.define('App.LoginBox', {
             'adaptiveY' : false,
             'left' : '-selfWidth+targetWidth',
             'top' : 'targetHeight + 8',
-            'className' : 'app-pt__box-login__tooltip'
+            'className' : 'app-mod__search__tooltip'
         }
     }
 },

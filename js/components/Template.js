@@ -7,12 +7,15 @@ cm.define('App.Template', {
         'Stack'
     ],
     'events' : [
-        'onRender'
+        'onRender',
+        'onRedraw'
     ],
     'params' : {
         'node' : cm.Node('div'),
         'name' : '',
-        'stickyFooter' : false
+        'stickyFooter' : false,
+        'scroll' : 'document.body',
+        'scrollDuration' : 1000
     }
 },
 function(params){
@@ -22,23 +25,42 @@ function(params){
         'container' : cm.Node('div'),
         'header' : cm.Node('div'),
         'content' : cm.Node('div'),
-        'footer' : cm.Node('div')
+        'footer' : cm.Node('div'),
+        'buttonUp' : cm.Node('div')
     };
+
+    that.anim = {};
 
     var init = function(){
         that.setParams(params);
         that.convertEvents(that.params['events']);
         that.getDataNodes(that.params['node']);
         that.getDataConfig(that.params['node']);
-        render();
         that.addToStack(that.params['node']);
+        render();
         that.triggerEvent('onRender');
+        redraw(true);
     };
 
     var render = function(){
-        redraw();
+        // Scroll Controllers
+        that.anim['scroll'] = new cm.Animation(that.params['scroll']);
+        cm.addEvent(that.nodes['buttonUp'], 'click', that.scrollToTop);
         // Resize events
-        cm.addEvent(window, 'resize', redraw)
+        cm.addEvent(window, 'resize', function(){
+            redraw(true);
+        });
+    };
+
+    var redraw = function(triggerEvents){
+        // Sticky Footer
+        if(that.params['stickyFooter']){
+            stickyFooter();
+        }
+        // Redraw Events
+        if(triggerEvents){
+            that.triggerEvent('onRedraw');
+        }
     };
 
     var stickyFooter = function(){
@@ -48,17 +70,16 @@ function(params){
         that.nodes['content'].style.minHeight = Math.max((windowHeight - contentTop - footerHeight), 0) + 'px';
     };
 
-    var redraw = function(){
-        // Sticky Footer
-        if(that.params['stickyFooter']){
-            stickyFooter();
-        }
-    };
-
     /* ******* MAIN ******* */
 
-    that.redraw = function(){
-        redraw();
+    that.redraw = function(triggerEvents){
+        triggerEvents = typeof triggerEvents == 'undefined'? true : triggerEvents;
+        redraw(triggerEvents);
+        return that;
+    };
+
+    that.scrollToTop = function(){
+        that.anim['scroll'].go({'style' : {'docScrollTop' : '0'}, 'duration' : that.params['scrollDuration'], 'anim' : 'smooth'});
         return that;
     };
 

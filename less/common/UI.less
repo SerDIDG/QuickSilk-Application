@@ -54,6 +54,22 @@
 
 .tpl__container__size(@AppTpl-Container-Size);
 
+/* *** TEMPLATE MIXINS *** */
+
+.tpl__content__flex-area () {
+    .display-flex;
+    .mx__flex-direction(row);
+
+    .tpl__content__inner {
+        .display-flex;
+        .mx__flex(1 1 auto);
+
+        .app__area-main {
+            .mx__flex(1 1 auto);
+        }
+    }
+}
+
 /* *** MODULES / PAGES *** */
 
 .app__page,
@@ -71,7 +87,7 @@
 
 .app__area-main {
     .clearfix;
-    min-height: 500px;
+    min-height: 256px;
 }
 
 .app__area-footer,
@@ -127,13 +143,9 @@ html {
     }
 
     &.is-sidebar--expanded {
-        .app-pt__widget-container {
-            margin: 0 0 @AppPT-Widget-Indent !important;
-        }
-
-        .app-pt__widgets-category {
+        .pt__dnd-area.is-available {
             .app-pt__widget-container {
-                margin: 0 !important;
+                margin: 0 0 @AppPT-Widget-Indent !important;
             }
         }
     }

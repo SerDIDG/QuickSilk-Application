@@ -55,8 +55,8 @@
         }
 
         .icon {
-            width: 90px;
-            height: 90px;
+            max-width: 90px;
+            max-height: 90px;
             margin: 0 auto;
             border-radius: @AppPT-Widget-Dummy-BorderRadiusInner;
             .mx__transition(background-color, @CmUI-Transition-Duration);
@@ -133,6 +133,10 @@
 
     &.pt__dnd-helper {
         .pt__dnd-helper;
+    }
+
+    &.is-hidden {
+        display: none;
     }
 
     &.is-hide {
