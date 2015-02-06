@@ -84,4 +84,14 @@
             }
         }
     }
+
+    // /* X Small Size Icons */
+
+    &.x-small {
+        .for(arrow-white-down); .-each(@name) {
+            &.@{name} {
+                background-image: url("@{AppPath-Images}/icons/x-small/@{name}.png");
+            }
+        }
+    }
 }
