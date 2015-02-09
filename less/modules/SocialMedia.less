@@ -1,11 +1,25 @@
 /* ******* MODULES: SOCIAL MEDIA ******* */
 
-/* *******  MODULES: SOCIAL MEDIA: PRINT ******* */
+/* ******* MODULES: SOCIAL MEDIA: PRINT ******* */
 
 @media print {
 
     .app-mod__social-media {
         display: none !important;
+    }
+
+}
+
+/* ******* MODULES: SOCIAL MEDIA: ADAPTIVE ******* */
+
+@media only screen and (max-width : @CmScreen-Mobile) {
+
+    html.is-adaptive {
+        .app-mod__social-media {
+            .pt__line-share {
+                .pt__line-share.pull-center;
+            }
+        }
     }
 
 }
