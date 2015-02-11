@@ -126,6 +126,10 @@
     border-radius: 0 0 @CmBorder-Radius @CmBorder-Radius;
 }
 
+.app-lt__topmenu__dropdown--desktop-right () {
+    .pt__menu-dropdown--base.pull-right;
+}
+
 /* ******* LAYOUTS: TOP MENU: ADAPTIVE *** */
 
 /* *** DESKTOP VIEW *** */
@@ -138,6 +142,12 @@
 
                 > li {
                     margin: 0 0 0 (@CmIndent-XSmall * 2 + 1px);
+
+                    > a {
+                        .cm__text-overflow;
+                        max-width: 128px;
+                        .mx__box-sizing(border-box);
+                    }
 
                     &.has-dropdown {
                         > a {
@@ -167,18 +177,22 @@
                     }
 
                     &:hover {
-                        > ul {
+                        .pt__menu-dropdown {
                             .pt__menu-dropdown--active;
                         }
                     }
                 }
 
-                ul {
-                    .app-lt__topmenu__dropdown--desktop();
+                .pt__menu-dropdown {
+                    .app-lt__topmenu__dropdown--desktop;
                 }
 
                 &.right {
                     float: right;
+
+                    .pt__menu-dropdown {
+                        .app-lt__topmenu__dropdown--desktop-right;
+                    }
                 }
 
                 &.left {
@@ -240,6 +254,16 @@
 @media only screen and (min-width : (@CmScreen-TabletPortrait + 1px)) and (max-width: 1280px) {
     html.is-adaptive {
         .app-lt__topmenu {
+            .menu {
+                > li {
+                    font-size: 12px;
+
+                    > a {
+                        font-size: 12px;
+                    }
+                }
+            }
+
             .menu-centered {
                 float: right;
                 margin: 0 0 0 @CmIndent-XSmall;
@@ -272,9 +296,7 @@
             .menu-holder {
                 display: block;
                 position: fixed;
-                -webkit-transform: translateY(-100%);
-                    -ms-transform: translateY(-100%);
-                        transform: translateY(-100%);
+                .mx__transform(translateY(-100%));
                 .mx__transition(transform, @AppLT-TopMenu-Duration);
                 .mx__position(0, 0, 0, 0);
 
@@ -338,9 +360,7 @@
 
             &.is-expanded {
                 .menu-holder {
-                    -webkit-transform: translateY(0);
-                        -ms-transform: translateY(0);
-                            transform: translateY(0);
+                    .mx__transform(translateY(0));
                 }
             }
         }
