@@ -24,11 +24,13 @@
 
     <script type="text/javascript" src="../../../js/Application.js"></script>
     <script type="text/javascript" src="../../../js/components/LoginBox.js"></script>
+    <script type="text/javascript" src="../../../js/components/Template.js"></script>
     <script type="text/javascript" src="../../../js/components/TopMenu.js"></script>
     <script type="text/javascript" src="../../../js/components/Sidebar.js"></script>
     <script type="text/javascript" src="../../../js/components/TemplateEditor.js"></script>
     <script type="text/javascript" src="../../../js/components/ModuleMenu.js"></script>
 
+    <script type="text/javascript" src="../../../../../js/custom.js"></script>
     <link type="text/css" rel="stylesheet" href="../../../../../css/index.css">
 
     <script type="text/javascript">
@@ -49,12 +51,17 @@
                         'node' : node
                     });
                 })
-                .add('app-lt__topmenu', function(node){
+                .add('app-template', function(node){
+                    new App.Template({
+                        'node' : node
+                    });
+                })
+                .add('app-topmenu', function(node){
                     new App.TopMenu({
                         'node' : node
                     });
                 })
-                .add('app-lt__sidebar', function(node){
+                .add('app-sidebar', function(node){
                     new App.Sidebar({
                         'node' : node
                     });
@@ -129,7 +136,7 @@
 
 <!-- [* ******* TOPMENU START ******* *] -->
 
-<div class="app-lt__topmenu" data-node=".AppTopMenu:{}:container" data-element="app-lt__topmenu">
+<div class="app-lt__topmenu" data-node=".AppTopMenu:{}:container" data-element="app-topmenu">
     <div class="inner clear">
         <a class="logo"></a>
         <div class="menu-button" data-node="button"></div>
@@ -154,7 +161,7 @@
 
                 <ul class="menu right">
                     <li class="pt__menu has-dropdown">
-                        <a>Welcome, User Userberg</a>
+                        <a>User Userberg</a>
                         <ul class="pt__menu-dropdown">
                             <li><a>Admin</a></li>
                             <li><a>View Profile</a></li>
@@ -209,9 +216,6 @@
                         </ul>
                     </li>
                     <li>
-                        <a>System</a>
-                    </li>
-                    <li>
                         <a>Language</a>
                     </li>
                     <li>
@@ -227,7 +231,7 @@
 
 <!-- [* ******* SIDEBAR START ******* *] -->
 
-<div class="app-lt__sidebar is-expanded" data-node=".AppSidebar:{}:container" data-element="app-lt__sidebar" data-config='{"remember" : true, "name" : "app-lt__sidebar"}'>
+<div class="app-lt__sidebar is-expanded" data-node=".AppSidebar:{}:container" data-element="app-sidebar" data-config='{"remember" : true, "name" : "app-sidebar"}'>
     <div class="inner">
         <div class="remove-zone" data-node="removeZone">
             <div class="title">Drop here to remove</div>
@@ -638,8 +642,39 @@
 
 <!-- [* ******* TEMPLATE START ******* *] -->
 
-<div class="tpl__container" data-node="Template.container">
-    <div class="app__area-main" data-com-draganddrop="area"></div>
+<div class="tpl__container" data-node="AppTemplate.container" data-element="app-template">
+
+    <!-- [* *** HEADER START *** *] -->
+
+    <div class="tpl__header" data-node="AppTemplate.header">
+        <div class="tpl__header__inner">
+            <div class="app__area-header main" data-com-draganddrop="area"></div>
+        </div>
+    </div>
+
+    <!-- [* *** HEADER END *** *] -->
+
+    <!-- [* *** CONTENT START *** *] -->
+
+    <div class="tpl__content" data-node="AppTemplate.content">
+        <div class="tpl__content__inner">
+            <div class="app__area-main" data-com-draganddrop="area"></div>
+        </div>
+    </div>
+
+    <!-- [* *** CONTENT END *** *] -->
+
+
+    <!-- [* *** FOOTER START *** *] -->
+
+    <div class="tpl__footer" data-node="AppTemplate.footer">
+        <div class="tpl__footer__inner">
+            <div class="app__area-footer main" data-com-draganddrop="area"></div>
+        </div>
+    </div>
+
+    <!-- [* *** FOOTER END *** *] -->
+
 </div>
 
 <!-- [* ******* TEMPLATE END ******* *] -->
