@@ -14,7 +14,7 @@ cm.define('App.LoginBox', {
             'hideOnReClick' : true,
             'preventClickEvent' : true,
             'adaptiveX' : true,
-            'adaptiveY' : false,
+            'adaptiveY' : true,
             'left' : '(targetWidth - selfWidth) / 2',
             'top' : 'targetHeight + 8',
             'className' : 'app-pt__box-login__tooltip'
