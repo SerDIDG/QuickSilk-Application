@@ -1,12 +1,6 @@
 /* ******* MODULES: SLIDER *******  */
 
 .app-mod__slider {
-    .com__slider:last-child,
-    .com__slider-layout:last-child,
-    .pt__toolbar:last-child {
-        margin: 0;
-    }
-
     &.is-editable {
         .com__slider {
             > .inner {
@@ -24,13 +18,4 @@
             }
         }
     }
-}
-
-.app-mod__slider__featured {
-    height: 110px;
-    width: 110px;
-    position: absolute;
-    z-index: 2;
-    background: url("@{AppPath-Images}/modules/slider/featured.png") 0 0 no-repeat;
-    .mx__position(-1px, -1px, auto, auto);
 }
