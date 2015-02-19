@@ -36,9 +36,14 @@
     position: relative;
 }
 
-.tpl__container__size (@value) when (@value = wide) {
-    .tpl__header,
-    .tpl__footer {
+.tpl__header__size (@value) when (@value = wide) {
+    .tpl__header {
+        padding: @AppTpl-Block-Padding;
+    }
+}
+
+.tpl__header__size (@value) when (@value = box) {
+    .tpl__header {
         padding: @AppTpl-Block-Padding;
     }
 
@@ -46,11 +51,28 @@
         max-width: @AppTpl-Header-Width;
         .mx__align(@AppTpl-Header-Align);
     }
+}
+
+.tpl__footer__size (@value) when (@value = wide) {
+    .tpl__footer {
+        padding: @AppTpl-Block-Padding;
+    }
+}
+
+.tpl__footer__size (@value) when (@value = box) {
+    .tpl__header {
+        padding: @AppTpl-Block-Padding;
+    }
 
     .tpl__footer__inner {
         max-width: @AppTpl-Footer-Width;
         .mx__align(@AppTpl-Footer-Align);
     }
+}
+
+.tpl__container__size (@value) when (@value = wide) {
+    .tpl__header__size(@AppTpl-Header-Size);
+    .tpl__footer__size(@AppTpl-Footer-Size);
 }
 
 .tpl__container__size (@value) when (@value = box) {
