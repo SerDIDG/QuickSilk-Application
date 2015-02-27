@@ -5,7 +5,6 @@
     position: fixed;
     z-index: 102;
     overflow: hidden;
-    background: @AppLT-Sidebar-Background;
     box-shadow: @CmUI-Shadow-Right;
     .mx__transition(transform, @AppLT-Sidebar-Duration);
     .mx__position(0, auto, 0, 0);
@@ -19,7 +18,6 @@
             .cm__font--ui-h1;
             padding: 6px @AppLT-Sidebar-Padding;
             position: absolute;
-            background: @AppLT-Sidebar-Background;
             text-align: left;
             .mx__position(0, 0, auto, 0);
             .mx__user-select(none);
@@ -29,6 +27,11 @@
                 cursor: pointer;
                 .mx__transition(transform, @AppLT-Sidebar-Duration);
                 .mx__position(14px, @CmIndent-XSmall, auto, auto);
+
+                &.default {
+                    .cm__size__medium;
+                    .icon.linked;
+                }
             }
         }
 
@@ -36,7 +39,6 @@
             .cm__scroll-y;
             padding: @AppLT-Sidebar-Padding;
             position: absolute;
-            background: @AppLT-Sidebar-Background;
             .mx__position(50px, 0, 0, 0);
             .mx__transition(opacity, @AppLT-Sidebar-Duration);
         }
@@ -123,46 +125,50 @@
     }
 }
 
-/* *** WIDGETS CATEGORY *** */
+// /* *** MIXINS *** */
 
-.app-pt__widgets-category {
-    margin: 10px 0 0 0;
+.app-lt__sidebar__theme (@theme) {
+    .app-lt__sidebar__background(~"@{AppLT-Sidebar-Theme@{theme}-Background}");
+    .app-lt__sidebar__color(~"@{AppLT-Sidebar-Theme@{theme}-Color}");
+    .app-lt__sidebar__title-icon(~"@{AppLT-Sidebar-Theme@{theme}-TitleIcon}");
 
-    &:first-child {
-        margin: 0;
+    .app-lt__sidebar {
+        .com__togglebox__title-theme(@theme);
+        .app-pt__widget-dummy__theme(@theme);
     }
+}
 
-    > dd {
-        margin: 0 -@AppPT-Widget-Dummy-Padding;
-        font-size: 0;
-        background: @AppLT-Sidebar-Background;  /* Fix blinked blocks on collapse in Firefox. */
+.app-lt__sidebar__background (@background) {
+    .app-lt__sidebar {
+        background-color: @background;
+        // Fix of blinking background in Firefox
+        .app-pt__widgets-category__background(@background);
     }
+}
 
-    .app-pt__widget-container {
-        width: @AppLT-Sidebar-Dummy-Width;
-        margin: 0 !important;
-        display: inline-block;
-        vertical-align: top;
-    }
-
-    // Styles for colorized plates
-    /*
-    @length: length(@AppLT-Sidebar-Dummy-Colors);
-
-    .loop(@counter) when (@counter > 0) {
-        .loop((@counter - 1));
-
-        @color: extract(@AppLT-Sidebar-Dummy-Colors, @counter);
-        @name: e('@{length}n -') @length - @counter;
-
-        &:nth-child(@{name}) {
-            .app-pt__widget__color(@color, lighten(@color, 10%), @color);
+.app-lt__sidebar__color (@color) {
+    .app-lt__sidebar {
+        > .inner {
+            > .title {
+                color: @color;
+            }
         }
     }
-
-    .loop(@length);
-    */
 }
+
+.app-lt__sidebar__title-icon (@image) {
+    .app-lt__sidebar {
+        > .inner {
+            > .title {
+                .icon.default {
+                    background-image: url("@{image}");
+                }
+            }
+        }
+    }
+}
+
+.app-lt__sidebar__theme(@AppLT-Sidebar-Theme);
 
 /* ******* COMPONENT: SIDEBAR: ADAPTIVE ******* */
 

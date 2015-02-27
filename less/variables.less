@@ -83,13 +83,39 @@
 // /* ******* WIDGETS ******* */
 
 @AppPT-Widget-Indent: @CmIndent-Medium;
-@AppPT-Widget-Dummy-Background: @CmColor-Secondary-LightHover;
-@AppPT-Widget-Dummy-HoverBackground: @CmColor-Primary-LightActive;
-@AppPT-Widget-Dummy-ActiveBackground: @CmColor-Primary-LightActive;
-@AppPT-Widget-Dummy-BorderColor: @CmColor-Border;
-@AppPT-Widget-Dummy-BorderRadius: @CmBorder-Radius;
-@AppPT-Widget-Dummy-BorderRadiusInner: 0px;
-@AppPT-Widget-Dummy-Padding: 2px;
+
+@AppPT-WidgetLoader-Background: @CmColor-Secondary-LightHover;
+@AppPT-WidgetLoader-Border: @CmBorder-Default;
+@AppPT-WidgetLoader-BorderRadius: @CmBorder-Radius;
+
+@AppPT-WidgetCategory-Background: transparent;
+
+@AppPT-WidgetDummy-Theme: Dark;
+@AppPT-WidgetDummy-Width: 94px;
+@AppPT-WidgetDummy-Padding: 2px;
+@AppPT-WidgetDummy-BorderRadius: @CmBorder-Radius;
+@AppPT-WidgetDummy-IconBorderRadius: 0px;
+@AppPT-WidgetDummy-IconSize: 90px;
+
+@AppPT-WidgetDummy-ThemeDark-ColorNormal: @CmColor-Font-Opposite;
+@AppPT-WidgetDummy-ThemeDark-ColorHover: @CmColor-Font-Opposite;
+@AppPT-WidgetDummy-ThemeDark-ColorActive: @CmColor-Font;
+@AppPT-WidgetDummy-ThemeDark-BackgroundNormal: trannsparent;
+@AppPT-WidgetDummy-ThemeDark-BackgroundHover: trannsparent;
+@AppPT-WidgetDummy-ThemeDark-BackgroundActive: #ffffff;
+@AppPT-WidgetDummy-ThemeDark-IconBackgroundNormal: rgba(255, 255, 255, 0.2);
+@AppPT-WidgetDummy-ThemeDark-IconBackgroundHover: rgba(255, 255, 255, 0.5);
+@AppPT-WidgetDummy-ThemeDark-IconBackgroundActive: @CmColor-Primary-DarkDefault;
+
+@AppPT-WidgetDummy-ThemeLight-ColorNormal: @CmColor-Font;
+@AppPT-WidgetDummy-ThemeLight-ColorHover: @CmColor-Font;
+@AppPT-WidgetDummy-ThemeLight-ColorActive: @CmColor-Font;
+@AppPT-WidgetDummy-ThemeLight-BackgroundNormal: trannsparent;
+@AppPT-WidgetDummy-ThemeLight-BackgroundHover: trannsparent;
+@AppPT-WidgetDummy-ThemeLight-BackgroundActive: #ffffff;
+@AppPT-WidgetDummy-ThemeLight-IconBackgroundNormal: @CmColor-Secondary-LightHover;
+@AppPT-WidgetDummy-ThemeLight-IconBackgroundHover: @CmColor-Primary-LightActive;
+@AppPT-WidgetDummy-ThemeLight-IconBackgroundActive: @CmColor-Primary-LightActive;
 
 // /* ************************************************ */
 // /* ******* LAYOUTS ******* */
@@ -100,7 +126,7 @@
 @AppLT-TopMenu-Height: 40px;
 @AppLT-TopMenu-Duration: 300ms;
 @AppLT-TopMenu-Background: #000000;
-@AppLT-TopMenu-Color: #d6d6d6;
+@AppLT-TopMenu-Color: @CmColor-Font-Opposite;
 @AppLT-TopMenu-FontSize: @CmFont-Base-Size;
 @AppLT-TopMenu-FontWeight: @CmFont-Base-BoldWeight;
 @AppLT-TopMenu-ItemBorder: @CmBorder-Width solid rgba(255,255,255,0.4);
@@ -113,9 +139,14 @@
 @AppLT-Sidebar-WidthCollapsed: 24px + (@AppLT-Sidebar-Padding * 2);
 @AppLT-Sidebar-Padding: @CmIndent-XSmall;
 @AppLT-Sidebar-Duration: 500ms;
-@AppLT-Sidebar-Background: #ffffff;
-@AppLT-Sidebar-Dummy-Width: 94px;
-@AppLT-Sidebar-Dummy-Colors: #c81b1c #f2a603 #ead814 #0dc10d #23ced0 #255dcf #bb2acc;
+
+@AppLT-Sidebar-Theme: 'Dark';
+@AppLT-Sidebar-ThemeDark-Color: @CmColor-Font-Opposite;
+@AppLT-Sidebar-ThemeDark-Background: @CmColor-Primary-DarkDefault;
+@AppLT-Sidebar-ThemeDark-TitleIcon: "@{CmPath-Images}/icons/medium/ui-arrow-white-left.png";
+@AppLT-Sidebar-ThemeLight-Color: @CmColor-Font;
+@AppLT-Sidebar-ThemeLight-Background: #ffffff;
+@AppLT-Sidebar-ThemeLight-TitleIcon: "@{CmPath-Images}/icons/medium/ui-arrow-left.png";
 
 // /* ******* TEMPLATES ******* */
 
