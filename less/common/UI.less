@@ -190,6 +190,12 @@ html {
         }
     }
 
+    &.is-sidebar--collapsed {
+        .app-pt__widget__controls {
+            display: none;
+        }
+    }
+
     &.is-sidebar--collapsed,
     &:not(.is-sidebar--expanded):not(.is-sidebar--collapsed) {
         .app__area-footer,

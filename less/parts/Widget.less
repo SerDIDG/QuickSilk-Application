@@ -13,10 +13,6 @@
         margin: 0;
         .mx__transition(opacity, @CmUI-Transition-Duration);
 
-        .app-pt__widget__controls {
-            display: none;
-        }
-
         &.is-hidden {
             display: none;
         }
@@ -27,10 +23,6 @@
 
         &.is-editable {
             .pt__editable__bundle > .editable;
-
-            .app-pt__widget__controls {
-                display: block;
-            }
         }
 
         &.is-hide {
@@ -278,3 +270,13 @@
 
 .app-pt__widget-dummy__theme(@AppPT-WidgetDummy-Theme);
 .app-pt__widgets-category__background(@AppPT-WidgetCategory-Background);
+
+/* ******* PARTS: WIDGET: PRINT ******* */
+
+@media print {
+
+    .app-pt__widget__controls {
+        display: none;
+    }
+
+}
