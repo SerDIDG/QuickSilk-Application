@@ -12,10 +12,6 @@
 .tpl__content,
 .tpl__footer {
     position: relative;
-
-    &:hover {
-        z-index: 10;
-    }
 }
 
 .tpl__header {
@@ -174,12 +170,6 @@ html {
             margin-left: @AppLT-Sidebar-Width;
             .mx__transition(margin, @AppLT-Sidebar-Duration);
         }
-
-        &.is-sidebar--collapsed {
-            .tpl__container {
-                margin-left: @AppLT-Sidebar-WidthCollapsed;
-            }
-        }
     }
 
     &.is-sidebar--expanded {
@@ -188,11 +178,23 @@ html {
                 margin: 0 0 @AppPT-Widget-Indent !important;
             }
         }
+
+        .tpl__header,
+        .tpl__content,
+        .tpl__footer {
+            &:hover {
+                z-index: 10;
+            }
+        }
     }
 
     &.is-sidebar--collapsed {
         .app-pt__widget__controls {
             display: none;
+        }
+
+        .tpl__container {
+            margin-left: @AppLT-Sidebar-WidthCollapsed;
         }
     }
 
