@@ -89,7 +89,25 @@
 
 .tpl__container__size(@AppTpl-Container-Size);
 
-/* *** TEMPLATE MIXINS *** */
+// /* *** TEMPLATE MIXINS *** */
+
+.tpl__header__flex-area (@area: main) {
+    .display-flex;
+    .mx__flex-direction(row);
+
+    .tpl__header__inner {
+        .display-flex;
+        .mx__flex(1 1 auto);
+
+        .app__area-header {
+            &.@{area} {
+                max-width: 100%;
+                .mx__flex(1 1 auto);
+                .mx__box-sizing(border-box);
+            }
+        }
+    }
+}
 
 .tpl__content__flex-area () {
     .display-flex;
@@ -103,6 +121,24 @@
             max-width: 100%;
             .mx__flex(1 1 auto);
             .mx__box-sizing(border-box);
+        }
+    }
+}
+
+.tpl__footer__flex-area (@area: main) {
+    .display-flex;
+    .mx__flex-direction(row);
+
+    .tpl__footer__inner {
+        .display-flex;
+        .mx__flex(1 1 auto);
+
+        .app__area-footer {
+            &.@{area} {
+                max-width: 100%;
+                .mx__flex(1 1 auto);
+                .mx__box-sizing(border-box);
+            }
         }
     }
 }
@@ -124,24 +160,15 @@
 
 .app__area-main {
     .clearfix;
-    min-height: 256px;
 }
 
 .app__area-footer,
 .app__area-header {
     .clearfix;
-    min-width: 200px;
-    min-height: @CmIndent-Medium * 2;
-    position: absolute;
     z-index: 1;
 
     &:not(.main) {
         padding: 0;
-    }
-
-    &.main {
-        min-width: 0;
-        position: relative;
     }
 
     &:hover {
@@ -174,6 +201,19 @@ html {
     }
 
     &.is-sidebar--expanded {
+        .app__area-main {
+            min-height: @AppUI-Area-ContentHeight;
+        }
+
+        .app__area-footer,
+        .app__area-header {
+            min-height: @AppUI-Area-Height;
+
+            &:not(.main) {
+                min-width: @AppUI-Area-Width;
+            }
+        }
+
         .pt__dnd-area.is-available {
             .app-pt__widget-container {
                 margin: 0 0 @AppPT-Widget-Indent !important;

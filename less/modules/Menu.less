@@ -48,12 +48,13 @@
         background: @CmColor-Secondary-LightHover;
         position: relative;
 
-        select {
+        .select {
             position: relative;
             z-index: 2;
             border: none;
             border-radius: 0;
             background: transparent;
+            cursor: pointer;
             .mx__appearance(none);
         }
     }
@@ -61,14 +62,14 @@
     .menu-button {
         .icon.linked;
         .icon.medium.menu;
-        width: @CmForm-FieldHeight;
-        height: @CmForm-FieldHeight;
         position: absolute;
         z-index: 1;
         background-position: 50% 50%;
         background-repeat: no-repeat;
         .mx__position(0, 0, 0, auto);
     }
+
+    .app-mod__menu__select-size(@CmForm-FieldHeight);
 
     &.vertical {
         ul {
@@ -144,6 +145,39 @@
         .pt__menu-dropdown {
             .pt__menu-dropdown--base.pull-right;
         }
+    }
+
+    &:not(.vertical).pull-justify {
+        > ul {
+            .display-flex;
+            .mx__flex-flow(row wrap);
+
+            > li {
+                max-width: 100%;
+                .mx__flex(1 1 0%);
+
+                > a {
+                    .cm__text-overflow;
+                    text-align: center;
+                }
+            }
+        }
+    }
+}
+
+// /* *** MIXINS *** */
+
+.app-mod__menu__select-size (@size: @CmForm-FieldHeight) {
+    .menu-select {
+        .select {
+            height: @size;
+            padding-right: @size;
+        }
+    }
+
+    .menu-button {
+        width: @size;
+        height: @size;
     }
 }
 
