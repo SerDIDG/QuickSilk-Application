@@ -1,5 +1,13 @@
 /* ******* MODULES: BLOG WIDGET ******* */
 
 .app-mod__blog-widget {
+    .blog-widget__item {
+        .pt__box-item__size(@AppMod-BlogWidget-ImageSize);
+    }
 
+    &.is-horizontal {
+        .blog-widget__grid {
+            .pt__grid.is-flexible;
+        }
+    }
 }
