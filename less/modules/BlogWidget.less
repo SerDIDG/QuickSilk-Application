@@ -3,15 +3,28 @@
 .app-mod__blog-widget {
     &.is-vertical {
         .blog-widget__item {
-            .pt__box-item.is-nowrap;
+            .pt__box-item.is-wrap;
             .pt__box-item__size(@AppMod-BlogWidget-ImageSize);
+
+            .pt__image {
+                .pt__image.is-centered;
+            }
         }
     }
 
     &.is-horizontal {
         .blog-widget__grid {
-            .pt__box-item.is-wrap;
             .pt__grid.is-flexible;
+        }
+
+        .blog-widget__item {
+            .pt__box-item.is-wrap;
+            .pt__box-item.is-image-top;
+
+            .pt__image {
+                .pt__image.pull-center;
+                .pt__image.is-adaptive;
+            }
         }
     }
 }
