@@ -123,6 +123,8 @@
             }
         }
     }
+
+    .app-lt__sidebar__theme(@AppLT-Sidebar-Theme);
 }
 
 // /* *** MIXINS *** */
@@ -132,42 +134,34 @@
     .app-lt__sidebar__color(~"@{AppLT-Sidebar-Theme@{theme}-Color}");
     .app-lt__sidebar__title-icon(~"@{AppLT-Sidebar-Theme@{theme}-TitleIcon}");
 
-    .app-lt__sidebar {
-        .com__togglebox__title-theme(@theme);
+    .com__togglebox {
+        .com__togglebox__theme(@theme);
     }
 }
 
 .app-lt__sidebar__background (@background) {
-    .app-lt__sidebar {
-        background-color: @background;
-        // Fix of blinking background in Firefox
-        .app-pt__widgets-category__background(@background);
-    }
+    background-color: @background;
+    // Fix of blinking background in Firefox
+    .app-pt__widgets-category__background(@background);
 }
 
 .app-lt__sidebar__color (@color) {
-    .app-lt__sidebar {
-        > .inner {
-            > .title {
-                color: @color;
-            }
+    > .inner {
+        > .title {
+            color: @color;
         }
     }
 }
 
 .app-lt__sidebar__title-icon (@image) {
-    .app-lt__sidebar {
-        > .inner {
-            > .title {
-                .icon.default {
-                    background-image: url("@{image}");
-                }
+    > .inner {
+        > .title {
+            .icon.default {
+                background-image: url("@{image}");
             }
         }
     }
 }
-
-.app-lt__sidebar__theme(@AppLT-Sidebar-Theme);
 
 /* ******* COMPONENT: SIDEBAR: ADAPTIVE ******* */
 
