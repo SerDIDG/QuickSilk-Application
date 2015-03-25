@@ -103,7 +103,6 @@
             &.@{area} {
                 max-width: 100%;
                 .mx__flex(1 1 auto);
-                .mx__box-sizing(border-box);
             }
         }
     }
@@ -120,7 +119,6 @@
         .app__area-main {
             max-width: 100%;
             .mx__flex(1 1 auto);
-            .mx__box-sizing(border-box);
         }
     }
 }
@@ -137,7 +135,6 @@
             &.@{area} {
                 max-width: 100%;
                 .mx__flex(1 1 auto);
-                .mx__box-sizing(border-box);
             }
         }
     }
@@ -159,7 +156,6 @@
 /* *** AREAS *** */
 
 .app__area-main {
-    .clearfix;
 }
 
 .app__area-footer,
@@ -284,6 +280,17 @@ html {
         }
     }
 
+}
+
+@media only screen and (max-width : @CmScreen-Mobile) {
+
+    html.is-adaptive {
+        .tpl__header__inner,
+        .tpl__content__inner,
+        .tpl__footer__inner {
+            max-width: 100%;
+        }
+    }
 }
 
 @media only screen and (max-width : @CmScreen-MobilePortrait) {

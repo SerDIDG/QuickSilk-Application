@@ -17,14 +17,15 @@
     // /* Quicksilk Logo */
 
     .logo {
-        width: 26px;
-        height: 24px;
+        width: @CmSize-XLarge;
+        height: @AppLT-TopMenu-Height;
         position: relative;
         z-index: 3;
         display: block;
         float: left;
-        margin: ((@AppLT-TopMenu-Height - 24px) / 2) 0 0 @CmIndent-XSmall;
         background-image: url("@{AppPath-Images}/layouts/topmenu/logo.png");
+        background-position: 50% 50%;
+        background-repeat: no-repeat;
         .mx__transition(opacity, @CmUI-Transition-Duration);
 
         &:hover {
@@ -53,9 +54,8 @@
         .mx__position(0,0,0,0);
 
         > .inner {
-            padding: 0 @CmIndent-XSmall;
             position: absolute;
-            .mx__position(0,0,0,0);
+            .mx__position(0, 0, 0, 0);
         }
     }
 
@@ -75,30 +75,6 @@
                 .app__font--topmenu;
                 display: block;
                 text-decoration: none;
-
-                .icon {
-                    margin: 0 @CmIndent-XXSmall 0 0;
-
-                    &.medium {
-                        margin-top: -2px;
-                    }
-                }
-
-                &:hover {
-                    text-decoration: underline;
-
-                    .icon {
-                        opacity: @CmUI-Opacity-Hover;
-                    }
-                }
-            }
-
-            &.active {
-                color: #fff;
-
-                > a {
-                    color: #fff;
-                }
             }
         }
 
@@ -120,14 +96,8 @@
 
 .app-lt__topmenu__dropdown--desktop () {
     .pt__menu-dropdown--base;
-    top: 100%;
-    left: -(@CmIndent-XSmall - 1px);
     border-top: none;
     border-radius: 0 0 @CmBorder-Radius @CmBorder-Radius;
-}
-
-.app-lt__topmenu__dropdown--desktop-right () {
-    .pt__menu-dropdown--base.pull-right;
 }
 
 /* ******* LAYOUTS: TOP MENU: ADAPTIVE *** */
@@ -141,42 +111,38 @@
                 .cm__list-inline;
 
                 > li {
-                    margin: 0 0 0 (@CmIndent-XSmall * 2 + 1px);
+                    margin: 0 0 0 1px;
 
                     > a {
                         .cm__text-overflow;
                         max-width: 256px;
+                        padding: 0 @CmIndent-XSmall;
                         .mx__box-sizing(border-box);
+                        .mx__transition(all, @CmUI-Transition-Duration);
+
+                        &:hover {
+                            .mx__transition(all, @CmUI-Transition-DurationReverse);
+                        }
                     }
 
                     &.has-dropdown {
                         > a {
                             .app-icon.x-small.arrow-white-down;
-                            padding-right: 20px;
-                            background-position: 100% center;
+                            padding-right: @CmIndent-Medium;
+                            background-position: calc(100% - ((@CmSize-Medium - @CmSize-XSmall) / 2)) center;
                             background-repeat: no-repeat;
                         }
                     }
 
-                    &:before {
-                        width: 1px;
-                        height: 16px;
-                        display: block;
-                        position: absolute;
-                        background: @AppLT-TopMenu-Color;
-                        content: '';
-                        .mx__position(12px, auto, auto, -@CmIndent-XSmall);
-                    }
-
                     &:first-child {
                         margin: 0;
-
-                        &:before {
-                            display: none;
-                        }
                     }
 
                     &:hover {
+                        > a {
+                            .mx__background__color(@CmColor-Primary-DarkDefault, @CmFont-Base-Color, @CmFont-Base-ColorOpposite);
+                        }
+
                         .pt__menu-dropdown {
                             .pt__menu-dropdown--active;
                         }
@@ -189,15 +155,11 @@
 
                 &.right {
                     float: right;
-
-                    .pt__menu-dropdown {
-                        .app-lt__topmenu__dropdown--desktop-right;
-                    }
                 }
 
                 &.left {
                     float: left;
-                    margin: 0 0 0 (24px + @CmIndent-XSmall);
+                    margin: 0 0 0 @CmIndent-XLarge;
                 }
             }
 
@@ -215,12 +177,15 @@
                             display: none;
                         }
                     }
-                    
+
                     a {
-                        padding: 0 @CmIndent-XSmall;
+                        padding: 0;
                         font-size: 0;
 
-                        .icon.medium {
+                        .icon {
+                            width: @CmSize-XLarge;
+                            height: @AppLT-TopMenu-Height;
+                            vertical-align: top;
                             margin: 0;
                         }
                     }
@@ -341,6 +306,10 @@
                         .cm__text-overflow;
                         padding: 0 @CmIndent-XSmall;
                         line-height: @AppLT-TopMenu-Height;
+
+                        &:hover {
+                            text-decoration: underline;
+                        }
                     }
 
                     &.has-dropdown {
@@ -356,6 +325,22 @@
                         a {
                             background: @AppLT-TopMenu-ItemBackground;
                             padding-left: @CmIndent-Medium;
+                        }
+                    }
+                }
+            }
+
+            .menu-centered {
+                .menu {
+                    a {
+                        padding: 0 @CmSize-XSmall;
+                    }
+
+                    .icon {
+                        margin: 0 @CmIndent-XXSmall 0 0;
+
+                        &.medium {
+                            margin-top: -2px;
                         }
                     }
                 }

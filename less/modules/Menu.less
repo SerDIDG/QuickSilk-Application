@@ -6,11 +6,14 @@
         .cm__list-inline--base;
 
         > li {
-            margin: 0 0 0 @CmIndent-XSmall;
             position: relative;
             z-index: 1;
 
             &:first-child {
+                margin: 0;
+            }
+
+            &:last-child {
                 margin: 0;
             }
 
@@ -69,84 +72,6 @@
         .mx__position(0, 0, 0, auto);
     }
 
-    .app-mod__menu__select-size(@CmForm-FieldHeight);
-
-    &.vertical {
-        ul {
-            margin: @CmIndent-XSmall 0 0;
-            padding: 0;
-
-            &:first-child {
-                margin: 0;
-            }
-
-            ul {
-                margin-left: @CmIndent-Medium;
-            }
-        }
-
-        li {
-            display: block;
-            margin: @CmIndent-XSmall 0 0;
-
-            &:first-child {
-                margin: 0;
-            }
-        }
-
-        a {
-            display: inline-block;
-            vertical-align: middle;
-            white-space: normal;
-
-            .mx__transition(color, @CmUI-Transition-Duration);
-
-            &:hover {
-                .mx__transition(color, @CmUI-Transition-DurationReverse);
-            }
-        }
-
-        &.pull-right {
-            ul {
-                ul {
-                    margin-left: 0;
-                    margin-right: @CmIndent-Medium;
-                }
-            }
-        }
-
-        &.pull-center {
-            ul {
-                ul {
-                    margin-left: 0;
-                    margin-right: 0;
-                }
-            }
-        }
-    }
-
-    &.pull-left {
-        > ul {
-            text-align: left;
-        }
-    }
-
-    &.pull-center {
-        > ul {
-            text-align: center;
-        }
-    }
-
-    &.pull-right {
-        > ul {
-            text-align: right;
-        }
-
-        .pt__menu-dropdown {
-            .pt__menu-dropdown--base.pull-right;
-        }
-    }
-
     &:not(.vertical).pull-justify {
         > ul {
             .display-flex;
@@ -163,6 +88,44 @@
             }
         }
     }
+
+    &.default {
+        .app-mod__menu__indent(@AppModuleMenu-Default-Indent);
+    }
+
+    &.primary {
+        .app-mod__menu__indent(@AppModuleMenu-Primary-Indent);
+    }
+
+    &.secondary {
+        .app-mod__menu__indent(@AppModuleMenu-Secondary-Indent);
+    }
+
+    &.vertical {
+        ul {
+            .cm__list-clear;
+        }
+
+        li {
+            display: block;
+        }
+
+        a {
+            display: inline-block;
+            vertical-align: top;
+            white-space: normal;
+
+            .mx__transition(color, @CmUI-Transition-Duration);
+
+            &:hover {
+                .mx__transition(color, @CmUI-Transition-DurationReverse);
+            }
+        }
+
+        .app-mod__menu__indent--vertical(@AppModuleMenu-Vertical-Indent, @AppModuleMenu-Vertical-IndentX);
+    }
+
+    .app-mod__menu__select-size(@CmForm-FieldHeight);
 }
 
 // /* *** MIXINS *** */
@@ -178,6 +141,101 @@
     .menu-button {
         width: @size;
         height: @size;
+    }
+}
+
+.app-mod__menu__indent (@indent: @AppModuleMenu-Default-Indent) {
+    &.pull-left {
+        > ul {
+            text-align: left;
+
+            > li {
+                margin-right: @indent;
+
+                &:last-child {
+                    margin-right: 0;
+                }
+            }
+        }
+    }
+
+    &.pull-center {
+        > ul {
+            text-align: center;
+
+            > li {
+                margin-left: @indent;
+
+                &:first-child {
+                    margin-left: 0;
+                }
+            }
+        }
+    }
+
+    &.pull-right {
+        > ul {
+            text-align: right;
+
+            > li {
+                margin-left: @indent;
+
+                &:first-child {
+                    margin-left: 0;
+                }
+            }
+        }
+    }
+
+    &.pull-justify {
+        >  ul {
+            text-align: left;
+
+            > li {
+                margin-left: @indent;
+
+                &:first-child {
+                    margin-right: 0;
+                }
+            }
+        }
+    }
+}
+
+.app-mod__menu__indent--vertical (@indent: @AppModuleMenu-Default-Indent, @indentX: @AppModuleMenu-Default-Indent) {
+    ul,
+    ul li {
+        margin-top: @indent;
+
+        &:first-child {
+            margin-top: 0;
+        }
+    }
+
+    &.pull-left {
+        ul {
+            text-align: left;
+
+            ul {
+                margin-left: @indentX;
+            }
+        }
+    }
+
+    &.pull-center {
+        ul {
+            text-align: center;
+        }
+    }
+
+    &.pull-right {
+        ul {
+            text-align: right;
+
+            ul {
+                margin-right: @indentX;
+            }
+        }
     }
 }
 
