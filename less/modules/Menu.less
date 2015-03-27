@@ -91,14 +91,17 @@
 
     &.default {
         .app-mod__menu__indent(@AppModuleMenu-Default-Indent);
+        .app-mod__menu__select-color(@AppModuleMenu-Default-SelectColor);
     }
 
     &.primary {
         .app-mod__menu__indent(@AppModuleMenu-Primary-Indent);
+        .app-mod__menu__select-color(@AppModuleMenu-Primary-SelectColor);
     }
 
     &.secondary {
         .app-mod__menu__indent(@AppModuleMenu-Secondary-Indent);
+        .app-mod__menu__select-color(@AppModuleMenu-Secondary-SelectColor);
     }
 
     &.vertical {
@@ -141,6 +144,19 @@
     .menu-button {
         width: @size;
         height: @size;
+    }
+}
+
+.app-mod__menu__select-color (@color: @AppModuleMenu-Default-SelectColor) {
+    .menu-select {
+        .select {
+            color: @color;
+
+            option,
+            optgroup {
+                color: @color;
+            }
+        }
     }
 }
 
