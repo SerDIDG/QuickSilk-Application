@@ -95,7 +95,7 @@
         .app-mod__menu__select-color(@AppModuleMenu-Default-SelectColor);
 
         &.has-separator {
-            .app-mod__menu--has-separator(@AppModuleMenu-Default-SeparatorWidth, @AppModuleMenu-Default-SeparatorHeight, @AppModuleMenu-Default-Indent);
+            .app-mod__menu--has-separator(@AppModuleMenu-Default-SeparatorWidth, @AppModuleMenu-Default-SeparatorHeight, @AppModuleMenu-Default-SeparatorBackground, @AppModuleMenu-Default-Indent);
         }
     }
 
@@ -105,7 +105,7 @@
         .app-mod__menu__select-color(@AppModuleMenu-Primary-SelectColor);
 
         &.has-separator {
-            .app-mod__menu--has-separator(@AppModuleMenu-Primary-SeparatorWidth, @AppModuleMenu-Primary-SeparatorHeight, @AppModuleMenu-Primary-Indent);
+            .app-mod__menu--has-separator(@AppModuleMenu-Primary-SeparatorWidth, @AppModuleMenu-Primary-SeparatorHeight, @AppModuleMenu-Primary-SeparatorBackground, @AppModuleMenu-Primary-Indent);
         }
     }
 
@@ -115,7 +115,7 @@
         .app-mod__menu__select-color(@AppModuleMenu-Secondary-SelectColor);
 
         &.has-separator {
-            .app-mod__menu--has-separator(@AppModuleMenu-Secondary-SeparatorWidth, @AppModuleMenu-Secondary-SeparatorHeight, @AppModuleMenu-Secondary-Indent);
+            .app-mod__menu--has-separator(@AppModuleMenu-Secondary-SeparatorWidth, @AppModuleMenu-Secondary-SeparatorHeight, @AppModuleMenu-Secondary-SeparatorBackground, @AppModuleMenu-Secondary-Indent);
         }
     }
 
@@ -268,7 +268,11 @@
     }
 }
 
-.app-mod__menu--has-separator (@separator-width, @separator-height, @item-indent: @AppModuleMenu-Default-Indent) {
+.app-mod__menu--has-separator__separator () {
+    background-color: @CmColor-Border;
+}
+
+.app-mod__menu--has-separator (@separator-width, @separator-height, @separator-background, @item-indent) {
     > ul {
         > li {
             &:after {
@@ -278,9 +282,8 @@
                 display: block;
                 position: absolute;
                 content: '';
+                background: @separator-background;
                 .mx__position(0, auto, 0, auto);
-
-                .app-mod__menu--has-separator__separator();
             }
         }
     }
@@ -318,10 +321,6 @@
             }
         }
     }
-}
-
-.app-mod__menu--has-separator__separator () {
-    background-color: @CmColor-Border;
 }
 
 /* ******* MODULES: MENU: ADAPTIVE ******* */
