@@ -279,6 +279,8 @@
                 position: absolute;
                 content: '';
                 .mx__position(0, auto, 0, auto);
+
+                .app-mod__menu--has-separator__separator();
             }
         }
     }
@@ -316,18 +318,10 @@
             }
         }
     }
-
-    .app-mod__menu--has-separator__separator();
 }
 
 .app-mod__menu--has-separator__separator () {
-    > ul {
-        > li {
-            &:after {
-                background-color: @CmColor-Border;
-            }
-        }
-    }
+    background-color: @CmColor-Border;
 }
 
 /* ******* MODULES: MENU: ADAPTIVE ******* */
