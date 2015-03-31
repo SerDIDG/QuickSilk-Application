@@ -268,10 +268,6 @@
     }
 }
 
-.app-mod__menu--has-separator__separator () {
-    background-color: @CmColor-Border;
-}
-
 .app-mod__menu--has-separator (@separator-width, @separator-height, @separator-background, @item-indent) {
     > ul {
         > li {
@@ -282,7 +278,6 @@
                 display: block;
                 position: absolute;
                 content: '';
-                background: @separator-background;
                 .mx__position(0, auto, 0, auto);
             }
         }
@@ -318,6 +313,18 @@
                 &:after {
                     left: floor(-(@item-indent + @separator-width) / 2);
                 }
+            }
+        }
+    }
+
+    .app-mod__menu__separator-background(@separator-background);
+}
+
+.app-mod__menu__separator-background (@background) {
+    > ul {
+        > li {
+            &:after {
+                background: @background;
             }
         }
     }
