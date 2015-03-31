@@ -91,17 +91,32 @@
 
     &.default {
         .app-mod__menu__indent(@AppModuleMenu-Default-Indent);
+        .app-mod__menu__select-size(@AppModuleMenu-Default-SelectSize);
         .app-mod__menu__select-color(@AppModuleMenu-Default-SelectColor);
+
+        &.has-separator {
+            .app-mod__menu--has-separator(1px, @CmSize-XSmall, @AppModuleMenu-Default-Indent);
+        }
     }
 
     &.primary {
         .app-mod__menu__indent(@AppModuleMenu-Primary-Indent);
+        .app-mod__menu__select-size(@AppModuleMenu-Primary-SelectSize);
         .app-mod__menu__select-color(@AppModuleMenu-Primary-SelectColor);
+
+        &.has-separator {
+            .app-mod__menu--has-separator(1px, @CmSize-XSmall, @AppModuleMenu-Primary-Indent);
+        }
     }
 
     &.secondary {
         .app-mod__menu__indent(@AppModuleMenu-Secondary-Indent);
+        .app-mod__menu__select-size(@AppModuleMenu-Secondary-SelectSize);
         .app-mod__menu__select-color(@AppModuleMenu-Secondary-SelectColor);
+
+        &.has-separator {
+            .app-mod__menu--has-separator(1px, @CmSize-XSmall, @AppModuleMenu-Secondary-Indent);
+        }
     }
 
     &.vertical {
@@ -127,8 +142,6 @@
 
         .app-mod__menu__indent--vertical(@AppModuleMenu-Vertical-Indent, @AppModuleMenu-Vertical-ChildIndent);
     }
-
-    .app-mod__menu__select-size(@CmForm-FieldHeight);
 }
 
 // /* *** MIXINS *** */
@@ -250,6 +263,68 @@
 
             ul {
                 margin-right: @indentX;
+            }
+        }
+    }
+}
+
+.app-mod__menu--has-separator (@separator-width, @separator-height, @item-indent: @AppModuleMenu-Default-Indent) {
+    > ul {
+        > li {
+            &:after {
+                width: @separator-width;
+                height: @separator-height;
+                margin: auto;
+                display: block;
+                position: absolute;
+                content: '';
+                .mx__position(0, auto, 0, auto);
+            }
+        }
+    }
+
+    &.pull-left,
+    &.pull-center,
+    &.pull-justify {
+        > ul {
+            > li {
+                &:last-child {
+                    &:after {
+                        display: none;
+                    }
+                }
+
+                &:after {
+                    right: floor(-(@item-indent + @separator-width) / 2);
+                }
+            }
+        }
+    }
+
+    &.pull-right {
+        > ul {
+            > li {
+                &:first-child {
+                    &:after {
+                        display: none;
+                    }
+                }
+
+                &:after {
+                    left: floor(-(@item-indent + @separator-width) / 2);
+                }
+            }
+        }
+    }
+
+    .app-mod__menu--has-separator__separator();
+}
+
+.app-mod__menu--has-separator__separator () {
+    > ul {
+        > li {
+            &:after {
+                background-color: @CmColor-Border;
             }
         }
     }
