@@ -90,32 +90,32 @@
     }
 
     &.default {
-        .app-mod__menu__indent(@AppModuleMenu-Default-Indent);
-        .app-mod__menu__select-size(@AppModuleMenu-Default-SelectSize);
-        .app-mod__menu__select-color(@AppModuleMenu-Default-SelectColor);
+        .app-mod__menu__indent(@AppMod-Menu-Default-Indent);
+        .app-mod__menu__select-size(@AppMod-Menu-Default-SelectSize);
+        .app-mod__menu__select-color(@AppMod-Menu-Default-SelectColor);
 
         &.has-separator {
-            .app-mod__menu--has-separator(@AppModuleMenu-Default-SeparatorWidth, @AppModuleMenu-Default-SeparatorHeight, @AppModuleMenu-Default-SeparatorBackground, @AppModuleMenu-Default-Indent);
+            .app-mod__menu--has-separator(@AppMod-Menu-Default-SeparatorWidth, @AppMod-Menu-Default-SeparatorHeight, @AppMod-Menu-Default-SeparatorBackground, @AppMod-Menu-Default-Indent);
         }
     }
 
     &.primary {
-        .app-mod__menu__indent(@AppModuleMenu-Primary-Indent);
-        .app-mod__menu__select-size(@AppModuleMenu-Primary-SelectSize);
-        .app-mod__menu__select-color(@AppModuleMenu-Primary-SelectColor);
+        .app-mod__menu__indent(@AppMod-Menu-Primary-Indent);
+        .app-mod__menu__select-size(@AppMod-Menu-Primary-SelectSize);
+        .app-mod__menu__select-color(@AppMod-Menu-Primary-SelectColor);
 
         &.has-separator {
-            .app-mod__menu--has-separator(@AppModuleMenu-Primary-SeparatorWidth, @AppModuleMenu-Primary-SeparatorHeight, @AppModuleMenu-Primary-SeparatorBackground, @AppModuleMenu-Primary-Indent);
+            .app-mod__menu--has-separator(@AppMod-Menu-Primary-SeparatorWidth, @AppMod-Menu-Primary-SeparatorHeight, @AppMod-Menu-Primary-SeparatorBackground, @AppMod-Menu-Primary-Indent);
         }
     }
 
     &.secondary {
-        .app-mod__menu__indent(@AppModuleMenu-Secondary-Indent);
-        .app-mod__menu__select-size(@AppModuleMenu-Secondary-SelectSize);
-        .app-mod__menu__select-color(@AppModuleMenu-Secondary-SelectColor);
+        .app-mod__menu__indent(@AppMod-Menu-Secondary-Indent);
+        .app-mod__menu__select-size(@AppMod-Menu-Secondary-SelectSize);
+        .app-mod__menu__select-color(@AppMod-Menu-Secondary-SelectColor);
 
         &.has-separator {
-            .app-mod__menu--has-separator(@AppModuleMenu-Secondary-SeparatorWidth, @AppModuleMenu-Secondary-SeparatorHeight, @AppModuleMenu-Secondary-SeparatorBackground, @AppModuleMenu-Secondary-Indent);
+            .app-mod__menu--has-separator(@AppMod-Menu-Secondary-SeparatorWidth, @AppMod-Menu-Secondary-SeparatorHeight, @AppMod-Menu-Secondary-SeparatorBackground, @AppMod-Menu-Secondary-Indent);
         }
     }
 
@@ -140,7 +140,7 @@
             }
         }
 
-        .app-mod__menu__indent--vertical(@AppModuleMenu-Vertical-Indent, @AppModuleMenu-Vertical-ChildIndent);
+        .app-mod__menu__indent--vertical(@AppMod-Menu-Vertical-Indent, @AppMod-Menu-Vertical-ChildIndent);
     }
 }
 
@@ -160,7 +160,7 @@
     }
 }
 
-.app-mod__menu__select-color (@color: @AppModuleMenu-Default-SelectColor) {
+.app-mod__menu__select-color (@color: @AppMod-Menu-Default-SelectColor) {
     .menu-select {
         .select {
             color: @color;
@@ -173,7 +173,7 @@
     }
 }
 
-.app-mod__menu__indent (@indent: @AppModuleMenu-Default-Indent) {
+.app-mod__menu__indent (@indent: @AppMod-Menu-Default-Indent) {
     &.pull-left {
         > ul {
             text-align: left;
@@ -231,7 +231,7 @@
     }
 }
 
-.app-mod__menu__indent--vertical (@indent: @AppModuleMenu-Default-Indent, @indentX: @AppModuleMenu-Default-Indent) {
+.app-mod__menu__indent--vertical (@indent: @AppMod-Menu-Default-Indent, @indentX: @AppMod-Menu-Default-Indent) {
     ul,
     ul li {
         margin-top: @indent;

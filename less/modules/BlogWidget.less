@@ -9,6 +9,10 @@
             .pt__image {
                 .pt__image.is-centered;
             }
+
+            .descr {
+                .app-mod__blog-widget__descr-lines(@AppMod-BlogWidget-Vertical-DescrLines);
+            }
         }
     }
 
@@ -25,6 +29,22 @@
                 .pt__image.pull-center;
                 .pt__image.is-adaptive;
             }
+
+            .descr {
+                .app-mod__blog-widget__descr-lines(@AppMod-BlogWidget-Horizontal-DescrLines);
+            }
         }
     }
+}
+
+// /* *** MIXINS *** */
+
+.app-mod__blog-widget__descr-lines (@count) when (@count > 0) {
+    height: @count * @CmFont-Base-LineHeight;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+
+.app-mod__blog-widget__descr-lines (@count) when (@count = 1) {
+    white-space: nowrap;
 }

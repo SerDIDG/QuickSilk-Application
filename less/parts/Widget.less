@@ -199,7 +199,7 @@
         .icon {
             background-image: url("@{AppPath-Images}/parts/widget/@{theme}/default.png");
 
-            .for(blogcontent blogblock blogcalendar blogarchive blogcategories blogroll comment events latestevents eventscalendar filegridlist filegridlistwidget forum forum_build googlemapblock imagegallery memberdirectory memberwidget slider socialmedia socialmedia_share socialmedia_rating twitter videogallery content menu search logo zone workingarea column divider spacer image registration login tabs); .-each(@name) {
+            .for(blogcontent blogblock blogcalendar blogarchive blogcategories blogroll googlemap comment events latestevents eventscalendar filegridlist filegridlistwidget forum forum_build googlemapblock imagegallery memberdirectory memberwidget slider socialmedia socialmedia_share socialmedia_rating twitter videogallery content menu search logo zone workingarea column divider spacer image registration login tabs); .-each(@name) {
                 &.module-@{name} {
                     background-image: url("@{AppPath-Images}/parts/widget/@{theme}/@{name}.png");
                 }

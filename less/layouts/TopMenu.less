@@ -72,8 +72,9 @@
             white-space: nowrap;
 
             > a {
-                .app__font--topmenu;
+                .cm__font--inherit;
                 display: block;
+                position: relative;
                 text-decoration: none;
             }
         }
@@ -117,6 +118,7 @@
                         .cm__text-overflow;
                         max-width: 256px;
                         padding: 0 @CmIndent-XSmall;
+                        z-index: 2;
                         .mx__box-sizing(border-box);
                         .mx__transition(all, @CmUI-Transition-Duration);
 
@@ -151,6 +153,7 @@
 
                 .pt__menu-dropdown {
                     .app-lt__topmenu__dropdown--desktop;
+                    z-index: 1;
                 }
 
                 &.right {
