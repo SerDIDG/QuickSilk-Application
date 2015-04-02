@@ -11,7 +11,10 @@
             }
 
             .descr {
-                .app-mod__blog-widget__descr-lines(@AppMod-BlogWidget-Vertical-DescrLines);
+                &.is-short {
+                    .app-mod__blog-widget__descr-lines(@AppMod-BlogWidget-Vertical-DescrLines);
+                }
+
             }
         }
     }
@@ -31,7 +34,9 @@
             }
 
             .descr {
-                .app-mod__blog-widget__descr-lines(@AppMod-BlogWidget-Horizontal-DescrLines);
+                &.is-short {
+                    .app-mod__blog-widget__descr-lines(@AppMod-BlogWidget-Horizontal-DescrLines);
+                }
             }
         }
     }
@@ -40,11 +45,7 @@
 // /* *** MIXINS *** */
 
 .app-mod__blog-widget__descr-lines (@count) when (@count > 0) {
+    .cm__text-wrap;
     height: @count * @CmFont-Base-LineHeight;
-    text-overflow: ellipsis;
     overflow: hidden;
-}
-
-.app-mod__blog-widget__descr-lines (@count) when (@count = 1) {
-    white-space: nowrap;
 }
