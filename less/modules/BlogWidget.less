@@ -1,42 +1,12 @@
 /* ******* MODULES: BLOG WIDGET ******* */
 
 .app-mod__blog-widget {
-    &.is-vertical {
-        .blog-widget__item {
-            .pt__box-item.is-wrap;
-            .pt__box-item__size(@AppMod-BlogWidget-ImageSize);
+    .blog-widget__item {
+        .pt__box-item__size(@AppMod-BlogWidget-ImageSize);
 
-            .pt__image {
-                .pt__image.is-centered;
-            }
-
-            .descr {
-                &.is-short {
-                    .app-mod__blog-widget__descr-lines(@AppMod-BlogWidget-Vertical-DescrLines);
-                }
-
-            }
-        }
-    }
-
-    &.is-horizontal {
-        .blog-widget__grid {
-            .pt__grid.is-flexible;
-        }
-
-        .blog-widget__item {
-            .pt__box-item.is-wrap;
-            .pt__box-item.is-image-top;
-
-            .pt__image {
-                .pt__image.pull-center;
-                .pt__image.is-adaptive;
-            }
-
-            .descr {
-                &.is-short {
-                    .app-mod__blog-widget__descr-lines(@AppMod-BlogWidget-Horizontal-DescrLines);
-                }
+        .descr {
+            &.is-short {
+                .app-mod__blog-widget__descr-lines(@AppMod-BlogWidget-Vertical-DescrLines);
             }
         }
     }
