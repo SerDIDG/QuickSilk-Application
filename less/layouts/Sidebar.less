@@ -1,48 +1,149 @@
 /* ******* LAYOUTS: SIDEBAR ******* */
 
 .app-lt__sidebar {
-    width: @AppLT-Sidebar-Width;
+    width: @AppLT-Sidebar-WidthCollapsed;
     position: fixed;
     z-index: 102;
     overflow: hidden;
     box-shadow: @CmUI-Shadow-Right;
-    .mx__transition(transform, @AppLT-Sidebar-Duration);
     .mx__position(0, auto, 0, 0);
     .mx__backface-visibility(hidden);
+    .mx__transition(width, @AppLT-Sidebar-Duration);
 
-    > .inner {
+    .sidebar__menu {
+        width: @AppLT-Sidebar-Menu-Width;
         position: absolute;
-        .mx__position(0, 0, 0, 0);
+        z-index: 2;
+        padding: @CmIndent-XXSmall 0;
+        background: @AppLT-Sidebar-Menu-Background;
+        .mx__position(0, auto, 0, 0);
 
-        > .title {
-            .cm__font--ui-h1;
-            padding: 6px @AppLT-Sidebar-Padding;
-            position: absolute;
-            text-align: left;
-            .mx__position(0, 0, auto, 0);
-            .mx__user-select(none);
+        > ul {
+            .cm__list-clear;
 
-            .icon {
-                position: absolute;
-                cursor: pointer;
-                .mx__transition(transform, @AppLT-Sidebar-Duration);
-                .mx__position(14px, @CmIndent-XSmall, auto, auto);
+            > li {
+                margin: @CmIndent-XXXSmall 0 0 0;
 
-                &.default {
-                    .cm__size__medium;
-                    .icon.linked;
+                &:first-child {
+                    margin: 0;
+                }
+
+                > a {
+                    display: block;
+                    height: @AppLT-Sidebar-Menu-Width;
+                    .mx__transition(background, @CmUI-Transition-Duration);
+
+                    &:hover {
+                        background-color: @CmColor-Primary-DarkHover;
+                        .mx__transition(background, @CmUI-Transition-DurationReverse);
+                    }
                 }
             }
         }
+    }
 
-        > .descr {
-            .cm__scroll-y;
-            padding: @AppLT-Sidebar-Padding;
+    .sidebar__content {
+        width: @AppLT-Sidebar-Content-Width;
+        position: absolute;
+        z-index: 1;
+        .mx__position(0, 0, 0, auto);
+
+        > ul {
+            .cm__list-clear;
             position: absolute;
-            .mx__position(50px, 0, 0, 0);
-            .mx__transition(opacity, @AppLT-Sidebar-Duration);
+            .mx__position(0, 0, 0, 0);
+
+            > li {
+                position: absolute;
+                .mx__position(0, 0, 0, 0);
+            }
         }
     }
+
+    .sidebar__remove-zone {
+        position: absolute;
+        z-index: 3;
+        padding: 0;
+        opacity: 0;
+        background: fadeout(@CmColor-Danger-DarkDefault, 50%);
+        border-radius: 0;
+        visibility: hidden;
+        .mx__position(0, 0, 0, @AppLT-Sidebar-Menu-Width);
+
+        .sidebar__content__title {
+            background-color: @CmColor-Danger-DarkDefault;
+            color: @CmFont-UI-ColorOpposite;
+        }
+
+        &.pt__dnd-area {
+            &.is-available {
+                .mx__transition(all, @CmUI-Transition-Duration);
+
+                &.is-highlight {
+                    visibility: visible;
+                    opacity: 1;
+                    background: fadeout(@CmColor-Danger-DarkDefault, 75%);
+
+                    &:before {
+                        display: none;
+                    }
+                }
+
+                &.is-active {
+                    visibility: visible;
+                    opacity: 1;
+                    background: fadeout(@CmColor-Danger-DarkDefault, 50%);
+
+                    &:before {
+                        display: none;
+                    }
+                }
+            }
+        }
+    }
+
+    .sidebar__content__title {
+        .cm__text-nowrap;
+        .cm__font--ui-h1;
+        padding: @AppLT-Sidebar-Title-Indent @AppLT-Sidebar-Content-Indent;
+        position: absolute;
+        text-align: left;
+        .mx__position(0, 0, auto, 0);
+        .mx__user-select(none);
+
+        .icon {
+            position: absolute;
+            cursor: pointer;
+            .mx__transition(transform, @AppLT-Sidebar-Duration);
+            .mx__position(14px, @CmIndent-XSmall, auto, auto);
+
+            &.default {
+                .cm__size__medium;
+                .icon.linked;
+            }
+        }
+    }
+
+    .sidebar__content__descr {
+        .cm__scroll-y;
+        padding: @AppLT-Sidebar-Content-Indent;
+        position: absolute;
+        .mx__position(@AppLT-Sidebar-Title-Height, 0, 0, 0);
+        .mx__transition(opacity, @AppLT-Sidebar-Duration);
+    }
+
+    &.is-collapsed {
+        width: @AppLT-Sidebar-WidthCollapsed;
+    }
+
+    &.is-expanded {
+        width: @AppLT-Sidebar-WidthExpanded;
+    }
+
+    .app-lt__sidebar__theme(@AppLT-Sidebar-Theme);
+}
+
+.app-lt__sidebar--old {
 
     &.is-collapsed {
         @translate: @AppLT-Sidebar-WidthCollapsed - @AppLT-Sidebar-Width;
@@ -80,50 +181,6 @@
 
     // /* *** REMOVE ZONE *** */
 
-    .remove-zone {
-        position: absolute;
-        padding: 0;
-        z-index: 3;
-        opacity: 0;
-        background: fadeout(@CmColor-Danger-DarkDefault, 50%);
-        border-radius: 0;
-        visibility: hidden;
-        .mx__position(0, 0, 0, 0);
-
-        .title {
-            .cm__font--ui-h1;
-            padding: 6px @CmIndent-XSmall;
-            background-color: @CmColor-Danger-DarkDefault;
-            color: @CmFont-UI-ColorOpposite;
-        }
-
-        &.pt__dnd-area {
-            &.is-available {
-                .mx__transition(all, @CmUI-Transition-Duration);
-
-                &.is-highlight {
-                    visibility: visible;
-                    opacity: 1;
-                    background: fadeout(@CmColor-Danger-DarkDefault, 75%);
-
-                    &:before {
-                        display: none;
-                    }
-                }
-
-                &.is-active {
-                    visibility: visible;
-                    opacity: 1;
-                    background: fadeout(@CmColor-Danger-DarkDefault, 50%);
-
-                    &:before {
-                        display: none;
-                    }
-                }
-            }
-        }
-    }
-
     .app-lt__sidebar__theme(@AppLT-Sidebar-Theme);
 }
 
@@ -141,24 +198,33 @@
 
 .app-lt__sidebar__background (@background) {
     background-color: @background;
+
+    .sidebar__menu {
+        > ul {
+            > li {
+                &.active {
+                    > a {
+                        background-color: @background;
+                    }
+                }
+            }
+        }
+    }
+
     // Fix of blinking background in Firefox
     .app-pt__widgets-category__background(@background);
 }
 
 .app-lt__sidebar__color (@color) {
-    > .inner {
-        > .title {
-            color: @color;
-        }
+    .sidebar__content__title {
+        color: @color;
     }
 }
 
 .app-lt__sidebar__title-icon (@image) {
-    > .inner {
-        > .title {
-            .icon.default {
-                background-image: url("@{image}");
-            }
+    .sidebar__content__title {
+        .icon.default {
+            background-image: url("@{image}");
         }
     }
 }

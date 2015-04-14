@@ -144,11 +144,24 @@
 
 // /* ******* SIDEBAR ******* */
 
+@AppLT-Sidebar-Menu-Width: 48px;
+@AppLT-Sidebar-Menu-Background: #000000;
+
+@AppLT-Sidebar-Content-Width: (@AppPT-WidgetDummy-Width * 3) + (@AppLT-Sidebar-Content-Indent * 2);
+@AppLT-Sidebar-Content-Indent: @CmIndent-XSmall;
+
+@AppLT-Sidebar-Title-Indent: @AppLT-Sidebar-Content-Indent / 2;
+@AppLT-Sidebar-Title-Height: (@AppLT-Sidebar-Title-Indent * 2) + @CmFont-UI-H1-LineHeight;
+
+@AppLT-Sidebar-WidthExpanded: @AppLT-Sidebar-Menu-Width + @AppLT-Sidebar-Content-Width;
+@AppLT-Sidebar-WidthCollapsed: @AppLT-Sidebar-Menu-Width;
+@AppLT-Sidebar-Duration: 500ms;
+
 @AppLT-Sidebar-Width: 319px;
 @AppLT-Sidebar-WidthTablet: 225px;
 @AppLT-Sidebar-WidthCollapsed: 24px + (@AppLT-Sidebar-Padding * 2);
 @AppLT-Sidebar-Padding: @CmIndent-XSmall;
-@AppLT-Sidebar-Duration: 500ms;
+
 
 @AppLT-Sidebar-Theme: 'Dark';
 @AppLT-Sidebar-ThemeDark-Color: @CmColor-Font-Opposite;
