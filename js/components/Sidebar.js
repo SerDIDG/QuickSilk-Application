@@ -4,7 +4,8 @@ cm.define('App.Sidebar', {
         'Events',
         'DataConfig',
         'DataNodes',
-        'Storage'
+        'Storage',
+        'Stack'
     ],
     'events' : [
         'onRender',
@@ -13,6 +14,7 @@ cm.define('App.Sidebar', {
     ],
     'params' : {
         'node' : cm.Node('div'),
+        'name' : '',
         'target' : 'document.html',
         'remember' : false
     }
@@ -34,7 +36,10 @@ function(params){
         that.convertEvents(that.params['events']);
         that.getDataNodes(that.params['node']);
         that.getDataConfig(that.params['node']);
+        that.addToStack(that.params['node']);
         render();
+        // Trigger render event
+        that.triggerEvent('onRender');
     };
 
     var render = function(){
@@ -58,8 +63,6 @@ function(params){
         // Add to global arrays
         App.Elements[that._name['full']] = that;
         App.Nodes[that._name['full']] = that.nodes;
-        // Trigger render event
-        that.triggerEvent('onRender');
     };
 
     var toggle = function(){
@@ -117,6 +120,11 @@ function(params){
             that.storageWrite('isExpanded', true);
         }
         that.triggerEvent('onExpand');
+        return that;
+    };
+
+    that.toggle = function(){
+        toggle();
         return that;
     };
 
