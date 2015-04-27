@@ -18,6 +18,7 @@ cm.define('App.HelpTour', {
         'topMenuName' : 'app-topmenu',
         'templateName' : 'app-template',
         'duration' : 500,
+        'autoStart' : false,
         'Com.Overlay' : {
             'container' : 'document.body',
             'autoOpen' : false,
@@ -67,6 +68,7 @@ function(params){
         validateParams();
         render();
         that.triggerEvent('onRender');
+        that.params['autoStart'] && prepare();
     };
 
     var getCSSHelpers = function(){
@@ -109,20 +111,17 @@ function(params){
     var prepare = function(){
         var finder;
         // Get Sidebar
-        finder = cm.find('App.Sidebar', that.params['sidebarName'])[0];
-        if(finder){
+        if(finder = cm.find('App.Sidebar', that.params['sidebarName'])[0]){
             that.components['sidebar'] = finder['class'];
             that.components['overlays']['sidebar'].embed(that.components['sidebar'].getNodes('inner'));
         }
         // Get TopMenu
-        finder = cm.find('App.TopMenu', that.params['topMenuName'])[0];
-        if(finder){
+        if(finder = cm.find('App.TopMenu', that.params['topMenuName'])[0]){
             that.components['topMenu'] = finder['class'];
             that.components['overlays']['topMenu'].embed(that.components['topMenu'].getNodes('inner'));
         }
         // Get TopMenu
-        finder = cm.find('App.Template', that.params['templateName'])[0];
-        if(finder){
+        if(finder = cm.find('App.Template', that.params['templateName'])[0]){
             that.components['template'] = finder['class'];
             that.components['overlays']['template'].embed(that.components['template'].getNodes('container'));
         }
@@ -194,9 +193,13 @@ function(params){
             });
             // Set sidebar
             if(!that.currentScene['sidebar']){
-                that.components['sidebar'].unsetTab().collapse();
+                that.components['sidebar']
+                    .unsetTab()
+                    .collapse();
             }else{
-                that.components['sidebar'].setTab(that.currentScene['sidebar']).expand();
+                that.components['sidebar']
+                    .setTab(that.currentScene['sidebar'])
+                    .expand();
             }
             // Set popup content
             cm.clearNode(that.nodes['popupContent']);
@@ -265,8 +268,20 @@ function(params){
 
     /* ******* MAIN ******* */
 
+    that.start = function(){
+        prepare();
+        return that;
+    };
+
+    that.stop = function(){
+        stop();
+        return that;
+    };
+
     init();
 });
+
+/* ******* HELP TOUR SCENARIO ******* */
 
 App.HelpTourScenario = [{
     'position' : 'center',

@@ -52,8 +52,11 @@
                     }
 
                     &:hover {
+                        .mx__transition(background, @CmUI-Transition-DurationReverse);
+
                         &:after {
                             background-color: @CmColor-Primary-DarkDefault;
+                            .mx__transition(background, @CmUI-Transition-DurationReverse);
                         }
                     }
                 }
