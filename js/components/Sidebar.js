@@ -14,19 +14,32 @@ cm.define('App.Sidebar', {
     ],
     'params' : {
         'node' : cm.Node('div'),
-        'name' : '',
+        'name' : 'app-sidebar',
+        'active' : 'modules',
         'target' : 'document.html',
-        'remember' : false
+        'remember' : true,
+        'Com.TabsetHelper' : {
+            'node' : cm.Node('div'),
+            'name' : ''
+        }
     }
 },
 function(params){
-    var that = this;
+    var that = this,
+        scrollBarSize = 0,
+        menuWidth = 0,
+        contentWidth;
 
     that.nodes = {
-        'container': cm.Node('div'),
-        'button': cm.Node('div')
+        'container' : cm.Node('div'),
+        'inner' : cm.Node('div'),
+        'collapseButtons' : [],
+        'labels' : [],
+        'tabs' : [],
+        'areas' : [],
+        'widgets' : []
     };
-
+    that.components = {};
     that.isExpanded = false;
 
     /* *** CLASS FUNCTIONS *** */
@@ -37,13 +50,43 @@ function(params){
         that.getDataNodes(that.params['node']);
         that.getDataConfig(that.params['node']);
         that.addToStack(that.params['node']);
+        validateParams();
         render();
-        // Trigger render event
         that.triggerEvent('onRender');
     };
 
+    var validateParams = function(){
+        that.params['Com.TabsetHelper']['node'] = that.nodes['inner'];
+        that.params['Com.TabsetHelper']['name'] = [that.params['name'], 'tabset'].join('-');
+    };
+
     var render = function(){
-        cm.addEvent(that.nodes['button'], 'click', toggle);
+        var helperMenuRule, helperContentRule;
+        // Init tabset
+        cm.getClass('Com.TabsetHelper', function(classConstructor){
+            that.components['tabset'] = new classConstructor(that.params['Com.TabsetHelper']);
+            that.components['tabset'].addEvent('onLabelClick', function(tabset, data){
+                if(!that.isExpanded || tabset.get() == data['id']){
+                    that.toggle();
+                }
+            });
+            that.components['tabset'].addTabs(that.nodes['tabs'], that.nodes['labels']);
+            that.components['tabset'].set(that.params['active']);
+        });
+        // Get sidebar dimensions from CSS
+        scrollBarSize = cm._scrollSize;
+        if(helperMenuRule = cm.getCSSRule('.app-lt__sidebar-helper__menu-width')[0]){
+            menuWidth = cm.styleToNumber(helperMenuRule.style.width);
+        }
+        if(helperContentRule = cm.getCSSRule('.app-lt__sidebar-helper__content-width')[0]){
+            contentWidth = cm.styleToNumber(helperContentRule.style.width);
+        }
+        // Add events on collapse buttons
+        cm.forEach(that.nodes['collapseButtons'], function(item){
+            cm.addEvent(item['container'], 'click', that.toggle);
+        });
+        // Resize sidebar relative to scroll bar size
+        resize();
         // Check toggle class
         that.isExpanded = cm.isClass(that.nodes['container'], 'is-expanded');
         // Check storage
@@ -60,22 +103,43 @@ function(params){
         }else{
             that.collapse(true);
         }
-        // Add to global arrays
-        App.Elements[that._name['full']] = that;
-        App.Nodes[that._name['full']] = that.nodes;
+        cm.addEvent(window, 'resize', onResize);
     };
 
-    var toggle = function(){
-        if(that.isExpanded){
-            that.collapse();
-        }else{
-            that.expand();
+    var resize = function(){
+        var rule;
+        cm.addClass(that.nodes['container'], 'is-immediately');
+        if(rule = cm.getCSSRule('.app-lt__sidebar .sidebar__content')[0]){
+            rule.style.width = [contentWidth + scrollBarSize, 'px'].join('');
+        }
+        if(rule = cm.getCSSRule('.app-lt__sidebar .sidebar__remove-zone')[0]){
+            rule.style.width = [contentWidth + scrollBarSize, 'px'].join('');
+        }
+        if(rule = cm.getCSSRule('.app-lt__sidebar.is-expanded')[0]){
+            rule.style.width = [menuWidth + contentWidth + scrollBarSize, 'px'].join('');
+        }
+        if(rule = cm.getCSSRule('html.is-sidebar--expanded .tpl__container')[0]){
+            rule.style.marginLeft = [menuWidth + contentWidth + scrollBarSize, 'px'].join('');
+        }
+        if(rule = cm.getCSSRule('.app-lt__sidebar-helper__width-expanded')[0]){
+            rule.style.width = [menuWidth + contentWidth + scrollBarSize, 'px'].join('');
+        }
+        setTimeout(function(){
+            cm.removeClass(that.nodes['container'], 'is-immediately');
+        }, 5);
+    };
+
+    var onResize = function(){
+        if(cm._scrollSize != scrollBarSize){
+            scrollBarSize = cm._scrollSize;
+            resize();
         }
     };
 
     /* ******* MAIN ******* */
 
     that.collapse = function(isImmediately){
+        var tab;
         that.isExpanded = false;
         // Set immediately animation hack
         if(isImmediately){
@@ -84,6 +148,10 @@ function(params){
         }
         cm.replaceClass(that.nodes['container'], 'is-expanded', 'is-collapsed', true);
         cm.replaceClass(that.params['target'], 'is-sidebar--expanded', 'is-sidebar--collapsed', true);
+        // Unset active class to collapse buttons
+        cm.forEach(that.nodes['collapseButtons'], function(item){
+            cm.removeClass(item['container'], 'active');
+        });
         // Remove immediately animation hack
         if(isImmediately){
             setTimeout(function(){
@@ -108,6 +176,10 @@ function(params){
         }
         cm.replaceClass(that.nodes['container'], 'is-collapsed', 'is-expanded', true);
         cm.replaceClass(that.params['target'], 'is-sidebar--collapsed', 'is-sidebar--expanded', true);
+        // Set active class to collapse buttons
+        cm.forEach(that.nodes['collapseButtons'], function(item){
+            cm.addClass(item['container'], 'active');
+        });
         // Remove immediately animation hack
         if(isImmediately){
             setTimeout(function(){
@@ -124,8 +196,37 @@ function(params){
     };
 
     that.toggle = function(){
-        toggle();
+        if(that.isExpanded){
+            that.collapse();
+        }else{
+            that.expand();
+        }
         return that;
+    };
+
+    that.setTab = function(id){
+        if(that.components['tabset']){
+            that.components['tabset'].set(id);
+        }
+        return that;
+    };
+
+    that.unsetTab = function(){
+        if(that.components['tabset']){
+            that.components['tabset'].unset();
+        }
+        return that;
+    };
+
+    that.getTab = function(){
+        if(that.components['tabset']){
+            return that.components['tabset'].get();
+        }
+        return null;
+    };
+
+    that.getNodes = function(key){
+        return that.nodes[key] || that.nodes;
     };
 
     init();

@@ -12,7 +12,7 @@ cm.define('App.Template', {
     ],
     'params' : {
         'node' : cm.Node('div'),
-        'name' : '',
+        'name' : 'app-template',
         'stickyFooter' : false,
         'scroll' : 'document.body',
         'scrollDuration' : 1000
@@ -81,6 +81,10 @@ function(params){
     that.scrollToTop = function(){
         that.anim['scroll'].go({'style' : {'docScrollTop' : '0'}, 'duration' : that.params['scrollDuration'], 'anim' : 'smooth'});
         return that;
+    };
+
+    that.getNodes = function(key){
+        return that.nodes[key] || that.nodes;
     };
 
     init();

@@ -10,13 +10,18 @@
     .mx__backface-visibility(hidden);
     .mx__transition(width, @AppLT-Sidebar-Duration);
 
+    > .inner {
+        position: absolute;
+        .mx__position(0, 0, 0, 0);
+    }
+
     .sidebar__menu {
         width: @AppLT-Sidebar-Menu-Width;
         position: absolute;
-        z-index: 2;
-        padding: @CmIndent-XXSmall 0;
-        background: @AppLT-Sidebar-Menu-Background;
+        z-index: 3;
+        background-color: @AppLT-Sidebar-Menu-Background;
         .mx__position(0, auto, 0, 0);
+        .mx__user-select(none);
 
         > ul {
             .cm__list-clear;
@@ -30,14 +35,67 @@
 
                 > a {
                     display: block;
-                    height: @AppLT-Sidebar-Menu-Width;
+                    position: relative;
+                    color: @CmColor-Font-Opposite;
+                    .cm-i__size(@CmSize-Large);
+                    .cm-i__b-size(@AppLT-Sidebar-Menu-Width);
                     .mx__transition(background, @CmUI-Transition-Duration);
 
+                    &:after {
+                        width: 3px;
+                        display: block;
+                        position: absolute;
+                        z-index: 2;
+                        content: '';
+                        .mx__position(0, auto, 0, 0);
+                        .mx__transition(background, @CmUI-Transition-Duration);
+                    }
+
                     &:hover {
-                        background-color: @CmColor-Primary-DarkHover;
-                        .mx__transition(background, @CmUI-Transition-DurationReverse);
+                        &:after {
+                            background-color: @CmColor-Primary-DarkDefault;
+                        }
                     }
                 }
+
+                &.active {
+                    > a {
+                        background-color: @CmColor-Primary-DarkActive;
+
+                        &:after {
+                            background-color: @CmColor-Primary-DarkDefault;
+                        }
+
+                        &:hover {
+                            background-color: @CmColor-Primary-DarkDefault;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    .sidebar__menu__button {
+        position: absolute;
+        z-index: 2;
+        background-color: @AppLT-Sidebar-Menu-Background;
+        .mx__position(auto, 0, 0 ,0);
+
+        .icon {
+            cursor: pointer;
+            color: @CmColor-Font-Opposite;
+            .cm-i__size(@CmSize-Medium);
+            .cm-i__b-size(@AppLT-Sidebar-Menu-Width);
+            .mx__transition(transform opacity, @AppLT-Sidebar-Duration);
+
+            &:hover {
+                opacity: @CmUI-Opacity-Hover;
+            }
+        }
+
+        &.active {
+            .icon {
+                .mx__transform(rotate(180deg));
             }
         }
     }
@@ -46,7 +104,9 @@
         width: @AppLT-Sidebar-Content-Width;
         position: absolute;
         z-index: 1;
+        opacity: 0;
         .mx__position(0, 0, 0, auto);
+        .mx__transition(opacity, @AppLT-Sidebar-Duration);
 
         > ul {
             .cm__list-clear;
@@ -55,22 +115,33 @@
 
             > li {
                 position: absolute;
+                z-index: 1;
+                opacity: 0;
                 .mx__position(0, 0, 0, 0);
+                .mx__transition(all, @CmUI-Transition-Duration);
+
+                &.active {
+                    z-index: 2;
+                    opacity: 1;
+                }
             }
         }
     }
 
     .sidebar__remove-zone {
+        width: @AppLT-Sidebar-Content-Width;
         position: absolute;
-        z-index: 3;
+        z-index: 2;
         padding: 0;
         opacity: 0;
         background: fadeout(@CmColor-Danger-DarkDefault, 50%);
         border-radius: 0;
         visibility: hidden;
-        .mx__position(0, 0, 0, @AppLT-Sidebar-Menu-Width);
+        .mx__position(0, 0, 0, auto);
 
         .sidebar__content__title {
+            .cm__text-wrap;
+            padding: 0 @AppLT-Sidebar-Content-Indent;
             background-color: @CmColor-Danger-DarkDefault;
             color: @CmFont-UI-ColorOpposite;
         }
@@ -105,91 +176,119 @@
     .sidebar__content__title {
         .cm__text-nowrap;
         .cm__font--ui-h1;
-        padding: @AppLT-Sidebar-Title-Indent @AppLT-Sidebar-Content-Indent;
+        padding: 0 (@AppLT-Sidebar-Title-Height + @AppLT-Sidebar-Content-Indent) 0 @AppLT-Sidebar-Content-Indent;
         position: absolute;
         text-align: left;
+        line-height: @AppLT-Sidebar-Title-Height;
         .mx__position(0, 0, auto, 0);
         .mx__user-select(none);
 
         .icon {
+            .icon.linked;
             position: absolute;
             cursor: pointer;
-            .mx__transition(transform, @AppLT-Sidebar-Duration);
-            .mx__position(14px, @CmIndent-XSmall, auto, auto);
-
-            &.default {
-                .cm__size__medium;
-                .icon.linked;
-            }
+            .cm-i__size(@CmSize-Medium);
+            .cm-i__b-size(@AppLT-Sidebar-Title-Height);
+            .mx__position(0, 0, auto, auto);
         }
     }
 
     .sidebar__content__descr {
         .cm__scroll-y;
-        padding: @AppLT-Sidebar-Content-Indent;
+        padding: 0 !important;
         position: absolute;
         .mx__position(@AppLT-Sidebar-Title-Height, 0, 0, 0);
-        .mx__transition(opacity, @AppLT-Sidebar-Duration);
+
+        > .inner {
+            padding: @AppLT-Sidebar-Content-Indent;
+        }
     }
 
-    &.is-collapsed {
-        width: @AppLT-Sidebar-WidthCollapsed;
+    .sidebar__content__text {
+        .cm__box;
     }
 
     &.is-expanded {
         width: @AppLT-Sidebar-WidthExpanded;
-    }
 
-    .app-lt__sidebar__theme(@AppLT-Sidebar-Theme);
-}
-
-.app-lt__sidebar--old {
-
-    &.is-collapsed {
-        @translate: @AppLT-Sidebar-WidthCollapsed - @AppLT-Sidebar-Width;
-        .mx__transform(translateX(@translate));
-
-        > .inner {
-            > .title {
-                .icon {
-                    .mx__transform(rotate(180deg));
-                }
-            }
-
-            > .descr {
-                opacity: 0;
-                .mx__opacity-ie(0);
-            }
+        .sidebar__content {
+            opacity: 1;
         }
     }
 
     &.is-immediately {
         .cm__transition-none;
 
-        > .inner {
-            > .title {
-                .icon {
-                    .cm__transition-none;
-                }
-            }
+        .sidebar__content,
+        .sidebar__remove-zone {
+            .cm__transition-none;
+        }
 
-            > .descr {
+        .sidebar__menu__button {
+            .icon {
                 .cm__transition-none;
             }
         }
     }
 
-    // /* *** REMOVE ZONE *** */
-
     .app-lt__sidebar__theme(@AppLT-Sidebar-Theme);
+}
+
+// /* *** HELPERS *** */
+
+.app-lt__sidebar-helper__menu-width {
+    width: @AppLT-Sidebar-Menu-Width;
+}
+
+.app-lt__sidebar-helper__content-width {
+    width: @AppLT-Sidebar-Content-Width;
+}
+
+.app-lt__sidebar-helper__width-collapsed {
+    width: @AppLT-Sidebar-WidthCollapsed;
+}
+
+.app-lt__sidebar-helper__width-expanded {
+    width: @AppLT-Sidebar-WidthExpanded;
 }
 
 // /* *** MIXINS *** */
 
+.app-lt__sidebar__theme (@theme) when (@theme = Light) {
+
+}
+
+.app-lt__sidebar__theme (@theme) when (@theme = Dark) {
+    .pt__toolbar {
+        .button {
+            .button.button-white;
+        }
+    }
+
+    .pt__listing-items {
+        > ul {
+            > li {
+                > a {
+                    color: ~"@{AppLT-Sidebar-Theme@{theme}-Color}";
+
+                    &:hover {
+                        color: ~"@{AppLT-Sidebar-Theme@{theme}-Background}";
+                    }
+                }
+
+                &.active {
+                    > a {
+                        color: ~"@{AppLT-Sidebar-Theme@{theme}-Background}";
+                    }
+                }
+            }
+        }
+    }
+}
+
 .app-lt__sidebar__theme (@theme) {
     .app-lt__sidebar__background(~"@{AppLT-Sidebar-Theme@{theme}-Background}");
     .app-lt__sidebar__color(~"@{AppLT-Sidebar-Theme@{theme}-Color}");
-    .app-lt__sidebar__title-icon(~"@{AppLT-Sidebar-Theme@{theme}-TitleIcon}");
 
     .com__togglebox {
         .com__togglebox__theme(@theme);
@@ -198,19 +297,6 @@
 
 .app-lt__sidebar__background (@background) {
     background-color: @background;
-
-    .sidebar__menu {
-        > ul {
-            > li {
-                &.active {
-                    > a {
-                        background-color: @background;
-                    }
-                }
-            }
-        }
-    }
-
     // Fix of blinking background in Firefox
     .app-pt__widgets-category__background(@background);
 }
@@ -218,13 +304,19 @@
 .app-lt__sidebar__color (@color) {
     .sidebar__content__title {
         color: @color;
-    }
-}
 
-.app-lt__sidebar__title-icon (@image) {
-    .sidebar__content__title {
-        .icon.default {
-            background-image: url("@{image}");
+        .icon {
+            color: @color;
+        }
+    }
+
+    .sidebar__content__text {
+        .cm__links {
+            color: ~"@{AppLT-Sidebar-Theme@{theme}-Color}";
+        }
+
+        .cm__inherit {
+            color: ~"@{AppLT-Sidebar-Theme@{theme}-Color}";
         }
     }
 }
@@ -234,6 +326,7 @@
 @media only screen and (max-width : @CmScreen-Tablet) {
 
     html.is-adaptive {
+        /*
         .app-lt__sidebar {
             width: @AppLT-Sidebar-WidthTablet;
 
@@ -242,6 +335,7 @@
                 .mx__transform(translateX(@translate));
             }
         }
+        */
     }
 
 }
@@ -249,9 +343,11 @@
 @media only screen and (max-width : @CmScreen-MobilePortrait) {
 
     html.is-adaptive {
+        /*
         .app-lt__sidebar {
             display: none;
         }
+        */
     }
 
 }

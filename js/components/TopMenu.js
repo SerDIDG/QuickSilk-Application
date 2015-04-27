@@ -3,7 +3,8 @@ cm.define('App.TopMenu', {
         'Params',
         'Events',
         'DataConfig',
-        'DataNodes'
+        'DataNodes',
+        'Stack'
     ],
     'events' : [
         'onRender',
@@ -12,6 +13,7 @@ cm.define('App.TopMenu', {
     ],
     'params' : {
         'node' : cm.Node('div'),
+        'name' : 'app-topmenu',
         'target' : 'document.html'
     }
 },
@@ -20,10 +22,11 @@ function(params){
 
     that.nodes = {
         'container': cm.Node('div'),
+        'inner': cm.Node('div'),
         'button': cm.Node('div'),
-        'target': cm.Node('div')
+        'target': cm.Node('div'),
+        'items' : {}
     };
-
     that.isExpanded = false;
 
     var init = function(){
@@ -31,25 +34,14 @@ function(params){
         that.convertEvents(that.params['events']);
         that.getDataNodes(that.params['node']);
         that.getDataConfig(that.params['node']);
+        that.addToStack(that.params['node']);
         render();
-    };
-
-    var render = function(){
-        cm.addEvent(that.nodes['button'], 'click', toggle);
-        that.isExpanded = cm.isClass(that.nodes['container'], 'is-expanded');
-        // Add to global arrays
-        App.Elements[that._name['full']] = that;
-        App.Nodes[that._name['full']] = that.nodes;
-        // Trigger render event
         that.triggerEvent('onRender');
     };
 
-    var toggle = function(){
-        if(that.isExpanded){
-            that.collapse();
-        }else{
-            that.expand();
-        }
+    var render = function(){
+        cm.addEvent(that.nodes['button'], 'click', that.toggle);
+        that.isExpanded = cm.isClass(that.nodes['container'], 'is-expanded');
     };
 
     /* ******* MAIN ******* */
@@ -68,6 +60,19 @@ function(params){
         cm.replaceClass(that.params['target'], 'is-topmenu--expanded', 'is-topmenu--collapsed', true);
         that.triggerEvent('onCollapse');
         return that;
+    };
+
+    that.toggle = function(){
+        if(that.isExpanded){
+            that.collapse();
+        }else{
+            that.expand();
+        }
+        return that;
+    };
+
+    that.getNodes = function(key){
+        return that.nodes[key] || that.nodes;
     };
 
     init();

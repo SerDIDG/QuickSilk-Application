@@ -4,6 +4,7 @@
 
 .tpl__container {
     position: relative;
+    z-index: 1;
     background: @AppTpl-Container-Background;
     background-size: @AppTpl-Container-BackgroundSize;
 }
@@ -191,7 +192,7 @@ html {
 
     &.is-sidebar {
         .tpl__container {
-            margin-left: @AppLT-Sidebar-Width;
+            margin-left: @AppLT-Sidebar-WidthCollapsed;
             .mx__transition(margin, @AppLT-Sidebar-Duration);
         }
     }
@@ -216,6 +217,10 @@ html {
             }
         }
 
+        .tpl__container {
+            margin-left: @AppLT-Sidebar-WidthExpanded;
+        }
+
         .tpl__header,
         .tpl__content,
         .tpl__footer {
@@ -228,10 +233,6 @@ html {
     &.is-sidebar--collapsed {
         .app-pt__widget__controls {
             display: none;
-        }
-
-        .tpl__container {
-            margin-left: @AppLT-Sidebar-WidthCollapsed;
         }
     }
 
@@ -267,17 +268,7 @@ html {
 @media only screen and (max-width : @CmScreen-Tablet) {
 
     html.is-adaptive {
-        &.is-sidebar {
-            .tpl__container {
-                margin-left: @AppLT-Sidebar-WidthTablet;
-            }
 
-            &.is-sidebar--collapsed {
-                .tpl__container {
-                    margin-left: @AppLT-Sidebar-WidthCollapsed;
-                }
-            }
-        }
     }
 
 }
@@ -296,6 +287,7 @@ html {
 @media only screen and (max-width : @CmScreen-MobilePortrait) {
 
     html.is-adaptive {
+        /*
         &.is-sidebar {
             .tpl__container {
                 margin-left: 0;
@@ -307,6 +299,7 @@ html {
                 }
             }
         }
+        */
     }
 
 }

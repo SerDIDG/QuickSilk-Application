@@ -6,6 +6,13 @@
 // /* ******* PATH ******* */
 
 @AppPath-Images: '../img';
+@AppPath-Fonts: '../fonts';
+
+// /* ************************************************ */
+// /* ******* IMPORT ******* */
+// /* ************************************************ */
+
+@import "variables.icons.less";
 
 // /* ************************************************ */
 // /* ******* FONT ******* */
@@ -72,6 +79,12 @@
 @AppFont-A-Decoration: none;
 @AppFont-A-Style: normal;
 
+@AppFont-Default-Family: @CmFont-Base-Family;
+@AppFont-Default-LineHeight: @CmFont-Base-LineHeight;
+@AppFont-Default-Size: @CmFont-Base-Size;
+@AppFont-Default-Weight: @CmFont-Base-Weight;
+@AppFont-Default-Color: @CmFont-Base-Color;
+
 // /* ************************************************ */
 // /* ******* COMMON ******* */
 // /* ************************************************ */
@@ -133,43 +146,33 @@
 
 // /* ******* TOP MENU ******* */
 
-@AppLT-TopMenu-Height: 40px;
+@AppLT-TopMenu-Height: @CmSize-XLarge;
 @AppLT-TopMenu-Duration: 300ms;
 @AppLT-TopMenu-Background: #000000;
 @AppLT-TopMenu-Color: @CmColor-Font-Opposite;
 @AppLT-TopMenu-FontSize: @CmFont-Base-Size;
 @AppLT-TopMenu-FontWeight: @CmFont-Base-BoldWeight;
+@AppLT-TopMenu-ItemIndent: 1px;
 @AppLT-TopMenu-ItemBorder: @CmBorder-Width solid rgba(255,255,255,0.4);
 @AppLT-TopMenu-ItemBackground: rgba(255,255,255,0.2);
 
 // /* ******* SIDEBAR ******* */
 
-@AppLT-Sidebar-Menu-Width: 48px;
+@AppLT-Sidebar-Menu-Width: @CmSize-XLarge;
 @AppLT-Sidebar-Menu-Background: #000000;
-
-@AppLT-Sidebar-Content-Width: (@AppPT-WidgetDummy-Width * 3) + (@AppLT-Sidebar-Content-Indent * 2);
+@AppLT-Sidebar-Content-Width: (@AppPT-WidgetDummy-Width * 3) - (@AppPT-WidgetDummy-Padding * 2) + (@AppLT-Sidebar-Content-Indent * 2);
 @AppLT-Sidebar-Content-Indent: @CmIndent-XSmall;
-
-@AppLT-Sidebar-Title-Indent: @AppLT-Sidebar-Content-Indent / 2;
-@AppLT-Sidebar-Title-Height: (@AppLT-Sidebar-Title-Indent * 2) + @CmFont-UI-H1-LineHeight;
-
+@AppLT-Sidebar-Title-Height: @AppLT-Sidebar-Menu-Width;
 @AppLT-Sidebar-WidthExpanded: @AppLT-Sidebar-Menu-Width + @AppLT-Sidebar-Content-Width;
 @AppLT-Sidebar-WidthCollapsed: @AppLT-Sidebar-Menu-Width;
-@AppLT-Sidebar-Duration: 500ms;
-
-@AppLT-Sidebar-Width: 319px;
-@AppLT-Sidebar-WidthTablet: 225px;
-@AppLT-Sidebar-WidthCollapsed: 24px + (@AppLT-Sidebar-Padding * 2);
-@AppLT-Sidebar-Padding: @CmIndent-XSmall;
-
+@AppLT-Sidebar-Duration: @CmUI-Overlay-Duration;
+@AppLT-Sidebar-Overlay: @CmUI-Overlay;
 
 @AppLT-Sidebar-Theme: 'Dark';
 @AppLT-Sidebar-ThemeDark-Color: @CmColor-Font-Opposite;
 @AppLT-Sidebar-ThemeDark-Background: @CmColor-Primary-DarkDefault;
-@AppLT-Sidebar-ThemeDark-TitleIcon: "@{CmPath-Images}/icons/medium/ui-arrow-white-left.png";
 @AppLT-Sidebar-ThemeLight-Color: @CmColor-Font;
 @AppLT-Sidebar-ThemeLight-Background: #ffffff;
-@AppLT-Sidebar-ThemeLight-TitleIcon: "@{CmPath-Images}/icons/medium/ui-arrow-left.png";
 
 @AppPT-WidgetDummy-Theme: @AppLT-Sidebar-Theme;
 
@@ -181,7 +184,10 @@
 // /* ******* COMPONENTS ******* */
 // /* ************************************************ */
 
+// /* ******* HELP TOUR ******* */
 
+@AppHelpTour-Duration: @CmUI-Overlay-Duration;
+@AppHelpTour-Overlay: @CmUI-Overlay;
 
 // /* ************************************************ */
 // /* ******* MODULES ******* */

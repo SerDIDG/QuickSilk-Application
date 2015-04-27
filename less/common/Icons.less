@@ -1,6 +1,48 @@
 /* ******* PART: ICONS ******* */
 
 .app-icon {
+    // /* Large Size Icons */
+
+    &.large {
+        .for(facebook twitter linkedin google favorite); .-each(@name) {
+            &.@{name} {
+                background-image: url("@{AppPath-Images}/icons/large/@{name}.png");
+            }
+        }
+    }
+
+    // /* Medium Size Icons */
+
+    &.medium {
+        .for(freetrial subscribe unsubscribe purchase start stop); .-each(@name) {
+            &.@{name} {
+                background-image: url("@{AppPath-Images}/icons/medium/@{name}.png");
+            }
+        }
+    }
+
+    // /* Small Size Icons */
+
+    &.small {
+        .for(plus); .-each(@name) {
+            &.@{name} {
+                background-image: url("@{AppPath-Images}/icons/small/@{name}.png");
+            }
+        }
+    }
+
+    // /* X Small Size Icons */
+
+    &.x-small {
+        .for(arrow-white-down); .-each(@name) {
+            &.@{name} {
+                background-image: url("@{AppPath-Images}/icons/x-small/@{name}.png");
+            }
+        }
+    }
+
+    // /*** OTHER *** */
+
     &.add-p {
         width: 16px;
         height: 16px;
@@ -54,44 +96,51 @@
         height: 20px;
         background: url('@{AppPath-Images}/icons/link.png');
     }
+}
 
-    // /* Large Size Icons */
+/* *** GLYPHS *** */
 
-    &.large {
-        .for(facebook twitter linkedin google favorite); .-each(@name) {
-            &.@{name} {
-                background-image: url("@{AppPath-Images}/icons/large/@{name}.png");
-            }
-        }
-    }
+.app-i,
+[class^="app-i__"],
+[class*=" app-i__"] {
+    &:extend(.cm-i all);
+    font-family: @AppIconVars-Family;
+}
 
-    // /* Medium Size Icons */
+.app-i__gear:before {
+    content: @AppIcon-Gear;
+}
 
-    &.medium {
-        .for(freetrial subscribe unsubscribe purchase start stop); .-each(@name) {
-            &.@{name} {
-                background-image: url("@{AppPath-Images}/icons/medium/@{name}.png");
-            }
-        }
-    }
+.app-i__gears:before {
+    content: @AppIcon-Gears;
+}
 
-    // /* Small Size Icons */
+.app-i__pages:before {
+    content: @AppIcon-Pages;
+}
 
-    &.small {
-        .for(plus); .-each(@name) {
-            &.@{name} {
-                background-image: url("@{AppPath-Images}/icons/small/@{name}.png");
-            }
-        }
-    }
+.app-i__palette:before {
+    content: @AppIcon-Palette;
+}
 
-    // /* X Small Size Icons */
+.app-i__layouts:before {
+    content: @AppIcon-Layouts;
+}
 
-    &.x-small {
-        .for(arrow-white-down); .-each(@name) {
-            &.@{name} {
-                background-image: url("@{AppPath-Images}/icons/x-small/@{name}.png");
-            }
-        }
-    }
+.app-i__templates:before {
+    content: @AppIcon-Templates;
+}
+
+.app-i__plus:before {
+    content: @AppIcon-Plus;
+}
+
+/* Circle */
+
+.app-i__circle-help:before {
+    content: @AppIcon-CircleHelp;
+}
+
+.app-i__circle-user:before {
+    content: @AppIcon-CircleUser;
 }

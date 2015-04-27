@@ -1,0 +1,27 @@
+/* ******* COMPONENTS: HELP TOUR ******* */
+
+.app__helptour__popup {
+    .pt__box;
+    width: 360px;
+    padding: @CmIndent-Medium;
+    visibility: hidden;
+    position: fixed;
+    z-index: 9999;
+    opacity: 0;
+    .mx__position(0, auto, auto, 0);
+    .mx__transform(scale(0));
+    .mx__transform-origin(0 0);
+    .mx__transition(all, @AppHelpTour-Duration);
+
+    &.is-show {
+        visibility: visible;
+        opacity: 1;
+        .mx__transform(scale(1));
+    }
+}
+
+// /* *** HELPERS *** */
+
+.app__helptour-helper__duration {
+    transition-duration: @AppHelpTour-Duration;
+}

@@ -16,6 +16,7 @@ cm.define('App.TemplateEditor', {
     ],
     'params' : {
         'node' : cm.Node('div'),
+        'sidebarName' : 'app-sidebar',
         'Com.Draganddrop' : {
             'renderTemporaryAria' : true
         }
@@ -31,7 +32,7 @@ function(params){
         },
         'AppSidebar' : {
             'removeZone' : cm.Node('div'),
-            'widgetsContainer' : cm.Node('div'),
+            'areas' : [],
             'widgets' : []
         }
     };
@@ -54,12 +55,14 @@ function(params){
     };
 
     var initSidebar = function(){
-        if(App.Elements['App.Sidebar']){
-            App.Elements['App.Sidebar']
+        var finder = cm.find('App.Sidebar', that.params['sidebarName'])[0];
+        if(finder){
+            that.components['sidebar'] = finder['class'];
+            that.components['sidebar']
                 .addEvent('onExpand', onSidebarExpand)
                 .addEvent('onCollapse', onSidebarCollapse);
 
-            if(App.Elements['App.Sidebar'].isExpanded){
+            if(that.components['sidebar'].isExpanded){
                 onSidebarExpand();
             }else{
                 onSidebarCollapse();
@@ -71,16 +74,6 @@ function(params){
 
     var onSidebarExpand = function(){
         var elements;
-        // Enable columns editable
-        elements = cm.getByClass('app-mod__columns');
-        cm.forEach(elements, function(column){
-            if(!cm.isClass(column, 'is-locked')){
-                cm.addClass(column, 'is-editable');
-            }
-            if(cm.isClass(column, 'is-hidden')){
-                cm.addClass(column, 'is-visible');
-            }
-        });
         // Enable widgets editable
         elements = cm.getByClass('app-pt__widget');
         cm.forEach(elements, function(widget){
@@ -89,6 +82,16 @@ function(params){
             }
             if(cm.isClass(widget, 'is-hidden')){
                 cm.addClass(widget, 'is-visible');
+            }
+        });
+        // Enable columns editable
+        elements = cm.getByClass('app-mod__columns');
+        cm.forEach(elements, function(column){
+            if(!cm.isClass(column, 'is-locked')){
+                cm.addClass(column, 'is-editable');
+            }
+            if(cm.isClass(column, 'is-hidden')){
+                cm.addClass(column, 'is-visible');
             }
         });
         // Enable spacers editable
@@ -111,31 +114,29 @@ function(params){
                 cm.addClass(slider, 'is-visible');
             }
         });
-        if(typeof Com.Slider != 'undefined'){
-            elements = Com.Slider.prototype.findInStack();
-            cm.forEach(elements, function(slider){
-                slider['class'].pause();
-            });
-        }
-        if(typeof App.Template != 'undefined'){
-            elements = App.Template.prototype.findInStack();
-            cm.forEach(elements, function(template){
-                template['class'].redraw();
-            });
-        }
+        // Pause sliders
+        elements = cm.find('Com.Slider', null, that.nodes['AppTemplate']['container']);
+        cm.forEach(elements, function(slider){
+            slider['class'].pause();
+        });
+        // Redraw template
+        elements = cm.find('App.Template', null, that.nodes['AppTemplate']['container']);
+        cm.forEach(elements, function(template){
+            template['class'].redraw();
+        });
     };
 
     var onSidebarCollapse = function(){
         var elements;
-        // Disable columns editable
-        elements = cm.getByClass('app-mod__columns');
-        cm.forEach(elements, function(column){
-            cm.removeClass(column, 'is-editable is-visible');
-        });
         // Disable widgets editable
         elements = cm.getByClass('app-pt__widget');
         cm.forEach(elements, function(widget){
             cm.removeClass(widget, 'is-editable is-visible');
+        });
+        // Disable columns editable
+        elements = cm.getByClass('app-mod__columns');
+        cm.forEach(elements, function(column){
+            cm.removeClass(column, 'is-editable is-visible');
         });
         // Disable spacers editable
         elements = cm.getByClass('app-mod__spacer');
@@ -147,18 +148,16 @@ function(params){
         cm.forEach(elements, function(slider){
             cm.removeClass(slider, 'is-editable is-visible');
         });
-        if(typeof Com.Slider != 'undefined'){
-            elements = Com.Slider.prototype.findInStack();
-            cm.forEach(elements, function(slider){
-                slider['class'].start();
-            });
-        }
-        if(typeof App.Template != 'undefined'){
-            elements = App.Template.prototype.findInStack();
-            cm.forEach(elements, function(template){
-                template['class'].redraw();
-            });
-        }
+        // UnPause sliders
+        elements = cm.find('Com.Slider', null, that.nodes['AppTemplate']['container']);
+        cm.forEach(elements, function(slider){
+            slider['class'].start();
+        });
+        // Redraw template
+        elements = cm.find('App.Template', null, that.nodes['AppTemplate']['container']);
+        cm.forEach(elements, function(template){
+            template['class'].redraw();
+        });
     };
 
     var renderLoaderBox = function(){
@@ -177,28 +176,32 @@ function(params){
     };
 
     var initDragAndDrop = function(){
-        that.components['dd'] = new Com.Draganddrop(
-            cm.merge({
-                'container' : that.nodes['AppTemplate']['container']
-            }, that.params['Com.Draganddrop'])
-        );
-        // Register widgets areas and events
-        that.components['dd']
-            .registerArea(that.nodes['AppSidebar']['widgetsContainer'], {
-                'isLocked' : true,
-                'isSystem' : true,
-                'hasPadding' : false,
-                'draggableInChildNodes' : false,
-                'cloneDraggable' : true
-            })
-            .registerArea(that.nodes['AppSidebar']['removeZone'], {
-                'isSystem' : true,
-                'isRemoveZone': true,
-                'hasPadding' : false
-            })
-            .addEvent('onDrop', onDrop)
-            .addEvent('onReplace', onReplace)
-            .addEvent('onRemove', onRemove);
+        cm.getClass('Com.Draganddrop', function(classObject){
+            that.components['dd'] = new classObject(
+                cm.merge({
+                    'container' : that.nodes['AppTemplate']['container']
+                }, that.params['Com.Draganddrop'])
+            );
+            // Register widgets areas and events
+            cm.forEach(that.nodes['AppSidebar']['areas'], function(area){
+                that.components['dd'].registerArea(area['container'], {
+                    'isLocked' : true,
+                    'isSystem' : true,
+                    'hasPadding' : false,
+                    'draggableInChildNodes' : false,
+                    'cloneDraggable' : true
+                });
+            });
+            that.components['dd']
+                .registerArea(that.nodes['AppSidebar']['removeZone'], {
+                    'isSystem' : true,
+                    'isRemoveZone': true,
+                    'hasPadding' : false
+                })
+                .addEvent('onDrop', onDrop)
+                .addEvent('onReplace', onReplace)
+                .addEvent('onRemove', onRemove);
+        });
     };
 
     /* *** DROP EVENTS *** */

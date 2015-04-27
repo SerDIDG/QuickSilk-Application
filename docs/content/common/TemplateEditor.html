@@ -19,8 +19,10 @@
     <script type="text/javascript" src="../../../../common/js/components/OldBrowserAlert.js"></script>
     <script type="text/javascript" src="../../../../common/js/components/ToggleBox.js"></script>
     <script type="text/javascript" src="../../../../common/js/components/Tabset.js"></script>
+    <script type="text/javascript" src="../../../../common/js/components/TabsetHelper.js"></script>
     <script type="text/javascript" src="../../../../common/js/components/Draganddrop.js"></script>
     <script type="text/javascript" src="../../../../common/js/components/Columns.js"></script>
+    <script type="text/javascript" src="../../../../common/js/components/Overlay.js"></script>
 
     <script type="text/javascript" src="../../../js/Application.js"></script>
     <script type="text/javascript" src="../../../js/components/LoginBox.js"></script>
@@ -29,6 +31,7 @@
     <script type="text/javascript" src="../../../js/components/Sidebar.js"></script>
     <script type="text/javascript" src="../../../js/components/TemplateEditor.js"></script>
     <script type="text/javascript" src="../../../js/components/ModuleMenu.js"></script>
+    <script type="text/javascript" src="../../../js/components/HelpTour.js"></script>
 
     <script type="text/javascript" src="../../../../../js/custom.js"></script>
     <link type="text/css" rel="stylesheet" href="../../../../../css/index.css">
@@ -44,6 +47,11 @@
                 .add('columns', function(node){
                     new Com.Columns({
                         'columns' : node
+                    });
+                })
+                .add('tabset-helper', function(node){
+                    new Com.TabsetHelper({
+                        'node' : node
                     });
                 })
                 .add('togglebox', function(node){
@@ -63,6 +71,11 @@
                 })
                 .add('app-sidebar', function(node){
                     new App.Sidebar({
+                        'node' : node
+                    });
+                })
+                .add('app-helptour', function(node){
+                    new App.HelpTour({
                         'node' : node
                     });
                 })
@@ -136,23 +149,23 @@
 
 <!-- [* ******* TOPMENU START ******* *] -->
 
-<div class="app-lt__topmenu" data-node=".AppTopMenu:{}:container" data-element="app-topmenu">
-    <div class="inner clear">
+<div class="app-lt__topmenu" data-node="AppTopMenu:{}:container" data-element="app-topmenu">
+    <div class="inner" data-node="inner">
         <a class="logo"></a>
         <div class="menu-button" data-node="button"></div>
         <div class="menu-holder" data-node="target">
-            <div class="inner">
+            <div class="inner" data-node="items:{}">
                 <div class="menu-centered">
                     <div class="inner">
                         <ul class="menu">
-                            <li>
+                            <li class="has-icon">
                                 <a title="Add New Site Page">
-                                    <span class="icon medium plus-white inline"></span>Add New Site Page
+                                    <i class="icon app-i__plus"></i>Add New Site Page
                                 </a>
                             </li>
-                            <li>
+                            <li class="has-icon">
                                 <a title="Edit Page Properties">
-                                    <span class="icon medium settings-white inline"></span>Edit Page Properties
+                                    <i class="icon app-i__gear"></i>Edit Page Properties
                                 </a>
                             </li>
                         </ul>
@@ -160,12 +173,19 @@
                 </div>
 
                 <ul class="menu right">
-                    <li class="pt__menu has-dropdown">
-                        <a>User Userberg</a>
-                        <ul class="pt__menu-dropdown">
+                    <li class="pt__menu has-dropdown has-icon" data-node="user:{}:container">
+                        <a title="User Userberg">
+                            <i class="icon app-i__circle-user"></i>User Userberg
+                        </a>
+                        <ul class="pt__menu-dropdown" data-node="dropdown">
                             <li><a>View Profile</a></li>
                             <li><a>Logout</a></li>
                         </ul>
+                    </li>
+                    <li class="has-icon">
+                        <a title="Help Tour" data-element="app-helptour">
+                            <i class="icon app-i__circle-help"></i>Help Tour
+                        </a>
                     </li>
                 </ul>
 
@@ -176,9 +196,9 @@
                     <li>
                         <a>User Manager</a>
                     </li>
-                    <li class="pt__menu has-dropdown">
+                    <li class="pt__menu has-dropdown" data-node="modules:{}:container">
                         <a href="http://google.com">Modules</a>
-                        <ul class="pt__menu-dropdown">
+                        <ul class="pt__menu-dropdown" data-node="dropdown">
                             <li>
                                 <a>Blog</a>
                             </li>
@@ -263,436 +283,576 @@
 
 <!-- [* ******* SIDEBAR START ******* *] -->
 
-<div class="app-lt__sidebar is-expanded" data-node=".AppSidebar:{}:container" data-element="app-sidebar" data-config='{"remember" : true, "name" : "app-sidebar"}'>
-    <div class="sidebar__menu">
-        <ul>
-            <li class="active">
-                <a title="Modules"></a>
-            </li>
-            <li>
-                <a title="Pages"></a>
-            </li>
-            <li>
-                <a title="Layouts"></a>
-            </li>
-            <li>
-                <a title="Templates"></a>
-            </li>
-        </ul>
+<div class="app-lt__sidebar is-expanded" data-node="AppSidebar:{}:container" data-element="app-sidebar">
+    <div class="inner" data-node="inner">
+        <div class="sidebar__menu">
+            <ul>
+                <li data-node="labels:[]:container" data-config='{"id" : "modules"}'>
+                    <a class="icon app-i app-i__gears" title="Modules"></a>
+                </li>
+                <li data-node="labels:[]:container" data-config='{"id" : "pages"}'>
+                    <a class="icon app-i app-i__pages" title="Pages"></a>
+                </li>
+                <li data-node="labels:[]:container" data-config='{"id" : "layouts"}'>
+                    <a class="icon app-i app-i__layouts"  title="Layouts"></a>
+                </li>
+                <li data-node="labels:[]:container" data-config='{"id" : "templates"}'>
+                    <a class="icon app-i app-i__templates" title="Templates"></a>
+                </li>
+            </ul>
+            <div class="sidebar__menu__button" data-node="AppSidebar.collapseButtons:[]:container">
+                <div class="icon cm-i cm-i__circle-arrow-right"></div>
+            </div>
+        </div>
+
+        <div class="sidebar__content">
+            <ul>
+                <li class="sidebar__content__modules" data-node="tabs:[]:container" data-config='{"id" : "modules"}'>
+                    <div class="sidebar__content__title">
+                        <span class="icon cm-i cm-i__circle-arrow-left" data-node="AppSidebar.collapseButtons:[]:container"></span>Modules
+                    </div>
+
+                    <div class="sidebar__content__descr" data-node="AppSidebar.areas:[]:container">
+                        <div class="inner">
+                            <dl class="com__togglebox app-pt__widgets-category is-show" data-element="togglebox" data-config='{"remember" : true, "name" : "app-lt__sidebar-main"}'>
+                                <dt data-node="ComToggleBox.button">
+                                    <span class="icon default"></span>
+                                    <span class="title">Main</span>
+                                </dt>
+                                <dd data-node="ComToggleBox.target">
+                                    <div class="app-pt__widget-container" data-node="AppSidebar.widgets:[]:container">
+                                        <div class="app-pt__widget-dummy" data-node="dummy">
+                                            <div class="inner">
+                                                <div class="icon module-logo"></div>
+                                                <div class="caption">Site Logo</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="app-pt__widget-container" data-node="AppSidebar.widgets:[]:container" data-config='{"type" : "content"}'>
+                                        <div class="app-pt__widget-dummy" data-node="dummy">
+                                            <div class="inner">
+                                                <div class="icon module-content"></div>
+                                                <div class="caption">Content</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="app-pt__widget-container" data-node="AppSidebar.widgets:[]:container">
+                                        <div class="app-pt__widget-dummy" data-node="dummy">
+                                            <div class="inner">
+                                                <div class="icon module-menu"></div>
+                                                <div class="caption">Menu</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="app-pt__widget-container" data-node="AppSidebar.widgets:[]:container">
+                                        <div class="app-pt__widget-dummy" data-node="dummy">
+                                            <div class="inner">
+                                                <div class="icon module-column"></div>
+                                                <div class="caption">Columns</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="app-pt__widget-container" data-node="AppSidebar.widgets:[]:container">
+                                        <div class="app-pt__widget-dummy" data-node="dummy">
+                                            <div class="inner">
+                                                <div class="icon module-zone"></div>
+                                                <div class="caption">Infoblock</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="app-pt__widget-container" data-node="AppSidebar.widgets:[]:container">
+                                        <div class="app-pt__widget-dummy" data-node="dummy">
+                                            <div class="inner">
+                                                <div class="icon module-zone"></div>
+                                                <div class="caption">Working Area</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="app-pt__widget-container" data-node="AppSidebar.widgets:[]:container">
+                                        <div class="app-pt__widget-dummy" data-node="dummy">
+                                            <div class="inner">
+                                                <div class="icon module-divider"></div>
+                                                <div class="caption">Divider</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="app-pt__widget-container" data-node="AppSidebar.widgets:[]:container">
+                                        <div class="app-pt__widget-dummy" data-node="dummy">
+                                            <div class="inner">
+                                                <div class="icon module-spacer"></div>
+                                                <div class="caption">Spacer</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="app-pt__widget-container" data-node="AppSidebar.widgets:[]:container">
+                                        <div class="app-pt__widget-dummy" data-node="dummy">
+                                            <div class="inner">
+                                                <div class="icon module-tabs"></div>
+                                                <div class="caption">Tabset</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </dd>
+                            </dl>
+
+                            <dl class="com__togglebox app-pt__widgets-category is-show" data-element="togglebox" data-config='{"remember" : true, "name" : "app-lt__sidebar-service"}'>
+                                <dt data-node="ComToggleBox.button">
+                                    <span class="icon default"></span>
+                                    <span class="title">Service</span>
+                                </dt>
+                                <dd data-node="ComToggleBox.target">
+                                    <div class="app-pt__widget-container" data-node="AppSidebar.widgets:[]:container">
+                                        <div class="app-pt__widget-dummy" data-node="dummy">
+                                            <div class="inner">
+                                                <div class="icon module-login"></div>
+                                                <div class="caption">Login</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="app-pt__widget-container" data-node="AppSidebar.widgets:[]:container">
+                                        <div class="app-pt__widget-dummy" data-node="dummy">
+                                            <div class="inner">
+                                                <div class="icon module-registration"></div>
+                                                <div class="caption">Registration</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="app-pt__widget-container" data-node="AppSidebar.widgets:[]:container">
+                                        <div class="app-pt__widget-dummy" data-node="dummy">
+                                            <div class="inner">
+                                                <div class="icon module-search"></div>
+                                                <div class="caption">Search</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="app-pt__widget-container" data-node="AppSidebar.widgets:[]:container">
+                                        <div class="app-pt__widget-dummy" data-node="dummy">
+                                            <div class="inner">
+                                                <div class="icon module-googlemap"></div>
+                                                <div class="caption">Google Map</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </dd>
+                            </dl>
+
+                            <dl class="com__togglebox app-pt__widgets-category is-show" data-element="togglebox" data-config='{"remember" : true, "name" : "app-lt__sidebar-media"}'>
+                                <dt data-node="ComToggleBox.button">
+                                    <span class="icon default"></span>
+                                    <span class="title">Media</span>
+                                </dt>
+                                <dd data-node="ComToggleBox.target">
+                                    <div class="app-pt__widget-container" data-node="AppSidebar.widgets:[]:container">
+                                        <div class="app-pt__widget-dummy" data-node="dummy">
+                                            <div class="inner">
+                                                <div class="icon module-image"></div>
+                                                <div class="caption">Image</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="app-pt__widget-container" data-node="AppSidebar.widgets:[]:container">
+                                        <div class="app-pt__widget-dummy" data-node="dummy">
+                                            <div class="inner">
+                                                <div class="icon module-slider"></div>
+                                                <div class="caption">Slider</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="app-pt__widget-container" data-node="AppSidebar.widgets:[]:container">
+                                        <div class="app-pt__widget-dummy" data-node="dummy">
+                                            <div class="inner">
+                                                <div class="icon module-imagegallery"></div>
+                                                <div class="caption">Image Gallery</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="app-pt__widget-container" data-node="AppSidebar.widgets:[]:container">
+                                        <div class="app-pt__widget-dummy" data-node="dummy">
+                                            <div class="inner">
+                                                <div class="icon module-videogallery"></div>
+                                                <div class="caption">Video Gallery</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </dd>
+                            </dl>
+
+                            <dl class="com__togglebox app-pt__widgets-category is-show" data-element="togglebox" data-config='{"remember" : true, "name" : "app-lt__sidebar-social"}'>
+                                <dt data-node="ComToggleBox.button">
+                                    <span class="icon default"></span>
+                                    <span class="title">Social</span>
+                                </dt>
+                                <dd data-node="ComToggleBox.target">
+                                    <div class="app-pt__widget-container" data-node="AppSidebar.widgets:[]:container">
+                                        <div class="app-pt__widget-dummy" data-node="dummy">
+                                            <div class="inner">
+                                                <div class="icon module-socialmedia"></div>
+                                                <div class="caption">Social Links</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="app-pt__widget-container" data-node="AppSidebar.widgets:[]:container">
+                                        <div class="app-pt__widget-dummy" data-node="dummy">
+                                            <div class="inner">
+                                                <div class="icon module-socialmedia_share"></div>
+                                                <div class="caption">Social Share</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="app-pt__widget-container" data-node="AppSidebar.widgets:[]:container">
+                                        <div class="app-pt__widget-dummy" data-node="dummy">
+                                            <div class="inner">
+                                                <div class="icon module-socialmedia_rating"></div>
+                                                <div class="caption">Social Rating</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="app-pt__widget-container" data-node="AppSidebar.widgets:[]:container">
+                                        <div class="app-pt__widget-dummy" data-node="dummy">
+                                            <div class="inner">
+                                                <div class="icon module-comment"></div>
+                                                <div class="caption">Comments</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="app-pt__widget-container" data-node="AppSidebar.widgets:[]:container">
+                                        <div class="app-pt__widget-dummy" data-node="dummy">
+                                            <div class="inner">
+                                                <div class="icon module-memberdirectory"></div>
+                                                <div class="caption">Member Directory</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="app-pt__widget-container" data-node="AppSidebar.widgets:[]:container">
+                                        <div class="app-pt__widget-dummy" data-node="dummy">
+                                            <div class="inner">
+                                                <div class="icon module-memberwidget"></div>
+                                                <div class="caption">Member Directory Widget</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="app-pt__widget-container" data-node="AppSidebar.widgets:[]:container">
+                                        <div class="app-pt__widget-dummy" data-node="dummy">
+                                            <div class="inner">
+                                                <div class="icon module-filegridlist"></div>
+                                                <div class="caption">File Grid List</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="app-pt__widget-container" data-node="AppSidebar.widgets:[]:container">
+                                        <div class="app-pt__widget-dummy" data-node="dummy">
+                                            <div class="inner">
+                                                <div class="icon module-forum"></div>
+                                                <div class="caption">Forum</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="app-pt__widget-container" data-node="AppSidebar.widgets:[]:container">
+                                        <div class="app-pt__widget-dummy" data-node="dummy">
+                                            <div class="inner">
+                                                <div class="icon module-forum_build"></div>
+                                                <div class="caption">Forum Widget</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </dd>
+                            </dl>
+
+                            <dl class="com__togglebox app-pt__widgets-category is-show" data-element="togglebox" data-config='{"remember" : true, "name" : "app-lt__sidebar-blog"}'>
+                                <dt data-node="ComToggleBox.button">
+                                    <span class="icon default"></span>
+                                    <span class="title">Blog</span>
+                                </dt>
+                                <dd data-node="ComToggleBox.target">
+                                    <div class="app-pt__widget-container" data-node="AppSidebar.widgets:[]:container">
+                                        <div class="app-pt__widget-dummy" data-node="dummy">
+                                            <div class="inner">
+                                                <div class="icon module-blogcontent"></div>
+                                                <div class="caption">Blog</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="app-pt__widget-container" data-node="AppSidebar.widgets:[]:container">
+                                        <div class="app-pt__widget-dummy" data-node="dummy">
+                                            <div class="inner">
+                                                <div class="icon module-blogblock"></div>
+                                                <div class="caption">Blog Widget</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="app-pt__widget-container" data-node="AppSidebar.widgets:[]:container">
+                                        <div class="app-pt__widget-dummy" data-node="dummy">
+                                            <div class="inner">
+                                                <div class="icon module-blogcategories"></div>
+                                                <div class="caption">Blog Categories</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="app-pt__widget-container" data-node="AppSidebar.widgets:[]:container">
+                                        <div class="app-pt__widget-dummy" data-node="dummy">
+                                            <div class="inner">
+                                                <div class="icon module-blogcalendar"></div>
+                                                <div class="caption">Blog Calendar</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="app-pt__widget-container" data-node="AppSidebar.widgets:[]:container">
+                                        <div class="app-pt__widget-dummy" data-node="dummy">
+                                            <div class="inner">
+                                                <div class="icon module-blogarchive"></div>
+                                                <div class="caption">Blog Archive</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="app-pt__widget-container" data-node="AppSidebar.widgets:[]:container">
+                                        <div class="app-pt__widget-dummy" data-node="dummy">
+                                            <div class="inner">
+                                                <div class="icon module-blogroll"></div>
+                                                <div class="caption">Blog Roll</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </dd>
+                            </dl>
+
+                            <dl class="com__togglebox app-pt__widgets-category is-show" data-element="togglebox" data-config='{"remember" : true, "name" : "app-lt__sidebar-events"}'>
+                                <dt data-node="ComToggleBox.button">
+                                    <span class="icon default"></span>
+                                    <span class="title">Events</span>
+                                </dt>
+                                <dd data-node="ComToggleBox.target">
+                                    <div class="app-pt__widget-container" data-node="AppSidebar.widgets:[]:container">
+                                        <div class="app-pt__widget-dummy" data-node="dummy">
+                                            <div class="inner">
+                                                <div class="icon module-events"></div>
+                                                <div class="caption">Events</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="app-pt__widget-container" data-node="AppSidebar.widgets:[]:container">
+                                        <div class="app-pt__widget-dummy" data-node="dummy">
+                                            <div class="inner">
+                                                <div class="icon module-latestevents"></div>
+                                                <div class="caption">Events Widget</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="app-pt__widget-container" data-node="AppSidebar.widgets:[]:container">
+                                        <div class="app-pt__widget-dummy" data-node="dummy">
+                                            <div class="inner">
+                                                <div class="icon module-eventscalendar"></div>
+                                                <div class="caption">Events Calendar</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </dd>
+                            </dl>
+
+                            <dl class="com__togglebox app-pt__widgets-category is-show" data-element="togglebox" data-config='{"remember" : true, "name" : "app-lt__sidebar-other"}'>
+                                <dt data-node="ComToggleBox.button">
+                                    <span class="icon default"></span>
+                                    <span class="title">Other</span>
+                                </dt>
+                                <dd data-node="ComToggleBox.target">
+                                    <div class="app-pt__widget-container" data-node="AppSidebar.widgets:[]:container">
+                                        <div class="app-pt__widget-dummy" data-node="dummy">
+                                            <div class="inner">
+                                                <div class="icon"></div>
+                                                <div class="caption">Default Widget</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </dd>
+                            </dl>
+                        </div>
+                    </div>
+                </li>
+                <li class="sidebar__content__pages" data-node="tabs:[]:container" data-config='{"id" : "pages"}'>
+                    <div class="sidebar__content__title">
+                        <span class="icon cm-i cm-i__circle-arrow-left" data-node="AppSidebar.collapseButtons:[]:container"></span>Pages
+                    </div>
+
+                    <div class="sidebar__content__descr">
+                        <div class="inner">
+                            <div class="pt__toolbar">
+                                <div class="inner clear">
+                                    <div class="left">
+                                        <ul class="group is-adaptive">
+                                            <li>
+                                                <a class="button">Create new page</a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="pt__listing-items">
+                                <ul>
+                                    <li class="active">
+                                        <a>Industry</a>
+                                        <div class="pt__listing-items">
+                                            <ul>
+                                                <li>
+                                                    <a>Business</a>
+                                                </li>
+                                                <li>
+                                                    <a>Government</a>
+                                                </li>
+                                                <li>
+                                                    <a>Non-profit</a>
+                                                </li>
+                                                <li>
+                                                    <a>Education</a>
+                                                </li>
+                                                <li>
+                                                    <a>Health-care</a>
+                                                </li>
+                                                <li>
+                                                    <a>Retail</a>
+                                                </li>
+                                                <li>
+                                                    <a>Other</a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <a>Solutions</a>
+                                    </li>
+                                    <li>
+                                        <a>Features</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+                <li class="sidebar__content__layouts" data-node="tabs:[]:container" data-config='{"id" : "layouts"}'>
+                    <div class="sidebar__content__title">
+                        <span class="icon cm-i cm-i__circle-arrow-left" data-node="AppSidebar.collapseButtons:[]:container"></span>Layouts
+                    </div>
+
+                    <div class="sidebar__content__descr">
+                        <div class="inner">
+                            <div class="pt__toolbar">
+                                <div class="inner clear">
+                                    <div class="left">
+                                        <ul class="group is-adaptive">
+                                            <li>
+                                                <a class="button">Create new layout</a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="pt__listing-items">
+                                <ul>
+                                    <li>
+                                        <a>Blank template #1 / Default Page Layout</a>
+                                    </li>
+                                    <li>
+                                        <a>Blank template #1 / Home Page Layout</a>
+                                    </li>
+                                    <li>
+                                        <a>Blank template #1 / Inner Page Layout</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+                <li class="sidebar__content__templates" data-node="tabs:[]:container" data-config='{"id" : "templates"}'>
+                    <div class="sidebar__content__title">
+                        <span class="icon cm-i cm-i__circle-arrow-left" data-node="AppSidebar.collapseButtons:[]:container"></span>Templates
+                    </div>
+
+                    <div class="sidebar__content__descr">
+                        <div class="inner">
+                            <div class="sidebar__content__text">
+                                <p>Your installed templates are below. If you want to view/install other templates please <a>click here</a> to open Template Gallery.</p>
+                            </div>
+
+                            <div class="app-lt__templates__scroll">
+                                <div class="pt__grid indent-12px col-1">
+                                    <ul class="clear">
+                                        <li>
+                                            <div class="app-lt__templates__item">
+                                                <div class="inner">
+                                                    <div class="image">
+                                                        <img alt="Blank template #1" src="http://quicksilk.com/web/default/files/screenshots/00022/thumbnail.jpg">
+                                                    </div>
+                                                    <div class="info">
+                                                        <div class="inner">
+                                                            <div class="title">
+                                                                <div class="icon medium check"></div>
+                                                                <h2>Blank template #1</h2>
+                                                            </div>
+                                                            <div class="btn-wrap is-box">
+                                                                <a class="button button-primary">Customize</a>
+                                                                <a class="button button-primary">Screenshots</a>
+                                                                <a class="button button-danger">Uninstall</a>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div class="app-lt__templates__item">
+                                                <div class="inner">
+                                                    <div class="image">
+                                                        <img alt="Management Consulting" src="http://quicksilk.com/web/default/files/screenshots/00024/1.jpg">
+                                                    </div>
+                                                    <div class="info">
+                                                        <div class="inner">
+                                                            <div class="title">
+                                                                <h2>Management Consulting</h2>
+                                                            </div>
+                                                            <div class="btn-wrap is-box">
+                                                                <a class="button button-primary">Customize</a>
+                                                                <a class="button button-primary">Screenshots</a>
+                                                                <a class="button button-danger">Uninstall</a>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div class="app-lt__templates__item">
+                                                <div class="inner">
+                                                    <div class="image">
+                                                        <img alt="Fastpitch Softball Team" src="http://quicksilk.com/web/default/files/screenshots/00037/1.jpg">
+                                                    </div>
+                                                    <div class="info">
+                                                        <div class="inner">
+                                                            <div class="title">
+                                                                <h2>Fastpitch Softball Team</h2>
+                                                            </div>
+                                                            <div class="btn-wrap is-box">
+                                                                <a class="button button-primary">Customize</a>
+                                                                <a class="button button-primary">Screenshots</a>
+                                                                <a class="button button-danger">Uninstall</a>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+        </div>
+
+        <div class="sidebar__remove-zone" data-node="AppSidebar.removeZone">
+            <div class="sidebar__content__title">Drop here to remove</div>
+        </div>
     </div>
-
-    <div class="sidebar__content">
-        <ul>
-            <li class="sidebar__content__modules">
-                <div class="sidebar__content__title">
-                    <span class="icon default" data-node="button"></span>Modules
-                </div>
-
-                <div class="sidebar__content__descr" data-node="widgetsContainer">
-                    <dl class="com__togglebox app-pt__widgets-category is-show" data-element="togglebox" data-config='{"remember" : true, "name" : "app-lt__sidebar-main"}'>
-                        <dt data-node="ComToggleBox.button">
-                            <span class="icon default"></span>
-                            <span class="title">Main</span>
-                        </dt>
-                        <dd data-node="ComToggleBox.target">
-                            <div class="app-pt__widget-container" data-node="widgets:[]:container">
-                                <div class="app-pt__widget-dummy" data-node="dummy">
-                                    <div class="inner">
-                                        <div class="icon module-logo"></div>
-                                        <div class="caption">Site Logo</div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="app-pt__widget-container" data-node="widgets:[]:container" data-config='{"type" : "content"}'>
-                                <div class="app-pt__widget-dummy" data-node="dummy">
-                                    <div class="inner">
-                                        <div class="icon module-content"></div>
-                                        <div class="caption">Content</div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="app-pt__widget-container" data-node="widgets:[]:container">
-                                <div class="app-pt__widget-dummy" data-node="dummy">
-                                    <div class="inner">
-                                        <div class="icon module-menu"></div>
-                                        <div class="caption">Menu</div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="app-pt__widget-container" data-node="widgets:[]:container">
-                                <div class="app-pt__widget-dummy" data-node="dummy">
-                                    <div class="inner">
-                                        <div class="icon module-column"></div>
-                                        <div class="caption">Columns</div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="app-pt__widget-container" data-node="widgets:[]:container">
-                                <div class="app-pt__widget-dummy" data-node="dummy">
-                                    <div class="inner">
-                                        <div class="icon module-zone"></div>
-                                        <div class="caption">Infoblock</div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="app-pt__widget-container" data-node="widgets:[]:container">
-                                <div class="app-pt__widget-dummy" data-node="dummy">
-                                    <div class="inner">
-                                        <div class="icon module-zone"></div>
-                                        <div class="caption">Working Area</div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="app-pt__widget-container" data-node="widgets:[]:container">
-                                <div class="app-pt__widget-dummy" data-node="dummy">
-                                    <div class="inner">
-                                        <div class="icon module-divider"></div>
-                                        <div class="caption">Divider</div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="app-pt__widget-container" data-node="widgets:[]:container">
-                                <div class="app-pt__widget-dummy" data-node="dummy">
-                                    <div class="inner">
-                                        <div class="icon module-spacer"></div>
-                                        <div class="caption">Spacer</div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="app-pt__widget-container" data-node="widgets:[]:container">
-                                <div class="app-pt__widget-dummy" data-node="dummy">
-                                    <div class="inner">
-                                        <div class="icon module-tabs"></div>
-                                        <div class="caption">Tabset</div>
-                                    </div>
-                                </div>
-                            </div>
-                        </dd>
-                    </dl>
-
-                    <dl class="com__togglebox app-pt__widgets-category is-show" data-element="togglebox" data-config='{"remember" : true, "name" : "app-lt__sidebar-service"}'>
-                        <dt data-node="ComToggleBox.button">
-                            <span class="icon default"></span>
-                            <span class="title">Service</span>
-                        </dt>
-                        <dd data-node="ComToggleBox.target">
-                            <div class="app-pt__widget-container" data-node="widgets:[]:container">
-                                <div class="app-pt__widget-dummy" data-node="dummy">
-                                    <div class="inner">
-                                        <div class="icon module-login"></div>
-                                        <div class="caption">Login</div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="app-pt__widget-container" data-node="widgets:[]:container">
-                                <div class="app-pt__widget-dummy" data-node="dummy">
-                                    <div class="inner">
-                                        <div class="icon module-registration"></div>
-                                        <div class="caption">Registration</div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="app-pt__widget-container" data-node="widgets:[]:container">
-                                <div class="app-pt__widget-dummy" data-node="dummy">
-                                    <div class="inner">
-                                        <div class="icon module-search"></div>
-                                        <div class="caption">Search</div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="app-pt__widget-container" data-node="widgets:[]:container">
-                                <div class="app-pt__widget-dummy" data-node="dummy">
-                                    <div class="inner">
-                                        <div class="icon module-googlemap"></div>
-                                        <div class="caption">Google Map</div>
-                                    </div>
-                                </div>
-                            </div>
-                        </dd>
-                    </dl>
-
-                    <dl class="com__togglebox app-pt__widgets-category is-show" data-element="togglebox" data-config='{"remember" : true, "name" : "app-lt__sidebar-media"}'>
-                        <dt data-node="ComToggleBox.button">
-                            <span class="icon default"></span>
-                            <span class="title">Media</span>
-                        </dt>
-                        <dd data-node="ComToggleBox.target">
-                            <div class="app-pt__widget-container" data-node="widgets:[]:container">
-                                <div class="app-pt__widget-dummy" data-node="dummy">
-                                    <div class="inner">
-                                        <div class="icon module-image"></div>
-                                        <div class="caption">Image</div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="app-pt__widget-container" data-node="widgets:[]:container">
-                                <div class="app-pt__widget-dummy" data-node="dummy">
-                                    <div class="inner">
-                                        <div class="icon module-slider"></div>
-                                        <div class="caption">Slider</div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="app-pt__widget-container" data-node="widgets:[]:container">
-                                <div class="app-pt__widget-dummy" data-node="dummy">
-                                    <div class="inner">
-                                        <div class="icon module-imagegallery"></div>
-                                        <div class="caption">Image Gallery</div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="app-pt__widget-container" data-node="widgets:[]:container">
-                                <div class="app-pt__widget-dummy" data-node="dummy">
-                                    <div class="inner">
-                                        <div class="icon module-videogallery"></div>
-                                        <div class="caption">Video Gallery</div>
-                                    </div>
-                                </div>
-                            </div>
-                        </dd>
-                    </dl>
-
-                    <dl class="com__togglebox app-pt__widgets-category is-show" data-element="togglebox" data-config='{"remember" : true, "name" : "app-lt__sidebar-social"}'>
-                        <dt data-node="ComToggleBox.button">
-                            <span class="icon default"></span>
-                            <span class="title">Social</span>
-                        </dt>
-                        <dd data-node="ComToggleBox.target">
-                            <div class="app-pt__widget-container" data-node="widgets:[]:container">
-                                <div class="app-pt__widget-dummy" data-node="dummy">
-                                    <div class="inner">
-                                        <div class="icon">
-                                            <img src="../../../img/widgets/social.png" alt="">
-                                        </div>
-                                        <div class="caption">Social Links</div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="app-pt__widget-container" data-node="widgets:[]:container">
-                                <div class="app-pt__widget-dummy" data-node="dummy">
-                                    <div class="inner">
-                                        <div class="icon">
-                                            <img src="../../../img/widgets/social.png" alt="">
-                                        </div>
-                                        <div class="caption">Social Share</div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="app-pt__widget-container" data-node="widgets:[]:container">
-                                <div class="app-pt__widget-dummy" data-node="dummy">
-                                    <div class="inner">
-                                        <div class="icon">
-                                            <img src="../../../img/widgets/social.png" alt="">
-                                        </div>
-                                        <div class="caption">Social Rating</div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="app-pt__widget-container" data-node="widgets:[]:container">
-                                <div class="app-pt__widget-dummy" data-node="dummy">
-                                    <div class="inner">
-                                        <div class="icon">
-                                            <img src="../../../img/widgets/comments.png" alt="">
-                                        </div>
-                                        <div class="caption">Comments</div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="app-pt__widget-container" data-node="widgets:[]:container">
-                                <div class="app-pt__widget-dummy" data-node="dummy">
-                                    <div class="inner">
-                                        <div class="icon">
-                                            <img src="../../../img/widgets/member.png" alt="">
-                                        </div>
-                                        <div class="caption">Member Directory</div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="app-pt__widget-container" data-node="widgets:[]:container">
-                                <div class="app-pt__widget-dummy" data-node="dummy">
-                                    <div class="inner">
-                                        <div class="icon">
-                                            <img src="../../../img/widgets/member-widget.png" alt="">
-                                        </div>
-                                        <div class="caption">Member Directory Widget</div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="app-pt__widget-container" data-node="widgets:[]:container">
-                                <div class="app-pt__widget-dummy" data-node="dummy">
-                                    <div class="inner">
-                                        <div class="icon">
-                                            <img src="../../../img/widgets/file.png" alt="">
-                                        </div>
-                                        <div class="caption">File Grid List</div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="app-pt__widget-container" data-node="widgets:[]:container">
-                                <div class="app-pt__widget-dummy" data-node="dummy">
-                                    <div class="inner">
-                                        <div class="icon">
-                                            <img src="../../../img/widgets/forum.png" alt="">
-                                        </div>
-                                        <div class="caption">Forum</div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="app-pt__widget-container" data-node="widgets:[]:container">
-                                <div class="app-pt__widget-dummy" data-node="dummy">
-                                    <div class="inner">
-                                        <div class="icon">
-                                            <img src="../../../img/widgets/forum-widget.png" alt="">
-                                        </div>
-                                        <div class="caption">Forum Widget</div>
-                                    </div>
-                                </div>
-                            </div>
-                        </dd>
-                    </dl>
-
-                    <dl class="com__togglebox app-pt__widgets-category is-show" data-element="togglebox" data-config='{"remember" : true, "name" : "app-lt__sidebar-blog"}'>
-                        <dt data-node="ComToggleBox.button">
-                            <span class="icon default"></span>
-                            <span class="title">Blog</span>
-                        </dt>
-                        <dd data-node="ComToggleBox.target">
-                            <div class="app-pt__widget-container" data-node="widgets:[]:container">
-                                <div class="app-pt__widget-dummy" data-node="dummy">
-                                    <div class="inner">
-                                        <div class="icon">
-                                            <img src="../../../img/widgets/blog.png" alt="">
-                                        </div>
-                                        <div class="caption">Blog</div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="app-pt__widget-container" data-node="widgets:[]:container">
-                                <div class="app-pt__widget-dummy" data-node="dummy">
-                                    <div class="inner">
-                                        <div class="icon">
-                                            <img src="../../../img/widgets/blog-widget.png" alt="">
-                                        </div>
-                                        <div class="caption">Blog Widget</div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="app-pt__widget-container" data-node="widgets:[]:container">
-                                <div class="app-pt__widget-dummy" data-node="dummy">
-                                    <div class="inner">
-                                        <div class="icon">
-                                            <img src="../../../img/widgets/blog-categories.png" alt="">
-                                        </div>
-                                        <div class="caption">Blog Categories</div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="app-pt__widget-container" data-node="widgets:[]:container">
-                                <div class="app-pt__widget-dummy" data-node="dummy">
-                                    <div class="inner">
-                                        <div class="icon">
-                                            <img src="../../../img/widgets/blog-calendar.png" alt="">
-                                        </div>
-                                        <div class="caption">Blog Calendar</div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="app-pt__widget-container" data-node="widgets:[]:container">
-                                <div class="app-pt__widget-dummy" data-node="dummy">
-                                    <div class="inner">
-                                        <div class="icon">
-                                            <img src="../../../img/widgets/blog-archive.png" alt="">
-                                        </div>
-                                        <div class="caption">Blog Archive</div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="app-pt__widget-container" data-node="widgets:[]:container">
-                                <div class="app-pt__widget-dummy" data-node="dummy">
-                                    <div class="inner">
-                                        <div class="icon">
-                                            <img src="../../../img/widgets/blog-roll.png" alt="">
-                                        </div>
-                                        <div class="caption">Blog Roll</div>
-                                    </div>
-                                </div>
-                            </div>
-                        </dd>
-                    </dl>
-
-                    <dl class="com__togglebox app-pt__widgets-category is-show" data-element="togglebox" data-config='{"remember" : true, "name" : "app-lt__sidebar-events"}'>
-                        <dt data-node="ComToggleBox.button">
-                            <span class="icon default"></span>
-                            <span class="title">Events</span>
-                        </dt>
-                        <dd data-node="ComToggleBox.target">
-                            <div class="app-pt__widget-container" data-node="widgets:[]:container">
-                                <div class="app-pt__widget-dummy" data-node="dummy">
-                                    <div class="inner">
-                                        <div class="icon">
-                                            <img src="../../../img/widgets/events.png" alt="">
-                                        </div>
-                                        <div class="caption">Events</div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="app-pt__widget-container" data-node="widgets:[]:container">
-                                <div class="app-pt__widget-dummy" data-node="dummy">
-                                    <div class="inner">
-                                        <div class="icon">
-                                            <img src="../../../img/widgets/events-widget.png" alt="">
-                                        </div>
-                                        <div class="caption">Events Widget</div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="app-pt__widget-container" data-node="widgets:[]:container">
-                                <div class="app-pt__widget-dummy" data-node="dummy">
-                                    <div class="inner">
-                                        <div class="icon">
-                                            <img src="../../../img/widgets/events-calendar.png" alt="">
-                                        </div>
-                                        <div class="caption">Events Calendar</div>
-                                    </div>
-                                </div>
-                            </div>
-                        </dd>
-                    </dl>
-
-                    <dl class="com__togglebox app-pt__widgets-category is-show" data-element="togglebox" data-config='{"remember" : true, "name" : "app-lt__sidebar-other"}'>
-                        <dt data-node="ComToggleBox.button">
-                            <span class="icon default"></span>
-                            <span class="title">Other</span>
-                        </dt>
-                        <dd data-node="ComToggleBox.target">
-                            <div class="app-pt__widget-container" data-node="widgets:[]:container">
-                                <div class="app-pt__widget-dummy" data-node="dummy">
-                                    <div class="inner">
-                                        <div class="icon">
-                                            <img src="../../../img/widgets/default.png" alt="">
-                                        </div>
-                                        <div class="caption">Default Widget</div>
-                                    </div>
-                                </div>
-                            </div>
-                        </dd>
-                    </dl>
-                </div>
-            </li>
-        </ul>
-    </div>
-
-    <div class="sidebar__remove-zone" data-node="removeZone">
-        <div class="sidebar__content__title">Drop here to remove</div>
-    </div>
-
-    <!--
-    <div class="inner">
-
-
-
-    </div>
-    -->
 </div>
 
 <!-- [* ******* SIDEBAR END ******* *] -->
