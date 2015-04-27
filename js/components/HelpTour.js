@@ -139,7 +139,6 @@ function(params){
     };
 
     var start = function(){
-        getDimensions();
         // Render popup
         renderPopup();
         // Sidebar
@@ -193,6 +192,12 @@ function(params){
             cm.forEach(that.currentScene['overlays'], function(item, key){
                 that.components['overlays'][key].setTheme(item);
             });
+            // Set sidebar
+            if(!that.currentScene['sidebar']){
+                that.components['sidebar'].unsetTab().collapse();
+            }else{
+                that.components['sidebar'].setTab(that.currentScene['sidebar']).expand();
+            }
             // Set popup content
             cm.clearNode(that.nodes['popupContent']);
             contentNode = cm.Node('div', {'class' : 'popup__content__item', 'innerHTML' : that.currentScene['content']});
@@ -271,6 +276,7 @@ App.HelpTourScenario = [{
         'topMenu' : 'dark',
         'template' : 'dark'
     },
+    'sidebar' : false,
     'content' : '<h3>Welcome to the QuickSilk Online Tour!</h3><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam viverra feugiat massa sed ultricies. Maecenas at metus ac massa porttitor congue.</p>'
 },{
     'position' : 'center',
@@ -280,6 +286,7 @@ App.HelpTourScenario = [{
         'topMenu' : 'transparent',
         'template' : 'dark'
     },
+    'sidebar' : false,
     'content' : '<h3>Modules Menu</h3><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam viverra feugiat massa sed ultricies. Maecenas at metus ac massa porttitor congue.</p>',
     'construct' : function(){
         var that = this,
@@ -305,6 +312,7 @@ App.HelpTourScenario = [{
         'topMenu' : 'transparent',
         'template' : 'dark'
     },
+    'sidebar' : false,
     'content' : '<h3>User Menu</h3><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam viverra feugiat massa sed ultricies. Maecenas at metus ac massa porttitor congue.</p>',
     'construct' : function(){
         var that = this,
@@ -322,4 +330,54 @@ App.HelpTourScenario = [{
             cm.removeClass(nodes['container'], 'active');
         }
     }
+},{
+    'position' : 'center',
+    'overlays' : {
+        'main' : 'transparent',
+        'sidebar' : 'transparent',
+        'topMenu' : 'dark',
+        'template' : 'dark'
+    },
+    'sidebar' : false,
+    'content' : '<h3>Left Panel</h3><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam viverra feugiat massa sed ultricies. Maecenas at metus ac massa porttitor congue.</p>'
+},{
+    'position' : 'center',
+    'overlays' : {
+        'main' : 'transparent',
+        'sidebar' : 'transparent',
+        'topMenu' : 'dark',
+        'template' : 'dark'
+    },
+    'sidebar' : 'templates',
+    'content' : '<h3>Left Panel: Templates</h3><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam viverra feugiat massa sed ultricies. Maecenas at metus ac massa porttitor congue.</p>'
+},{
+    'position' : 'center',
+    'overlays' : {
+        'main' : 'transparent',
+        'sidebar' : 'transparent',
+        'topMenu' : 'dark',
+        'template' : 'dark'
+    },
+    'sidebar' : 'layouts',
+    'content' : '<h3>Left Panel: Layouts</h3><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam viverra feugiat massa sed ultricies. Maecenas at metus ac massa porttitor congue.</p>'
+},{
+    'position' : 'center',
+    'overlays' : {
+        'main' : 'transparent',
+        'sidebar' : 'transparent',
+        'topMenu' : 'dark',
+        'template' : 'dark'
+    },
+    'sidebar' : 'pages',
+    'content' : '<h3>Left Panel: Pages</h3><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam viverra feugiat massa sed ultricies. Maecenas at metus ac massa porttitor congue.</p>'
+},{
+    'position' : 'center',
+    'overlays' : {
+        'main' : 'transparent',
+        'sidebar' : 'transparent',
+        'topMenu' : 'dark',
+        'template' : 'dark'
+    },
+    'sidebar' : 'modules',
+    'content' : '<h3>Left Panel: Modules</h3><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam viverra feugiat massa sed ultricies. Maecenas at metus ac massa porttitor congue.</p>'
 }];
