@@ -1,18 +1,90 @@
 /* ******* COMPONENTS: HELP TOUR ******* */
 
 .app__helptour__popup {
-    width: 360px;
+    width: @AppHelpTour-Popup-Width;
     padding: @CmIndent-Medium;
     visibility: hidden;
     position: fixed;
     z-index: 9999;
     opacity: 0;
-    background: #ffffff;
     border-radius: @CmBorder-Radius;
+    box-shadow: @CmUI-ShadowLight;
+    background: @AppHelpTour-Popup-Background;
     .mx__position(0, auto, auto, 0);
     .mx__transform(scale(0));
     .mx__transform-origin(0 0);
     .mx__transition(all, @AppHelpTour-Duration);
+
+    .popup__close {
+        .icon.linked;
+        .cm-i;
+        .cm-i__circle-close;
+        position: absolute;
+        z-index: 2;
+        .mx__position(@CmIndent-XXXSmall, @CmIndent-XXXSmall, auto, auto);
+        .cm-i__size(@CmSize-Medium);
+    }
+
+    .popup__content {
+        height: 0;
+        position: relative;
+        overflow: hidden;
+        .mx__transition(all, @AppHelpTour-Duration);
+    }
+
+    .popup__content__item {
+        position: absolute;
+        opacity: 0;
+        background: @AppHelpTour-Popup-Background;
+        .mx__position(0, 0, 0, 0);
+        .mx__transition(opacity, @AppHelpTour-Duration);
+
+        &.is-show {
+            opacity: 1;
+        }
+
+        &:last-child {
+            position: relative;
+        }
+    }
+
+    .popup__arrow {
+        width: 0;
+        height: 0;
+        position: absolute;
+        opacity: 0;
+        border-style: solid;
+        border-color: transparent;
+        .mx__transition(all, @AppHelpTour-Duration);
+
+        &.is-show {
+            opacity: 1;
+        }
+    }
+
+    .popup__arrow--top {
+        @border_width: @AppHelpTour-Popup-ArrowSize / 2;
+        top: -@border_width;
+        left: @CmIndent-Medium;
+        border-width: 0 @border_width @border_width @border_width;
+        border-bottom-color: @AppHelpTour-Popup-Background;
+    }
+
+    .popup__arrow--right {
+        @border_width: @AppHelpTour-Popup-ArrowSize / 2;
+        top: @CmIndent-Medium;
+        right: -@border_width;
+        border-width: @border_width 0 @border_width @border_width;
+        border-left-color: @AppHelpTour-Popup-Background;
+    }
+
+    .popup__arrow--left {
+        @border_width: @AppHelpTour-Popup-ArrowSize / 2;
+        top: @CmIndent-Medium;
+        left: -@border_width;
+        border-width: @border_width @border_width @border_width 0;
+        border-right-color: @AppHelpTour-Popup-Background;
+    }
 
     &.is-show {
         visibility: visible;

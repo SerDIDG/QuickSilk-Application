@@ -19,6 +19,7 @@ cm.define('App.HelpTour', {
         'templateName' : 'app-template',
         'duration' : 500,
         'autoStart' : false,
+        'popupIndent' : 24,
         'Com.Overlay' : {
             'container' : 'document.body',
             'autoOpen' : false,
@@ -41,7 +42,10 @@ function(params){
         dimensions = {
             'sidebarCollapsed' : 0,
             'sidebarExpanded' : 0,
-            'topMenu' : 0
+            'topMenu' : 0,
+            'popupHeight' : 0,
+            'popupSelfHeight' : 0,
+            'popupContentHeight' : 0
         },
         startOptions = {
             'sidebarExpanded' : false,
@@ -52,10 +56,12 @@ function(params){
     that.components = {
         'overlays' : {}
     };
-    that.currentStage = null;
+    that.currentStage = -1;
     that.currentScene = null;
+    that.currentSceneNode = null;
     that.previousStage = null;
     that.previousScene = null;
+    that.previousSceneNode = null;
     that.sceneIntervals = {};
 
     var init = function(){
@@ -104,8 +110,15 @@ function(params){
             dimensions['sidebarExpanded'] = cm.styleToNumber(rule.style.width);
         }
         if(rule = cm.getCSSRule('.app-lt__topmenu-helper__height')[0]){
-            dimensions['topMenu'] = cm.styleToNumber(rule.style.width);
+            dimensions['topMenu'] = cm.styleToNumber(rule.style.height);
         }
+        if(!dimensions['popupSelfHeight']){
+            dimensions['popupSelfHeight'] = that.nodes['popup'].offsetHeight;
+        }
+        if(that.currentSceneNode){
+            dimensions['popupContentHeight'] = that.currentSceneNode.offsetHeight;
+        }
+        dimensions['popupHeight'] = dimensions['popupSelfHeight'] + dimensions['popupContentHeight'];
     };
 
     var prepare = function(){
@@ -164,8 +177,7 @@ function(params){
         }
         that.components['sidebar'].setTab(startOptions['sidebarTab']);
         // Hide popup
-        that.nodes['popup'].style.left = [cm.getX(that.params['node']), 'px'].join('');
-        that.nodes['popup'].style.top = [cm.getY(that.params['node']), 'px'].join('');
+        setPopupStartPosition();
         cm.removeClass(that.nodes['popup'], 'is-show');
         setTimeout(function(){
             cm.removeEvent(window, 'resize', setPopupPosition);
@@ -180,7 +192,6 @@ function(params){
     };
 
     var setStage = function(stage){
-        var contentNode;
         if(App.HelpTourScenario[stage]){
             // Destruct previous scene
             unsetStage();
@@ -201,10 +212,25 @@ function(params){
                     .setTab(that.currentScene['sidebar'])
                     .expand();
             }
+            // Set popup arrow
+            cm.removeClass(that.nodes['popupArrowTop'], 'is-show');
+            cm.removeClass(that.nodes['popupArrowRight'], 'is-show');
+            cm.removeClass(that.nodes['popupArrowLeft'], 'is-show');
+            switch(that.currentScene['arrow']){
+                case 'top':
+                    cm.addClass(that.nodes['popupArrowTop'], 'is-show');
+                    break;
+                case 'right':
+                    cm.addClass(that.nodes['popupArrowRight'], 'is-show');
+                    break;
+                case 'left':
+                    cm.addClass(that.nodes['popupArrowLeft'], 'is-show');
+                    break;
+            }
             // Set popup content
-            cm.clearNode(that.nodes['popupContent']);
-            contentNode = cm.Node('div', {'class' : 'popup__content__item', 'innerHTML' : that.currentScene['content']});
-            that.nodes['popupContent'].appendChild(contentNode);
+            that.currentSceneNode = cm.Node('div', {'class' : 'popup__content__item', 'innerHTML' : that.currentScene['content']});
+            that.nodes['popupContent'].appendChild(that.currentSceneNode);
+            cm.addClass(that.currentSceneNode, 'is-show', true);
             // Set popup position
             setPopupPosition();
             // Construct
@@ -213,56 +239,126 @@ function(params){
     };
 
     var unsetStage = function(){
-        if(that.currentStage){
+        if(that.currentStage >= 0){
             that.previousStage = that.currentStage;
             that.previousScene = that.currentScene;
+            that.previousSceneNode = that.currentSceneNode;
             cm.forEach(that.sceneIntervals, function(item){
                 clearInterval(item);
             });
+            (function(node){
+                setTimeout(function(){
+                    cm.remove(node);
+                }, that.params['duration']);
+            })(that.previousSceneNode);
             that.previousScene['destruct'] && that.previousScene['destruct'].call(that);
         }
-        that.currentStage = null;
+        that.currentStage = -1;
     };
 
     var renderPopup = function(){
         that.nodes['popup'] = cm.Node('div', {'class' : 'app__helptour__popup'},
+            that.nodes['popupArrowTop'] = cm.Node('div', {'class' : 'popup__arrow popup__arrow--top'}),
+            that.nodes['popupArrowRight'] = cm.Node('div', {'class' : 'popup__arrow popup__arrow--right'}),
+            that.nodes['popupArrowLeft'] = cm.Node('div', {'class' : 'popup__arrow popup__arrow--left'}),
+            that.nodes['popupClose'] = cm.Node('div', {'class' : 'popup__close', 'title' : that.lang('close')}),
             that.nodes['popupContent'] = cm.Node('div', {'class' : 'popup__content'}),
             cm.Node('div', {'class' : 'btn-wrap pull-center'},
-                that.nodes['close'] = cm.Node('button', {'class' : 'button-transparent'}, that.lang('close')),
                 that.nodes['back'] = cm.Node('button', that.lang('back')),
                 that.nodes['next'] = cm.Node('button', that.lang('next'))
             )
         );
-        that.nodes['popup'].style.left = [cm.getX(that.params['node']), 'px'].join('');
-        that.nodes['popup'].style.top = [cm.getY(that.params['node']), 'px'].join('');
+        setPopupStartPosition();
+        // Append
         that.params['container'].appendChild(that.nodes['popup']);
         cm.addClass(that.nodes['popup'], 'is-show', true);
         // Events
-        cm.addEvent(that.nodes['close'], 'click', stop);
+        cm.addEvent(that.nodes['popupClose'], 'click', stop);
         cm.addEvent(that.nodes['next'], 'click', function(){
             if(App.HelpTourScenario[that.currentStage + 1]){
                 setStage(that.currentStage + 1);
+            }else{
+                stop();
             }
         });
         cm.addEvent(that.nodes['back'], 'click', function(){
             if(App.HelpTourScenario[that.currentStage - 1]){
                 setStage(that.currentStage - 1);
+            }else{
+                stop();
             }
         });
         cm.addEvent(window, 'resize', setPopupPosition);
     };
 
+    var setPopupStartPosition = function(){
+        that.nodes['popup'].style.left = [Math.round(cm.getX(that.params['node']) + that.params['node'].offsetWidth / 2), 'px'].join('');
+        that.nodes['popup'].style.top = [Math.round(cm.getY(that.params['node']) + that.params['node'].offsetHeight / 2), 'px'].join('');
+    };
+
     var setPopupPosition = function(){
-        var pageSize;
+        var pageSize, top, left, nodes;
         if(that.currentScene){
             getDimensions();
             pageSize = cm.getPageSize();
             switch(that.currentScene['position']){
+                case 'top':
+                    left = Math.round((pageSize['winWidth'] - that.nodes['popup'].offsetWidth) / 2);
+                    top = dimensions['topMenu'] + that.params['popupIndent'];
+                    break;
+                case 'bottom':
+                    left = Math.round((pageSize['winWidth'] - that.nodes['popup'].offsetWidth) / 2);
+                    top = pageSize['winHeight'] - dimensions['popupHeight'] - that.params['popupIndent'];
+                    break;
+                case 'left':
+                    left = (that.components['sidebar'].isExpanded ? dimensions['sidebarExpanded'] : dimensions['sidebarCollapsed']) + that.params['popupIndent'];
+                    top = Math.round((pageSize['winHeight'] - dimensions['popupHeight']) / 2);
+                    break;
+                case 'left-top':
+                    left = (that.components['sidebar'].isExpanded ? dimensions['sidebarExpanded'] : dimensions['sidebarCollapsed']) + that.params['popupIndent'];
+                    top = dimensions['topMenu'] + that.params['popupIndent'];
+                    break;
+                case 'template-bottom':
+                    left = (that.components['sidebar'].isExpanded ? dimensions['sidebarExpanded'] : dimensions['sidebarCollapsed']);
+                    left = Math.round((pageSize['winWidth'] + left - that.nodes['popup'].offsetWidth) / 2);
+                    top = pageSize['winHeight'] - dimensions['popupHeight'] - that.params['popupIndent'];
+                    break;
+                case 'menu-modules':
+                    nodes = that.components['topMenu'].getNodes('items')['modules'];
+                    if(nodes){
+                        left = cm.getX(nodes['dropdown']) + nodes['dropdown'].offsetWidth + that.params['popupIndent'];
+                    }else{
+                        left = Math.round((pageSize['winWidth'] - that.nodes['popup'].offsetWidth) / 2);
+                    }
+                    top = dimensions['topMenu'] + that.params['popupIndent'];
+                    break;
+                case 'menu-user':
+                    nodes = that.components['topMenu'].getNodes('items')['user'];
+                    if(nodes){
+                        left = cm.getX(nodes['container']) - that.nodes['popup'].offsetWidth - that.params['popupIndent'];
+                    }else{
+                        left = Math.round((pageSize['winWidth'] - that.nodes['popup'].offsetWidth) / 2);
+                    }
+                    top = dimensions['topMenu'] + that.params['popupIndent'];
+                    break;
+                case 'menu-help':
+                    nodes = that.components['topMenu'].getNodes('items')['help'];
+                    if(nodes){
+                        left = cm.getX(nodes['container']);
+                    }else{
+                        left = Math.round((pageSize['winWidth'] - that.nodes['popup'].offsetWidth) / 2);
+                    }
+                    top = dimensions['topMenu'] + that.params['popupIndent'];
+                    break;
                 case 'center':
-                    that.nodes['popup'].style.left = [Math.round((pageSize['winWidth'] - that.nodes['popup'].offsetWidth) / 2), 'px'].join('');
-                    that.nodes['popup'].style.top = [Math.round((pageSize['winHeight'] - that.nodes['popup'].offsetHeight) / 2), 'px'].join('');
+                default:
+                    left = Math.round((pageSize['winWidth'] - that.nodes['popup'].offsetWidth) / 2);
+                    top = Math.round((pageSize['winHeight'] - dimensions['popupHeight']) / 2);
                     break;
             }
+            that.nodes['popup'].style.left = [left, 'px'].join('');
+            that.nodes['popup'].style.top = [top, 'px'].join('');
+            that.nodes['popupContent'].style.height = [dimensions['popupContentHeight'], 'px'].join('')
         }
     };
 
@@ -292,9 +388,10 @@ App.HelpTourScenario = [{
         'template' : 'dark'
     },
     'sidebar' : false,
+    'arrow' : false,
     'content' : '<h3>Welcome to the QuickSilk Online Tour!</h3><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam viverra feugiat massa sed ultricies. Maecenas at metus ac massa porttitor congue.</p>'
 },{
-    'position' : 'center',
+    'position' : 'menu-modules',
     'overlays' : {
         'main' : 'transparent',
         'sidebar' : 'dark',
@@ -302,6 +399,7 @@ App.HelpTourScenario = [{
         'template' : 'dark'
     },
     'sidebar' : false,
+    'arrow' : 'left',
     'content' : '<h3>Modules Menu</h3><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam viverra feugiat massa sed ultricies. Maecenas at metus ac massa porttitor congue.</p>',
     'construct' : function(){
         var that = this,
@@ -320,7 +418,7 @@ App.HelpTourScenario = [{
         }
     }
 },{
-    'position' : 'center',
+    'position' : 'menu-user',
     'overlays' : {
         'main' : 'transparent',
         'sidebar' : 'dark',
@@ -328,6 +426,7 @@ App.HelpTourScenario = [{
         'template' : 'dark'
     },
     'sidebar' : false,
+    'arrow' : 'right',
     'content' : '<h3>User Menu</h3><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam viverra feugiat massa sed ultricies. Maecenas at metus ac massa porttitor congue.</p>',
     'construct' : function(){
         var that = this,
@@ -346,7 +445,7 @@ App.HelpTourScenario = [{
         }
     }
 },{
-    'position' : 'center',
+    'position' : 'left-top',
     'overlays' : {
         'main' : 'transparent',
         'sidebar' : 'transparent',
@@ -354,9 +453,10 @@ App.HelpTourScenario = [{
         'template' : 'dark'
     },
     'sidebar' : false,
+    'arrow' : 'left',
     'content' : '<h3>Left Panel</h3><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam viverra feugiat massa sed ultricies. Maecenas at metus ac massa porttitor congue.</p>'
 },{
-    'position' : 'center',
+    'position' : 'left-top',
     'overlays' : {
         'main' : 'transparent',
         'sidebar' : 'transparent',
@@ -364,9 +464,10 @@ App.HelpTourScenario = [{
         'template' : 'dark'
     },
     'sidebar' : 'templates',
+    'arrow' : 'left',
     'content' : '<h3>Left Panel: Templates</h3><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam viverra feugiat massa sed ultricies. Maecenas at metus ac massa porttitor congue.</p>'
 },{
-    'position' : 'center',
+    'position' : 'left-top',
     'overlays' : {
         'main' : 'transparent',
         'sidebar' : 'transparent',
@@ -374,9 +475,10 @@ App.HelpTourScenario = [{
         'template' : 'dark'
     },
     'sidebar' : 'layouts',
+    'arrow' : 'left',
     'content' : '<h3>Left Panel: Layouts</h3><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam viverra feugiat massa sed ultricies. Maecenas at metus ac massa porttitor congue.</p>'
 },{
-    'position' : 'center',
+    'position' : 'left-top',
     'overlays' : {
         'main' : 'transparent',
         'sidebar' : 'transparent',
@@ -384,9 +486,10 @@ App.HelpTourScenario = [{
         'template' : 'dark'
     },
     'sidebar' : 'pages',
+    'arrow' : 'left',
     'content' : '<h3>Left Panel: Pages</h3><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam viverra feugiat massa sed ultricies. Maecenas at metus ac massa porttitor congue.</p>'
 },{
-    'position' : 'center',
+    'position' : 'left-top',
     'overlays' : {
         'main' : 'transparent',
         'sidebar' : 'transparent',
@@ -394,5 +497,44 @@ App.HelpTourScenario = [{
         'template' : 'dark'
     },
     'sidebar' : 'modules',
+    'arrow' : 'left',
     'content' : '<h3>Left Panel: Modules</h3><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam viverra feugiat massa sed ultricies. Maecenas at metus ac massa porttitor congue.</p>'
+},{
+    'position' : 'template-bottom',
+    'overlays' : {
+        'main' : 'transparent',
+        'sidebar' : 'dark',
+        'topMenu' : 'dark',
+        'template' : 'transparent'
+    },
+    'sidebar' : 'modules',
+    'arrow' : false,
+    'content' : '<h3>Drop Area</h3><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam viverra feugiat massa sed ultricies. Maecenas at metus ac massa porttitor congue.</p>'
+},{
+    'position' : 'menu-help',
+    'overlays' : {
+        'main' : 'transparent',
+        'sidebar' : 'dark',
+        'topMenu' : 'transparent',
+        'template' : 'dark'
+    },
+    'sidebar' : false,
+    'arrow' : 'top',
+    'content' : '<h3>Need Help?</h3><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam viverra feugiat massa sed ultricies. Maecenas at metus ac massa porttitor congue.</p>',
+    'construct' : function(){
+        var that = this,
+            nodes = that.components['topMenu'].getNodes('items')['help'];
+        if(nodes){
+            that.sceneIntervals['dropdown'] = setTimeout(function(){
+                cm.addClass(nodes['container'], 'active', true);
+            }, that.params['duration']);
+        }
+    },
+    'destruct' : function(){
+        var that = this,
+            nodes = that.components['topMenu'].getNodes('items')['help'];
+        if(nodes){
+            cm.removeClass(nodes['container'], 'active');
+        }
+    }
 }];
