@@ -215,6 +215,17 @@ function(params){
             if(that.currentScene['arrow']){
                 cm.addClass(that.nodes['popupArrows'][that.currentScene['arrow']], 'is-show');
             }
+            // Set Popup Buttons
+            if(that.currentStage == 0){
+                that.nodes['back'].innerHTML = that.lang('close');
+                that.nodes['next'].innerHTML = that.lang('next');
+            }else if(that.currentStage == App.HelpTourScenario.length - 1){
+                that.nodes['back'].innerHTML = that.lang('back');
+                that.nodes['next'].innerHTML = that.lang('finish');
+            }else{
+                that.nodes['back'].innerHTML = that.lang('back');
+                that.nodes['next'].innerHTML = that.lang('next');
+            }
             // Set Popup Content
             that.currentSceneNode = cm.Node('div', {'class' : 'popup__content__item', 'innerHTML' : that.currentScene['content']});
             that.nodes['popupContent'].appendChild(that.currentSceneNode);
@@ -262,9 +273,11 @@ function(params){
             that.nodes['popupArrows']['left'] = cm.Node('div', {'class' : 'popup__arrow popup__arrow--left'}),
             that.nodes['popupClose'] = cm.Node('div', {'class' : 'popup__close', 'title' : that.lang('close')}),
             that.nodes['popupContent'] = cm.Node('div', {'class' : 'popup__content'}),
-            cm.Node('div', {'class' : 'btn-wrap pull-center'},
-                that.nodes['back'] = cm.Node('button', that.lang('back')),
-                that.nodes['next'] = cm.Node('button', that.lang('next'))
+            that.nodes['popupButtons'] = cm.Node('div', {'class' : 'popup__buttons'},
+                cm.Node('div', {'class' : 'btn-wrap pull-center'},
+                    that.nodes['back'] = cm.Node('button', that.lang('back')),
+                    that.nodes['next'] = cm.Node('button', that.lang('next'))
+                )
             )
         );
         setPopupStartPosition();
@@ -273,24 +286,8 @@ function(params){
         cm.addClass(that.nodes['popup'], 'is-show', true);
         // Events
         cm.addEvent(that.nodes['popupClose'], 'click', stop);
-        cm.addEvent(that.nodes['next'], 'click', function(){
-            if(App.HelpTourScenario[that.currentStage + 1]){
-                //that.nodes['next'].innerHTML = that.lang('next');
-                setStage(that.currentStage + 1);
-            }else{
-                //that.nodes['next'].innerHTML = that.lang('finish');
-                stop();
-            }
-        });
-        cm.addEvent(that.nodes['back'], 'click', function(){
-            if(App.HelpTourScenario[that.currentStage - 1]){
-                //that.nodes['back'].innerHTML = that.lang('back');
-                setStage(that.currentStage - 1);
-            }else{
-                //that.nodes['back'].innerHTML = that.lang('cancel');
-                stop();
-            }
-        });
+        cm.addEvent(that.nodes['next'], 'click', that.next);
+        cm.addEvent(that.nodes['back'], 'click', that.prev);
         cm.addEvent(window, 'resize', setPopupPosition);
         cm.addEvent(window, 'keydown', popupClickEvents);
     };
@@ -315,8 +312,16 @@ function(params){
 
     var popupClickEvents = function(e){
         e = cm.getEvent(e);
-        if(e.keyCode == 27){
-            stop();
+        switch(e.keyCode){
+            case 27:
+                stop();
+                break;
+            case 37:
+                that.prev();
+                break;
+            case 39:
+                that.next();
+                break;
         }
     };
 
@@ -428,6 +433,28 @@ function(params){
 
     that.stop = function(){
         stop();
+        return that;
+    };
+
+    that.next = function(){
+        if(that.currentStage >= 0){
+            if(App.HelpTourScenario[that.currentStage + 1]){
+                setStage(that.currentStage + 1);
+            }else{
+                stop();
+            }
+        }
+        return that;
+    };
+
+    that.prev = function(){
+        if(that.currentStage >= 0){
+            if(App.HelpTourScenario[that.currentStage - 1]){
+                setStage(that.currentStage - 1);
+            }else{
+                stop();
+            }
+        }
         return that;
     };
 
