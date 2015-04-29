@@ -115,7 +115,7 @@ function(params){
         if(rule = cm.getCSSRule('.app-lt__sidebar .sidebar__remove-zone')[0]){
             rule.style.width = [contentWidth + scrollBarSize, 'px'].join('');
         }
-        if(rule = cm.getCSSRule('.app-lt__sidebar.is-expanded')[0]){
+        if((rule = cm.getCSSRule('.app-lt__sidebar.is-expanded')[0]) || (rule = cm.getCSSRule('.is-expanded.app-lt__sidebar')[0])){
             rule.style.width = [menuWidth + contentWidth + scrollBarSize, 'px'].join('');
         }
         if(rule = cm.getCSSRule('html.is-sidebar--expanded .tpl__container')[0]){
