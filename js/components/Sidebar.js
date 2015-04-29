@@ -63,7 +63,7 @@ function(params){
     var render = function(){
         var helperMenuRule, helperContentRule;
         // Init tabset
-        cm.getClass('Com.TabsetHelper', function(classConstructor){
+        cm.getConstructor('Com.TabsetHelper', function(classConstructor){
             that.components['tabset'] = new classConstructor(that.params['Com.TabsetHelper']);
             that.components['tabset'].addEvent('onLabelClick', function(tabset, data){
                 if(!that.isExpanded || tabset.get() == data['id']){

@@ -89,7 +89,7 @@ function(params){
     };
 
     var render = function(){
-        cm.getClass('Com.Overlay', function(classConstructor){
+        cm.getConstructor('Com.Overlay', function(classConstructor){
             that.components['overlays']['main'] = new classConstructor(
                 cm.merge(that.params['Com.Overlay'], {
                     'position' : 'fixed'

@@ -176,7 +176,7 @@ function(params){
     };
 
     var initDragAndDrop = function(){
-        cm.getClass('Com.Draganddrop', function(classObject){
+        cm.getConstructor('Com.Draganddrop', function(classObject){
             that.components['dd'] = new classObject(
                 cm.merge({
                     'container' : that.nodes['AppTemplate']['container']
