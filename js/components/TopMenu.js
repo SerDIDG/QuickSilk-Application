@@ -71,6 +71,30 @@ function(params){
         return that;
     };
 
+    that.setActiveItem = function(id){
+        var item;
+        if(id && (item = that.nodes['items'][id])){
+            cm.addClass(item['container'], 'active')
+        }
+        return that;
+    };
+
+    that.unsetActiveItem = function(id){
+        var item;
+        if(id && (item = that.nodes['items'][id])){
+            cm.removeClass(item['container'], 'active')
+        }
+        return that;
+    };
+
+    that.getItem = function(id){
+        var item;
+        if(id && (item = that.nodes['items'][id])){
+            return item;
+        }
+        return null;
+    };
+
     that.getNodes = function(key){
         return that.nodes[key] || that.nodes;
     };

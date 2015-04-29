@@ -33,7 +33,9 @@ cm.define('App.HelpTour', {
         'langs' : {
             'next' : 'Next',
             'back' : 'Back',
-            'close' : 'Close'
+            'close' : 'Close',
+            'cancel' : 'Cancel',
+            'finish' : 'Finish'
         }
     }
 },
@@ -96,9 +98,9 @@ function(params){
             that.components['overlays']['sidebar'] = new classConstructor(that.params['Com.Overlay']);
             that.components['overlays']['topMenu'] = new classConstructor(that.params['Com.Overlay']);
             that.components['overlays']['template'] = new classConstructor(that.params['Com.Overlay']);
+            // Start tour on click
+            cm.addEvent(that.params['node'], 'click', prepare);
         });
-        // Start tour on click
-        cm.addEvent(that.params['node'], 'click', prepare);
     };
 
     var getDimensions = function(){
@@ -151,9 +153,9 @@ function(params){
     };
 
     var start = function(){
-        // Render popup
+        // Render Popup
         renderPopup();
-        // Sidebar
+        // Save Sidebar State
         startOptions['sidebarExpanded'] = that.components['sidebar'].isExpanded;
         if(that.components['sidebar'].isExpanded){
             that.components['sidebar'].collapse();
@@ -169,20 +171,15 @@ function(params){
     };
 
     var stop = function(){
-        // Restore state
+        // Remove Popup
+        removePopup();
+        // Restore Sidebar State
         if(startOptions['sidebarExpanded'] && !that.components['sidebar'].isExpanded){
             that.components['sidebar'].expand();
         }else if(!startOptions['sidebarExpanded'] && that.components['sidebar'].isExpanded){
             that.components['sidebar'].collapse();
         }
         that.components['sidebar'].setTab(startOptions['sidebarTab']);
-        // Hide popup
-        setPopupStartPosition();
-        cm.removeClass(that.nodes['popup'], 'is-show');
-        setTimeout(function(){
-            cm.removeEvent(window, 'resize', setPopupPosition);
-            cm.remove(that.nodes['popup']);
-        }, that.params['duration']);
         // Hide overlays
         cm.forEach(that.components['overlays'], function(item){
             item.close();
@@ -193,16 +190,16 @@ function(params){
 
     var setStage = function(stage){
         if(App.HelpTourScenario[stage]){
-            // Destruct previous scene
+            // Destruct Previous Scene
             unsetStage();
-            // Construct new scene
+            // Construct New Scene
             that.currentStage = stage;
             that.currentScene = App.HelpTourScenario[stage];
-            // Set overlays
+            // Set Overlays
             cm.forEach(that.currentScene['overlays'], function(item, key){
                 that.components['overlays'][key].setTheme(item);
             });
-            // Set sidebar
+            // Set Sidebar
             if(!that.currentScene['sidebar']){
                 that.components['sidebar']
                     .unsetTab()
@@ -212,26 +209,17 @@ function(params){
                     .setTab(that.currentScene['sidebar'])
                     .expand();
             }
-            // Set popup arrow
-            cm.removeClass(that.nodes['popupArrowTop'], 'is-show');
-            cm.removeClass(that.nodes['popupArrowRight'], 'is-show');
-            cm.removeClass(that.nodes['popupArrowLeft'], 'is-show');
-            switch(that.currentScene['arrow']){
-                case 'top':
-                    cm.addClass(that.nodes['popupArrowTop'], 'is-show');
-                    break;
-                case 'right':
-                    cm.addClass(that.nodes['popupArrowRight'], 'is-show');
-                    break;
-                case 'left':
-                    cm.addClass(that.nodes['popupArrowLeft'], 'is-show');
-                    break;
+            // Set Top Menu
+            that.components['topMenu'].setActiveItem(that.currentScene['topMenu']);
+            // Set Popup Arrow
+            if(that.currentScene['arrow']){
+                cm.addClass(that.nodes['popupArrows'][that.currentScene['arrow']], 'is-show');
             }
-            // Set popup content
+            // Set Popup Content
             that.currentSceneNode = cm.Node('div', {'class' : 'popup__content__item', 'innerHTML' : that.currentScene['content']});
             that.nodes['popupContent'].appendChild(that.currentSceneNode);
             cm.addClass(that.currentSceneNode, 'is-show', true);
-            // Set popup position
+            // Set Popup Position
             setPopupPosition();
             // Construct
             that.currentScene['construct'] && that.currentScene['construct'].call(that);
@@ -243,24 +231,35 @@ function(params){
             that.previousStage = that.currentStage;
             that.previousScene = that.currentScene;
             that.previousSceneNode = that.currentSceneNode;
+            // Top Menu
+            that.components['topMenu'].unsetActiveItem(that.previousScene['topMenu']);
+            // Clear Popup Arrow
+            if(that.previousScene['arrow']){
+                cm.removeClass(that.nodes['popupArrows'][that.previousScene['arrow']], 'is-show');
+            }
+            // Clear Scene Intervals
             cm.forEach(that.sceneIntervals, function(item){
                 clearInterval(item);
             });
+            // Remove Popup Node
             (function(node){
                 setTimeout(function(){
                     cm.remove(node);
                 }, that.params['duration']);
             })(that.previousSceneNode);
+            // Destruct
             that.previousScene['destruct'] && that.previousScene['destruct'].call(that);
         }
         that.currentStage = -1;
     };
 
     var renderPopup = function(){
+        that.nodes['popupArrows'] = {};
         that.nodes['popup'] = cm.Node('div', {'class' : 'app__helptour__popup'},
-            that.nodes['popupArrowTop'] = cm.Node('div', {'class' : 'popup__arrow popup__arrow--top'}),
-            that.nodes['popupArrowRight'] = cm.Node('div', {'class' : 'popup__arrow popup__arrow--right'}),
-            that.nodes['popupArrowLeft'] = cm.Node('div', {'class' : 'popup__arrow popup__arrow--left'}),
+            that.nodes['popupArrows']['top'] = cm.Node('div', {'class' : 'popup__arrow popup__arrow--top'}),
+            that.nodes['popupArrows']['right'] = cm.Node('div', {'class' : 'popup__arrow popup__arrow--right'}),
+            that.nodes['popupArrows']['bottom'] = cm.Node('div', {'class' : 'popup__arrow popup__arrow--bottom'}),
+            that.nodes['popupArrows']['left'] = cm.Node('div', {'class' : 'popup__arrow popup__arrow--left'}),
             that.nodes['popupClose'] = cm.Node('div', {'class' : 'popup__close', 'title' : that.lang('close')}),
             that.nodes['popupContent'] = cm.Node('div', {'class' : 'popup__content'}),
             cm.Node('div', {'class' : 'btn-wrap pull-center'},
@@ -276,19 +275,37 @@ function(params){
         cm.addEvent(that.nodes['popupClose'], 'click', stop);
         cm.addEvent(that.nodes['next'], 'click', function(){
             if(App.HelpTourScenario[that.currentStage + 1]){
+                //that.nodes['next'].innerHTML = that.lang('next');
                 setStage(that.currentStage + 1);
             }else{
+                //that.nodes['next'].innerHTML = that.lang('finish');
                 stop();
             }
         });
         cm.addEvent(that.nodes['back'], 'click', function(){
             if(App.HelpTourScenario[that.currentStage - 1]){
+                //that.nodes['back'].innerHTML = that.lang('back');
                 setStage(that.currentStage - 1);
             }else{
+                //that.nodes['back'].innerHTML = that.lang('cancel');
                 stop();
             }
         });
         cm.addEvent(window, 'resize', setPopupPosition);
+        cm.addEvent(window, 'keydown', popupClickEvents);
+    };
+
+    var removePopup = function(){
+        // Remove events
+        cm.removeEvent(window, 'resize', setPopupPosition);
+        cm.removeEvent(window, 'keydown', popupClickEvents);
+        // Set end position
+        setPopupStartPosition();
+        cm.removeClass(that.nodes['popup'], 'is-show');
+        // Remove node
+        setTimeout(function(){
+            cm.remove(that.nodes['popup']);
+        }, that.params['duration']);
     };
 
     var setPopupStartPosition = function(){
@@ -296,61 +313,101 @@ function(params){
         that.nodes['popup'].style.top = [Math.round(cm.getY(that.params['node']) + that.params['node'].offsetHeight / 2), 'px'].join('');
     };
 
+    var popupClickEvents = function(e){
+        e = cm.getEvent(e);
+        if(e.keyCode == 27){
+            stop();
+        }
+    };
+
     var setPopupPosition = function(){
-        var pageSize, top, left, nodes;
+        var position, pageSize, top, left, topMenuItem;
         if(that.currentScene){
             getDimensions();
             pageSize = cm.getPageSize();
-            switch(that.currentScene['position']){
-                case 'top':
-                    left = Math.round((pageSize['winWidth'] - that.nodes['popup'].offsetWidth) / 2);
-                    top = dimensions['topMenu'] + that.params['popupIndent'];
+            position = that.currentScene['position'].split(':');
+            // Set position
+            switch(position[0]){
+                // Window related position
+                case 'window':
+                    switch(position[1]){
+                        case 'top':
+                            left = Math.round((pageSize['winWidth'] - that.nodes['popup'].offsetWidth) / 2);
+                            top = that.params['popupIndent'];
+                            break;
+                        case 'bottom':
+                            left = Math.round((pageSize['winWidth'] - that.nodes['popup'].offsetWidth) / 2);
+                            top = pageSize['winHeight'] - dimensions['popupHeight'] - that.params['popupIndent'];
+                            break;
+                        case 'center':
+                        default:
+                            left = Math.round((pageSize['winWidth'] - that.nodes['popup'].offsetWidth) / 2);
+                            top = Math.round((pageSize['winHeight'] - dimensions['popupHeight']) / 2);
+                            break;
+                    }
                     break;
-                case 'bottom':
-                    left = Math.round((pageSize['winWidth'] - that.nodes['popup'].offsetWidth) / 2);
-                    top = pageSize['winHeight'] - dimensions['popupHeight'] - that.params['popupIndent'];
+                // Top Menu related position
+                case 'topMenu':
+                    switch(position[1]){
+                        case 'center':
+                        default:
+                            left = Math.round((pageSize['winWidth'] - that.nodes['popup'].offsetWidth) / 2);
+                            top = dimensions['topMenu'] + that.params['popupIndent'];
+                            break;
+                    }
                     break;
-                case 'left':
-                    left = (that.components['sidebar'].isExpanded ? dimensions['sidebarExpanded'] : dimensions['sidebarCollapsed']) + that.params['popupIndent'];
-                    top = Math.round((pageSize['winHeight'] - dimensions['popupHeight']) / 2);
-                    break;
-                case 'left-top':
-                    left = (that.components['sidebar'].isExpanded ? dimensions['sidebarExpanded'] : dimensions['sidebarCollapsed']) + that.params['popupIndent'];
-                    top = dimensions['topMenu'] + that.params['popupIndent'];
-                    break;
-                case 'template-bottom':
-                    left = (that.components['sidebar'].isExpanded ? dimensions['sidebarExpanded'] : dimensions['sidebarCollapsed']);
-                    left = Math.round((pageSize['winWidth'] + left - that.nodes['popup'].offsetWidth) / 2);
-                    top = pageSize['winHeight'] - dimensions['popupHeight'] - that.params['popupIndent'];
-                    break;
-                case 'menu-modules':
-                    nodes = that.components['topMenu'].getNodes('items')['modules'];
-                    if(nodes){
-                        left = cm.getX(nodes['dropdown']) + nodes['dropdown'].offsetWidth + that.params['popupIndent'];
+                // Top Menu Item related position
+                case 'topMenuItem':
+                    topMenuItem = that.components['topMenu'].getItem(position[1]);
+                    if(!topMenuItem){
+                        left = Math.round((pageSize['winWidth'] - that.nodes['popup'].offsetWidth) / 2);
+                    }else if(position[2] && position[2] == 'dropdown' && topMenuItem['dropdown']){
+                        if(position[3] && position[3] == 'right'){
+                            left = cm.getX(topMenuItem['dropdown']) - that.nodes['popup'].offsetWidth - that.params['popupIndent'];
+                        }else{
+                            left = cm.getX(topMenuItem['dropdown']) + topMenuItem['dropdown'].offsetWidth + that.params['popupIndent'];
+                        }
+                    }else if(topMenuItem['container']){
+                        if(position[3] && position[3] == 'left'){
+                            left = cm.getX(topMenuItem['container']) + topMenuItem['container'].offsetWidth - that.nodes['popup'].offsetWidth;
+                        }else{
+                            left = cm.getX(topMenuItem['container']);
+                        }
                     }else{
                         left = Math.round((pageSize['winWidth'] - that.nodes['popup'].offsetWidth) / 2);
                     }
                     top = dimensions['topMenu'] + that.params['popupIndent'];
                     break;
-                case 'menu-user':
-                    nodes = that.components['topMenu'].getNodes('items')['user'];
-                    if(nodes){
-                        left = cm.getX(nodes['container']) - that.nodes['popup'].offsetWidth - that.params['popupIndent'];
-                    }else{
-                        left = Math.round((pageSize['winWidth'] - that.nodes['popup'].offsetWidth) / 2);
+                // Template related position
+                case 'template':
+                    switch(position[1]){
+                        case 'top':
+                            left = (that.components['sidebar'].isExpanded ? dimensions['sidebarExpanded'] : dimensions['sidebarCollapsed']);
+                            left = Math.round((pageSize['winWidth'] + left - that.nodes['popup'].offsetWidth) / 2);
+                            top = dimensions['topMenu'] + that.params['popupIndent'];
+                            break;
+                        case 'bottom':
+                            left = (that.components['sidebar'].isExpanded ? dimensions['sidebarExpanded'] : dimensions['sidebarCollapsed']);
+                            left = Math.round((pageSize['winWidth'] + left - that.nodes['popup'].offsetWidth) / 2);
+                            top = pageSize['winHeight'] - dimensions['popupHeight'] - that.params['popupIndent'];
+                            break;
+                        case 'left':
+                            left = (that.components['sidebar'].isExpanded ? dimensions['sidebarExpanded'] : dimensions['sidebarCollapsed']) + that.params['popupIndent'];
+                            top = Math.round((pageSize['winHeight'] - dimensions['popupHeight']) / 2);
+                            break;
+                        case 'left-top':
+                            left = (that.components['sidebar'].isExpanded ? dimensions['sidebarExpanded'] : dimensions['sidebarCollapsed']) + that.params['popupIndent'];
+                            top = dimensions['topMenu'] + that.params['popupIndent'];
+                            break;
+                        case 'center':
+                        default:
+                            left = (that.components['sidebar'].isExpanded ? dimensions['sidebarExpanded'] : dimensions['sidebarCollapsed']);
+                            left = Math.round((pageSize['winWidth'] + left - that.nodes['popup'].offsetWidth) / 2);
+                            top = Math.round((pageSize['winHeight'] +  dimensions['topMenu'] - dimensions['popupHeight']) / 2);
+                            break;
                     }
-                    top = dimensions['topMenu'] + that.params['popupIndent'];
                     break;
-                case 'menu-help':
-                    nodes = that.components['topMenu'].getNodes('items')['help'];
-                    if(nodes){
-                        left = cm.getX(nodes['container']);
-                    }else{
-                        left = Math.round((pageSize['winWidth'] - that.nodes['popup'].offsetWidth) / 2);
-                    }
-                    top = dimensions['topMenu'] + that.params['popupIndent'];
-                    break;
-                case 'center':
+                // Default position
                 default:
                     left = Math.round((pageSize['winWidth'] - that.nodes['popup'].offsetWidth) / 2);
                     top = Math.round((pageSize['winHeight'] - dimensions['popupHeight']) / 2);
@@ -380,7 +437,8 @@ function(params){
 /* ******* HELP TOUR SCENARIO ******* */
 
 App.HelpTourScenario = [{
-    'position' : 'center',
+    'position' : 'window:center',
+    'arrow' : false,
     'overlays' : {
         'main' : 'transparent',
         'sidebar' : 'dark',
@@ -388,64 +446,35 @@ App.HelpTourScenario = [{
         'template' : 'dark'
     },
     'sidebar' : false,
-    'arrow' : false,
+    'topMenu' : false,
     'content' : '<h3>Welcome to the QuickSilk Online Tour!</h3><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam viverra feugiat massa sed ultricies. Maecenas at metus ac massa porttitor congue.</p>'
 },{
-    'position' : 'menu-modules',
-    'overlays' : {
-        'main' : 'transparent',
-        'sidebar' : 'dark',
-        'topMenu' : 'transparent',
-        'template' : 'dark'
-    },
-    'sidebar' : false,
-    'arrow' : 'left',
-    'content' : '<h3>Modules Menu</h3><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam viverra feugiat massa sed ultricies. Maecenas at metus ac massa porttitor congue.</p>',
-    'construct' : function(){
-        var that = this,
-            nodes = that.components['topMenu'].getNodes('items')['modules'];
-        if(nodes){
-            that.sceneIntervals['dropdown'] = setTimeout(function(){
-                cm.addClass(nodes['container'], 'active', true);
-            }, that.params['duration']);
-        }
-    },
-    'destruct' : function(){
-        var that = this,
-            nodes = that.components['topMenu'].getNodes('items')['modules'];
-        if(nodes){
-            cm.removeClass(nodes['container'], 'active');
-        }
-    }
-},{
-    'position' : 'menu-user',
-    'overlays' : {
-        'main' : 'transparent',
-        'sidebar' : 'dark',
-        'topMenu' : 'transparent',
-        'template' : 'dark'
-    },
-    'sidebar' : false,
+    'position' : 'topMenuItem:user:dropdown:right',
     'arrow' : 'right',
-    'content' : '<h3>User Menu</h3><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam viverra feugiat massa sed ultricies. Maecenas at metus ac massa porttitor congue.</p>',
-    'construct' : function(){
-        var that = this,
-            nodes = that.components['topMenu'].getNodes('items')['user'];
-        if(nodes){
-            that.sceneIntervals['dropdown'] = setTimeout(function(){
-                cm.addClass(nodes['container'], 'active', true);
-            }, that.params['duration']);
-        }
+    'overlays' : {
+        'main' : 'transparent',
+        'sidebar' : 'dark',
+        'topMenu' : 'transparent',
+        'template' : 'dark'
     },
-    'destruct' : function(){
-        var that = this,
-            nodes = that.components['topMenu'].getNodes('items')['user'];
-        if(nodes){
-            cm.removeClass(nodes['container'], 'active');
-        }
-    }
+    'sidebar' : false,
+    'topMenu' : 'user',
+    'content' : '<h3>User Menu</h3><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam viverra feugiat massa sed ultricies. Maecenas at metus ac massa porttitor congue.</p>'
 },{
-    'position' : 'left-top',
+    'position' : 'topMenuItem:modules:dropdown:left',
+    'arrow' : 'left',
+    'overlays' : {
+        'main' : 'transparent',
+        'sidebar' : 'dark',
+        'topMenu' : 'transparent',
+        'template' : 'dark'
+    },
+    'sidebar' : false,
+    'topMenu' : 'modules',
+    'content' : '<h3>Modules Menu</h3><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam viverra feugiat massa sed ultricies. Maecenas at metus ac massa porttitor congue.</p>'
+},{
+    'position' : 'template:left-top',
+    'arrow' : 'left',
     'overlays' : {
         'main' : 'transparent',
         'sidebar' : 'transparent',
@@ -453,10 +482,11 @@ App.HelpTourScenario = [{
         'template' : 'dark'
     },
     'sidebar' : false,
-    'arrow' : 'left',
+    'topMenu' : false,
     'content' : '<h3>Left Panel</h3><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam viverra feugiat massa sed ultricies. Maecenas at metus ac massa porttitor congue.</p>'
 },{
-    'position' : 'left-top',
+    'position' : 'template:left-top',
+    'arrow' : 'left',
     'overlays' : {
         'main' : 'transparent',
         'sidebar' : 'transparent',
@@ -464,10 +494,11 @@ App.HelpTourScenario = [{
         'template' : 'dark'
     },
     'sidebar' : 'templates',
-    'arrow' : 'left',
+    'topMenu' : false,
     'content' : '<h3>Left Panel: Templates</h3><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam viverra feugiat massa sed ultricies. Maecenas at metus ac massa porttitor congue.</p>'
 },{
-    'position' : 'left-top',
+    'position' : 'template:left-top',
+    'arrow' : 'left',
     'overlays' : {
         'main' : 'transparent',
         'sidebar' : 'transparent',
@@ -475,10 +506,11 @@ App.HelpTourScenario = [{
         'template' : 'dark'
     },
     'sidebar' : 'layouts',
-    'arrow' : 'left',
+    'topMenu' : false,
     'content' : '<h3>Left Panel: Layouts</h3><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam viverra feugiat massa sed ultricies. Maecenas at metus ac massa porttitor congue.</p>'
 },{
-    'position' : 'left-top',
+    'position' : 'template:left-top',
+    'arrow' : 'left',
     'overlays' : {
         'main' : 'transparent',
         'sidebar' : 'transparent',
@@ -486,10 +518,11 @@ App.HelpTourScenario = [{
         'template' : 'dark'
     },
     'sidebar' : 'pages',
-    'arrow' : 'left',
+    'topMenu' : false,
     'content' : '<h3>Left Panel: Pages</h3><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam viverra feugiat massa sed ultricies. Maecenas at metus ac massa porttitor congue.</p>'
 },{
-    'position' : 'left-top',
+    'position' : 'template:left-top',
+    'arrow' : 'left',
     'overlays' : {
         'main' : 'transparent',
         'sidebar' : 'transparent',
@@ -497,10 +530,11 @@ App.HelpTourScenario = [{
         'template' : 'dark'
     },
     'sidebar' : 'modules',
-    'arrow' : 'left',
+    'topMenu' : false,
     'content' : '<h3>Left Panel: Modules</h3><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam viverra feugiat massa sed ultricies. Maecenas at metus ac massa porttitor congue.</p>'
 },{
-    'position' : 'template-bottom',
+    'position' : 'template:center',
+    'arrow' : false,
     'overlays' : {
         'main' : 'transparent',
         'sidebar' : 'dark',
@@ -508,10 +542,11 @@ App.HelpTourScenario = [{
         'template' : 'transparent'
     },
     'sidebar' : 'modules',
-    'arrow' : false,
+    'topMenu' : false,
     'content' : '<h3>Drop Area</h3><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam viverra feugiat massa sed ultricies. Maecenas at metus ac massa porttitor congue.</p>'
 },{
-    'position' : 'menu-help',
+    'position' : 'topMenuItem:help_support:container:right',
+    'arrow' : 'top',
     'overlays' : {
         'main' : 'transparent',
         'sidebar' : 'dark',
@@ -519,22 +554,6 @@ App.HelpTourScenario = [{
         'template' : 'dark'
     },
     'sidebar' : false,
-    'arrow' : 'top',
-    'content' : '<h3>Need Help?</h3><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam viverra feugiat massa sed ultricies. Maecenas at metus ac massa porttitor congue.</p>',
-    'construct' : function(){
-        var that = this,
-            nodes = that.components['topMenu'].getNodes('items')['help'];
-        if(nodes){
-            that.sceneIntervals['dropdown'] = setTimeout(function(){
-                cm.addClass(nodes['container'], 'active', true);
-            }, that.params['duration']);
-        }
-    },
-    'destruct' : function(){
-        var that = this,
-            nodes = that.components['topMenu'].getNodes('items')['help'];
-        if(nodes){
-            cm.removeClass(nodes['container'], 'active');
-        }
-    }
+    'topMenu' : 'help_support',
+    'content' : '<h3>Need Help?</h3><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam viverra feugiat massa sed ultricies. Maecenas at metus ac massa porttitor congue.</p>'
 }];
