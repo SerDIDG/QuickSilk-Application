@@ -18,7 +18,8 @@ cm.define('App.TopMenu', {
     }
 },
 function(params){
-    var that = this;
+    var that = this,
+        eventInterval;
 
     that.nodes = {
         'container': cm.Node('div'),
@@ -40,8 +41,18 @@ function(params){
     };
 
     var render = function(){
+        preventMenuBlinking();
         cm.addEvent(that.nodes['button'], 'click', that.toggle);
         that.isExpanded = cm.isClass(that.nodes['container'], 'is-expanded');
+        cm.addEvent(window, 'resize', preventMenuBlinking);
+    };
+
+    var preventMenuBlinking = function(){
+        cm.addClass(that.nodes['container'], 'cm__transition-disable');
+        eventInterval && clearTimeout(eventInterval);
+        eventInterval = setTimeout(function(){
+            cm.removeClass(that.nodes['container'], 'cm__transition-disable');
+        }, 5);
     };
 
     /* ******* MAIN ******* */
