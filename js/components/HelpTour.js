@@ -306,8 +306,9 @@ function(params){
     };
 
     var setPopupStartPosition = function(){
-        that.nodes['popup'].style.left = [Math.round(cm.getX(that.params['node']) + that.params['node'].offsetWidth / 2), 'px'].join('');
-        that.nodes['popup'].style.top = [Math.round(cm.getY(that.params['node']) + that.params['node'].offsetHeight / 2), 'px'].join('');
+        var left = [Math.round(cm.getX(that.params['node']) + that.params['node'].offsetWidth / 2), 'px'].join(''),
+            top = [Math.round(cm.getY(that.params['node']) + that.params['node'].offsetHeight / 2), 'px'].join('');
+        cm.setCSSTranslate(that.nodes['popup'], left, top);
     };
 
     var popupClickEvents = function(e){
@@ -418,9 +419,8 @@ function(params){
                     top = Math.round((pageSize['winHeight'] - dimensions['popupHeight']) / 2);
                     break;
             }
-            that.nodes['popup'].style.left = [left, 'px'].join('');
-            that.nodes['popup'].style.top = [top, 'px'].join('');
-            that.nodes['popupContent'].style.height = [dimensions['popupContentHeight'], 'px'].join('')
+            that.nodes['popupContent'].style.height = [dimensions['popupContentHeight'], 'px'].join('');
+            cm.setCSSTranslate(that.nodes['popup'], [left, 'px'].join(''), [top, 'px'].join(''));
         }
     };
 
