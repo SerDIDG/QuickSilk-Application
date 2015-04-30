@@ -111,6 +111,9 @@
 
 .app-lt__topmenu__dropdown--desktop () {
     .pt__menu-dropdown--base;
+}
+
+.app-lt__topmenu__dropdown--desktop-first () {
     border-top: none;
     border-radius: 0 0 @CmBorder-Radius @CmBorder-Radius;
 }
@@ -140,6 +143,10 @@
                         &:hover {
                             .mx__transition(all, @CmUI-Transition-DurationReverse);
                         }
+                    }
+
+                    > .pt__menu-dropdown {
+                        .app-lt__topmenu__dropdown--desktop-first;
                     }
 
                     &.has-dropdown {
@@ -255,7 +262,7 @@
     }
 }
 
-/* *** TABLET VIEW *** */
+/* *** MOBILE VIEW *** */
 
 @media only screen and (max-width : @CmScreen-TabletPortrait) {
 
@@ -324,17 +331,20 @@
 
                     &.has-dropdown {
                         > a {
-                            background: none;
                             border-bottom: @AppLT-TopMenu-ItemBorder;
                         }
                     }
                 }
 
                 ul {
-                    li {
+                    a {
+                        background: @AppLT-TopMenu-ItemBackground;
+                        padding-left: @CmIndent-XSmall * 2;
+                    }
+
+                    ul {
                         a {
-                            background: @AppLT-TopMenu-ItemBackground;
-                            padding-left: @CmIndent-Medium;
+                            padding-left: @CmIndent-XSmall * 3;
                         }
                     }
                 }

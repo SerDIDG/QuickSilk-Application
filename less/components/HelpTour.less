@@ -113,8 +113,38 @@
     }
 }
 
-// /* *** HELPERS *** */
+/* *** HELPERS *** */
 
 .app__helptour-helper__duration {
     transition-duration: @AppHelpTour-Duration;
+}
+
+.app__helptour-helper__adaptive-from {
+    width: @AppHelpTour-AdaptiveFrom;
+}
+
+/* ******* COMPONENTS: HELP TOUR: ADAPTIVE ******* */
+
+@media only screen and (max-width : @AppHelpTour-AdaptiveFrom) {
+
+    html.is-adaptive {
+        .app__helptour__popup {
+            .display-flex;
+            width: auto;
+            height: auto;
+            border-radius: 0;
+            .mx__position(0, 0, 0, 0);
+            .mx__flex-flow(column);
+
+            .popup__content {
+                overflow: auto;
+                .mx__flex(1 1 auto);
+            }
+
+            .popup__buttons {
+                .mx__flex(0 0 auto);
+            }
+        }
+    }
+
 }

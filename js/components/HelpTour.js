@@ -18,6 +18,7 @@ cm.define('App.HelpTour', {
         'topMenuName' : 'app-topmenu',
         'templateName' : 'app-template',
         'duration' : 500,
+        'adaptiveFrom' : 768,
         'autoStart' : false,
         'popupIndent' : 24,
         'Com.Overlay' : {
@@ -80,7 +81,11 @@ function(params){
     };
 
     var getCSSHelpers = function(){
+        var rule;
         that.params['duration'] = cm.getTransitionDurationFromRule('.app__helptour-helper__duration');
+        if(rule = cm.getCSSRule('.app__helptour-helper__adaptive-from')[0]){
+            that.params['adaptiveFrom'] = cm.styleToNumber(rule.style.width);
+        }
     };
 
     var validateParams = function(){
@@ -162,6 +167,8 @@ function(params){
         }
         startOptions['sidebarTab'] = that.components['sidebar'].getTab();
         that.components['sidebar'].unsetTab();
+        // Collapse menu (mobile)
+        that.components['topMenu'].collapse();
         // Show overlays
         cm.forEach(that.components['overlays'], function(item){
             item.open();
@@ -327,99 +334,107 @@ function(params){
     };
 
     var setPopupPosition = function(){
-        var position, pageSize, top, left, topMenuItem;
+        var position, pageSize, top, left, conentHeight, topMenuItem;
         if(that.currentScene){
-            getDimensions();
             pageSize = cm.getPageSize();
-            position = that.currentScene['position'].split(':');
-            // Set position
-            switch(position[0]){
-                // Window related position
-                case 'window':
-                    switch(position[1]){
-                        case 'top':
-                            left = Math.round((pageSize['winWidth'] - that.nodes['popup'].offsetWidth) / 2);
-                            top = that.params['popupIndent'];
-                            break;
-                        case 'bottom':
-                            left = Math.round((pageSize['winWidth'] - that.nodes['popup'].offsetWidth) / 2);
-                            top = pageSize['winHeight'] - dimensions['popupHeight'] - that.params['popupIndent'];
-                            break;
-                        case 'center':
-                        default:
-                            left = Math.round((pageSize['winWidth'] - that.nodes['popup'].offsetWidth) / 2);
-                            top = Math.round((pageSize['winHeight'] - dimensions['popupHeight']) / 2);
-                            break;
-                    }
-                    break;
-                // Top Menu related position
-                case 'topMenu':
-                    switch(position[1]){
-                        case 'center':
-                        default:
-                            left = Math.round((pageSize['winWidth'] - that.nodes['popup'].offsetWidth) / 2);
-                            top = dimensions['topMenu'] + that.params['popupIndent'];
-                            break;
-                    }
-                    break;
-                // Top Menu Item related position
-                case 'topMenuItem':
-                    topMenuItem = that.components['topMenu'].getItem(position[1]);
-                    if(!topMenuItem){
-                        left = Math.round((pageSize['winWidth'] - that.nodes['popup'].offsetWidth) / 2);
-                    }else if(position[2] && position[2] == 'dropdown' && topMenuItem['dropdown']){
-                        if(position[3] && position[3] == 'right'){
-                            left = cm.getX(topMenuItem['dropdown']) - that.nodes['popup'].offsetWidth - that.params['popupIndent'];
-                        }else{
-                            left = cm.getX(topMenuItem['dropdown']) + topMenuItem['dropdown'].offsetWidth + that.params['popupIndent'];
+            // Desktop or mobile view
+            if(pageSize['winWidth'] > that.params['adaptiveFrom']){
+                getDimensions();
+                position = that.currentScene['position'].split(':');
+                conentHeight = dimensions['popupContentHeight'];
+                // Set position
+                switch(position[0]){
+                    // Window related position
+                    case 'window':
+                        switch(position[1]){
+                            case 'top':
+                                left = Math.round((pageSize['winWidth'] - that.nodes['popup'].offsetWidth) / 2);
+                                top = that.params['popupIndent'];
+                                break;
+                            case 'bottom':
+                                left = Math.round((pageSize['winWidth'] - that.nodes['popup'].offsetWidth) / 2);
+                                top = pageSize['winHeight'] - dimensions['popupHeight'] - that.params['popupIndent'];
+                                break;
+                            case 'center':
+                            default:
+                                left = Math.round((pageSize['winWidth'] - that.nodes['popup'].offsetWidth) / 2);
+                                top = Math.round((pageSize['winHeight'] - dimensions['popupHeight']) / 2);
+                                break;
                         }
-                    }else if(topMenuItem['container']){
-                        if(position[3] && position[3] == 'left'){
-                            left = cm.getX(topMenuItem['container']) + topMenuItem['container'].offsetWidth - that.nodes['popup'].offsetWidth;
-                        }else{
-                            left = cm.getX(topMenuItem['container']);
+                        break;
+                    // Top Menu related position
+                    case 'topMenu':
+                        switch(position[1]){
+                            case 'center':
+                            default:
+                                left = Math.round((pageSize['winWidth'] - that.nodes['popup'].offsetWidth) / 2);
+                                top = dimensions['topMenu'] + that.params['popupIndent'];
+                                break;
                         }
-                    }else{
+                        break;
+                    // Top Menu Item related position
+                    case 'topMenuItem':
+                        topMenuItem = that.components['topMenu'].getItem(position[1]);
+                        if(!topMenuItem){
+                            left = Math.round((pageSize['winWidth'] - that.nodes['popup'].offsetWidth) / 2);
+                        }else if(position[2] && position[2] == 'dropdown' && topMenuItem['dropdown']){
+                            if(position[3] && position[3] == 'right'){
+                                left = cm.getX(topMenuItem['dropdown']) - that.nodes['popup'].offsetWidth - that.params['popupIndent'];
+                            }else{
+                                left = cm.getX(topMenuItem['dropdown']) + topMenuItem['dropdown'].offsetWidth + that.params['popupIndent'];
+                            }
+                        }else if(topMenuItem['container']){
+                            if(position[3] && position[3] == 'left'){
+                                left = cm.getX(topMenuItem['container']) + topMenuItem['container'].offsetWidth - that.nodes['popup'].offsetWidth;
+                            }else{
+                                left = cm.getX(topMenuItem['container']);
+                            }
+                        }else{
+                            left = Math.round((pageSize['winWidth'] - that.nodes['popup'].offsetWidth) / 2);
+                        }
+                        top = dimensions['topMenu'] + that.params['popupIndent'];
+                        break;
+                    // Template related position
+                    case 'template':
+                        switch(position[1]){
+                            case 'top':
+                                left = (that.components['sidebar'].isExpanded ? dimensions['sidebarExpanded'] : dimensions['sidebarCollapsed']);
+                                left = Math.round((pageSize['winWidth'] + left - that.nodes['popup'].offsetWidth) / 2);
+                                top = dimensions['topMenu'] + that.params['popupIndent'];
+                                break;
+                            case 'bottom':
+                                left = (that.components['sidebar'].isExpanded ? dimensions['sidebarExpanded'] : dimensions['sidebarCollapsed']);
+                                left = Math.round((pageSize['winWidth'] + left - that.nodes['popup'].offsetWidth) / 2);
+                                top = pageSize['winHeight'] - dimensions['popupHeight'] - that.params['popupIndent'];
+                                break;
+                            case 'left':
+                                left = (that.components['sidebar'].isExpanded ? dimensions['sidebarExpanded'] : dimensions['sidebarCollapsed']) + that.params['popupIndent'];
+                                top = Math.round((pageSize['winHeight'] - dimensions['popupHeight']) / 2);
+                                break;
+                            case 'left-top':
+                                left = (that.components['sidebar'].isExpanded ? dimensions['sidebarExpanded'] : dimensions['sidebarCollapsed']) + that.params['popupIndent'];
+                                top = dimensions['topMenu'] + that.params['popupIndent'];
+                                break;
+                            case 'center':
+                            default:
+                                left = (that.components['sidebar'].isExpanded ? dimensions['sidebarExpanded'] : dimensions['sidebarCollapsed']);
+                                left = Math.round((pageSize['winWidth'] + left - that.nodes['popup'].offsetWidth) / 2);
+                                top = Math.round((pageSize['winHeight'] +  dimensions['topMenu'] - dimensions['popupHeight']) / 2);
+                                break;
+                        }
+                        break;
+                    // Default position
+                    default:
                         left = Math.round((pageSize['winWidth'] - that.nodes['popup'].offsetWidth) / 2);
-                    }
-                    top = dimensions['topMenu'] + that.params['popupIndent'];
-                    break;
-                // Template related position
-                case 'template':
-                    switch(position[1]){
-                        case 'top':
-                            left = (that.components['sidebar'].isExpanded ? dimensions['sidebarExpanded'] : dimensions['sidebarCollapsed']);
-                            left = Math.round((pageSize['winWidth'] + left - that.nodes['popup'].offsetWidth) / 2);
-                            top = dimensions['topMenu'] + that.params['popupIndent'];
-                            break;
-                        case 'bottom':
-                            left = (that.components['sidebar'].isExpanded ? dimensions['sidebarExpanded'] : dimensions['sidebarCollapsed']);
-                            left = Math.round((pageSize['winWidth'] + left - that.nodes['popup'].offsetWidth) / 2);
-                            top = pageSize['winHeight'] - dimensions['popupHeight'] - that.params['popupIndent'];
-                            break;
-                        case 'left':
-                            left = (that.components['sidebar'].isExpanded ? dimensions['sidebarExpanded'] : dimensions['sidebarCollapsed']) + that.params['popupIndent'];
-                            top = Math.round((pageSize['winHeight'] - dimensions['popupHeight']) / 2);
-                            break;
-                        case 'left-top':
-                            left = (that.components['sidebar'].isExpanded ? dimensions['sidebarExpanded'] : dimensions['sidebarCollapsed']) + that.params['popupIndent'];
-                            top = dimensions['topMenu'] + that.params['popupIndent'];
-                            break;
-                        case 'center':
-                        default:
-                            left = (that.components['sidebar'].isExpanded ? dimensions['sidebarExpanded'] : dimensions['sidebarCollapsed']);
-                            left = Math.round((pageSize['winWidth'] + left - that.nodes['popup'].offsetWidth) / 2);
-                            top = Math.round((pageSize['winHeight'] +  dimensions['topMenu'] - dimensions['popupHeight']) / 2);
-                            break;
-                    }
-                    break;
-                // Default position
-                default:
-                    left = Math.round((pageSize['winWidth'] - that.nodes['popup'].offsetWidth) / 2);
-                    top = Math.round((pageSize['winHeight'] - dimensions['popupHeight']) / 2);
-                    break;
+                        top = Math.round((pageSize['winHeight'] - dimensions['popupHeight']) / 2);
+                        break;
+                }
+            }else{
+                left = 0;
+                top = 0;
+                conentHeight = 'auto';
             }
-            that.nodes['popupContent'].style.height = [dimensions['popupContentHeight'], 'px'].join('');
+            that.nodes['popupContent'].style.height = conentHeight == 'auto' ? conentHeight : [conentHeight, 'px'].join('');
             cm.setCSSTranslate(that.nodes['popup'], [left, 'px'].join(''), [top, 'px'].join(''));
         }
     };
@@ -566,7 +581,7 @@ App.HelpTourScenario = [{
         'main' : 'transparent',
         'sidebar' : 'dark',
         'topMenu' : 'dark',
-        'template' : 'transparent'
+        'template' : 'light'
     },
     'sidebar' : 'modules',
     'topMenu' : false,

@@ -58,18 +58,22 @@ function(params){
     /* ******* MAIN ******* */
 
     that.expand = function(){
-        that.isExpanded = true;
-        cm.replaceClass(that.nodes['container'], 'is-collapsed', 'is-expanded');
-        cm.replaceClass(that.params['target'], 'is-topmenu--collapsed', 'is-topmenu--expanded', true);
-        that.triggerEvent('onExpand');
+        if(!that.isExpanded){
+            that.isExpanded = true;
+            cm.replaceClass(that.nodes['container'], 'is-collapsed', 'is-expanded');
+            cm.replaceClass(that.params['target'], 'is-topmenu--collapsed', 'is-topmenu--expanded', true);
+            that.triggerEvent('onExpand');
+        }
         return that;
     };
 
     that.collapse = function(){
-        that.isExpanded = false;
-        cm.replaceClass(that.nodes['container'], 'is-expanded', 'is-collapsed');
-        cm.replaceClass(that.params['target'], 'is-topmenu--expanded', 'is-topmenu--collapsed', true);
-        that.triggerEvent('onCollapse');
+        if(that.isExpanded){
+            that.isExpanded = false;
+            cm.replaceClass(that.nodes['container'], 'is-expanded', 'is-collapsed');
+            cm.replaceClass(that.params['target'], 'is-topmenu--expanded', 'is-topmenu--collapsed', true);
+            that.triggerEvent('onCollapse');
+        }
         return that;
     };
 
