@@ -315,7 +315,7 @@ function(params){
     var setPopupStartPosition = function(){
         var left = [Math.round(cm.getX(that.params['node']) + that.params['node'].offsetWidth / 2), 'px'].join(''),
             top = [Math.round(cm.getY(that.params['node']) + that.params['node'].offsetHeight / 2), 'px'].join('');
-        cm.setCSSTranslate(that.nodes['popup'], left, top);
+        cm.setCSSTranslate(that.nodes['popup'], left, top, 0, 'scale(0)');
     };
 
     var popupClickEvents = function(e){
@@ -435,7 +435,7 @@ function(params){
                 conentHeight = 'auto';
             }
             that.nodes['popupContent'].style.height = conentHeight == 'auto' ? conentHeight : [conentHeight, 'px'].join('');
-            cm.setCSSTranslate(that.nodes['popup'], [left, 'px'].join(''), [top, 'px'].join(''));
+            cm.setCSSTranslate(that.nodes['popup'], [left, 'px'].join(''), [top, 'px'].join(''), 0, 'scale(1)');
         }
     };
 
