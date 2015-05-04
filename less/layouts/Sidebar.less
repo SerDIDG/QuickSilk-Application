@@ -27,6 +27,7 @@
             .cm__list-clear;
 
             > li {
+                .app-lt__sidebar-tag__menu-item;
                 margin: @CmIndent-XXXSmall 0 0 0;
 
                 &:first-child {
@@ -39,7 +40,7 @@
                     color: @CmColor-Font-Opposite;
                     .cm-i__size(@CmSize-Large);
                     .cm-i__b-size(@AppLT-Sidebar-Menu-Width);
-                    .mx__transition(background, @CmUI-Transition-Duration);
+                    .mx__transition(background color, @CmUI-Transition-Duration);
 
                     &:after {
                         width: 3px;
@@ -55,22 +56,7 @@
                         .mx__transition(background, @CmUI-Transition-DurationReverse);
 
                         &:after {
-                            background-color: @CmColor-Primary-DarkDefault;
                             .mx__transition(background, @CmUI-Transition-DurationReverse);
-                        }
-                    }
-                }
-
-                &.active {
-                    > a {
-                        background-color: @CmColor-Primary-DarkActive;
-
-                        &:after {
-                            background-color: @CmColor-Primary-DarkDefault;
-                        }
-
-                        &:hover {
-                            background-color: @CmColor-Primary-DarkDefault;
                         }
                     }
                 }
@@ -300,11 +286,35 @@
 
 .app-lt__sidebar__background (@background) {
     background-color: @background;
+
+    .app-lt__sidebar-tag__menu-item {
+        > a {
+            &:hover {
+                &:after {
+                    background-color: @background;
+                }
+            }
+        }
+
+        &.active {
+            > a {
+                background-color: @background;
+            }
+        }
+    }
     // Fix of blinking background in Firefox
     .app-pt__widgets-category__background(@background);
 }
 
 .app-lt__sidebar__color (@color) {
+    .app-lt__sidebar-tag__menu-item {
+        &.active {
+            > a {
+                color: @color;
+            }
+        }
+    }
+
     .sidebar__content__title {
         color: @color;
 
@@ -322,6 +332,12 @@
             color: ~"@{AppLT-Sidebar-Theme@{theme}-Color}";
         }
     }
+}
+
+// /* *** SHORT TAGS *** */
+
+.app-lt__sidebar-tag__menu-item () {
+
 }
 
 /* ******* COMPONENT: SIDEBAR: ADAPTIVE ******* */
