@@ -587,8 +587,8 @@ App.HelpTourScenario = [{
     'topMenu' : false,
     'content' : '<h3>Drop Area</h3><p>The drop area is where you drag and drop the modules. To move a module onto a page or template place your mouse on the desired module icon, hold down the left button on your mouse, and drag the module to the highlighted area of the page you wish to drop it, then let go of the mouse button.</p>'
 },{
-    'position' : 'topMenuItem:help:dropdown:left',
-    'arrow' : 'right',
+    'position' : 'topMenuItem:support:container:right',
+    'arrow' : 'top',
     'overlays' : {
         'main' : 'transparent',
         'sidebar' : 'dark',
@@ -596,6 +596,6 @@ App.HelpTourScenario = [{
         'template' : 'dark'
     },
     'sidebar' : false,
-    'topMenu' : 'help',
+    'topMenu' : 'support',
     'content' : '<h3>Need Help?</h3><p>Are you stuck, experiencing an issue, found a bug or have a suggestion? Simply click on this link and send us a message. FYI, to assist in the troubleshooting process we automatically collect information on the operating system, browser and browser version you are using. Our goal is to respond to your message within 1 business day.</p>'
 }];
