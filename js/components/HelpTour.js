@@ -378,7 +378,7 @@ function(params){
                         if(!topMenuItem){
                             left = Math.round((pageSize['winWidth'] - that.nodes['popup'].offsetWidth) / 2);
                         }else if(position[2] && position[2] == 'dropdown' && topMenuItem['dropdown']){
-                            if(position[3] && position[3] == 'right'){
+                            if(position[3] && position[3] == 'left'){
                                 left = cm.getX(topMenuItem['dropdown']) - that.nodes['popup'].offsetWidth - that.params['popupIndent'];
                             }else{
                                 left = cm.getX(topMenuItem['dropdown']) + topMenuItem['dropdown'].offsetWidth + that.params['popupIndent'];
@@ -489,9 +489,9 @@ App.HelpTourScenario = [{
     },
     'sidebar' : false,
     'topMenu' : false,
-    'content' : '<h3>Welcome to the QuickSilk Online Tour!</h3><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam viverra feugiat massa sed ultricies. Maecenas at metus ac massa porttitor congue.</p>'
+    'content' : '<h3>QuickSilk Online Tour!</h3><p>Welcome to QuickSilk! Use the buttons at the bottom of each help bubble to quickly discover how to navigate and use the QuickSilk software. This online tour automatically appears the first time you login. Anytime after this, simply click on the help tour menu item for a quick refresher.</p>'
 },{
-    'position' : 'topMenuItem:user:dropdown:right',
+    'position' : 'topMenuItem:user:dropdown:left',
     'arrow' : 'right',
     'overlays' : {
         'main' : 'transparent',
@@ -501,9 +501,9 @@ App.HelpTourScenario = [{
     },
     'sidebar' : false,
     'topMenu' : 'user',
-    'content' : '<h3>User Menu</h3><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam viverra feugiat massa sed ultricies. Maecenas at metus ac massa porttitor congue.</p>'
+    'content' : '<h3>User Menu</h3><p>Click on your name to view the admin panel (future), your profile, or to logout. The View Profile link provides the ability to manage your subscription and billing, password, forum settings, working groups and public profile.</p>'
 },{
-    'position' : 'topMenuItem:modules:dropdown:left',
+    'position' : 'topMenuItem:modules:dropdown:right',
     'arrow' : 'left',
     'overlays' : {
         'main' : 'transparent',
@@ -513,7 +513,7 @@ App.HelpTourScenario = [{
     },
     'sidebar' : false,
     'topMenu' : 'modules',
-    'content' : '<h3>Modules Menu</h3><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam viverra feugiat massa sed ultricies. Maecenas at metus ac massa porttitor congue.</p>'
+    'content' : '<h3>Modules</h3><p>The Module manager allows you to work on your modules from the administration panel. Simply mouse over the Modules menu and then scroll down and click on the module you wish to work with. </p>'
 },{
     'position' : 'template:left-top',
     'arrow' : 'left',
@@ -525,7 +525,7 @@ App.HelpTourScenario = [{
     },
     'sidebar' : false,
     'topMenu' : false,
-    'content' : '<h3>Left Panel</h3><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam viverra feugiat massa sed ultricies. Maecenas at metus ac massa porttitor congue.</p>'
+    'content' : '<h3>Left Panel Slider</h3><p>The left slider widget provides you with quick access to the modules, pages, layouts and template features. Simply click on the icon for the tab you wish to use.</p>'
 },{
     'position' : 'template:left-top',
     'arrow' : 'left',
@@ -535,21 +535,9 @@ App.HelpTourScenario = [{
         'topMenu' : 'dark',
         'template' : 'dark'
     },
-    'sidebar' : 'templates',
+    'sidebar' : 'modules',
     'topMenu' : false,
-    'content' : '<h3>Left Panel: Templates</h3><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam viverra feugiat massa sed ultricies. Maecenas at metus ac massa porttitor congue.</p>'
-},{
-    'position' : 'template:left-top',
-    'arrow' : 'left',
-    'overlays' : {
-        'main' : 'transparent',
-        'sidebar' : 'transparent',
-        'topMenu' : 'dark',
-        'template' : 'dark'
-    },
-    'sidebar' : 'layouts',
-    'topMenu' : false,
-    'content' : '<h3>Left Panel: Layouts</h3><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam viverra feugiat massa sed ultricies. Maecenas at metus ac massa porttitor congue.</p>'
+    'content' : '<h3>Installed Modules</h3><p>The modules tab provides quick access to the modules that you\'ve subscribed to. Once you\'ve opened a page or a template, open the modules tab to drag and drop the modules you wish to include.</p>'
 },{
     'position' : 'template:left-top',
     'arrow' : 'left',
@@ -561,7 +549,7 @@ App.HelpTourScenario = [{
     },
     'sidebar' : 'pages',
     'topMenu' : false,
-    'content' : '<h3>Left Panel: Pages</h3><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam viverra feugiat massa sed ultricies. Maecenas at metus ac massa porttitor congue.</p>'
+    'content' : '<h3>Site Pages</h3><p>The site pages tab allows you to quickly open, modify and manage your website pages. Simply open the tab and click on the web page you wish to work on.</p>'
 },{
     'position' : 'template:left-top',
     'arrow' : 'left',
@@ -571,9 +559,21 @@ App.HelpTourScenario = [{
         'topMenu' : 'dark',
         'template' : 'dark'
     },
-    'sidebar' : 'modules',
+    'sidebar' : 'layouts',
     'topMenu' : false,
-    'content' : '<h3>Left Panel: Modules</h3><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam viverra feugiat massa sed ultricies. Maecenas at metus ac massa porttitor congue.</p>'
+    'content' : '<h3>Page Layouts</h3><p>Use the page layout tab to open, modify and manage the layouts of your various web page templates. A page layout will consist of the common elements you have on every page.</p>'
+},{
+    'position' : 'template:left-top',
+    'arrow' : 'left',
+    'overlays' : {
+        'main' : 'transparent',
+        'sidebar' : 'transparent',
+        'topMenu' : 'dark',
+        'template' : 'dark'
+    },
+    'sidebar' : 'templates',
+    'topMenu' : false,
+    'content' : '<h3>Templates</h3><p>The templates tab displays the different custom or predesigned templates that you\'ve installed and are immediately available for use on your website. If you want to view or install other templates, you\'ll do so from the template gallery.</p>'
 },{
     'position' : 'template:center',
     'arrow' : false,
@@ -583,12 +583,12 @@ App.HelpTourScenario = [{
         'topMenu' : 'dark',
         'template' : 'light'
     },
-    'sidebar' : 'modules',
+    'sidebar' : false,
     'topMenu' : false,
-    'content' : '<h3>Drop Area</h3><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam viverra feugiat massa sed ultricies. Maecenas at metus ac massa porttitor congue.</p>'
+    'content' : '<h3>Drop Area</h3><p>The drop area is where you drag and drop the modules. To move a module onto a page or template place your mouse on the desired module icon, hold down the left button on your mouse, and drag the module to the highlighted area of the page you wish to drop it, then let go of the mouse button.</p>'
 },{
-    'position' : 'topMenuItem:help_support:container:right',
-    'arrow' : 'top',
+    'position' : 'topMenuItem:help:dropdown:left',
+    'arrow' : 'right',
     'overlays' : {
         'main' : 'transparent',
         'sidebar' : 'dark',
@@ -596,6 +596,6 @@ App.HelpTourScenario = [{
         'template' : 'dark'
     },
     'sidebar' : false,
-    'topMenu' : 'help_support',
-    'content' : '<h3>Need Help?</h3><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam viverra feugiat massa sed ultricies. Maecenas at metus ac massa porttitor congue.</p>'
+    'topMenu' : 'help',
+    'content' : '<h3>Need Help?</h3><p>Are you stuck, experiencing an issue, found a bug or have a suggestion? Simply click on this link and send us a message. FYI, to assist in the troubleshooting process we automatically collect information on the operating system, browser and browser version you are using. Our goal is to respond to your message within 1 business day.</p>'
 }];

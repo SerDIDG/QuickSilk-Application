@@ -178,14 +178,26 @@
                             <i class="icon app-i__circle-user"></i>User Userberg
                         </a>
                         <ul class="pt__menu-dropdown" data-node="dropdown">
-                            <li><a>View Profile</a></li>
-                            <li><a>Logout</a></li>
+                            <li>
+                                <a>View Profile</a>
+                            </li>
+                            <li>
+                                <a>Logout</a>
+                            </li>
                         </ul>
                     </li>
-                    <li class="has-icon" data-node="help_tour:{}:container">
-                        <a title="Help Tour" data-element="app-helptour">
-                            <i class="icon app-i__circle-help"></i>Help Tour
+                    <li class="pt__menu has-dropdown has-icon" data-node="help:{}:container">
+                        <a title="Help">
+                            <i class="icon app-i__circle-help"></i>Help
                         </a>
+                        <ul class="pt__menu-dropdown" data-node="dropdown">
+                            <li>
+                                <a data-element="app-helptour">Help Tour</a>
+                            </li>
+                            <li>
+                                <a>Support</a>
+                            </li>
+                        </ul>
                     </li>
                 </ul>
 
@@ -338,9 +350,6 @@
                                 </ul>
                             </li>
                         </ul>
-                    </li>
-                    <li data-node="help_support:{}:container">
-                        <a>Help & Support</a>
                     </li>
                     <li data-node="settings:{}:container">
                         <a>Settings</a>
