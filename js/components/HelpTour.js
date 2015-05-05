@@ -129,22 +129,21 @@ function(params){
     };
 
     var prepare = function(){
-        var finder;
         // Get Sidebar
-        if(finder = cm.find('App.Sidebar', that.params['sidebarName'])[0]){
-            that.components['sidebar'] = finder['class'];
+        cm.find('App.Sidebar', that.params['sidebarName'], null, function(classObject){
+            that.components['sidebar'] = classObject;
             that.components['overlays']['sidebar'].embed(that.components['sidebar'].getNodes('inner'));
-        }
+        });
         // Get TopMenu
-        if(finder = cm.find('App.TopMenu', that.params['topMenuName'])[0]){
-            that.components['topMenu'] = finder['class'];
+        cm.find('App.TopMenu', that.params['topMenuName'], null, function(classObject){
+            that.components['topMenu'] = classObject;
             that.components['overlays']['topMenu'].embed(that.components['topMenu'].getNodes('inner'));
-        }
+        });
         // Get TopMenu
-        if(finder = cm.find('App.Template', that.params['templateName'])[0]){
-            that.components['template'] = finder['class'];
+        cm.find('App.Template', that.params['templateName'], null, function(classObject){
+            that.components['template'] = classObject;
             that.components['overlays']['template'].embed(that.components['template'].getNodes('container'));
-        }
+        });
         // Start
         if(that.components['sidebar'] && that.components['topMenu'] && that.components['template']){
             start();

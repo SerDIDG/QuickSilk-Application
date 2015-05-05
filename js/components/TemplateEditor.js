@@ -45,19 +45,18 @@ function(params){
         that.getDataNodes(that.params['node'], that.params['nodesDataMarker'], null);
         that.getDataConfig(that.params['node']);
         render();
+        that.triggerEvent('onRender');
     };
 
     var render = function(){
         processPanelWidgets();
         initDragAndDrop();
         initSidebar();
-        that.triggerEvent('onRender');
     };
 
     var initSidebar = function(){
-        var finder = cm.find('App.Sidebar', that.params['sidebarName'])[0];
-        if(finder){
-            that.components['sidebar'] = finder['class'];
+        var finder = cm.find('App.Sidebar', that.params['sidebarName'], null, function(classObject){
+            that.components['sidebar'] = classObject;
             that.components['sidebar']
                 .addEvent('onExpand', onSidebarExpand)
                 .addEvent('onCollapse', onSidebarCollapse);
@@ -67,7 +66,8 @@ function(params){
             }else{
                 onSidebarCollapse();
             }
-        }else{
+        });
+        if(!finder || finder.length == 0){
             onSidebarCollapse();
         }
     };
@@ -115,14 +115,12 @@ function(params){
             }
         });
         // Pause sliders
-        elements = cm.find('Com.Slider', null, that.nodes['AppTemplate']['container']);
-        cm.forEach(elements, function(slider){
-            slider['class'].pause();
+        cm.find('Com.Slider', null, that.nodes['AppTemplate']['container'], function(classObject){
+            classObject.pause();
         });
         // Redraw template
-        elements = cm.find('App.Template', null, that.nodes['AppTemplate']['container']);
-        cm.forEach(elements, function(template){
-            template['class'].redraw();
+        cm.find('App.Template', null, that.nodes['AppTemplate']['container'], function(classObject){
+            classObject.redraw();
         });
     };
 
@@ -149,14 +147,12 @@ function(params){
             cm.removeClass(slider, 'is-editable is-visible');
         });
         // UnPause sliders
-        elements = cm.find('Com.Slider', null, that.nodes['AppTemplate']['container']);
-        cm.forEach(elements, function(slider){
-            slider['class'].start();
+        cm.find('Com.Slider', null, that.nodes['AppTemplate']['container'], function(classObject){
+            classObject.start();
         });
         // Redraw template
-        elements = cm.find('App.Template', null, that.nodes['AppTemplate']['container']);
-        cm.forEach(elements, function(template){
-            template['class'].redraw();
+        cm.find('App.Template', null, that.nodes['AppTemplate']['container'], function(classObject){
+            classObject.redraw();
         });
     };
 
@@ -176,8 +172,8 @@ function(params){
     };
 
     var initDragAndDrop = function(){
-        cm.getConstructor('Com.Draganddrop', function(classObject){
-            that.components['dd'] = new classObject(
+        cm.getConstructor('Com.Draganddrop', function(classConstructor){
+            that.components['dd'] = new classConstructor(
                 cm.merge({
                     'container' : that.nodes['AppTemplate']['container']
                 }, that.params['Com.Draganddrop'])
