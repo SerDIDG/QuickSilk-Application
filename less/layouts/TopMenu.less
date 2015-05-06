@@ -146,7 +146,11 @@
                     }
 
                     > .pt__menu-dropdown {
-                        .app-lt__topmenu__dropdown--desktop-first;
+                        .check-first-level (@value) when (@value = true) {
+                            .app-lt__topmenu__dropdown--desktop-first;
+                        }
+
+                        .check-first-level(@AppLT-TopMenu-Dropdown-FirstLevel);
                     }
 
                     &.has-dropdown {
