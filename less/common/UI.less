@@ -30,6 +30,7 @@
 .tpl__header__inner,
 .tpl__content__inner,
 .tpl__footer__inner {
+    width: 100%;
     max-width: 100%;
     position: relative;
 }
@@ -112,10 +113,12 @@
 .tpl__content__flex-area () {
     .display-flex;
     .mx__flex-direction(row);
+    .mx__justify-content(flex-start);
 
     .tpl__content__inner {
         .display-flex;
         .mx__flex(1 1 auto);
+        .mx__flex-direction(row);
 
         .app__area-main {
             max-width: 100%;
