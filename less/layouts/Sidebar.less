@@ -60,6 +60,10 @@
                         }
                     }
                 }
+
+                &.is-immediately {
+                    &:extend(.cm__transition-disable all);
+                }
             }
         }
     }
@@ -112,6 +116,10 @@
                 &.active {
                     z-index: 2;
                     opacity: 1;
+                }
+
+                &.is-immediately {
+                    &:extend(.cm__transition-disable all);
                 }
             }
         }
