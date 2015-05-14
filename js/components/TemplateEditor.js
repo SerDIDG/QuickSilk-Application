@@ -167,15 +167,17 @@ function(params){
     var windowResize = function(){
         var pageSize = cm.getPageSize();
 
-        if(pageSize['winWidth'] <= cm._adaptiveFrom){
-            if(that.components['sidebar'].isExpanded && that.isExpanded){
-                that.states['sidebarExpanded'] = true;
-                that.components['sidebar'].collapse(true);
-            }
-        }else{
-            if(that.states['sidebarExpanded'] && !that.isExpanded){
-                that.states['sidebarExpanded'] = false;
-                that.components['sidebar'].expand(true);
+        if(that.components['sidebar']){
+            if(pageSize['winWidth'] <= cm._adaptiveFrom){
+                if(that.components['sidebar'].isExpanded && that.isExpanded){
+                    that.states['sidebarExpanded'] = true;
+                    that.components['sidebar'].collapse(true);
+                }
+            }else{
+                if(that.states['sidebarExpanded'] && !that.isExpanded){
+                    that.states['sidebarExpanded'] = false;
+                    that.components['sidebar'].expand(true);
+                }
             }
         }
     };
