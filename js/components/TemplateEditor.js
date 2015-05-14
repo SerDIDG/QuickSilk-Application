@@ -36,6 +36,10 @@ function(params){
             'widgets' : []
         }
     };
+    that.states = {
+        'sidebarExpanded' : false
+    };
+    that.isExpanded = false;
 
     /* *** INIT *** */
 
@@ -52,6 +56,8 @@ function(params){
         processPanelWidgets();
         initDragAndDrop();
         initSidebar();
+        windowResize();
+        cm.addEvent(window, 'resize', windowResize);
     };
 
     var initSidebar = function(){
@@ -74,6 +80,7 @@ function(params){
 
     var onSidebarExpand = function(){
         var elements;
+        that.isExpanded = true;
         // Enable widgets editable
         elements = cm.getByClass('app-pt__widget');
         cm.forEach(elements, function(widget){
@@ -126,6 +133,7 @@ function(params){
 
     var onSidebarCollapse = function(){
         var elements;
+        that.isExpanded = false;
         // Disable widgets editable
         elements = cm.getByClass('app-pt__widget');
         cm.forEach(elements, function(widget){
@@ -154,6 +162,22 @@ function(params){
         cm.find('App.Template', null, that.nodes['AppTemplate']['container'], function(classObject){
             classObject.redraw();
         });
+    };
+
+    var windowResize = function(){
+        var pageSize = cm.getPageSize();
+
+        if(pageSize['winWidth'] <= cm._adaptiveFrom){
+            if(that.components['sidebar'].isExpanded && that.isExpanded){
+                that.states['sidebarExpanded'] = true;
+                that.components['sidebar'].collapse(true);
+            }
+        }else{
+            if(that.states['sidebarExpanded'] && !that.isExpanded){
+                that.states['sidebarExpanded'] = false;
+                that.components['sidebar'].expand(true);
+            }
+        }
     };
 
     var renderLoaderBox = function(){

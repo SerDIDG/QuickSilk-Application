@@ -51,7 +51,7 @@
     .menu-holder {
         position: absolute;
         z-index: 1;
-        .mx__position(0,0,0,0);
+        .mx__position(0, 0, 0, 0);
 
         > .inner {
             position: absolute;
@@ -127,7 +127,7 @@
 
 /* *** DESKTOP VIEW *** */
 
-@media only screen and (min-width : (@CmScreen-TabletPortrait + 1px)) {
+@media only screen and (min-width : (@CmUI-AdaptiveFrom + 1px)) {
     html.is-adaptive {
         .app-lt__topmenu {
             .menu {
@@ -291,8 +291,9 @@
             .menu-holder {
                 display: block;
                 position: fixed;
-                .mx__transform(translateY(-100%));
-                .mx__transition(transform, @AppLT-TopMenu-Duration);
+                visibility: hidden;
+                .mx__transform(translate3d(0, -100%, 0));
+                .mx__transition(transform visibility, @AppLT-TopMenu-Duration);
                 .mx__position(0, 0, 0, 0);
 
                 > .inner {
@@ -356,9 +357,17 @@
                 }
             }
 
+            &.is-collapsed {
+                .menu-holder {
+                    visibility: hidden;
+                    .mx__transform(translate3d(0, -100%, 0));
+                }
+            }
+
             &.is-expanded {
                 .menu-holder {
-                    .mx__transform(translateY(0));
+                    visibility: visible;
+                    .mx__transform(translate3d(0, 0, 0));
                 }
             }
         }
