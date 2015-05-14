@@ -270,15 +270,7 @@ html {
 
 /* ******* PART: UI: ADAPTIVE ******* */
 
-@media only screen and (max-width : @CmScreen-Tablet) {
-
-    html.is-adaptive {
-
-    }
-
-}
-
-@media only screen and (max-width : @CmScreen-Mobile) {
+@media only screen and (max-width : @CmUI-AdaptiveFrom) {
 
     html.is-adaptive {
         .tpl__header__inner,
@@ -286,12 +278,6 @@ html {
         .tpl__footer__inner {
             max-width: 100%;
         }
-    }
-}
-
-@media only screen and (max-width : @CmScreen-MobilePortrait) {
-
-    html.is-adaptive {
 
         &.is-sidebar {
             .tpl__container {
@@ -305,7 +291,6 @@ html {
             }
         }
     }
-
 }
 
 /* *** PARTS: UI: PRINT *** */
