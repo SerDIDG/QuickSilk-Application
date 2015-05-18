@@ -169,7 +169,7 @@
     .clearfix;
     z-index: 1;
 
-    &:not(.main):not(.splash) {
+    &:not(.main):not(.splash):not(.additional) {
         padding: 0;
     }
 
@@ -211,7 +211,7 @@ html {
         .app__area-header {
             min-height: @AppUI-Area-Height;
 
-            &:not(.main) {
+            &:not(.main):not(.splash):not(.additional) {
                 min-width: @AppUI-Area-Width;
             }
         }
