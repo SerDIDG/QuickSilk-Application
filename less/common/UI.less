@@ -17,6 +17,11 @@
 
 .tpl__header {
     z-index: 3;
+
+    &.is-fixed {
+        position: fixed;
+        .mx__position(0, 0, auto, 0);
+    }
 }
 
 .tpl__content {
@@ -25,6 +30,11 @@
 
 .tpl__footer {
     z-index: 2;
+
+    &.is-fixed {
+        position: fixed;
+        .mx__position(auto, 0, 0, 0);
+    }
 }
 
 .tpl__header__inner,

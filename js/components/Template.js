@@ -13,6 +13,7 @@ cm.define('App.Template', {
     'params' : {
         'node' : cm.Node('div'),
         'name' : 'app-template',
+        'fixedHeader' : false,
         'stickyFooter' : false,
         'scroll' : 'document.body',
         'scrollDuration' : 1000
@@ -53,6 +54,10 @@ function(params){
     };
 
     var redraw = function(triggerEvents){
+        // Fixed Header
+        if(that.params['fixedHeader']){
+            //fixedHeader();
+        }
         // Sticky Footer
         if(that.params['stickyFooter']){
             stickyFooter();
@@ -61,6 +66,11 @@ function(params){
         if(triggerEvents){
             that.triggerEvent('onRedraw');
         }
+    };
+
+    var fixedHeader = function(){
+        var headerHeight = that.nodes['header'].offsetHeight;
+        that.nodes['content'].style.marginTop = headerHeight + 'px';
     };
 
     var stickyFooter = function(){

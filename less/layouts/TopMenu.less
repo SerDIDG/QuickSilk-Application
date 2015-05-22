@@ -93,7 +93,7 @@
                 vertical-align: top;
                 color: @AppLT-TopMenu-Color;
                 line-height: @AppLT-TopMenu-Height;
-                .cm-i__size(@CmSize-Medium);
+                .cm-i__size(@CmSize-Large);
                 .cm-i__b-size(@AppLT-TopMenu-Height);
             }
 
@@ -210,26 +210,6 @@
 
                 .menu {
                     white-space: nowrap;
-
-                    li {
-                        margin: 0;
-                        border-left: @AppLT-TopMenu-ItemBorder;
-
-                        &:last-child {
-                            border-right: @AppLT-TopMenu-ItemBorder;
-                        }
-
-                        &:before {
-                            display: none;
-                        }
-
-                        &.has-icon {
-                            > a {
-                                padding: 0;
-                                font-size: 0;
-                            }
-                        }
-                    }
                 }
             }
         }
