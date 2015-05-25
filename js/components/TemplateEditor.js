@@ -18,7 +18,8 @@ cm.define('App.TemplateEditor', {
         'node' : cm.Node('div'),
         'sidebarName' : 'app-sidebar',
         'Com.Draganddrop' : {
-            'renderTemporaryAria' : true
+            'renderTemporaryAria' : true,
+            'highlightChassis' : true
         }
     }
 },
