@@ -1,0 +1,92 @@
+<!DOCTYPE HTML>
+<html class="is-adaptive">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <title>Old Browser Toolbar</title>
+</head>
+
+<body>
+
+<noindex>
+    <style type="text/css">
+        .app__oldbrowser {
+            width: 100%;
+            position: fixed;
+            top: 0;
+            right: 0;
+            left: 0;
+            z-index: 9000;
+            border-bottom: 2px solid #f7b239;
+            background-color: #ffd180;
+            font-family: Arial, Helvetica, sans-serif;
+            line-height: 24px;
+            font-weight: normal;
+            font-size: 14px;
+            color: #000000;
+        }
+        .app__oldbrowser a {
+            font-weight: normal;
+            color: #393ef7;
+            text-decoration: underline;
+        }
+        .app__oldbrowser a:hover {
+            font-weight: normal;
+            color: #393ef7;
+            text-decoration: none;
+        }
+        .app__oldbrowser .inner {
+            padding: 8px 40px 8px 40px;
+            text-align: center;
+        }
+        .app__oldbrowser .close {
+            width: 24px;
+            height: 24px;
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            background-color: #e61111;
+            text-align: center;
+            line-height: 24px;
+            font-weight: bold;
+            color: #ffffff;
+            cursor: pointer;
+        }
+        .app__oldbrowser .close:hover {
+            background-color: #f65050;
+        }
+        .app__oldbrowser.is-noscript {
+            display: block;
+        }
+        .app__oldbrowser.is-noscript .inner {
+            padding: 8px;
+        }
+    </style>
+
+    <div class="app__oldbrowser" id="app__oldbrowser">
+        <div class="inner">It seems that you are using an outdated browser <b>(%browser% %version%)</b>. As a result, we cannot provide you with the best user experience while visiting our site. Please upgrade your browser by clicking this <a href="https://browser-update.org/update-browser.html" target="_blank">link</a>.</div>
+        <div class="close" id="app__oldbrowser__button" title="Close">X</div>
+    </div>
+
+    <noscript>
+        <div class="app__oldbrowser is-noscript">
+            <div class="inner">It seems that you are using an outdated browser <b>(%browser% %version%)</b>. As a result, we cannot provide you with the best user experience while visiting our site. Please upgrade your browser by clicking this <a href="https://browser-update.org/update-browser.html" target="_blank">link</a>.</div>
+        </div>
+    </noscript>
+
+    <script type="text/javascript">
+        (function(){
+            var container = document.getElementById('app__oldbrowser'),
+                    button = document.getElementById('app__oldbrowser__button');
+            if(container && button){
+                button.onclick = function(){
+                    container.style.display = 'none';
+                };
+            }
+        })();
+    </script>
+</noindex>
+
+</body>
+
+</html>
