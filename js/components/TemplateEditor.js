@@ -12,7 +12,9 @@ cm.define('App.TemplateEditor', {
         'onAppend',
         'onRemove',
         'onEmbed',
-        'onReplace'
+        'onReplace',
+        'onUpdate',
+        'onForceRender'
     ],
     'params' : {
         'node' : cm.Node('div'),
@@ -112,20 +114,6 @@ function(params){
                 cm.addClass(spacer, 'is-visible');
             }
         });
-        // Enable slider editable
-        elements = cm.getByClass('app-mod__slider');
-        cm.forEach(elements, function(slider){
-            if(!cm.isClass(slider, 'is-locked')){
-                cm.addClass(slider, 'is-editable');
-            }
-            if(cm.isClass(slider, 'is-hidden')){
-                cm.addClass(slider, 'is-visible');
-            }
-        });
-        // Pause sliders
-        cm.find('Com.Slider', null, that.nodes['AppTemplate']['container'], function(classObject){
-            classObject.pause();
-        });
         // Redraw template
         cm.find('App.Template', null, that.nodes['AppTemplate']['container'], function(classObject){
             classObject.redraw();
@@ -149,15 +137,6 @@ function(params){
         elements = cm.getByClass('app-mod__spacer');
         cm.forEach(elements, function(spacer){
             cm.removeClass(spacer, 'is-editable is-visible');
-        });
-        // Disable slider editable
-        elements = cm.getByClass('app-mod__slider');
-        cm.forEach(elements, function(slider){
-            cm.removeClass(slider, 'is-editable is-visible');
-        });
-        // UnPause sliders
-        cm.find('Com.Slider', null, that.nodes['AppTemplate']['container'], function(classObject){
-            classObject.start();
         });
         // Redraw template
         cm.find('App.Template', null, that.nodes['AppTemplate']['container'], function(classObject){
