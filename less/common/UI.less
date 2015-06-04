@@ -37,6 +37,7 @@
     }
 }
 
+.tpl__container__inner,
 .tpl__header__inner,
 .tpl__content__inner,
 .tpl__footer__inner {
@@ -46,16 +47,9 @@
 }
 
 .tpl__header__size (@value) when (@value = wide) {
-    .tpl__header {
-        padding: @AppTpl-Block-Padding;
-    }
 }
 
 .tpl__header__size (@value) when (@value = box) {
-    .tpl__header {
-        padding: @AppTpl-Block-Padding;
-    }
-
     .tpl__header__inner {
         max-width: @AppTpl-Header-Width;
         .mx__align(@AppTpl-Header-Align);
@@ -63,16 +57,9 @@
 }
 
 .tpl__footer__size (@value) when (@value = wide) {
-    .tpl__footer {
-        padding: @AppTpl-Block-Padding;
-    }
 }
 
 .tpl__footer__size (@value) when (@value = box) {
-    .tpl__footer {
-        padding: @AppTpl-Block-Padding;
-    }
-
     .tpl__footer__inner {
         max-width: @AppTpl-Footer-Width;
         .mx__align(@AppTpl-Footer-Align);
@@ -85,15 +72,11 @@
 }
 
 .tpl__container__size (@value) when (@value = box) {
-    .tpl__header,
-    .tpl__footer,
-    .tpl__content {
-        padding: @AppTpl-Block-Padding;
+    .tpl__container {
+        padding: 0 @AppTpl-Container-Indent;
     }
 
-    .tpl__header__inner,
-    .tpl__content__inner,
-    .tpl__footer__inner {
+    .tpl__container__inner {
         max-width: @AppTpl-Container-Width;
         .mx__align(@AppTpl-Container-Align);
     }
@@ -283,6 +266,7 @@ html {
 @media only screen and (max-width : @CmUI-AdaptiveFrom) {
 
     html.is-adaptive {
+        .tpl__container__inner
         .tpl__header__inner,
         .tpl__content__inner,
         .tpl__footer__inner {

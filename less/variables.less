@@ -18,6 +18,12 @@
 // /* ******* FONT ******* */
 // /* ************************************************ */
 
+@AppFont-Default-Family: @CmFont-Base-Family;
+@AppFont-Default-LineHeight: @CmFont-Base-LineHeight;
+@AppFont-Default-Size: @CmFont-Base-Size;
+@AppFont-Default-Weight: @CmFont-Base-Weight;
+@AppFont-Default-Color: @CmFont-Base-Color;
+
 @AppFont-H1-Family: @CmFont-Base-Family;
 @AppFont-H1-LineHeight: 34px;
 @AppFont-H1-Size: 24px;
@@ -78,12 +84,6 @@
 @AppFont-A-Color: @CmFont-Base-Color;
 @AppFont-A-Decoration: none;
 @AppFont-A-Style: normal;
-
-@AppFont-Default-Family: @CmFont-Base-Family;
-@AppFont-Default-LineHeight: @CmFont-Base-LineHeight;
-@AppFont-Default-Size: @CmFont-Base-Size;
-@AppFont-Default-Weight: @CmFont-Base-Weight;
-@AppFont-Default-Color: @CmFont-Base-Color;
 
 // /* ************************************************ */
 // /* ******* COMMON ******* */
@@ -252,6 +252,7 @@
 @AppTpl-Container-Size: box;        // wide | box
 @AppTpl-Container-Width: 1000px;
 @AppTpl-Container-Align: center;
+@AppTpl-Container-Indent: @CmIndent-Medium;
 @AppTpl-Container-BackgroundColor: transparent;
 @AppTpl-Container-BackgroundImage: none;
 @AppTpl-Container-BackgroundPosition: center center;
@@ -259,10 +260,6 @@
 @AppTpl-Container-BackgroundSize: auto;
 @AppTpl-Container-BackgroundParallax: scroll;
 @AppTpl-Container-Background: @AppTpl-Container-BackgroundColor @AppTpl-Container-BackgroundImage @AppTpl-Container-BackgroundRepeat @AppTpl-Container-BackgroundPosition @AppTpl-Container-BackgroundParallax;
-
-@AppTpl-Block-PaddingY: 0;
-@AppTpl-Block-PaddingX: @CmIndent-Medium;
-@AppTpl-Block-Padding: @AppTpl-Block-PaddingY @AppTpl-Block-PaddingX;
 
 @AppTpl-Header-Size: box;
 @AppTpl-Header-Width: 1000px;
@@ -280,13 +277,13 @@
 
 // /* *** FONT *** */
 
-@CmColor-Font: @AppFont-P-Color;
+@CmColor-Font: @AppFont-Default-Color;
 @CmColor-Font-Link: @AppFont-A-Color;
 
-@CmFont-Base-Family: @AppFont-P-Family;
-@CmFont-Base-LineHeight: @AppFont-P-LineHeight;
-@CmFont-Base-Size: @AppFont-P-Size;
-@CmFont-Base-Weight: @AppFont-P-Weight;
+@CmFont-Base-Family: @AppFont-Default-Family;
+@CmFont-Base-LineHeight: @AppFont-Default-LineHeight;
+@CmFont-Base-Size: @AppFont-Default-Size;
+@CmFont-Base-Weight: @AppFont-Default-Weight;
 
 // /* ******* PARTS ******* */
 
