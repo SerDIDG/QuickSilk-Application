@@ -59,6 +59,7 @@
             height: @AppPT-WidgetDummy-IconSize;
             margin: 0 auto;
             border-radius: @AppPT-WidgetDummy-IconBorderRadius;
+            background-repeat: no-repeat;
             .mx__transition(background-color, @CmUI-Transition-Duration);
 
             img {
@@ -194,14 +195,21 @@
     }
 }
 
+.get_var(@var, @value){
+    @{var}: @value;
+}
+
 .app-pt__widget-dummy__icons (@theme) {
     .app-pt__widget-dummy {
         .icon {
-            background-image: url("@{AppPath-Images}/parts/widget/@{theme}/default.png");
+            background-image: url("@{AppPath-Images}/parts/widget/@{theme}.svg");
+            background-position: 50% @AppIcon-PtWidget-default;
 
-            .for(blogcontent blogblock blogcalendar blogarchive blogcategories blogroll googlemap comment events latestevents eventscalendar filegridlist filegridlistwidget forum forum_build googlemapblock imagegallery memberdirectory memberwidget slider socialmedia socialmedia_share socialmedia_rating twitter videogallery content menu search logo zone workingarea column divider spacer image registration login tabs webexmeetings); .-each(@name) {
+            .for(@AppIcon-PtWidget-Names); .-each(@name) {
                 &.module-@{name} {
-                    background-image: url("@{AppPath-Images}/parts/widget/@{theme}/@{name}.png");
+                    @var: "AppIcon-PtWidget-@{name}";
+                    @rule: @@var;
+                    background-position: 50% (-@rule * @AppIcon-PtWidget-Size);
                 }
             }
         }
