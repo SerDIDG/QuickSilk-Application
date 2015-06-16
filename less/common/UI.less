@@ -46,6 +46,9 @@
     position: relative;
 }
 
+.tpl__header__size (@value) when (@value = content) {
+}
+
 .tpl__header__size (@value) when (@value = wide) {
 }
 
@@ -54,6 +57,9 @@
         max-width: @AppTpl-Header-Width;
         .mx__align(@AppTpl-Header-Align);
     }
+}
+
+.tpl__footer__size (@value) when (@value = content) {
 }
 
 .tpl__footer__size (@value) when (@value = wide) {
@@ -80,6 +86,9 @@
         max-width: @AppTpl-Container-Width;
         .mx__align(@AppTpl-Container-Align);
     }
+
+    .tpl__header__size(content);
+    .tpl__footer__size(content);
 }
 
 .tpl__container__size(@AppTpl-Container-Size);
