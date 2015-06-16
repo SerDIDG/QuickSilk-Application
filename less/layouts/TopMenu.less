@@ -14,18 +14,20 @@
         position: relative;
     }
 
-    // /* Quicksilk Logo */
+    .icon {
+        color: @AppLT-TopMenu-Color;
+        line-height: @AppLT-TopMenu-Height;
+        .cm-i__size(@CmSize-Large);
+        .cm-i__b-size(@AppLT-TopMenu-Height);
+    }
 
-    .logo {
-        width: @CmSize-XLarge;
-        height: @AppLT-TopMenu-Height;
+    // /* QuickSilk Logo */
+
+    .menu-logo {
         position: relative;
         z-index: 3;
         display: block;
         float: left;
-        background-image: url("@{AppPath-Images}/layouts/topmenu/logo.png");
-        background-position: 50% 50%;
-        background-repeat: no-repeat;
         .mx__transition(opacity, @CmUI-Transition-Duration);
 
         &:hover {
@@ -69,7 +71,7 @@
         }
 
         li {
-            .app__font--topmenu;
+            .app-lt__topmenu-font;
             position: relative;
             line-height: @AppLT-TopMenu-Height;
             color: @AppLT-TopMenu-Color;
@@ -87,21 +89,6 @@
                     .mx__transition(all, @CmUI-Transition-DurationReverse);
                 }
             }
-
-            .icon {
-                display: inline-block;
-                vertical-align: top;
-                color: @AppLT-TopMenu-Color;
-                line-height: @AppLT-TopMenu-Height;
-                .cm-i__size(@CmSize-Large);
-                .cm-i__b-size(@AppLT-TopMenu-Height);
-            }
-
-            &.has-icon {
-                > a {
-                    padding-left: 0;
-                }
-            }
         }
     }
 }
@@ -110,6 +97,11 @@
 
 .app-lt__topmenu-helper__height {
     height: @AppLT-TopMenu-Height;
+}
+
+/* *** FONT *** */
+
+.app-lt__topmenu-font {
 }
 
 // /* *** MIXINS *** */
@@ -151,6 +143,17 @@
                         }
 
                         .check-first-level(@AppLT-TopMenu-Dropdown-FirstLevel);
+                    }
+
+                    .icon {
+                        display: inline-block;
+                        vertical-align: top;
+                    }
+
+                    &.has-icon {
+                        > a {
+                            padding-left: 0;
+                        }
                     }
 
                     &.has-dropdown {
@@ -313,6 +316,10 @@
                         > a {
                             border-bottom: @AppLT-TopMenu-ItemBorder;
                         }
+                    }
+
+                    .icon {
+                        display: none;
                     }
                 }
 
