@@ -48,7 +48,6 @@
 
     .menu-select {
         display: none;
-        background: @CmColor-Secondary-LightHover;
         border-radius: @CmBorder-Radius;
         position: relative;
 
@@ -60,6 +59,11 @@
             background: transparent;
             cursor: pointer;
             .mx__appearance(none);
+
+            // Hide select arrow in IE
+            &::-ms-expand {
+                display: none;
+            }
         }
     }
 
@@ -94,6 +98,7 @@
         .app-mod__menu__indent(@AppMod-Menu-Default-Indent);
         .app-mod__menu__select-size(@AppMod-Menu-Default-SelectSize);
         .app-mod__menu__select-color(@AppMod-Menu-Default-SelectColor);
+        .app-mod__menu__select-background(@AppMod-Menu-Default-SelectBackground);
 
         &.has-separator {
             .app-mod__menu--has-separator(@AppMod-Menu-Default-SeparatorWidth, @AppMod-Menu-Default-SeparatorHeight, @AppMod-Menu-Default-SeparatorBackground, @AppMod-Menu-Default-Indent);
@@ -104,6 +109,7 @@
         .app-mod__menu__indent(@AppMod-Menu-Primary-Indent);
         .app-mod__menu__select-size(@AppMod-Menu-Primary-SelectSize);
         .app-mod__menu__select-color(@AppMod-Menu-Primary-SelectColor);
+        .app-mod__menu__select-background(@AppMod-Menu-Primary-SelectBackground);
 
         &.has-separator {
             .app-mod__menu--has-separator(@AppMod-Menu-Primary-SeparatorWidth, @AppMod-Menu-Primary-SeparatorHeight, @AppMod-Menu-Primary-SeparatorBackground, @AppMod-Menu-Primary-Indent);
@@ -114,6 +120,7 @@
         .app-mod__menu__indent(@AppMod-Menu-Secondary-Indent);
         .app-mod__menu__select-size(@AppMod-Menu-Secondary-SelectSize);
         .app-mod__menu__select-color(@AppMod-Menu-Secondary-SelectColor);
+        .app-mod__menu__select-background(@AppMod-Menu-Secondary-SelectBackground);
 
         &.has-separator {
             .app-mod__menu--has-separator(@AppMod-Menu-Secondary-SeparatorWidth, @AppMod-Menu-Secondary-SeparatorHeight, @AppMod-Menu-Secondary-SeparatorBackground, @AppMod-Menu-Secondary-Indent);
@@ -169,6 +176,19 @@
             option,
             optgroup {
                 color: @color;
+            }
+        }
+    }
+}
+
+.app-mod__menu__select-background (@background: @AppMod-Menu-Default-SelectBackground) {
+    .menu-select {
+        background: @background;
+
+        .select {
+            option,
+            optgroup {
+                background: @background;
             }
         }
     }
