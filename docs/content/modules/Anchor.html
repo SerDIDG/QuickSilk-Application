@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-    <title>Modules: Spacer</title>
+    <title>Modules: Anchor</title>
 
     <link type="text/css" rel="stylesheet" href="../../../../../css/index.css">
     <link type="text/css" rel="stylesheet" href="../../styles/index.css">
@@ -15,8 +15,6 @@
     <script type="text/javascript" src="../../../../common/js/init.js"></script>
     <script type="text/javascript" src="../../../../common/js/components/UA.js"></script>
     <script type="text/javascript" src="../../../../common/js/components/Collector.js"></script>
-    <script type="text/javascript" src="../../../../common/js/components/Draggable.js"></script>
-    <script type="text/javascript" src="../../../../common/js/components/Spacer.js"></script>
 
     <script type="text/javascript" src="../../../js/Application.js"></script>
     <script type="text/javascript" src="../../../js/components/ModuleMenu.js"></script>
@@ -29,16 +27,6 @@
                     Part.Menu();
                     Part.Autoresize(data['node']);
                 })
-                .add('module-menu', function(node){
-                    new App.ModuleMenu({
-                        'node' : node
-                    });
-                })
-                .add('spacer', function(node){
-                    new Com.Spacer({
-                        'node' : node
-                    });
-                })
                 .construct();
         });
     </script>
@@ -46,7 +34,7 @@
 
 <body>
 
-<h1 class="pt__box-title">Modules: Spacer</h1>
+<h1 class="pt__box-title">Modules: Anchor</h1>
 <hr>
 
 <h2>Default spacer:</h2>
