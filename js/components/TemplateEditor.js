@@ -163,7 +163,7 @@ function(params){
         var pageSize = cm.getPageSize();
 
         if(that.components['sidebar']){
-            if(pageSize['winWidth'] <= cm._.config['adaptiveFrom']){
+            if(pageSize['winWidth'] <= cm._config['adaptiveFrom']){
                 if(that.components['sidebar'].isExpanded && that.isExpanded){
                     that.states['sidebarExpanded'] = true;
                     that.components['sidebar'].collapse(true);
