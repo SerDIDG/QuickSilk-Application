@@ -33,7 +33,7 @@ cm.define('App.Stylizer', {
                 "Verdana, Geneva, sans-serif"
             ],
             'line-height' : [8, 10, 12, 16, 20, 24, 28, 32, 36, 40, 48, 56, 64, 72, 80, 88, 96, 108, 120],
-            'font-size' : [8, 9, 10, 11, 12, 13, 14, 18, 10, 22, 24, 28, 32, 36, 42, 48, 54, 60, 72, 96],
+            'font-size' : [8, 9, 10, 11, 12, 13, 14, 18, 20, 22, 24, 28, 32, 36, 42, 48, 54, 60, 72, 96],
             'font-weight' : [100, 300, 400, 600, 700, 800],
             'font-style' : ['normal', 'italic'],
             'text-decoration' : ['none', 'underline']
@@ -126,6 +126,7 @@ function(params){
         // Extend global styles config
         extendGlobalConfig(that.params['active']);
         extendGlobalConfig(that.params['default']);
+        sortGlobalConfig();
         // Override controls
         if(that.params['overrideControls']){
             cm.forEach(that.params['controls'], function(item, key){
@@ -162,29 +163,32 @@ function(params){
     var extendGlobalConfig = function(config){
         if(config['font-size'] && !cm.inArray(that.params['styles']['font-size'], config['font-size'])){
             that.params['styles']['font-size'].push(config['font-size']);
-            that.params['styles']['font-size'].sort(function(a, b){
-                return a - b;
-            });
         }
         if(config['line-height'] && !cm.inArray(that.params['styles']['line-height'], config['line-height'])){
             that.params['styles']['line-height'].push(config['line-height']);
-            that.params['styles']['line-height'].sort(function(a, b){
-                if(a == 'normal'){
-                    return -1;
-                }else if(b == 'normal'){
-                    return 1;
-                }
-                return a - b;
-            });
         }
         if(config['font-family'] && !cm.inArray(that.params['styles']['font-family'], config['font-family'])){
             that.params['styles']['font-family'].push(config['font-family']);
-            that.params['styles']['font-family'].sort(function(a, b){
-                var t1 = a.toLowerCase().replace(/["']/g, ''),
-                    t2 = b.toLowerCase().replace(/["']/g, '');
-                return (t1 < t2)? -1 : ((t1 > t2)? 1 : 0);
-            });
         }
+    };
+
+    var sortGlobalConfig = function(){
+        that.params['styles']['font-size'].sort(function(a, b){
+            return a - b;
+        });
+        that.params['styles']['line-height'].sort(function(a, b){
+            if(a == 'normal'){
+                return -1;
+            }else if(b == 'normal'){
+                return 1;
+            }
+            return a - b;
+        });
+        that.params['styles']['font-family'].sort(function(a, b){
+            var t1 = a.toLowerCase().replace(/["']/g, ''),
+                t2 = b.toLowerCase().replace(/["']/g, '');
+            return (t1 < t2)? -1 : ((t1 > t2)? 1 : 0);
+        });
     };
 
     var renderTooltip = function(){
