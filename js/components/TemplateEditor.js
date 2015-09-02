@@ -124,6 +124,10 @@ function(params){
                 cm.addClass(slider, 'is-visible');
             }
         });
+        // Enable gridlist editable
+        cm.find('Com.GridlistHelper', null, that.nodes['AppTemplate']['container'], function(classObject){
+            classObject.enableEditMode();
+        });
         // Redraw template
         cm.find('App.Template', null, that.nodes['AppTemplate']['container'], function(classObject){
             classObject.redraw();
@@ -152,6 +156,10 @@ function(params){
         elements = cm.getByClass('app-mod__slider');
         cm.forEach(elements, function(slider){
             cm.removeClass(slider, 'is-editable is-visible');
+        });
+        // Disable gridlist editable
+        cm.find('Com.GridlistHelper', null, that.nodes['AppTemplate']['container'], function(classObject){
+            classObject.disableEditMode();
         });
         // Redraw template
         cm.find('App.Template', null, that.nodes['AppTemplate']['container'], function(classObject){
