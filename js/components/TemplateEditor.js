@@ -78,6 +78,7 @@ function(params){
         });
         if(!finder || finder.length == 0){
             onSidebarCollapse();
+            onAdminPage();
         }
     };
 
@@ -164,6 +165,13 @@ function(params){
         // Redraw template
         cm.find('App.Template', null, that.nodes['AppTemplate']['container'], function(classObject){
             classObject.redraw();
+        });
+    };
+
+    var onAdminPage = function(){
+        // Enable gridlist editable
+        cm.find('Com.GridlistHelper', null, that.nodes['AppTemplate']['container'], function(classObject){
+            classObject.enableEditMode();
         });
     };
 
