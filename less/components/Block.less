@@ -1,14 +1,14 @@
-/* ******* PARTS: WIDGET ******* */
+/* ******* COMPONENTS: BLOCK ******* */
 
-.app-pt__widget-container {
+.app__block-container {
     position: relative;
     z-index: 1;
-    margin: 0 0 @AppPT-Widget-Indent;
+    margin: 0 0 @AppBlock-Indent;
     .mx__transition(z-index, @CmUI-Transition-Duration);
 
-    // /* Widget */
+    // /* Inner */
 
-    > .app-pt__widget {
+    > .app__block {
         .pt__editable__bundle > .normal;
         margin: 0;
         .mx__transition(opacity, @CmUI-Transition-Duration);
@@ -35,30 +35,24 @@
         }
     }
 
-    // /* Module */
-
-    .app__module {
-        margin: 0;
-    }
-
     // /* Dummy */
 
-    > .app-pt__widget-dummy {
+    > .app__block-dummy {
         position: relative;
-        border-radius: @AppPT-WidgetDummy-BorderRadius;
+        border-radius: @AppBlock-Dummy-BorderRadius;
         cursor: move;
         .mx__user-select(none);
         .mx__transition(background-color box-shadow, @CmUI-Transition-Duration);
 
         > .inner {
-            padding: @AppPT-WidgetDummy-Padding;
+            padding: @AppBlock-Dummy-Padding;
         }
 
         .icon {
-            //width: @AppPT-WidgetDummy-IconSize;
-            height: @AppPT-WidgetDummy-IconSize;
+            //width: @AppBlock-Dummy-IconSize;
+            height: @AppBlock-Dummy-IconSize;
             margin: 0 auto;
-            border-radius: @AppPT-WidgetDummy-IconBorderRadius;
+            border-radius: @AppBlock-Dummy-IconBorderRadius;
             background-repeat: no-repeat;
             .mx__transition(background-color, @CmUI-Transition-Duration);
 
@@ -79,9 +73,9 @@
         }
 
         .pt__box-loader {
-            background: @AppPT-WidgetLoader-Background;
-            border: @AppPT-WidgetLoader-Border;
-            border-radius: @AppPT-WidgetLoader-BorderRadius;
+            background: @AppBlock-Loader-Background;
+            border: @AppBlock-Loader-Border;
+            border-radius: @AppBlock-Loader-BorderRadius;
             opacity: 0;
             .mx__transition(opacity, @CmUI-Transition-Duration);
 
@@ -99,11 +93,11 @@
         z-index: 10;
         .mx__transition(z-index, @CmUI-Transition-DurationReverse);
 
-        > .app-pt__widget.is-editable {
+        > .app__block.is-editable {
             .pt__editable__bundle > .hover;
         }
 
-        > .app-pt__widget-dummy {
+        > .app__block-dummy {
             .icon {
                 .mx__transition(background-color, @CmUI-Transition-DurationReverse);
             }
@@ -114,14 +108,14 @@
         z-index: 10;
         .mx__transition(z-index, @CmUI-Transition-DurationReverse);
 
-        > .app-pt__widget.is-editable {
+        > .app__block.is-editable {
             .pt__editable__bundle > .hover;
             .pt__editable__bundle > .active;
             opacity: 0.7;
             .mx__transition(opacity, @CmUI-Transition-DurationReverse);
         }
 
-        > .app-pt__widget-dummy {
+        > .app__block-dummy {
             box-shadow: 0 1px 5px rgba(0,0,0,0.2);
             .mx__transition(background-color box-shadow, @CmUI-Transition-DurationReverse);
 
@@ -146,7 +140,7 @@
 
 /* *** WIDGET CATEGORY *** */
 
-.app-pt__widgets-category {
+.app__blocks-category {
     margin: 0 0 @CmIndent-XSmall;
 
     &:last-child {
@@ -154,12 +148,12 @@
     }
 
     > dd {
-        margin: 0 -@AppPT-WidgetDummy-Padding;
+        margin: 0 -@AppBlock-Dummy-Padding;
         font-size: 0;
     }
 
-    .app-pt__widget-container {
-        width: @AppPT-WidgetDummy-Width;
+    .app__block-container {
+        width: @AppBlock-Dummy-Width;
         margin: 0 !important;
         display: inline-block;
         vertical-align: top;
@@ -168,64 +162,60 @@
 
 // /* *** MIXINS **** */
 
-.app-pt__widget-dummy__theme (@theme) {
-    .app-pt__widget-dummy__background(~"@{AppPT-WidgetDummy-Theme@{theme}-BackgroundNormal}", ~"@{AppPT-WidgetDummy-Theme@{theme}-BackgroundHover}", ~"@{AppPT-WidgetDummy-Theme@{theme}-BackgroundActive}");
-    .app-pt__widget-dummy__icon-background(~"@{AppPT-WidgetDummy-Theme@{theme}-IconBackgroundNormal}", ~"@{AppPT-WidgetDummy-Theme@{theme}-IconBackgroundHover}", ~"@{AppPT-WidgetDummy-Theme@{theme}-IconBackgroundActive}");
-    .app-pt__widget-dummy__icons(@theme);
-    .app-pt__widget-dummy__caption-color(~"@{AppPT-WidgetDummy-Theme@{theme}-ColorNormal}", ~"@{AppPT-WidgetDummy-Theme@{theme}-ColorHover}", ~"@{AppPT-WidgetDummy-Theme@{theme}-ColorActive}");
+.app__block-dummy__theme (@theme) {
+    .app__block-dummy__background(~"@{AppBlock-Dummy-Theme@{theme}-BackgroundNormal}", ~"@{AppBlock-Dummy-Theme@{theme}-BackgroundHover}", ~"@{AppBlock-Dummy-Theme@{theme}-BackgroundActive}");
+    .app__block-dummy__icon-background(~"@{AppBlock-Dummy-Theme@{theme}-IconBackgroundNormal}", ~"@{AppBlock-Dummy-Theme@{theme}-IconBackgroundHover}", ~"@{AppBlock-Dummy-Theme@{theme}-IconBackgroundActive}");
+    .app__block-dummy__icons(@theme);
+    .app__block-dummy__caption-color(~"@{AppBlock-Dummy-Theme@{theme}-ColorNormal}", ~"@{AppBlock-Dummy-Theme@{theme}-ColorHover}", ~"@{AppBlock-Dummy-Theme@{theme}-ColorActive}");
 }
 
-.app-pt__widget-dummy__background (@normal, @hover, @active){
-    .app-pt__widget-container {
-        > .app-pt__widget-dummy {
+.app__block-dummy__background (@normal, @hover, @active){
+    .app__block-container {
+        > .app__block-dummy {
             background-color: @normal;
         }
 
         &:hover {
-            > .app-pt__widget-dummy {
+            > .app__block-dummy {
                 background-color: @hover;
             }
         }
 
         &.is-active {
-            > .app-pt__widget-dummy {
+            > .app__block-dummy {
                 background-color: @active;
             }
         }
     }
 }
 
-.get_var(@var, @value){
-    @{var}: @value;
-}
-
-.app-pt__widget-dummy__icons (@theme) {
-    .app-pt__widget-dummy {
+.app__block-dummy__icons (@theme) {
+    .app__block-dummy {
         .icon {
-            background-image: url("@{AppPath-Images}/parts/widget/@{theme}.svg");
-            background-position: 50% @AppIcon-PtWidget-default;
+            background-image: url("@{AppPath-Images}/components/block/@{theme}.svg");
+            background-position: 50% @AppIcon-Block-default;
 
-            .for(@AppIcon-PtWidget-Names); .-each(@name) {
+            .for(@AppIcon-Block-Names); .-each(@name) {
                 &.module-@{name} {
-                    @var: "AppIcon-PtWidget-@{name}";
+                    @var: "AppIcon-Block-@{name}";
                     @rule: @@var;
-                    background-position: 50% (-@rule * @AppIcon-PtWidget-Size);
+                    background-position: 50% (-@rule * @AppIcon-Block-Size);
                 }
             }
         }
     }
 }
 
-.app-pt__widget-dummy__icon-background (@normal, @hover, @active) {
-    .app-pt__widget-container {
-        > .app-pt__widget-dummy {
+.app__block-dummy__icon-background (@normal, @hover, @active) {
+    .app__block-container {
+        > .app__block-dummy {
             .icon {
                 background-color: @normal;
             }
         }
 
         &:hover {
-            > .app-pt__widget-dummy {
+            > .app__block-dummy {
                 .icon {
                     background-color: @hover;
                 }
@@ -233,7 +223,7 @@
         }
 
         &.is-active {
-            > .app-pt__widget-dummy {
+            > .app__block-dummy {
                 .icon {
                     background-color: @active;
                 }
@@ -242,16 +232,16 @@
     }
 }
 
-.app-pt__widget-dummy__caption-color (@normal, @hover, @active) {
-    .app-pt__widget-container {
-        > .app-pt__widget-dummy {
+.app__block-dummy__caption-color (@normal, @hover, @active) {
+    .app__block-container {
+        > .app__block-dummy {
             .caption {
                 color: @normal;
             }
         }
 
         &:hover {
-            > .app-pt__widget-dummy {
+            > .app__block-dummy {
                 .caption {
                     color: @hover;
                 }
@@ -259,7 +249,7 @@
         }
 
         &.is-active {
-            > .app-pt__widget-dummy {
+            > .app__block-dummy {
                 .caption {
                     color: @active;
                 }
@@ -268,27 +258,13 @@
     }
 }
 
-.app-pt__widgets-category__background (@color){
-    .app-pt__widgets-category {
+.app__blocks-category__background (@color){
+    .app__blocks-category {
         > dd {
             background-color: @color;
         }
     }
 }
 
-.app-pt__widget-dummy__theme(@AppPT-WidgetDummy-Theme);
-.app-pt__widgets-category__background(@AppPT-WidgetCategory-Background);
-
-/* ******* PARTS: WIDGET: PRINT ******* */
-
-@media print {
-
-    .app-pt__widget__controls {
-        display: none;
-    }
-
-    .app-pt__widget__controls--edit {
-        display: none;
-    }
-
-}
+.app__block-dummy__theme(@AppBlock-Dummy-Theme);
+.app__blocks-category__background(@AppBlock-Category-Background);

@@ -1,21 +1,8 @@
 /* ******* MODULES: BLOG WIDGET ******* */
 
 .app-mod__blog-widget {
-    .blog-widget__item {
-        .pt__box-item__size(@AppMod-BlogWidget-ImageSize);
-
-        .descr {
-            &.is-short {
-                .app-mod__blog-widget__descr-lines(@AppMod-BlogWidget-Vertical-DescrLines);
-            }
-        }
+    .app-pt__latest-posts {
+        .app-pt__latest-posts__image-size(@AppMod-BlogWidget-ImageSize);
+        .app-pt__latest-posts__descr-lines(@AppMod-BlogWidget-DescrLines);
     }
-}
-
-// /* *** MIXINS *** */
-
-.app-mod__blog-widget__descr-lines (@count) when (@count > 0) {
-    .cm__text-wrap;
-    height: @count * @CmFont-Base-LineHeight;
-    overflow: hidden;
 }

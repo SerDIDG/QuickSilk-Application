@@ -86,7 +86,7 @@ function(params){
         var elements;
         that.isExpanded = true;
         // Enable widgets editable
-        elements = cm.getByClass('app-pt__widget');
+        elements = cm.getByClass('app__block');
         cm.forEach(elements, function(widget){
             if(!cm.isClass(widget, 'is-locked')){
                 cm.addClass(widget, 'is-editable');
@@ -139,7 +139,7 @@ function(params){
         var elements;
         that.isExpanded = false;
         // Disable widgets editable
-        elements = cm.getByClass('app-pt__widget');
+        elements = cm.getByClass('app__block');
         cm.forEach(elements, function(widget){
             cm.removeClass(widget, 'is-editable is-visible');
         });
@@ -289,6 +289,63 @@ function(params){
     that.replaceWidget = function(oldNode, newNode, params){
         that.components['dd'].replaceDraggable(oldNode, newNode, params);
         return that;
+    };
+
+    that.deleteAllTemporary = function() {
+        var dummy = cm.getByAttr('data-node', 'dummy', that.nodes['AppTemplate']['container']);
+        cm.forEach(dummy, function(node) {
+            that.removeWidget(node.parentNode);
+        });
+    };
+
+    that.updateTemporaryWidget = function(content) {
+        var dummy = cm.getByAttr('data-node', 'dummy', that.nodes['AppTemplate']['container']);
+        cm.forEach(dummy, function(node) {
+            var element = cm.strToHTML(content);
+            that.components['dd'].replaceDraggable(node.parentNode, element, {'noEvent': true, 'onStop': function() {
+                //register drop areas
+                var areas = cm.getByAttr('data-com-draganddrop', 'area', element);
+                cm.forEach(areas, function(area) {
+                    that.components['dd'].registerArea(area, {});
+                });
+                that.triggerEvent('onUpdate', {'node': element});
+            }});
+        });
+    };
+
+    that.getWidget = function(id) {
+        var draggableList = that.components['dd'].getDraggableList(),
+            widgets = [],
+            result = null;
+        cm.forEach(draggableList, function(item) {
+            widgets = cm.getByClass('app__block', item['node']);
+            if (widgets[0] && widgets[0].getAttribute('data-block-position-id') == id) {
+                result = item;
+            }
+        });
+        return result;
+    };
+
+    that.updateWidget = function(content, id) {
+        var item = that.getWidget(id);
+        if(item){
+            var element = cm.strToHTML(content);
+            that.components['dd'].replaceDraggable(item['node'], element, {'noEvent': true, 'onStop': function() {
+                //register drop areas
+                var areas = cm.getByAttr('data-com-draganddrop', 'area', element);
+                cm.forEach(areas, function(area) {
+                    that.components['dd'].registerArea(area, {});
+                });
+                that.triggerEvent('onUpdate', {'node': element});
+            }});
+        }
+    };
+
+    that.deleteWidget = function(id) {
+        var item = that.getWidget(id);
+        if(item){
+            that.components['dd'].removeDraggable(item['node'], {'noEvent': true});
+        }
     };
 
     init();

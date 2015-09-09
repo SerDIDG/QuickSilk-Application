@@ -83,8 +83,8 @@
                     var onRequest = function(TE, data){
                         var config = cm.parseJSON(data['node'].getAttribute('data-config')) || {};
 
-                        var widget = '<div class="app-pt__widget-container" data-com-draganddrop="draggable">' +
-                                '<div class="app-pt__widget is-editable">' +
+                        var widget = '<div class="app__block-container" data-com-draganddrop="draggable">' +
+                                '<div class="app__block is-editable">' +
                                 '<div class="border"></div>' +
                                 '<div class="drag" data-com-draganddrop="drag">' +
                                 '<div class="icon draggable"></div>' +
@@ -401,102 +401,102 @@
 
                     <div class="sidebar__content__descr" data-node="AppSidebar.areas:[]:container">
                         <div class="inner">
-                            <dl class="com__togglebox app-pt__widgets-category is-show" data-element="togglebox" data-config='{"remember" : true, "name" : "app-lt__sidebar-main"}' data-node="ComToggleBox.container">
+                            <dl class="com__togglebox app__blocks-category is-show" data-element="togglebox" data-config='{"remember" : true, "name" : "app-lt__sidebar-main"}' data-node="ComToggleBox.container">
                                 <dt data-node="ComToggleBox.button">
                                     <span class="icon default"></span>
                                     <span class="title">Main</span>
                                 </dt>
                                 <dd data-node="ComToggleBox.target">
-                                    <div class="app-pt__widget-container" data-node="AppSidebar.widgets:[]:container">
-                                        <div class="app-pt__widget-dummy" data-node="dummy">
+                                    <div class="app__block-container" data-node="AppSidebar.widgets:[]:container">
+                                        <div class="app__block-dummy" data-node="dummy">
                                             <div class="inner">
                                                 <div class="icon module-logo"></div>
                                                 <div class="caption">Site Logo</div>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="app-pt__widget-container" data-node="AppSidebar.widgets:[]:container" data-config='{"type" : "content"}'>
-                                        <div class="app-pt__widget-dummy" data-node="dummy">
+                                    <div class="app__block-container" data-node="AppSidebar.widgets:[]:container" data-config='{"type" : "content"}'>
+                                        <div class="app__block-dummy" data-node="dummy">
                                             <div class="inner">
                                                 <div class="icon module-content"></div>
                                                 <div class="caption">Content</div>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="app-pt__widget-container" data-node="AppSidebar.widgets:[]:container">
-                                        <div class="app-pt__widget-dummy" data-node="dummy">
+                                    <div class="app__block-container" data-node="AppSidebar.widgets:[]:container">
+                                        <div class="app__block-dummy" data-node="dummy">
                                             <div class="inner">
                                                 <div class="icon module-menu"></div>
                                                 <div class="caption">Menu</div>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="app-pt__widget-container" data-node="AppSidebar.widgets:[]:container">
-                                        <div class="app-pt__widget-dummy" data-node="dummy">
+                                    <div class="app__block-container" data-node="AppSidebar.widgets:[]:container">
+                                        <div class="app__block-dummy" data-node="dummy">
                                             <div class="inner">
                                                 <div class="icon module-column"></div>
                                                 <div class="caption">Columns</div>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="app-pt__widget-container" data-node="AppSidebar.widgets:[]:container">
-                                        <div class="app-pt__widget-dummy" data-node="dummy">
+                                    <div class="app__block-container" data-node="AppSidebar.widgets:[]:container">
+                                        <div class="app__block-dummy" data-node="dummy">
                                             <div class="inner">
                                                 <div class="icon module-zone"></div>
                                                 <div class="caption">Infoblock</div>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="app-pt__widget-container" data-node="AppSidebar.widgets:[]:container">
-                                        <div class="app-pt__widget-dummy" data-node="dummy">
+                                    <div class="app__block-container" data-node="AppSidebar.widgets:[]:container">
+                                        <div class="app__block-dummy" data-node="dummy">
                                             <div class="inner">
                                                 <div class="icon module-zone"></div>
                                                 <div class="caption">Working Area</div>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="app-pt__widget-container" data-node="AppSidebar.widgets:[]:container">
-                                        <div class="app-pt__widget-dummy" data-node="dummy">
+                                    <div class="app__block-container" data-node="AppSidebar.widgets:[]:container">
+                                        <div class="app__block-dummy" data-node="dummy">
                                             <div class="inner">
                                                 <div class="icon module-divider"></div>
                                                 <div class="caption">Divider</div>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="app-pt__widget-container" data-node="AppSidebar.widgets:[]:container">
-                                        <div class="app-pt__widget-dummy" data-node="dummy">
+                                    <div class="app__block-container" data-node="AppSidebar.widgets:[]:container">
+                                        <div class="app__block-dummy" data-node="dummy">
                                             <div class="inner">
                                                 <div class="icon module-spacer"></div>
                                                 <div class="caption">Spacer</div>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="app-pt__widget-container" data-node="AppSidebar.widgets:[]:container">
-                                        <div class="app-pt__widget-dummy" data-node="dummy">
+                                    <div class="app__block-container" data-node="AppSidebar.widgets:[]:container">
+                                        <div class="app__block-dummy" data-node="dummy">
                                             <div class="inner">
                                                 <div class="icon module-tabs"></div>
                                                 <div class="caption">Tabset</div>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="app-pt__widget-container" data-node="AppSidebar.widgets:[]:container">
-                                        <div class="app-pt__widget-dummy" data-node="dummy">
+                                    <div class="app__block-container" data-node="AppSidebar.widgets:[]:container">
+                                        <div class="app__block-dummy" data-node="dummy">
                                             <div class="inner">
                                                 <div class="icon module-flickr"></div>
                                                 <div class="caption">Flickr</div>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="app-pt__widget-container" data-node="AppSidebar.widgets:[]:container">
-                                        <div class="app-pt__widget-dummy" data-node="dummy">
+                                    <div class="app__block-container" data-node="AppSidebar.widgets:[]:container">
+                                        <div class="app__block-dummy" data-node="dummy">
                                             <div class="inner">
                                                 <div class="icon module-languageswitcher"></div>
                                                 <div class="caption">Language swicther</div>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="app-pt__widget-container" data-node="AppSidebar.widgets:[]:container">
-                                        <div class="app-pt__widget-dummy" data-node="dummy">
+                                    <div class="app__block-container" data-node="AppSidebar.widgets:[]:container">
+                                        <div class="app__block-dummy" data-node="dummy">
                                             <div class="inner">
                                                 <div class="icon module-d3"></div>
                                                 <div class="caption">D3 module</div>
@@ -506,38 +506,38 @@
                                 </dd>
                             </dl>
 
-                            <dl class="com__togglebox app-pt__widgets-category is-show" data-element="togglebox" data-config='{"remember" : true, "name" : "app-lt__sidebar-service"}' data-node="ComToggleBox.container">
+                            <dl class="com__togglebox app__blocks-category is-show" data-element="togglebox" data-config='{"remember" : true, "name" : "app-lt__sidebar-service"}' data-node="ComToggleBox.container">
                                 <dt data-node="ComToggleBox.button">
                                     <span class="icon default"></span>
                                     <span class="title">Service</span>
                                 </dt>
                                 <dd data-node="ComToggleBox.target">
-                                    <div class="app-pt__widget-container" data-node="AppSidebar.widgets:[]:container">
-                                        <div class="app-pt__widget-dummy" data-node="dummy">
+                                    <div class="app__block-container" data-node="AppSidebar.widgets:[]:container">
+                                        <div class="app__block-dummy" data-node="dummy">
                                             <div class="inner">
                                                 <div class="icon module-login"></div>
                                                 <div class="caption">Login</div>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="app-pt__widget-container" data-node="AppSidebar.widgets:[]:container">
-                                        <div class="app-pt__widget-dummy" data-node="dummy">
+                                    <div class="app__block-container" data-node="AppSidebar.widgets:[]:container">
+                                        <div class="app__block-dummy" data-node="dummy">
                                             <div class="inner">
                                                 <div class="icon module-registration"></div>
                                                 <div class="caption">Registration</div>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="app-pt__widget-container" data-node="AppSidebar.widgets:[]:container">
-                                        <div class="app-pt__widget-dummy" data-node="dummy">
+                                    <div class="app__block-container" data-node="AppSidebar.widgets:[]:container">
+                                        <div class="app__block-dummy" data-node="dummy">
                                             <div class="inner">
                                                 <div class="icon module-search"></div>
                                                 <div class="caption">Search</div>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="app-pt__widget-container" data-node="AppSidebar.widgets:[]:container">
-                                        <div class="app-pt__widget-dummy" data-node="dummy">
+                                    <div class="app__block-container" data-node="AppSidebar.widgets:[]:container">
+                                        <div class="app__block-dummy" data-node="dummy">
                                             <div class="inner">
                                                 <div class="icon module-googlemap"></div>
                                                 <div class="caption">Google Map</div>
@@ -547,38 +547,38 @@
                                 </dd>
                             </dl>
 
-                            <dl class="com__togglebox app-pt__widgets-category is-show" data-element="togglebox" data-config='{"remember" : true, "name" : "app-lt__sidebar-media"}' data-node="ComToggleBox.container">
+                            <dl class="com__togglebox app__blocks-category is-show" data-element="togglebox" data-config='{"remember" : true, "name" : "app-lt__sidebar-media"}' data-node="ComToggleBox.container">
                                 <dt data-node="ComToggleBox.button">
                                     <span class="icon default"></span>
                                     <span class="title">Media</span>
                                 </dt>
                                 <dd data-node="ComToggleBox.target">
-                                    <div class="app-pt__widget-container" data-node="AppSidebar.widgets:[]:container">
-                                        <div class="app-pt__widget-dummy" data-node="dummy">
+                                    <div class="app__block-container" data-node="AppSidebar.widgets:[]:container">
+                                        <div class="app__block-dummy" data-node="dummy">
                                             <div class="inner">
                                                 <div class="icon module-image"></div>
                                                 <div class="caption">Image</div>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="app-pt__widget-container" data-node="AppSidebar.widgets:[]:container">
-                                        <div class="app-pt__widget-dummy" data-node="dummy">
+                                    <div class="app__block-container" data-node="AppSidebar.widgets:[]:container">
+                                        <div class="app__block-dummy" data-node="dummy">
                                             <div class="inner">
                                                 <div class="icon module-slider"></div>
                                                 <div class="caption">Slider</div>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="app-pt__widget-container" data-node="AppSidebar.widgets:[]:container">
-                                        <div class="app-pt__widget-dummy" data-node="dummy">
+                                    <div class="app__block-container" data-node="AppSidebar.widgets:[]:container">
+                                        <div class="app__block-dummy" data-node="dummy">
                                             <div class="inner">
                                                 <div class="icon module-imagegallery"></div>
                                                 <div class="caption">Image Gallery</div>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="app-pt__widget-container" data-node="AppSidebar.widgets:[]:container">
-                                        <div class="app-pt__widget-dummy" data-node="dummy">
+                                    <div class="app__block-container" data-node="AppSidebar.widgets:[]:container">
+                                        <div class="app__block-dummy" data-node="dummy">
                                             <div class="inner">
                                                 <div class="icon module-videogallery"></div>
                                                 <div class="caption">Video Gallery</div>
@@ -588,78 +588,78 @@
                                 </dd>
                             </dl>
 
-                            <dl class="com__togglebox app-pt__widgets-category is-show" data-element="togglebox" data-config='{"remember" : true, "name" : "app-lt__sidebar-social"}' data-node="ComToggleBox.container">
+                            <dl class="com__togglebox app__blocks-category is-show" data-element="togglebox" data-config='{"remember" : true, "name" : "app-lt__sidebar-social"}' data-node="ComToggleBox.container">
                                 <dt data-node="ComToggleBox.button">
                                     <span class="icon default"></span>
                                     <span class="title">Social</span>
                                 </dt>
                                 <dd data-node="ComToggleBox.target">
-                                    <div class="app-pt__widget-container" data-node="AppSidebar.widgets:[]:container">
-                                        <div class="app-pt__widget-dummy" data-node="dummy">
+                                    <div class="app__block-container" data-node="AppSidebar.widgets:[]:container">
+                                        <div class="app__block-dummy" data-node="dummy">
                                             <div class="inner">
                                                 <div class="icon module-socialmedia"></div>
                                                 <div class="caption">Social Links</div>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="app-pt__widget-container" data-node="AppSidebar.widgets:[]:container">
-                                        <div class="app-pt__widget-dummy" data-node="dummy">
+                                    <div class="app__block-container" data-node="AppSidebar.widgets:[]:container">
+                                        <div class="app__block-dummy" data-node="dummy">
                                             <div class="inner">
                                                 <div class="icon module-socialmedia_share"></div>
                                                 <div class="caption">Social Share</div>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="app-pt__widget-container" data-node="AppSidebar.widgets:[]:container">
-                                        <div class="app-pt__widget-dummy" data-node="dummy">
+                                    <div class="app__block-container" data-node="AppSidebar.widgets:[]:container">
+                                        <div class="app__block-dummy" data-node="dummy">
                                             <div class="inner">
                                                 <div class="icon module-socialmedia_rating"></div>
                                                 <div class="caption">Social Rating</div>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="app-pt__widget-container" data-node="AppSidebar.widgets:[]:container">
-                                        <div class="app-pt__widget-dummy" data-node="dummy">
+                                    <div class="app__block-container" data-node="AppSidebar.widgets:[]:container">
+                                        <div class="app__block-dummy" data-node="dummy">
                                             <div class="inner">
                                                 <div class="icon module-comment"></div>
                                                 <div class="caption">Comments</div>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="app-pt__widget-container" data-node="AppSidebar.widgets:[]:container">
-                                        <div class="app-pt__widget-dummy" data-node="dummy">
+                                    <div class="app__block-container" data-node="AppSidebar.widgets:[]:container">
+                                        <div class="app__block-dummy" data-node="dummy">
                                             <div class="inner">
                                                 <div class="icon module-memberdirectory"></div>
                                                 <div class="caption">Member Directory</div>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="app-pt__widget-container" data-node="AppSidebar.widgets:[]:container">
-                                        <div class="app-pt__widget-dummy" data-node="dummy">
+                                    <div class="app__block-container" data-node="AppSidebar.widgets:[]:container">
+                                        <div class="app__block-dummy" data-node="dummy">
                                             <div class="inner">
                                                 <div class="icon module-memberwidget"></div>
                                                 <div class="caption">Member Directory Widget</div>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="app-pt__widget-container" data-node="AppSidebar.widgets:[]:container">
-                                        <div class="app-pt__widget-dummy" data-node="dummy">
+                                    <div class="app__block-container" data-node="AppSidebar.widgets:[]:container">
+                                        <div class="app__block-dummy" data-node="dummy">
                                             <div class="inner">
                                                 <div class="icon module-filegridlist"></div>
                                                 <div class="caption">File Grid List</div>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="app-pt__widget-container" data-node="AppSidebar.widgets:[]:container">
-                                        <div class="app-pt__widget-dummy" data-node="dummy">
+                                    <div class="app__block-container" data-node="AppSidebar.widgets:[]:container">
+                                        <div class="app__block-dummy" data-node="dummy">
                                             <div class="inner">
                                                 <div class="icon module-forum"></div>
                                                 <div class="caption">Forum</div>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="app-pt__widget-container" data-node="AppSidebar.widgets:[]:container">
-                                        <div class="app-pt__widget-dummy" data-node="dummy">
+                                    <div class="app__block-container" data-node="AppSidebar.widgets:[]:container">
+                                        <div class="app__block-dummy" data-node="dummy">
                                             <div class="inner">
                                                 <div class="icon module-forum_build"></div>
                                                 <div class="caption">Forum Widget</div>
@@ -669,54 +669,54 @@
                                 </dd>
                             </dl>
 
-                            <dl class="com__togglebox app-pt__widgets-category is-show" data-element="togglebox" data-config='{"remember" : true, "name" : "app-lt__sidebar-blog"}' data-node="ComToggleBox.container">
+                            <dl class="com__togglebox app__blocks-category is-show" data-element="togglebox" data-config='{"remember" : true, "name" : "app-lt__sidebar-blog"}' data-node="ComToggleBox.container">
                                 <dt data-node="ComToggleBox.button">
                                     <span class="icon default"></span>
                                     <span class="title">Blog</span>
                                 </dt>
                                 <dd data-node="ComToggleBox.target">
-                                    <div class="app-pt__widget-container" data-node="AppSidebar.widgets:[]:container">
-                                        <div class="app-pt__widget-dummy" data-node="dummy">
+                                    <div class="app__block-container" data-node="AppSidebar.widgets:[]:container">
+                                        <div class="app__block-dummy" data-node="dummy">
                                             <div class="inner">
                                                 <div class="icon module-blogcontent"></div>
                                                 <div class="caption">Blog</div>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="app-pt__widget-container" data-node="AppSidebar.widgets:[]:container">
-                                        <div class="app-pt__widget-dummy" data-node="dummy">
+                                    <div class="app__block-container" data-node="AppSidebar.widgets:[]:container">
+                                        <div class="app__block-dummy" data-node="dummy">
                                             <div class="inner">
                                                 <div class="icon module-blogblock"></div>
                                                 <div class="caption">Blog Widget</div>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="app-pt__widget-container" data-node="AppSidebar.widgets:[]:container">
-                                        <div class="app-pt__widget-dummy" data-node="dummy">
+                                    <div class="app__block-container" data-node="AppSidebar.widgets:[]:container">
+                                        <div class="app__block-dummy" data-node="dummy">
                                             <div class="inner">
                                                 <div class="icon module-blogcategories"></div>
                                                 <div class="caption">Blog Categories</div>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="app-pt__widget-container" data-node="AppSidebar.widgets:[]:container">
-                                        <div class="app-pt__widget-dummy" data-node="dummy">
+                                    <div class="app__block-container" data-node="AppSidebar.widgets:[]:container">
+                                        <div class="app__block-dummy" data-node="dummy">
                                             <div class="inner">
                                                 <div class="icon module-blogcalendar"></div>
                                                 <div class="caption">Blog Calendar</div>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="app-pt__widget-container" data-node="AppSidebar.widgets:[]:container">
-                                        <div class="app-pt__widget-dummy" data-node="dummy">
+                                    <div class="app__block-container" data-node="AppSidebar.widgets:[]:container">
+                                        <div class="app__block-dummy" data-node="dummy">
                                             <div class="inner">
                                                 <div class="icon module-blogarchive"></div>
                                                 <div class="caption">Blog Archive</div>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="app-pt__widget-container" data-node="AppSidebar.widgets:[]:container">
-                                        <div class="app-pt__widget-dummy" data-node="dummy">
+                                    <div class="app__block-container" data-node="AppSidebar.widgets:[]:container">
+                                        <div class="app__block-dummy" data-node="dummy">
                                             <div class="inner">
                                                 <div class="icon module-blogroll"></div>
                                                 <div class="caption">Blog Roll</div>
@@ -726,30 +726,30 @@
                                 </dd>
                             </dl>
 
-                            <dl class="com__togglebox app-pt__widgets-category is-show" data-element="togglebox" data-config='{"remember" : true, "name" : "app-lt__sidebar-events"}' data-node="ComToggleBox.container">
+                            <dl class="com__togglebox app__blocks-category is-show" data-element="togglebox" data-config='{"remember" : true, "name" : "app-lt__sidebar-events"}' data-node="ComToggleBox.container">
                                 <dt data-node="ComToggleBox.button">
                                     <span class="icon default"></span>
                                     <span class="title">Events</span>
                                 </dt>
                                 <dd data-node="ComToggleBox.target">
-                                    <div class="app-pt__widget-container" data-node="AppSidebar.widgets:[]:container">
-                                        <div class="app-pt__widget-dummy" data-node="dummy">
+                                    <div class="app__block-container" data-node="AppSidebar.widgets:[]:container">
+                                        <div class="app__block-dummy" data-node="dummy">
                                             <div class="inner">
                                                 <div class="icon module-events"></div>
                                                 <div class="caption">Events</div>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="app-pt__widget-container" data-node="AppSidebar.widgets:[]:container">
-                                        <div class="app-pt__widget-dummy" data-node="dummy">
+                                    <div class="app__block-container" data-node="AppSidebar.widgets:[]:container">
+                                        <div class="app__block-dummy" data-node="dummy">
                                             <div class="inner">
                                                 <div class="icon module-latestevents"></div>
                                                 <div class="caption">Events Widget</div>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="app-pt__widget-container" data-node="AppSidebar.widgets:[]:container">
-                                        <div class="app-pt__widget-dummy" data-node="dummy">
+                                    <div class="app__block-container" data-node="AppSidebar.widgets:[]:container">
+                                        <div class="app__block-dummy" data-node="dummy">
                                             <div class="inner">
                                                 <div class="icon module-eventscalendar"></div>
                                                 <div class="caption">Events Calendar</div>
@@ -759,14 +759,14 @@
                                 </dd>
                             </dl>
 
-                            <dl class="com__togglebox app-pt__widgets-category is-show" data-element="togglebox" data-config='{"remember" : true, "name" : "app-lt__sidebar-other"}' data-node="ComToggleBox.container">
+                            <dl class="com__togglebox app__blocks-category is-show" data-element="togglebox" data-config='{"remember" : true, "name" : "app-lt__sidebar-other"}' data-node="ComToggleBox.container">
                                 <dt data-node="ComToggleBox.button">
                                     <span class="icon default"></span>
                                     <span class="title">Other</span>
                                 </dt>
                                 <dd data-node="ComToggleBox.target">
-                                    <div class="app-pt__widget-container" data-node="AppSidebar.widgets:[]:container">
-                                        <div class="app-pt__widget-dummy" data-node="dummy">
+                                    <div class="app__block-container" data-node="AppSidebar.widgets:[]:container">
+                                        <div class="app__block-dummy" data-node="dummy">
                                             <div class="inner">
                                                 <div class="icon"></div>
                                                 <div class="caption">Default Widget</div>

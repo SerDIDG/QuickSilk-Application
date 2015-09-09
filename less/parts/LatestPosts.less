@@ -1,0 +1,24 @@
+/* ******* PARTS: LATEST POSTS ******* */
+
+.app-pt__latest-posts {
+    .app-pt__latest-posts__image-size(@AppPT-LatestPosts-ImageSize);
+    .app-pt__latest-posts__descr-lines(@AppPT-LatestPosts-DescrLines);
+}
+
+// /* ******* MIXINS ******* */
+
+.app-pt__latest-posts__image-size(@value){
+    .pt__box-item {
+        .pt__box-item__size(@value);
+    }
+}
+
+.app-pt__latest-posts__descr-lines(@value){
+    .pt__box-item {
+        .descr {
+            &.is-short {
+                .pt__box-item__descr-lines(@value);
+            }
+        }
+    }
+}

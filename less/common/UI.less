@@ -148,19 +148,6 @@
     }
 }
 
-/* *** MODULES / PAGES *** */
-
-.app__page,
-.app__module {
-    .clearfix;
-}
-
-.app-mod__default {
-}
-
-.app-page__default {
-}
-
 /* *** AREAS *** */
 
 .app__area-main {
@@ -219,8 +206,8 @@ html {
         }
 
         .pt__dnd-area.is-available {
-            .app-pt__widget-container {
-                margin: 0 0 @AppPT-Widget-Indent !important;
+            .app__block-container {
+                margin: 0 0 @AppBlock-Indent !important;
             }
         }
 
@@ -238,7 +225,7 @@ html {
     }
 
     &.is-sidebar--collapsed {
-        .app-pt__widget__controls {
+        .app__module__controls {
             display: none;
         }
     }
@@ -256,13 +243,13 @@ html {
             padding: 0;
         }
 
-        .app-pt__widget-container {
+        .app__block-container {
             &:last-child {
                 margin: 0;
             }
         }
 
-        .app-pt__widget__controls--edit {
+        .app__module__controls--edit {
             display: none;
         }
     }
