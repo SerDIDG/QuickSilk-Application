@@ -1,4 +1,6 @@
 module.exports = function(grunt) {
+    // Load all grunt tasks matching the `grunt-*` pattern.
+    require('load-grunt-tasks')(grunt);
 
     // Project configuration.
     grunt.initConfig({
@@ -7,7 +9,7 @@ module.exports = function(grunt) {
         concat: {
             dist: {
                 src: [
-                    'js/*.js',
+                    'js/Application.js',
                     'js/components/**/*.js'
                 ],
                 dest: 'js/build/<%= pkg.name %>.js'
@@ -19,14 +21,23 @@ module.exports = function(grunt) {
                 src: 'js/build/<%= pkg.name %>.js',
                 dest: 'js/build/<%= pkg.name %>.min.js'
             }
+        },
+
+        watch: {
+            scripts: {
+                files: [
+                    'js/**/*.js'
+                ],
+                tasks: ['concat'],
+                options: {
+                    spawn: false
+                }
+            }
         }
     });
 
-    // Load the plugin that provides the "uglify" task.
-    grunt.loadNpmTasks('grunt-contrib-concat');
-    grunt.loadNpmTasks('grunt-contrib-uglify');
-
     // Default task(s).
     grunt.registerTask('default', ['concat', 'uglify']);
+    grunt.registerTask('dev', ['concat']);
 
 };
