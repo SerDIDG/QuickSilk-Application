@@ -1,5 +1,5 @@
 {
-  "name": "QuickSilk-UI",
+  "name": "QuickSilk-Application",
   "version": "3.6.2",
   "devDependencies": {
     "grunt": "^0.4.5",
