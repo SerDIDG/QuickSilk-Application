@@ -1,7 +1,6 @@
 .DS_store
 .idea
 .git
-js/components/old
-js/components/dev
+src/js/components/old
 
 node_modules

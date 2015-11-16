@@ -1,0 +1,274 @@
+/* ******* COMPONENTS: BLOCK ******* */
+
+.app__block-container {
+    position: relative;
+    z-index: 1;
+    margin: 0 0 @AppBlock-Indent;
+    .mx__transition(z-index, @CmUI-Transition-Duration);
+
+    // /* Inner */
+
+    > .app__block {
+        .pt__editable__bundle > .normal;
+        margin: 0;
+        .mx__transition(opacity, @CmUI-Transition-Duration);
+
+        &.is-hidden {
+            display: none;
+        }
+
+        &.is-visible {
+            display: block;
+        }
+
+        &.is-editable {
+            .pt__editable__bundle > .editable;
+        }
+
+        &.is-hide {
+            .cm__transition-none;
+            overflow: hidden;
+            opacity: 0;
+        }
+
+        &.is-locked {
+        }
+    }
+
+    // /* Dummy */
+
+    > .app__block-dummy {
+        position: relative;
+        border-radius: @AppBlock-Dummy-BorderRadius;
+        cursor: move;
+        .mx__user-select(none);
+        .mx__transition(background-color box-shadow, @CmUI-Transition-Duration);
+
+        > .inner {
+            padding: @AppBlock-Dummy-Padding;
+        }
+
+        .icon {
+            //width: @AppBlock-Dummy-IconSize;
+            height: @AppBlock-Dummy-IconSize;
+            margin: 0 auto;
+            border-radius: @AppBlock-Dummy-IconBorderRadius;
+            background-repeat: no-repeat;
+            .mx__transition(background-color, @CmUI-Transition-Duration);
+
+            img {
+                width: 100%;
+                height: 100%;
+                display: block;
+            }
+        }
+
+        .caption {
+            .cm__font--small;
+            padding: 4px 0;
+            overflow: hidden;
+            text-align: center;
+            line-height: 15px;
+            .mx__transition(color, @CmUI-Transition-Duration);
+        }
+
+        .pt__box-loader {
+            background: @AppBlock-Loader-Background;
+            border: @AppBlock-Loader-Border;
+            border-radius: @AppBlock-Loader-BorderRadius;
+            opacity: 0;
+            .mx__transition(opacity, @CmUI-Transition-Duration);
+
+            &.fadein {
+                opacity: 1;
+            }
+        }
+
+        &.is-hide {
+            overflow: hidden;
+        }
+    }
+
+    &:hover {
+        z-index: 10;
+        .mx__transition(z-index, @CmUI-Transition-DurationReverse);
+
+        > .app__block.is-editable {
+            .pt__editable__bundle > .hover;
+        }
+
+        > .app__block-dummy {
+            .icon {
+                .mx__transition(background-color, @CmUI-Transition-DurationReverse);
+            }
+        }
+    }
+
+    &.is-active {
+        z-index: 10;
+        .mx__transition(z-index, @CmUI-Transition-DurationReverse);
+
+        > .app__block.is-editable {
+            .pt__editable__bundle > .hover;
+            .pt__editable__bundle > .active;
+            opacity: 0.7;
+            .mx__transition(opacity, @CmUI-Transition-DurationReverse);
+        }
+
+        > .app__block-dummy {
+            box-shadow: 0 1px 5px rgba(0,0,0,0.2);
+            .mx__transition(background-color box-shadow, @CmUI-Transition-DurationReverse);
+
+            .icon {
+                .mx__transition(background-color, @CmUI-Transition-DurationReverse);
+            }
+        }
+    }
+
+    &.pt__dnd-helper {
+        .pt__dnd-helper;
+    }
+
+    &.com__dashboard__helper {
+        .com__dashboard__helper;
+    }
+
+    &.is-hidden {
+        display: none;
+    }
+
+    &.is-hide {
+        overflow: hidden;
+    }
+}
+
+/* *** WIDGET CATEGORY *** */
+
+.app__blocks-category {
+    margin: 0 0 @CmIndent-XSmall;
+
+    &:last-child {
+        margin: 0;
+    }
+
+    > dd {
+        margin: 0 -@AppBlock-Dummy-Padding;
+        font-size: 0;
+    }
+
+    .app__block-container {
+        width: @AppBlock-Dummy-Width;
+        margin: 0 !important;
+        display: inline-block;
+        vertical-align: top;
+    }
+}
+
+// /* *** MIXINS **** */
+
+.app__block-dummy__theme (@theme) {
+    .app__block-dummy__background(~"@{AppBlock-Dummy-Theme@{theme}-BackgroundNormal}", ~"@{AppBlock-Dummy-Theme@{theme}-BackgroundHover}", ~"@{AppBlock-Dummy-Theme@{theme}-BackgroundActive}");
+    .app__block-dummy__icon-background(~"@{AppBlock-Dummy-Theme@{theme}-IconBackgroundNormal}", ~"@{AppBlock-Dummy-Theme@{theme}-IconBackgroundHover}", ~"@{AppBlock-Dummy-Theme@{theme}-IconBackgroundActive}");
+    .app__block-dummy__icons(@theme);
+    .app__block-dummy__caption-color(~"@{AppBlock-Dummy-Theme@{theme}-ColorNormal}", ~"@{AppBlock-Dummy-Theme@{theme}-ColorHover}", ~"@{AppBlock-Dummy-Theme@{theme}-ColorActive}");
+}
+
+.app__block-dummy__background (@normal, @hover, @active){
+    .app__block-container {
+        > .app__block-dummy {
+            background-color: @normal;
+        }
+
+        &:hover {
+            > .app__block-dummy {
+                background-color: @hover;
+            }
+        }
+
+        &.is-active {
+            > .app__block-dummy {
+                background-color: @active;
+            }
+        }
+    }
+}
+
+.app__block-dummy__icons (@theme) {
+    .app__block-dummy {
+        .icon {
+            background-image: url("@{AppPath-Images}/components/block/@{theme}.svg");
+            background-position: 50% @AppIcon-Block-default;
+
+            .for(@AppIcon-Block-Names); .-each(@name) {
+                &.module-@{name} {
+                    @var: "AppIcon-Block-@{name}";
+                    @rule: @@var;
+                    background-position: 50% (-@rule * @AppIcon-Block-Size);
+                }
+            }
+        }
+    }
+}
+
+.app__block-dummy__icon-background (@normal, @hover, @active) {
+    .app__block-container {
+        > .app__block-dummy {
+            .icon {
+                background-color: @normal;
+            }
+        }
+
+        &:hover {
+            > .app__block-dummy {
+                .icon {
+                    background-color: @hover;
+                }
+            }
+        }
+
+        &.is-active {
+            > .app__block-dummy {
+                .icon {
+                    background-color: @active;
+                }
+            }
+        }
+    }
+}
+
+.app__block-dummy__caption-color (@normal, @hover, @active) {
+    .app__block-container {
+        > .app__block-dummy {
+            .caption {
+                color: @normal;
+            }
+        }
+
+        &:hover {
+            > .app__block-dummy {
+                .caption {
+                    color: @hover;
+                }
+            }
+        }
+
+        &.is-active {
+            > .app__block-dummy {
+                .caption {
+                    color: @active;
+                }
+            }
+        }
+    }
+}
+
+.app__blocks-category__background (@color){
+    .app__blocks-category {
+        > dd {
+            background-color: @color;
+        }
+    }
+}
+
+.app__block-dummy__theme(@AppBlock-Dummy-Theme);
+.app__blocks-category__background(@AppBlock-Category-Background);

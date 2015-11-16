@@ -1,0 +1,294 @@
+
+// /* ************************************************ */
+// /* ******* VARIABLES ******* */
+// /* ************************************************ */
+
+// /* ******* PATH ******* */
+
+@AppPath-Images: '../img';
+@AppPath-Fonts: '../fonts';
+
+// /* ************************************************ */
+// /* ******* FONT ******* */
+// /* ************************************************ */
+
+@AppFont-Default-Family: Open Sans, sans-serif;
+@AppFont-Default-LineHeight: 18px;
+@AppFont-Default-Size: 13px;
+@AppFont-Default-Weight: 400;
+@AppFont-Default-Color: #666666;
+
+@AppFont-H1-Family: Open Sans, sans-serif;
+@AppFont-H1-LineHeight: 64px;
+@AppFont-H1-Size: 48px;
+@AppFont-H1-Weight: 100;
+@AppFont-H1-Color: #666666;
+@AppFont-H1-Decoration: none;
+@AppFont-H1-Style: normal;
+
+@AppFont-H2-Family: Open Sans, sans-serif;
+@AppFont-H2-LineHeight: 42px;
+@AppFont-H2-Size: 32px;
+@AppFont-H2-Weight: 400;
+@AppFont-H2-Color: #666666;
+@AppFont-H2-Decoration: none;
+@AppFont-H2-Style: normal;
+
+@AppFont-H3-Family: Open Sans, sans-serif;
+@AppFont-H3-LineHeight: 32px;
+@AppFont-H3-Size: 24px;
+@AppFont-H3-Weight: 400;
+@AppFont-H3-Color: #666666;
+@AppFont-H3-Decoration: none;
+@AppFont-H3-Style: normal;
+
+@AppFont-H4-Family: Open Sans, sans-serif;
+@AppFont-H4-LineHeight: 24px;
+@AppFont-H4-Size: 18px;
+@AppFont-H4-Weight: 400;
+@AppFont-H4-Color: #666666;
+@AppFont-H4-Decoration: none;
+@AppFont-H4-Style: normal;
+
+@AppFont-H5-Family: Open Sans, sans-serif;
+@AppFont-H5-LineHeight: 24px;
+@AppFont-H5-Size: 16px;
+@AppFont-H5-Weight: 400;
+@AppFont-H5-Color: #666666;
+@AppFont-H5-Decoration: none;
+@AppFont-H5-Style: normal;
+
+@AppFont-H6-Family: Open Sans, sans-serif;
+@AppFont-H6-LineHeight: 18px;
+@AppFont-H6-Size: 12px;
+@AppFont-H6-Weight: 600;
+@AppFont-H6-Color: #666666;
+@AppFont-H6-Decoration: none;
+@AppFont-H6-Style: normal;
+
+@AppFont-P-Family: Open Sans, sans-serif;
+@AppFont-P-LineHeight: 18px;
+@AppFont-P-Size: 13px;
+@AppFont-P-Weight: 400;
+@AppFont-P-Color: #666666;
+@AppFont-P-Decoration: none;
+@AppFont-P-Style: normal;
+
+@AppFont-A-Weight: 400;
+@AppFont-A-Color: #1d73c9;
+@AppFont-A-Decoration: underline;
+@AppFont-A-Style: normal;
+
+// /* ************************************************ */
+// /* ******* COMMON ******* */
+// /* ************************************************ */
+
+// /* ******* AREA ******* */
+
+@AppUI-Area-Width: @CmIndent-XLarge;
+@AppUI-Area-Height: @CmIndent-XLarge;
+@AppUI-Area-ContentHeight: 256px;
+
+// /* ************************************************ */
+// /* ******* PARTS ******* */
+// /* ************************************************ */
+
+// /* ******* BOX ******* */
+
+@AppPT-BoxLogin-Width: 350px;
+
+// /* ******* LATEST POSTS ******* */
+
+@AppPT-LatestPosts-ImageSize: 70;
+@AppPT-LatestPosts-DescrLines: 1;
+
+// /* ************************************************ */
+// /* ******* LAYOUTS ******* */
+// /* ************************************************ */
+
+// /* ******* TOP MENU ******* */
+
+@AppLT-TopMenu-Height: @CmSize-XLarge;
+@AppLT-TopMenu-Duration: 300ms;
+@AppLT-TopMenu-Background: #000000;
+@AppLT-TopMenu-Color: @CmColor-Font-Opposite;
+@AppLT-TopMenu-HoverBackground: @CmColor-Primary-DarkDefault;
+@AppLT-TopMenu-ItemIndent: 1px;
+@AppLT-TopMenu-ItemBorder: @CmBorder-Width solid rgba(255,255,255,0.4);
+@AppLT-TopMenu-ItemBackground: rgba(255,255,255,0.2);
+@AppLT-TopMenu-Dropdown-FirstLevel: true;
+
+// /* ******* SIDEBAR ******* */
+
+@AppLT-Sidebar-Menu-Width: @CmSize-XLarge;
+@AppLT-Sidebar-Menu-Background: #000000;
+@AppLT-Sidebar-Content-Width: (@AppBlock-Dummy-Width * 3) - (@AppBlock-Dummy-Padding * 2) + (@AppLT-Sidebar-Content-Indent * 2);
+@AppLT-Sidebar-Content-Indent: @CmIndent-XSmall;
+@AppLT-Sidebar-Title-Height: @AppLT-Sidebar-Menu-Width;
+@AppLT-Sidebar-WidthExpanded: @AppLT-Sidebar-Menu-Width + @AppLT-Sidebar-Content-Width;
+@AppLT-Sidebar-WidthCollapsed: @AppLT-Sidebar-Menu-Width;
+@AppLT-Sidebar-Duration: @CmUI-Overlay-Duration;
+@AppLT-Sidebar-Overlay: @CmUI-Overlay;
+
+@AppLT-Sidebar-Theme: 'Dark';
+@AppLT-Sidebar-ThemeDark-Color: @CmColor-Font-Opposite;
+@AppLT-Sidebar-ThemeDark-Background: @CmColor-Primary-DarkDefault;
+@AppLT-Sidebar-ThemeLight-Color: @CmColor-Font;
+@AppLT-Sidebar-ThemeLight-Background: #ffffff;
+
+// /* ******* TEMPLATES ******* */
+
+@AppLT-Templates-Item-Padding: @CmIndent-XSmall;
+
+// /* ************************************************ */
+// /* ******* COMPONENTS ******* */
+// /* ************************************************ */
+
+// /* ******* WIDGETS ******* */
+
+@AppBlock-Indent: @CmIndent-Medium;
+
+@AppBlock-Loader-Background: @CmColor-Secondary-LightHover;
+@AppBlock-Loader-Border: @CmBorder-Default;
+@AppBlock-Loader-BorderRadius: @CmBorder-Radius;
+
+@AppBlock-Category-Background: transparent;
+
+@AppBlock-Dummy-Theme: @AppLT-Sidebar-Theme;
+@AppBlock-Dummy-Width: 94px;
+@AppBlock-Dummy-Padding: 2px;
+@AppBlock-Dummy-BorderRadius: @CmBorder-Radius;
+@AppBlock-Dummy-IconBorderRadius: 0px;
+@AppBlock-Dummy-IconSize: 90px;
+
+@AppBlock-Dummy-ThemeDark-ColorNormal: @CmColor-Font-Opposite;
+@AppBlock-Dummy-ThemeDark-ColorHover: @CmColor-Font-Opposite;
+@AppBlock-Dummy-ThemeDark-ColorActive: @CmColor-Font;
+@AppBlock-Dummy-ThemeDark-BackgroundNormal: trannsparent;
+@AppBlock-Dummy-ThemeDark-BackgroundHover: trannsparent;
+@AppBlock-Dummy-ThemeDark-BackgroundActive: #ffffff;
+@AppBlock-Dummy-ThemeDark-IconBackgroundNormal: rgba(255, 255, 255, 0.2);
+@AppBlock-Dummy-ThemeDark-IconBackgroundHover: rgba(255, 255, 255, 0.5);
+@AppBlock-Dummy-ThemeDark-IconBackgroundActive: @CmColor-Primary-DarkDefault;
+
+@AppBlock-Dummy-ThemeLight-ColorNormal: @CmColor-Font;
+@AppBlock-Dummy-ThemeLight-ColorHover: @CmColor-Font;
+@AppBlock-Dummy-ThemeLight-ColorActive: @CmColor-Font;
+@AppBlock-Dummy-ThemeLight-BackgroundNormal: trannsparent;
+@AppBlock-Dummy-ThemeLight-BackgroundHover: trannsparent;
+@AppBlock-Dummy-ThemeLight-BackgroundActive: #ffffff;
+@AppBlock-Dummy-ThemeLight-IconBackgroundNormal: @CmColor-Secondary-LightHover;
+@AppBlock-Dummy-ThemeLight-IconBackgroundHover: @CmColor-Primary-LightActive;
+@AppBlock-Dummy-ThemeLight-IconBackgroundActive: @CmColor-Primary-LightActive;
+
+// /* ******* HELP TOUR ******* */
+
+@AppHelpTour-Duration: @CmUI-Overlay-Duration;
+@AppHelpTour-AdaptiveFrom: @CmUI-AdaptiveFrom;
+@AppHelpTour-Popup-Width: 360px;
+@AppHelpTour-Popup-Background: @CmColor-Background;
+@AppHelpTour-Popup-ArrowSize: @CmSize-Medium;
+
+// /* ************************************************ */
+// /* ******* MODULES ******* */
+// /* ************************************************ */
+
+// /* ******* KNOWLEDGE CENTRE ******* */
+
+@AppMod-KnowledgeCentre-Title-MinWidth: 170px;
+
+// /* ******* SITEMAP ******* */
+
+@AppMod-Sitemap-FontSize: @CmFont-Base-Hint-Size;
+@AppMod-Sitemap-Color: @CmFont-Base-Color;
+@AppMod-Sitemap-Title-Color: @AppMod-Sitemap-Color;
+@AppMod-Sitemap-IndentY: @CmIndent-Medium;
+
+// /* ******* BLOG WIDGET ******* */
+
+@AppMod-BlogWidget-ImageSize: @AppPT-LatestPosts-ImageSize;
+@AppMod-BlogWidget-DescrLines: @AppPT-LatestPosts-DescrLines;
+
+// /* ******* FORUM WIDGET ******* */
+
+@AppMod-ForumWidget-ImageSize: @AppPT-LatestPosts-ImageSize;
+@AppMod-ForumWidget-DescrLines: @AppPT-LatestPosts-DescrLines;
+
+// /* ******* MENU ******* */
+
+@AppMod-Menu-Default-Indent: @CmIndent-XSmall;
+@AppMod-Menu-Default-SelectSize: @CmForm-FieldHeight;
+@AppMod-Menu-Default-SelectColor: @CmColor-Font;
+@AppMod-Menu-Default-SelectBackground: @CmColor-Secondary-LightHover;
+@AppMod-Menu-Default-SeparatorWidth: 1px;
+@AppMod-Menu-Default-SeparatorHeight: @CmSize-XSmall;
+@AppMod-Menu-Default-SeparatorBackground: @CmColor-Border;
+
+@AppMod-Menu-Primary-Indent: @AppMod-Menu-Default-Indent;
+@AppMod-Menu-Primary-SelectSize: @AppMod-Menu-Default-SelectSize;
+@AppMod-Menu-Primary-SelectColor: @AppMod-Menu-Default-SelectColor;
+@AppMod-Menu-Primary-SelectBackground: @AppMod-Menu-Default-SelectBackground;
+@AppMod-Menu-Primary-SeparatorWidth: @AppMod-Menu-Default-SeparatorWidth;
+@AppMod-Menu-Primary-SeparatorHeight: @AppMod-Menu-Default-SeparatorHeight;
+@AppMod-Menu-Primary-SeparatorBackground: @AppMod-Menu-Default-SeparatorBackground;
+
+@AppMod-Menu-Secondary-Indent: @AppMod-Menu-Default-Indent;
+@AppMod-Menu-Secondary-SelectSize: @AppMod-Menu-Default-SelectSize;
+@AppMod-Menu-Secondary-SelectColor: @AppMod-Menu-Default-SelectColor;
+@AppMod-Menu-Secondary-SelectBackground: @AppMod-Menu-Default-SelectBackground;
+@AppMod-Menu-Secondary-SeparatorWidth: @AppMod-Menu-Default-SeparatorWidth;
+@AppMod-Menu-Secondary-SeparatorHeight: @AppMod-Menu-Default-SeparatorHeight;
+@AppMod-Menu-Secondary-SeparatorBackground: @AppMod-Menu-Default-SeparatorBackground;
+
+@AppMod-Menu-Vertical-Indent: @AppMod-Menu-Default-Indent;
+@AppMod-Menu-Vertical-ChildIndent: @CmIndent-Medium;
+
+// /* ************************************************ */
+// /* ******* PAGES ******* */
+// /* ************************************************ */
+
+// /* ************************************************ */
+// /* ******* TEMPLATE ******* */
+// /* ************************************************ */
+
+@AppTpl-Container-Size: box;        // wide | box
+@AppTpl-Container-Width: 1000px;
+@AppTpl-Container-Align: center;
+@AppTpl-Container-Indent: @CmIndent-Medium;
+@AppTpl-Container-BackgroundColor: transparent;
+@AppTpl-Container-BackgroundImage: none;
+@AppTpl-Container-BackgroundPosition: center center;
+@AppTpl-Container-BackgroundRepeat: no-repeat;
+@AppTpl-Container-BackgroundSize: auto;
+@AppTpl-Container-BackgroundParallax: scroll;
+@AppTpl-Container-Background: @AppTpl-Container-BackgroundColor @AppTpl-Container-BackgroundImage @AppTpl-Container-BackgroundRepeat @AppTpl-Container-BackgroundPosition @AppTpl-Container-BackgroundParallax;
+
+@AppTpl-Header-Size: box;           // wide | box | content
+@AppTpl-Header-Width: 1000px;
+@AppTpl-Header-Align: center;
+
+@AppTpl-Footer-Size: box;           // wide | box | content
+@AppTpl-Footer-Width: 1000px;
+@AppTpl-Footer-Align: center;
+
+// /* ************************************************ */
+// /* ******* MAGPIE UI ******* */
+// /* ************************************************ */
+
+// /* ******* COMMON ******* */
+
+// /* *** FONT *** */
+
+@CmColor-Font: @AppFont-P-Color;
+@CmColor-Font-Link: @AppFont-A-Color;
+
+@CmFont-Base-Family: @AppFont-P-Family;
+@CmFont-Base-LineHeight: @AppFont-P-LineHeight;
+@CmFont-Base-Size: @AppFont-P-Size;
+@CmFont-Base-Weight: @AppFont-P-Weight;
+
+// /* ******* PARTS ******* */
+
+// /* *** DnD *** */
+
+@PtDnD-Chassis-HighlightIndent: @AppBlock-Indent;

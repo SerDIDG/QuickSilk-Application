@@ -1,0 +1,105 @@
+/* ************ APPLICATION: STYLES ************ */
+
+@font-face {
+    font-family: @AppIconVars-Family;
+    src: url('@{AppPath-Fonts}/QuickSilk-Glyphs.eot?@{AppIconVars-Version}');
+    src: url('@{AppPath-Fonts}/QuickSilk-Glyphs.eot?#iefix@{AppIconVars-Version}') format('embedded-opentype'),
+         url('@{AppPath-Fonts}/QuickSilk-Glyphs.woff?@{AppIconVars-Version}') format('woff'),
+         url('@{AppPath-Fonts}/QuickSilk-Glyphs.ttf?@{AppIconVars-Version}') format('truetype'),
+         url('@{AppPath-Fonts}/QuickSilk-Glyphs.svg?@{AppIconVars-Version}#QuickSilk-Glyphs') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+
+/* ******* TAGS ******* */
+
+html {
+    .cm__scroll-y;
+    height: 100%;
+}
+
+body {
+    .marginfix;
+    min-width: 320px;
+    height: 100%;
+}
+
+/* ****** COMPONENTS ******* */
+
+/* News List */
+
+.news-list {
+}
+.news-list > ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+.news-list > ul > li {
+    margin: 18px 0 0 0;
+}
+.news-list > ul > li:first-child {
+    margin: 0;
+}
+.news-list h4,
+.news-list h4 a {
+    margin: 0;
+    color: #333333;
+}
+.news-list h4 a {
+    text-decoration: none;
+}
+.news-list h4 a:hover {
+    text-decoration: underline;
+}
+.news-list .article-details {
+    margin: 0;
+}
+.news-list .article-details .date {
+}
+.news-list .more {
+    text-align: right;
+}
+
+/* Form Builder */
+
+.form-builder {
+}
+.form-builder .pt__gridlist dl {
+    margin: 0;
+}
+
+/* Form Language */
+
+.form-language-top {
+    margin-bottom: 24px;
+}
+
+/* ******* ADDITIONAL FIXES ******* */
+
+.elfinder-button-search input {
+    height: 24px;
+    padding: 0 20px;
+    border: 1px solid #AAAAAA;
+}
+
+/* *** CKE EDITOR *** */
+
+.cke_dialog {
+    color: #000;
+
+    .cm__tags {
+        color: #000;
+    }
+
+    .input {
+        color: #000;
+        background: #fff;
+
+        &:hover,
+        &:active {
+            color: #000;
+            background: #fff;
+        }
+    }
+}
