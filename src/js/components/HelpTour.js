@@ -110,13 +110,13 @@ function(params){
 
     var getDimensions = function(){
         var rule;
-        if(rule = cm.getCSSRule('.app-lt__sidebar-helper__width-collapsed')[0]){
+        if(rule = cm.getCSSRule('.app__sidebar-helper__width-collapsed')[0]){
             dimensions['sidebarCollapsed'] = cm.styleToNumber(rule.style.width);
         }
-        if(rule = cm.getCSSRule('.app-lt__sidebar-helper__width-expanded')[0]){
+        if(rule = cm.getCSSRule('.app__sidebar-helper__width-expanded')[0]){
             dimensions['sidebarExpanded'] = cm.styleToNumber(rule.style.width);
         }
-        if(rule = cm.getCSSRule('.app-lt__topmenu-helper__height')[0]){
+        if(rule = cm.getCSSRule('.app__topmenu-helper__height')[0]){
             dimensions['topMenu'] = cm.styleToNumber(rule.style.height);
         }
         if(!dimensions['popupSelfHeight']){

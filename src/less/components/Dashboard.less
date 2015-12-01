@@ -1,0 +1,27 @@
+/* ******* COMPONENTS: DASHBOARD ******* */
+
+.app__dashboard__body,
+.app__dashboard__body * {
+    cursor: move !important;
+    .mx__user-select(none);
+}
+
+.app__dashboard__helper {
+    position: fixed !important;
+    z-index: 9000 !important;
+    .mx__user-select(none);
+
+    &.is-drop {
+        .mx__transition(all, @AppDashboard-DropDuration);
+    }
+}
+
+/* *** HELPERS *** */
+
+.app__dashboard__drop-duration {
+    transition-duration: @AppDashboard-DropDuration;
+}
+
+.app__dashboard__move-duration {
+    transition-duration: @AppDashboard-MoveDuration;
+}

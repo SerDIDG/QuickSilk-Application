@@ -172,11 +172,11 @@
 html {
     &.is-topmenu {
         .tpl__container {
-            margin-top: @AppLT-TopMenu-Height;
+            margin-top: @AppTopMenu-Height;
         }
 
-        .app-lt__sidebar {
-            top: @AppLT-TopMenu-Height;
+        .app__sidebar {
+            top: @AppTopMenu-Height;
         }
 
         &.is-topmenu--expanded {
@@ -186,8 +186,8 @@ html {
 
     &.is-sidebar {
         .tpl__container {
-            margin-left: @AppLT-Sidebar-WidthCollapsed;
-            .mx__transition(margin, @AppLT-Sidebar-Duration);
+            margin-left: @AppSidebar-WidthCollapsed;
+            .mx__transition(margin, @AppSidebar-Duration);
         }
     }
 
@@ -212,7 +212,7 @@ html {
         }
 
         .tpl__container {
-            margin-left: @AppLT-Sidebar-WidthExpanded;
+            margin-left: @AppSidebar-WidthExpanded;
         }
 
         .tpl__header,

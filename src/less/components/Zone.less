@@ -1,0 +1,45 @@
+/* ******* COMPONENTS: ZONE ******* */
+
+.app__zone {
+    .clearfix;
+    position: relative;
+
+    &.is-editing {
+        min-height: @AppZone-MinHeight;
+        padding: @AppZone-Padding;
+    }
+
+    &.is-available {
+        .mx__transition(background-color, @CmUI-Transition-Duration);
+
+        &:before {
+            .mx__transition(border-color, @CmUI-Transition-Duration);
+        }
+
+        &.is-highlight {
+            background-color: @AppZone-Highlight-Background;
+            border-radius: @AppZone-BorderRadius;
+
+            &:before {
+                position: absolute;
+                display: block;
+                content: '';
+                border: @AppZone-Highlight-Border;
+                border-radius: @AppZone-BorderRadius;
+                .mx__position(-1px,-1px,-1px,-1px);
+            }
+
+            &.is-active {
+                background-color: @AppZone-Active-Background;
+
+                &:before {
+                    border: @AppZone-Active-Border;
+                }
+
+                .app__zone {
+                    background-color: rgba(255,255,255,0.4);
+                }
+            }
+        }
+    }
+}

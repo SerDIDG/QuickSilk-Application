@@ -1,4 +1,4 @@
-cm.define('App.TemplateEditor', {
+cm.define('App.Editor', {
     'modules' : [
         'Params',
         'Events',
@@ -9,6 +9,8 @@ cm.define('App.TemplateEditor', {
     ],
     'events' : [
         'onRender',
+        'onExpand',
+        'onCollapse',
         'onDrop',
         'onAppend',
         'onRemove',
@@ -19,31 +21,24 @@ cm.define('App.TemplateEditor', {
     ],
     'params' : {
         'node' : cm.Node('div'),
-        'name' : 'app-template-editor',
+        'name' : 'app-editor',
         'sidebarName' : 'app-sidebar',
-        'Com.Draganddrop' : {
-            'renderTemporaryAria' : true,
-            'highlightChassis' : true
-        }
+        'App.Dashboard' : {}
     }
 },
 function(params){
     var that = this;
     
     that.components = {};
-    that.nodes = {
-        'AppTemplate' : {
-            'container' : cm.Node('div')
-        },
-        'AppSidebar' : {
-            'removeZone' : cm.Node('div'),
-            'areas' : [],
-            'widgets' : []
-        }
-    };
+    that.nodes = {};
     that.states = {
         'sidebarExpanded' : false
     };
+
+    that.zones = {};
+    that.blocks = {};
+    that.dummyBlocks = {};
+    that.isProcessed = false;
     that.isExpanded = false;
 
     /* *** INIT *** */
@@ -51,7 +46,7 @@ function(params){
     var init = function(){
         that.setParams(params);
         that.convertEvents(that.params['events']);
-        that.getDataNodes(that.params['node'], that.params['nodesDataMarker'], null);
+        that.getDataNodes(that.params['node']);
         that.getDataConfig(that.params['node']);
         render();
         that.addToStack(that.params['node']);
@@ -59,36 +54,57 @@ function(params){
     };
 
     var render = function(){
-        processPanelWidgets();
-        initDragAndDrop();
         initSidebar();
+        initDashboard();
         windowResize();
         cm.addEvent(window, 'resize', windowResize);
     };
 
     var initSidebar = function(){
-        var finder = cm.find('App.Sidebar', that.params['sidebarName'], null, function(classObject){
-            that.components['sidebar'] = classObject;
-            that.components['sidebar']
-                .addEvent('onExpand', onSidebarExpand)
-                .addEvent('onCollapse', onSidebarCollapse);
+        new cm.Finder('App.Sidebar', that.params['sidebarName'], null, function(classObject){
+            that.components['sidebar'] = classObject
+                .addEvent('onExpand', sidebarExpandAction)
+                .addEvent('onCollapse', sidebarCollapseAction);
 
             if(that.components['sidebar'].isExpanded){
-                onSidebarExpand();
+                sidebarExpandAction();
             }else{
-                onSidebarCollapse();
+                sidebarCollapseAction();
             }
         });
-        if(!finder || finder.length == 0){
-            onSidebarCollapse();
-            onAdminPage();
-        }
     };
 
-    var onSidebarExpand = function(){
-        var elements;
+    var initDashboard = function(){
+        cm.getConstructor('App.Dashboard', function(classConstructor){
+            that.components['dashboard'] = new classConstructor(that.params['App.Dashboard'])
+                .addEvent('onDrop', onDrop)
+                .addEvent('onReplace', onReplace)
+                .addEvent('onRemove', onRemove);
+            // Add Blocks
+            cm.forEach(that.dummyBlocks, function(item){
+                that.components['dashboard'].addDummyBlock(item);
+            });
+            cm.forEach(that.zones, function(item){
+                that.components['dashboard'].addZone(item);
+            });
+        });
+    };
+
+    var sidebarExpandAction = function(){
         that.isExpanded = true;
+        cm.forEach(that.zones, function(item){
+            item.enableEditing();
+        });
+        cm.forEach(that.blocks, function(item){
+            item.enableEditing();
+        });
+        that.triggerEvent('onExpand');
+
+        return false;
+
+        var elements;
         // Enable widgets editable
+        /*
         elements = cm.getByClass('app__block');
         cm.forEach(elements, function(widget){
             if(!cm.isClass(widget, 'is-locked')){
@@ -98,6 +114,7 @@ function(params){
                 cm.addClass(widget, 'is-visible');
             }
         });
+        */
         // Enable columns editable
         elements = cm.getByClass('app-mod__columns');
         cm.forEach(elements, function(column){
@@ -128,6 +145,12 @@ function(params){
                 cm.addClass(slider, 'is-visible');
             }
         });
+        // Enable block editable
+        /*
+        cm.find('App.Block', null, that.nodes['AppTemplate']['container'], function(classObject){
+            classObject.enableEditMode();
+        });
+        */
         // Enable gridlist editable
         cm.find('Com.GridlistHelper', null, that.nodes['AppTemplate']['container'], function(classObject){
             classObject.enableEditMode();
@@ -138,14 +161,26 @@ function(params){
         });
     };
 
-    var onSidebarCollapse = function(){
-        var elements;
+    var sidebarCollapseAction = function(){
         that.isExpanded = false;
+        cm.forEach(that.zones, function(item){
+            item.disableEditing();
+        });
+        cm.forEach(that.blocks, function(item){
+            item.disableEditing();
+        });
+        that.triggerEvent('onCollapse');
+
+        return false;
+
+        var elements;
         // Disable widgets editable
+        /*
         elements = cm.getByClass('app__block');
         cm.forEach(elements, function(widget){
             cm.removeClass(widget, 'is-editable is-visible');
         });
+        */
         // Disable columns editable
         elements = cm.getByClass('app-mod__columns');
         cm.forEach(elements, function(column){
@@ -161,6 +196,12 @@ function(params){
         cm.forEach(elements, function(slider){
             cm.removeClass(slider, 'is-editable is-visible');
         });
+        // Disable block editable
+        /*
+        cm.find('App.Block', null, that.nodes['AppTemplate']['container'], function(classObject){
+            classObject.disableEditMode();
+        });
+        */
         // Disable gridlist editable
         cm.find('Com.GridlistHelper', null, that.nodes['AppTemplate']['container'], function(classObject){
             classObject.disableEditMode();
@@ -179,65 +220,23 @@ function(params){
     };
 
     var windowResize = function(){
-        var pageSize = cm.getPageSize();
+        // This code must be placed in Sidebar component!!!
+        animFrame(function(){
+            var pageSize = cm.getPageSize();
 
-        if(that.components['sidebar']){
-            if(pageSize['winWidth'] <= cm._config['adaptiveFrom']){
-                if(that.components['sidebar'].isExpanded && that.isExpanded){
-                    that.states['sidebarExpanded'] = true;
-                    that.components['sidebar'].collapse(true);
-                }
-            }else{
-                if(that.states['sidebarExpanded'] && !that.isExpanded){
-                    that.states['sidebarExpanded'] = false;
-                    that.components['sidebar'].expand(true);
+            if(that.components['sidebar']){
+                if(pageSize['winWidth'] <= cm._config['adaptiveFrom']){
+                    if(that.components['sidebar'].isExpanded && that.isExpanded){
+                        that.states['sidebarExpanded'] = true;
+                        that.components['sidebar'].collapse(true);
+                    }
+                }else{
+                    if(that.states['sidebarExpanded'] && !that.isExpanded){
+                        that.states['sidebarExpanded'] = false;
+                        that.components['sidebar'].expand(true);
+                    }
                 }
             }
-        }
-    };
-
-    var renderLoaderBox = function(){
-        var node;
-        node = cm.Node('div', {'class' : 'pt__box-loader position'},
-            cm.Node('div', {'class' : 'inner'})
-        );
-        return node;
-    };
-
-    var processPanelWidgets = function(){
-        cm.forEach(that.nodes['AppSidebar']['widgets'], function(item){
-            item['container'].setAttribute('data-com-draganddrop', 'draggable');
-            item['dummy'].setAttribute('data-com-draganddrop', 'drag');
-        });
-    };
-
-    var initDragAndDrop = function(){
-        var classToUse = that.storageRead('dd')? that.storageRead('dd') : 'Com.Draganddrop';
-        cm.getConstructor(classToUse, function(classConstructor){
-            that.components['dd'] = new classConstructor(
-                cm.merge({
-                    'container' : that.nodes['AppTemplate']['container']
-                }, that.params['Com.Draganddrop'])
-            );
-            // Register widgets areas and events
-            cm.forEach(that.nodes['AppSidebar']['areas'], function(area){
-                that.components['dd'].registerArea(area['container'], {
-                    'isLocked' : true,
-                    'isSystem' : true,
-                    'hasPadding' : false,
-                    'draggableInChildNodes' : false,
-                    'cloneDraggable' : true
-                });
-            });
-            that.components['dd']
-                .registerArea(that.nodes['AppSidebar']['removeZone'], {
-                    'isSystem' : true,
-                    'isRemoveZone': true,
-                    'hasPadding' : false
-                })
-                .addEvent('onDrop', onDrop)
-                .addEvent('onReplace', onReplace)
-                .addEvent('onRemove', onRemove);
         });
     };
 
@@ -274,6 +273,44 @@ function(params){
     };
 
     /* ******* MAIN ******* */
+
+    that.addZone = function(name, item){
+        that.zones[name] = item;
+        if(that.components['dashboard']){
+            that.components['dashboard'].addZone(item);
+        }
+        return that;
+    };
+
+    that.removeZone = function(name){
+        delete that.zones[name];
+        return that;
+    };
+
+    that.addBlock = function(name, item){
+        that.blocks[name] = item;
+        if(that.components['dashboard']){
+            that.components['dashboard'].addBlock(item);
+        }
+        return that;
+    };
+
+    that.removeBlock = function(name){
+        delete that.blocks[name];
+        return that;
+    };
+
+    that.addDummyBlock = function(name, item){
+        that.dummyBlocks[name] = item;
+        if(that.components['dashboard']){
+            that.components['dashboard'].addDummyBlock(item);
+        }
+        return that;
+    };
+
+
+
+
 
     that.registerArea = function(area, params){
         that.components['dd'].registerArea(area, params);

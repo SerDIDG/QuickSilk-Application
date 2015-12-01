@@ -187,36 +187,6 @@
 // /* ******* LAYOUTS ******* */
 // /* ************************************************ */
 
-// /* ******* TOP MENU ******* */
-
-@AppLT-TopMenu-Height: @CmSize-XLarge;
-@AppLT-TopMenu-Duration: 300ms;
-@AppLT-TopMenu-Background: #000000;
-@AppLT-TopMenu-Color: @CmColor-Font-Opposite;
-@AppLT-TopMenu-HoverBackground: @CmColor-Primary-DarkDefault;
-@AppLT-TopMenu-ItemIndent: 1px;
-@AppLT-TopMenu-ItemBorder: @CmBorder-Width solid rgba(255,255,255,0.4);
-@AppLT-TopMenu-ItemBackground: rgba(255,255,255,0.2);
-@AppLT-TopMenu-Dropdown-FirstLevel: true;
-
-// /* ******* SIDEBAR ******* */
-
-@AppLT-Sidebar-Menu-Width: @CmSize-XLarge;
-@AppLT-Sidebar-Menu-Background: #000000;
-@AppLT-Sidebar-Content-Width: (@AppBlock-Dummy-Width * 3) - (@AppBlock-Dummy-Padding * 2) + (@AppLT-Sidebar-Content-Indent * 2);
-@AppLT-Sidebar-Content-Indent: @CmIndent-XSmall;
-@AppLT-Sidebar-Title-Height: @AppLT-Sidebar-Menu-Width;
-@AppLT-Sidebar-WidthExpanded: @AppLT-Sidebar-Menu-Width + @AppLT-Sidebar-Content-Width;
-@AppLT-Sidebar-WidthCollapsed: @AppLT-Sidebar-Menu-Width;
-@AppLT-Sidebar-Duration: @CmUI-Overlay-Duration;
-@AppLT-Sidebar-Overlay: @CmUI-Overlay;
-
-@AppLT-Sidebar-Theme: 'Dark';
-@AppLT-Sidebar-ThemeDark-Color: @CmColor-Font-Opposite;
-@AppLT-Sidebar-ThemeDark-Background: @CmColor-Primary-DarkDefault;
-@AppLT-Sidebar-ThemeLight-Color: @CmColor-Font;
-@AppLT-Sidebar-ThemeLight-Background: #ffffff;
-
 // /* ******* TEMPLATES ******* */
 
 @AppLT-Templates-Item-Padding: @CmIndent-XSmall;
@@ -225,7 +195,48 @@
 // /* ******* COMPONENTS ******* */
 // /* ************************************************ */
 
-// /* ******* WIDGETS ******* */
+// /* ******* TOP MENU ******* */
+
+@AppTopMenu-Height: @CmSize-XLarge;
+@AppTopMenu-Duration: 300ms;
+@AppTopMenu-Background: #000000;
+@AppTopMenu-Color: @CmColor-Font-Opposite;
+@AppTopMenu-HoverBackground: @CmColor-Primary-DarkDefault;
+@AppTopMenu-ItemIndent: 1px;
+@AppTopMenu-ItemBorder: @CmBorder-Width solid rgba(255,255,255,0.4);
+@AppTopMenu-ItemBackground: rgba(255,255,255,0.2);
+@AppTopMenu-Dropdown-FirstLevel: true;
+
+// /* ******* SIDEBAR ******* */
+
+@AppSidebar-Menu-Width: @CmSize-XLarge;
+@AppSidebar-Menu-Background: #000000;
+@AppSidebar-Content-Width: (@AppBlock-Dummy-Width * 3) - (@AppBlock-Dummy-Padding * 2) + (@AppSidebar-Content-Indent * 2);
+@AppSidebar-Content-Indent: @CmIndent-XSmall;
+@AppSidebar-Title-Height: @AppSidebar-Menu-Width;
+@AppSidebar-WidthExpanded: @AppSidebar-Menu-Width + @AppSidebar-Content-Width;
+@AppSidebar-WidthCollapsed: @AppSidebar-Menu-Width;
+@AppSidebar-Duration: @CmUI-Overlay-Duration;
+@AppSidebar-Overlay: @CmUI-Overlay;
+
+@AppSidebar-Theme: 'Dark';
+@AppSidebar-ThemeDark-Color: @CmColor-Font-Opposite;
+@AppSidebar-ThemeDark-Background: @CmColor-Primary-DarkDefault;
+@AppSidebar-ThemeLight-Color: @CmColor-Font;
+@AppSidebar-ThemeLight-Background: #ffffff;
+
+// /* ******* ZONE ******* */
+
+@AppZone-MinHeight: @CmIndent-Medium;
+@AppZone-Padding: @CmIndent-Small;
+@AppZone-BorderRadius: @CmBorder-Radius;
+
+@AppZone-Active-Background: hsla(@CmColor-Primary, @CmColor-Primary-DarkSaturation, 55%, 0.12);
+@AppZone-Active-Border: 1px dashed @CmColor-Primary-DarkDefault;
+@AppZone-Highlight-Background: hsla(@CmColor-Primary, @CmColor-Primary-DarkSaturation, 55%, 0.05);
+@AppZone-Highlight-Border: 1px dashed fade(@CmColor-Primary-DarkDefault, 30%);
+
+// /* ******* BLOCK ******* */
 
 @AppBlock-Indent: @CmIndent-Medium;
 
@@ -235,7 +246,7 @@
 
 @AppBlock-Category-Background: transparent;
 
-@AppBlock-Dummy-Theme: @AppLT-Sidebar-Theme;
+@AppBlock-Dummy-Theme: @AppSidebar-Theme;
 @AppBlock-Dummy-Width: 94px;
 @AppBlock-Dummy-Padding: 2px;
 @AppBlock-Dummy-BorderRadius: @CmBorder-Radius;
@@ -261,6 +272,11 @@
 @AppBlock-Dummy-ThemeLight-IconBackgroundNormal: @CmColor-Secondary-LightHover;
 @AppBlock-Dummy-ThemeLight-IconBackgroundHover: @CmColor-Primary-LightActive;
 @AppBlock-Dummy-ThemeLight-IconBackgroundActive: @CmColor-Primary-LightActive;
+
+// /* ******* DASHBOARD ******* */
+
+@AppDashboard-DropDuration: @PtDnD-DropDuration;
+@AppDashboard-MoveDuration: @PtDnD-MoveDuration;
 
 // /* ******* HELP TOUR ******* */
 
@@ -554,11 +570,11 @@ body {
     }
 }
 
-.app-lt__topmenu-font {
+.app__topmenu-font {
     .app__font--default;
 }
 
-.app-lt__sidebar-font {
+.app__sidebar-font {
     .app__font--default;
 }
 
@@ -985,11 +1001,11 @@ h1, h2, h3, h4, h5, h6 {
 html {
     &.is-topmenu {
         .tpl__container {
-            margin-top: @AppLT-TopMenu-Height;
+            margin-top: @AppTopMenu-Height;
         }
 
-        .app-lt__sidebar {
-            top: @AppLT-TopMenu-Height;
+        .app__sidebar {
+            top: @AppTopMenu-Height;
         }
 
         &.is-topmenu--expanded {
@@ -999,8 +1015,8 @@ html {
 
     &.is-sidebar {
         .tpl__container {
-            margin-left: @AppLT-Sidebar-WidthCollapsed;
-            .mx__transition(margin, @AppLT-Sidebar-Duration);
+            margin-left: @AppSidebar-WidthCollapsed;
+            .mx__transition(margin, @AppSidebar-Duration);
         }
     }
 
@@ -1025,7 +1041,7 @@ html {
         }
 
         .tpl__container {
-            margin-left: @AppLT-Sidebar-WidthExpanded;
+            margin-left: @AppSidebar-WidthExpanded;
         }
 
         .tpl__header,
@@ -1499,413 +1515,6 @@ html {
         }
     }
 }
-/* ******* LAYOUTS: SIDEBAR ******* */
-
-.app-lt__sidebar {
-    .app-lt__sidebar-font;
-    width: @AppLT-Sidebar-WidthCollapsed;
-    position: fixed;
-    z-index: 102;
-    overflow: hidden;
-    box-shadow: @CmUI-Shadow-Right;
-    .mx__position(0, auto, 0, 0);
-    .mx__backface-visibility(hidden);
-    .mx__transition(width, @AppLT-Sidebar-Duration);
-
-    > .inner {
-        position: absolute;
-        .mx__position(0, 0, 0, 0);
-    }
-
-    .sidebar__menu {
-        width: @AppLT-Sidebar-Menu-Width;
-        position: absolute;
-        z-index: 3;
-        background-color: @AppLT-Sidebar-Menu-Background;
-        .mx__position(0, auto, 0, 0);
-        .mx__user-select(none);
-
-        > ul {
-            .cm__list-clear;
-
-            > li {
-                .app-lt__sidebar-tag__menu-item;
-                margin: @CmIndent-XXXSmall 0 0 0;
-
-                &:first-child {
-                    margin: 0;
-                }
-
-                > a {
-                    display: block;
-                    position: relative;
-                    color: @CmColor-Font-Opposite;
-                    .cm-i__size(@CmSize-Large);
-                    .cm-i__b-size(@AppLT-Sidebar-Menu-Width);
-                    .mx__transition(background color, @CmUI-Transition-Duration);
-
-                    &:after {
-                        width: 3px;
-                        display: block;
-                        position: absolute;
-                        z-index: 2;
-                        content: '';
-                        .mx__position(0, auto, 0, 0);
-                        .mx__transition(background, @CmUI-Transition-Duration);
-                    }
-
-                    &:hover {
-                        .mx__transition(background, @CmUI-Transition-DurationReverse);
-
-                        &:after {
-                            .mx__transition(background, @CmUI-Transition-DurationReverse);
-                        }
-                    }
-                }
-
-                &.is-immediately {
-                    &:extend(.cm__transition-disable all);
-                }
-            }
-        }
-    }
-
-    .sidebar__menu__button {
-        position: absolute;
-        z-index: 2;
-        background-color: @AppLT-Sidebar-Menu-Background;
-        .mx__position(auto, 0, 0 ,0);
-
-        .icon {
-            cursor: pointer;
-            color: @CmColor-Font-Opposite;
-            .cm-i__size(@CmSize-Medium);
-            .cm-i__b-size(@AppLT-Sidebar-Menu-Width);
-            .mx__transition(transform opacity, @AppLT-Sidebar-Duration);
-
-            &:hover {
-                opacity: @CmUI-Opacity-Hover;
-            }
-        }
-
-        &.active {
-            .icon {
-                .mx__transform(rotate(180deg));
-            }
-        }
-    }
-
-    .sidebar__content {
-        width: @AppLT-Sidebar-Content-Width;
-        position: absolute;
-        z-index: 1;
-        opacity: 0;
-        .mx__position(0, 0, 0, auto);
-        .mx__transition(opacity, @AppLT-Sidebar-Duration);
-
-        > ul {
-            .cm__list-clear;
-            position: absolute;
-            .mx__position(0, 0, 0, 0);
-
-            > li {
-                position: absolute;
-                z-index: 1;
-                opacity: 0;
-                .mx__position(0, 0, 0, 0);
-                .mx__transition(all, @CmUI-Transition-Duration);
-
-                &.active {
-                    z-index: 2;
-                    opacity: 1;
-                }
-
-                &.is-immediately {
-                    &:extend(.cm__transition-disable all);
-                }
-            }
-        }
-    }
-
-    .sidebar__remove-zone {
-        width: @AppLT-Sidebar-Content-Width;
-        position: absolute;
-        z-index: 2;
-        padding: 0;
-        opacity: 0;
-        background: fadeout(@CmColor-Danger-DarkDefault, 50%);
-        border-radius: 0;
-        visibility: hidden;
-        .mx__position(0, 0, 0, auto);
-        .mx__transition(all, @CmUI-Transition-Duration);
-
-        .sidebar__content__title {
-            .cm__text-wrap;
-            padding: 0 @AppLT-Sidebar-Content-Indent;
-            background-color: @CmColor-Danger-DarkDefault;
-            color: @CmFont-UI-ColorOpposite;
-        }
-
-        .pt__dnd-chassis {
-            visibility: hidden;
-        }
-
-        .com__dashboard__placeholder {
-            position: absolute;
-            z-index: 1;
-            opacity: 0;
-            .mx__position(0, 0, 0, 0);
-        }
-
-        &.pt__dnd-area {
-            &.is-available {
-                .mx__transition(all, @CmUI-Transition-Duration);
-
-                &.is-highlight {
-                    visibility: visible;
-                    opacity: 1;
-                    background: fadeout(@CmColor-Danger-DarkDefault, 75%);
-
-                    &:before {
-                        display: none;
-                    }
-                }
-
-                &.is-active {
-                    visibility: visible;
-                    opacity: 1;
-                    background: fadeout(@CmColor-Danger-DarkDefault, 50%);
-
-                    &:before {
-                        display: none;
-                    }
-                }
-            }
-        }
-
-        .com__dashboard__body & {
-            visibility: visible;
-            opacity: 1;
-            background: fadeout(@CmColor-Danger-DarkDefault, 75%);
-
-            &.is-active {
-                visibility: visible;
-                opacity: 1;
-                background: fadeout(@CmColor-Danger-DarkDefault, 50%);
-            }
-        }
-    }
-
-    .sidebar__content__title {
-        .cm__text-nowrap;
-        .cm__font--ui-h1;
-        padding: 0 (@AppLT-Sidebar-Title-Height + @AppLT-Sidebar-Content-Indent) 0 @AppLT-Sidebar-Content-Indent;
-        position: absolute;
-        z-index: 2;
-        text-align: left;
-        line-height: @AppLT-Sidebar-Title-Height;
-        .mx__position(0, 0, auto, 0);
-        .mx__user-select(none);
-
-        .icon {
-            .icon.linked;
-            position: absolute;
-            cursor: pointer;
-            .cm-i__size(@CmSize-Medium);
-            .cm-i__b-size(@AppLT-Sidebar-Title-Height);
-            .mx__position(0, 0, auto, auto);
-        }
-    }
-
-    .sidebar__content__descr {
-        .cm__scroll-y;
-        padding: 0 !important;
-        position: absolute;
-        z-index: 1;
-        .mx__position(@AppLT-Sidebar-Title-Height, 0, 0, 0);
-
-        > .inner {
-            padding: @AppLT-Sidebar-Content-Indent;
-        }
-    }
-
-    .sidebar__content__text {
-        .cm__box;
-    }
-
-    &.is-expanded {
-        width: @AppLT-Sidebar-WidthExpanded;
-
-        .sidebar__content {
-            opacity: 1;
-        }
-    }
-
-    &.is-immediately {
-        .cm__transition-none;
-
-        .sidebar__content,
-        .sidebar__remove-zone {
-            .cm__transition-none;
-        }
-
-        .sidebar__menu__button {
-            .icon {
-                .cm__transition-none;
-            }
-        }
-    }
-
-    .app-lt__sidebar__theme(@AppLT-Sidebar-Theme);
-}
-
-/* *** HELPERS *** */
-
-.app-lt__sidebar-helper__menu-width {
-    width: @AppLT-Sidebar-Menu-Width;
-}
-
-.app-lt__sidebar-helper__content-width {
-    width: @AppLT-Sidebar-Content-Width;
-}
-
-.app-lt__sidebar-helper__width-collapsed {
-    width: @AppLT-Sidebar-WidthCollapsed;
-}
-
-.app-lt__sidebar-helper__width-expanded {
-    width: @AppLT-Sidebar-WidthExpanded;
-}
-
-/* *** FONT *** */
-
-.app-lt__sidebar-font {
-
-}
-
-// /* *** MIXINS *** */
-
-.app-lt__sidebar__theme (@theme) when (@theme = Light) {
-
-}
-
-.app-lt__sidebar__theme (@theme) when (@theme = Dark) {
-    .pt__toolbar {
-        .button {
-            .button.button-white;
-        }
-    }
-
-    .pt__listing-items {
-        > ul {
-            > li {
-                > a {
-                    color: ~"@{AppLT-Sidebar-Theme@{theme}-Color}";
-
-                    &:hover {
-                        color: ~"@{AppLT-Sidebar-Theme@{theme}-Background}";
-                    }
-                }
-
-                &.active {
-                    > a {
-                        color: ~"@{AppLT-Sidebar-Theme@{theme}-Background}";
-                    }
-                }
-            }
-        }
-    }
-}
-
-.app-lt__sidebar__theme (@theme) {
-    .app-lt__sidebar__background(~"@{AppLT-Sidebar-Theme@{theme}-Background}");
-    .app-lt__sidebar__color(~"@{AppLT-Sidebar-Theme@{theme}-Color}");
-
-    .com__togglebox {
-        .com__togglebox__theme(@theme);
-    }
-}
-
-.app-lt__sidebar__background (@background) {
-    background-color: @background;
-
-    .app-lt__sidebar-tag__menu-item {
-        > a {
-            &:hover {
-                &:after {
-                    background-color: @background;
-                }
-            }
-        }
-
-        &.active {
-            > a {
-                background-color: @background;
-            }
-        }
-    }
-    // Fix of blinking background in Firefox
-    .app__blocks-category__background(@background);
-}
-
-.app-lt__sidebar__color (@color) {
-    .app-lt__sidebar-tag__menu-item {
-        &.active {
-            > a {
-                color: @color;
-            }
-        }
-    }
-
-    .sidebar__content__title {
-        color: @color;
-
-        .icon {
-            color: @color;
-        }
-    }
-
-    .sidebar__content__text {
-        .cm__links {
-            color: ~"@{AppLT-Sidebar-Theme@{theme}-Color}";
-        }
-
-        .cm__inherit {
-            color: ~"@{AppLT-Sidebar-Theme@{theme}-Color}";
-        }
-    }
-}
-
-// /* *** SHORT TAGS *** */
-
-.app-lt__sidebar-tag__menu-item () {
-
-}
-
-/* ******* COMPONENT: SIDEBAR: ADAPTIVE ******* */
-
-
-@media only screen and (max-width : @CmUI-AdaptiveFrom) {
-
-    html.is-adaptive {
-
-        .app-lt__sidebar {
-            display: none;
-        }
-
-    }
-
-}
-
-/* ******* COMPONENT: SIDEBAR: PRINT ******* */
-
-@media print {
-
-    .app-lt__sidebar {
-        display: none;
-    }
-
-}
 /* ******* LAYOUTS: TEMPLATES ******* */
 
 .app-lt__templates__scroll {
@@ -2014,11 +1623,11 @@ html {
 }
 /* ******* LAYOUTS: TOP MENU ******* */
 
-.app-lt__topmenu {
-    height: @AppLT-TopMenu-Height;
+.app__topmenu {
+    height: @AppTopMenu-Height;
     position: fixed;
     z-index: 104;
-    background-color: @AppLT-TopMenu-Background;
+    background-color: @AppTopMenu-Background;
     box-shadow: @CmUI-Shadow-Bottom;
     .mx__position(0, 0, auto, 0);
 
@@ -2029,10 +1638,10 @@ html {
     }
 
     .icon {
-        color: @AppLT-TopMenu-Color;
-        line-height: @AppLT-TopMenu-Height;
+        color: @AppTopMenu-Color;
+        line-height: @AppTopMenu-Height;
         .cm-i__size(@CmSize-Large);
-        .cm-i__b-size(@AppLT-TopMenu-Height);
+        .cm-i__b-size(@AppTopMenu-Height);
     }
 
     // /* QuickSilk Logo */
@@ -2054,8 +1663,8 @@ html {
     .menu-button {
         .icon.medium.menu-white;
         .icon.linked;
-        width: @AppLT-TopMenu-Height;
-        height: @AppLT-TopMenu-Height;
+        width: @AppTopMenu-Height;
+        height: @AppTopMenu-Height;
         display: none;
         position: absolute;
         z-index: 3;
@@ -2085,10 +1694,10 @@ html {
         }
 
         li {
-            .app-lt__topmenu-font;
+            .app__topmenu-font;
             position: relative;
-            line-height: @AppLT-TopMenu-Height;
-            color: @AppLT-TopMenu-Color;
+            line-height: @AppTopMenu-Height;
+            color: @AppTopMenu-Color;
 
             a {
                 .cm__font--inherit;
@@ -2109,22 +1718,22 @@ html {
 
 /* *** HELPERS *** */
 
-.app-lt__topmenu-helper__height {
-    height: @AppLT-TopMenu-Height;
+.app__topmenu-helper__height {
+    height: @AppTopMenu-Height;
 }
 
 /* *** FONT *** */
 
-.app-lt__topmenu-font {
+.app__topmenu-font {
 }
 
 // /* *** MIXINS *** */
 
-.app-lt__topmenu__dropdown--desktop () {
+.app__topmenu__dropdown--desktop () {
     .pt__menu-dropdown--base;
 }
 
-.app-lt__topmenu__dropdown--desktop-first () {
+.app__topmenu__dropdown--desktop-first () {
     border-top: none;
     border-radius: 0 0 @CmBorder-Radius @CmBorder-Radius;
 }
@@ -2135,12 +1744,12 @@ html {
 
 @media only screen and (min-width : (@CmUI-AdaptiveFrom + 1px)) {
     html.is-adaptive {
-        .app-lt__topmenu {
+        .app__topmenu {
             .menu {
                 .cm__list-inline;
 
                 > li {
-                    margin: 0 0 0 @AppLT-TopMenu-ItemIndent;
+                    margin: 0 0 0 @AppTopMenu-ItemIndent;
 
                     &:first-child {
                         margin: 0;
@@ -2153,10 +1762,10 @@ html {
 
                     > .pt__menu-dropdown {
                         .check-first-level (@value) when (@value = true) {
-                            .app-lt__topmenu__dropdown--desktop-first;
+                            .app__topmenu__dropdown--desktop-first;
                         }
 
-                        .check-first-level(@AppLT-TopMenu-Dropdown-FirstLevel);
+                        .check-first-level(@AppTopMenu-Dropdown-FirstLevel);
                     }
 
                     .icon {
@@ -2183,8 +1792,8 @@ html {
                     &:hover,
                     &.active {
                         > a {
-                            background-color: @AppLT-TopMenu-HoverBackground;
-                            color: @AppLT-TopMenu-Color;
+                            background-color: @AppTopMenu-HoverBackground;
+                            color: @AppTopMenu-Color;
                             .mx__transition(all, @CmUI-Transition-DurationReverse);
                         }
 
@@ -2195,7 +1804,7 @@ html {
                 }
 
                 .pt__menu-dropdown {
-                    .app-lt__topmenu__dropdown--desktop;
+                    .app__topmenu__dropdown--desktop;
                     z-index: 1;
                 }
 
@@ -2214,7 +1823,7 @@ html {
 
 @media only screen and (min-width: 1281px) {
     html.is-adaptive {
-        .app-lt__topmenu {
+        .app__topmenu {
             .menu-centered {
                 position: absolute;
                 margin: 0 50%;
@@ -2235,7 +1844,7 @@ html {
 
 @media only screen and (min-width : (@CmUI-AdaptiveFrom + 1px)) and (max-width: 1280px) {
     html.is-adaptive {
-        .app-lt__topmenu {
+        .app__topmenu {
             .menu {
                 > li {
                     font-size: 12px;
@@ -2258,7 +1867,7 @@ html {
 
             .menu-centered {
                 float: right;
-                margin: 0 0 0 @AppLT-TopMenu-ItemIndent;
+                margin: 0 0 0 @AppTopMenu-ItemIndent;
             }
         }
     }
@@ -2269,14 +1878,14 @@ html {
 @media only screen and (max-width : @CmUI-AdaptiveFrom) {
 
     html.is-adaptive {
-        .app-lt__topmenu {
+        .app__topmenu {
             > .inner {
                 &:before {
                     position: absolute;
                     z-index: 2;
                     display: block;
                     content: '';
-                    background-color: @AppLT-TopMenu-Background;
+                    background-color: @AppTopMenu-Background;
                     .mx__position(0, 0, 0, 0);
                 }
             }
@@ -2290,15 +1899,15 @@ html {
                 position: fixed;
                 visibility: hidden;
                 .mx__transform(translate3d(0, -100%, 0));
-                .mx__transition(transform visibility, @AppLT-TopMenu-Duration);
+                .mx__transition(transform visibility, @AppTopMenu-Duration);
                 .mx__position(0, 0, 0, 0);
 
                 > .inner {
                     .cm__scroll-y-a;
                     position: absolute;
                     padding: 0;
-                    background-color: @AppLT-TopMenu-Background;
-                    .mx__position(@AppLT-TopMenu-Height, 0, 0, 0);
+                    background-color: @AppTopMenu-Background;
+                    .mx__position(@AppTopMenu-Height, 0, 0, 0);
                 }
             }
 
@@ -2307,14 +1916,14 @@ html {
                 padding: 0;
                 position: relative;
                 float: none;
-                border-top: @AppLT-TopMenu-ItemBorder;
+                border-top: @AppTopMenu-ItemBorder;
 
                 li {
                     display: block;
                     margin: 0;
                     border: none;
-                    border-top: @AppLT-TopMenu-ItemBorder;
-                    line-height: @AppLT-TopMenu-Height;
+                    border-top: @AppTopMenu-ItemBorder;
+                    line-height: @AppTopMenu-Height;
                     .mx__background-clip(padding-box);
 
                     &:first-child {
@@ -2328,7 +1937,7 @@ html {
 
                     &.has-dropdown {
                         > a {
-                            border-bottom: @AppLT-TopMenu-ItemBorder;
+                            border-bottom: @AppTopMenu-ItemBorder;
                         }
                     }
 
@@ -2339,7 +1948,7 @@ html {
 
                 ul {
                     a {
-                        background: @AppLT-TopMenu-ItemBackground;
+                        background: @AppTopMenu-ItemBackground;
                         padding-left: @CmIndent-XSmall * 2;
                     }
 
@@ -2353,7 +1962,7 @@ html {
                 li a,
                 ul a {
                     &:hover {
-                        background-color: @AppLT-TopMenu-HoverBackground;
+                        background-color: @AppTopMenu-HoverBackground;
                     }
                 }
             }
@@ -2380,7 +1989,7 @@ html {
 
 @media print {
 
-    .app-lt__topmenu {
+    .app__topmenu {
         display: none !important;
     }
 
@@ -2659,6 +2268,33 @@ html {
 
 .app__block-dummy__theme(@AppBlock-Dummy-Theme);
 .app__blocks-category__background(@AppBlock-Category-Background);
+/* ******* COMPONENTS: DASHBOARD ******* */
+
+.app__dashboard__body,
+.app__dashboard__body * {
+    cursor: move !important;
+    .mx__user-select(none);
+}
+
+.app__dashboard__helper {
+    position: fixed !important;
+    z-index: 9000 !important;
+    .mx__user-select(none);
+
+    &.is-drop {
+        .mx__transition(all, @AppDashboard-DropDuration);
+    }
+}
+
+/* *** HELPERS *** */
+
+.app__dashboard__drop-duration {
+    transition-duration: @AppDashboard-DropDuration;
+}
+
+.app__dashboard__move-duration {
+    transition-duration: @AppDashboard-MoveDuration;
+}
 /* ******* COMPONENTS: HELP TOUR ******* */
 
 .app__helptour__popup {
@@ -2842,6 +2478,413 @@ html {
     }
 
 }
+/* ******* COMPONENTS: SIDEBAR ******* */
+
+.app__sidebar {
+    .app__sidebar-font;
+    width: @AppSidebar-WidthCollapsed;
+    position: fixed;
+    z-index: 102;
+    overflow: hidden;
+    box-shadow: @CmUI-Shadow-Right;
+    .mx__position(0, auto, 0, 0);
+    .mx__backface-visibility(hidden);
+    .mx__transition(width, @AppSidebar-Duration);
+
+    > .inner {
+        position: absolute;
+        .mx__position(0, 0, 0, 0);
+    }
+
+    .sidebar__menu {
+        width: @AppSidebar-Menu-Width;
+        position: absolute;
+        z-index: 3;
+        background-color: @AppSidebar-Menu-Background;
+        .mx__position(0, auto, 0, 0);
+        .mx__user-select(none);
+
+        > ul {
+            .cm__list-clear;
+
+            > li {
+                .app__sidebar-tag__menu-item;
+                margin: @CmIndent-XXXSmall 0 0 0;
+
+                &:first-child {
+                    margin: 0;
+                }
+
+                > a {
+                    display: block;
+                    position: relative;
+                    color: @CmColor-Font-Opposite;
+                    .cm-i__size(@CmSize-Large);
+                    .cm-i__b-size(@AppSidebar-Menu-Width);
+                    .mx__transition(background color, @CmUI-Transition-Duration);
+
+                    &:after {
+                        width: 3px;
+                        display: block;
+                        position: absolute;
+                        z-index: 2;
+                        content: '';
+                        .mx__position(0, auto, 0, 0);
+                        .mx__transition(background, @CmUI-Transition-Duration);
+                    }
+
+                    &:hover {
+                        .mx__transition(background, @CmUI-Transition-DurationReverse);
+
+                        &:after {
+                            .mx__transition(background, @CmUI-Transition-DurationReverse);
+                        }
+                    }
+                }
+
+                &.is-immediately {
+                    &:extend(.cm__transition-disable all);
+                }
+            }
+        }
+    }
+
+    .sidebar__menu__button {
+        position: absolute;
+        z-index: 2;
+        background-color: @AppSidebar-Menu-Background;
+        .mx__position(auto, 0, 0 ,0);
+
+        .icon {
+            cursor: pointer;
+            color: @CmColor-Font-Opposite;
+            .cm-i__size(@CmSize-Medium);
+            .cm-i__b-size(@AppSidebar-Menu-Width);
+            .mx__transition(transform opacity, @AppSidebar-Duration);
+
+            &:hover {
+                opacity: @CmUI-Opacity-Hover;
+            }
+        }
+
+        &.active {
+            .icon {
+                .mx__transform(rotate(180deg));
+            }
+        }
+    }
+
+    .sidebar__content {
+        width: @AppSidebar-Content-Width;
+        position: absolute;
+        z-index: 1;
+        opacity: 0;
+        .mx__position(0, 0, 0, auto);
+        .mx__transition(opacity, @AppSidebar-Duration);
+
+        > ul {
+            .cm__list-clear;
+            position: absolute;
+            .mx__position(0, 0, 0, 0);
+
+            > li {
+                position: absolute;
+                z-index: 1;
+                opacity: 0;
+                .mx__position(0, 0, 0, 0);
+                .mx__transition(all, @CmUI-Transition-Duration);
+
+                &.active {
+                    z-index: 2;
+                    opacity: 1;
+                }
+
+                &.is-immediately {
+                    &:extend(.cm__transition-disable all);
+                }
+            }
+        }
+    }
+
+    .sidebar__remove-zone {
+        width: @AppSidebar-Content-Width;
+        position: absolute;
+        z-index: 2;
+        padding: 0;
+        opacity: 0;
+        background: fadeout(@CmColor-Danger-DarkDefault, 50%);
+        border-radius: 0;
+        visibility: hidden;
+        .mx__position(0, 0, 0, auto);
+        .mx__transition(all, @CmUI-Transition-Duration);
+
+        .sidebar__content__title {
+            .cm__text-wrap;
+            padding: 0 @AppSidebar-Content-Indent;
+            background-color: @CmColor-Danger-DarkDefault;
+            color: @CmFont-UI-ColorOpposite;
+        }
+
+        .pt__dnd-chassis {
+            visibility: hidden;
+        }
+
+        .com__dashboard__placeholder {
+            position: absolute;
+            z-index: 1;
+            opacity: 0;
+            .mx__position(0, 0, 0, 0);
+        }
+
+        &.pt__dnd-area {
+            &.is-available {
+                .mx__transition(all, @CmUI-Transition-Duration);
+
+                &.is-highlight {
+                    visibility: visible;
+                    opacity: 1;
+                    background: fadeout(@CmColor-Danger-DarkDefault, 75%);
+
+                    &:before {
+                        display: none;
+                    }
+                }
+
+                &.is-active {
+                    visibility: visible;
+                    opacity: 1;
+                    background: fadeout(@CmColor-Danger-DarkDefault, 50%);
+
+                    &:before {
+                        display: none;
+                    }
+                }
+            }
+        }
+
+        .com__dashboard__body & {
+            visibility: visible;
+            opacity: 1;
+            background: fadeout(@CmColor-Danger-DarkDefault, 75%);
+
+            &.is-active {
+                visibility: visible;
+                opacity: 1;
+                background: fadeout(@CmColor-Danger-DarkDefault, 50%);
+            }
+        }
+    }
+
+    .sidebar__content__title {
+        .cm__text-nowrap;
+        .cm__font--ui-h1;
+        padding: 0 (@AppSidebar-Title-Height + @AppSidebar-Content-Indent) 0 @AppSidebar-Content-Indent;
+        position: absolute;
+        z-index: 2;
+        text-align: left;
+        line-height: @AppSidebar-Title-Height;
+        .mx__position(0, 0, auto, 0);
+        .mx__user-select(none);
+
+        .icon {
+            .icon.linked;
+            position: absolute;
+            cursor: pointer;
+            .cm-i__size(@CmSize-Medium);
+            .cm-i__b-size(@AppSidebar-Title-Height);
+            .mx__position(0, 0, auto, auto);
+        }
+    }
+
+    .sidebar__content__descr {
+        .cm__scroll-y;
+        padding: 0 !important;
+        position: absolute;
+        z-index: 1;
+        .mx__position(@AppSidebar-Title-Height, 0, 0, 0);
+
+        > .inner {
+            padding: @AppSidebar-Content-Indent;
+        }
+    }
+
+    .sidebar__content__text {
+        .cm__box;
+    }
+
+    &.is-expanded {
+        width: @AppSidebar-WidthExpanded;
+
+        .sidebar__content {
+            opacity: 1;
+        }
+    }
+
+    &.is-immediately {
+        .cm__transition-none;
+
+        .sidebar__content,
+        .sidebar__remove-zone {
+            .cm__transition-none;
+        }
+
+        .sidebar__menu__button {
+            .icon {
+                .cm__transition-none;
+            }
+        }
+    }
+
+    .app__sidebar__theme(@AppSidebar-Theme);
+}
+
+/* *** HELPERS *** */
+
+.app__sidebar-helper__menu-width {
+    width: @AppSidebar-Menu-Width;
+}
+
+.app__sidebar-helper__content-width {
+    width: @AppSidebar-Content-Width;
+}
+
+.app__sidebar-helper__width-collapsed {
+    width: @AppSidebar-WidthCollapsed;
+}
+
+.app__sidebar-helper__width-expanded {
+    width: @AppSidebar-WidthExpanded;
+}
+
+/* *** FONT *** */
+
+.app__sidebar-font {
+
+}
+
+// /* *** MIXINS *** */
+
+.app__sidebar__theme (@theme) when (@theme = Light) {
+
+}
+
+.app__sidebar__theme (@theme) when (@theme = Dark) {
+    .pt__toolbar {
+        .button {
+            .button.button-white;
+        }
+    }
+
+    .pt__listing-items {
+        > ul {
+            > li {
+                > a {
+                    color: ~"@{AppSidebar-Theme@{theme}-Color}";
+
+                    &:hover {
+                        color: ~"@{AppSidebar-Theme@{theme}-Background}";
+                    }
+                }
+
+                &.active {
+                    > a {
+                        color: ~"@{AppSidebar-Theme@{theme}-Background}";
+                    }
+                }
+            }
+        }
+    }
+}
+
+.app__sidebar__theme (@theme) {
+    .app__sidebar__background(~"@{AppSidebar-Theme@{theme}-Background}");
+    .app__sidebar__color(~"@{AppSidebar-Theme@{theme}-Color}");
+
+    .com__togglebox {
+        .com__togglebox__theme(@theme);
+    }
+}
+
+.app__sidebar__background (@background) {
+    background-color: @background;
+
+    .app__sidebar-tag__menu-item {
+        > a {
+            &:hover {
+                &:after {
+                    background-color: @background;
+                }
+            }
+        }
+
+        &.active {
+            > a {
+                background-color: @background;
+            }
+        }
+    }
+    // Fix of blinking background in Firefox
+    .app__blocks-category__background(@background);
+}
+
+.app__sidebar__color (@color) {
+    .app__sidebar-tag__menu-item {
+        &.active {
+            > a {
+                color: @color;
+            }
+        }
+    }
+
+    .sidebar__content__title {
+        color: @color;
+
+        .icon {
+            color: @color;
+        }
+    }
+
+    .sidebar__content__text {
+        .cm__links {
+            color: ~"@{AppSidebar-Theme@{theme}-Color}";
+        }
+
+        .cm__inherit {
+            color: ~"@{AppSidebar-Theme@{theme}-Color}";
+        }
+    }
+}
+
+// /* *** SHORT TAGS *** */
+
+.app__sidebar-tag__menu-item () {
+
+}
+
+/* ******* COMPONENT: SIDEBAR: ADAPTIVE ******* */
+
+
+@media only screen and (max-width : @CmUI-AdaptiveFrom) {
+
+    html.is-adaptive {
+
+        .app__sidebar {
+            display: none;
+        }
+
+    }
+
+}
+
+/* ******* COMPONENT: SIDEBAR: PRINT ******* */
+
+@media print {
+
+    .app__sidebar {
+        display: none;
+    }
+
+}
 /* ******* COMPONENTS: STYLIZER ******* */
 
 .app__stylizer {
@@ -2895,6 +2938,51 @@ html {
 
 .app__support__inner {
     height: 100%;
+}
+/* ******* COMPONENTS: ZONE ******* */
+
+.app__zone {
+    .clearfix;
+    position: relative;
+
+    &.is-editing {
+        min-height: @AppZone-MinHeight;
+        padding: @AppZone-Padding;
+    }
+
+    &.is-available {
+        .mx__transition(background-color, @CmUI-Transition-Duration);
+
+        &:before {
+            .mx__transition(border-color, @CmUI-Transition-Duration);
+        }
+
+        &.is-highlight {
+            background-color: @AppZone-Highlight-Background;
+            border-radius: @AppZone-BorderRadius;
+
+            &:before {
+                position: absolute;
+                display: block;
+                content: '';
+                border: @AppZone-Highlight-Border;
+                border-radius: @AppZone-BorderRadius;
+                .mx__position(-1px,-1px,-1px,-1px);
+            }
+
+            &.is-active {
+                background-color: @AppZone-Active-Background;
+
+                &:before {
+                    border: @AppZone-Active-Border;
+                }
+
+                .app__zone {
+                    background-color: rgba(255,255,255,0.4);
+                }
+            }
+        }
+    }
 }
 /* ******* MODULES: AGGREGATOR ******* */
 

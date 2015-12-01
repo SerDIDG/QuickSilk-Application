@@ -106,36 +106,6 @@
 // /* ******* LAYOUTS ******* */
 // /* ************************************************ */
 
-// /* ******* TOP MENU ******* */
-
-@AppLT-TopMenu-Height: @CmSize-XLarge;
-@AppLT-TopMenu-Duration: 300ms;
-@AppLT-TopMenu-Background: #000000;
-@AppLT-TopMenu-Color: @CmColor-Font-Opposite;
-@AppLT-TopMenu-HoverBackground: @CmColor-Primary-DarkDefault;
-@AppLT-TopMenu-ItemIndent: 1px;
-@AppLT-TopMenu-ItemBorder: @CmBorder-Width solid rgba(255,255,255,0.4);
-@AppLT-TopMenu-ItemBackground: rgba(255,255,255,0.2);
-@AppLT-TopMenu-Dropdown-FirstLevel: true;
-
-// /* ******* SIDEBAR ******* */
-
-@AppLT-Sidebar-Menu-Width: @CmSize-XLarge;
-@AppLT-Sidebar-Menu-Background: #000000;
-@AppLT-Sidebar-Content-Width: (@AppBlock-Dummy-Width * 3) - (@AppBlock-Dummy-Padding * 2) + (@AppLT-Sidebar-Content-Indent * 2);
-@AppLT-Sidebar-Content-Indent: @CmIndent-XSmall;
-@AppLT-Sidebar-Title-Height: @AppLT-Sidebar-Menu-Width;
-@AppLT-Sidebar-WidthExpanded: @AppLT-Sidebar-Menu-Width + @AppLT-Sidebar-Content-Width;
-@AppLT-Sidebar-WidthCollapsed: @AppLT-Sidebar-Menu-Width;
-@AppLT-Sidebar-Duration: @CmUI-Overlay-Duration;
-@AppLT-Sidebar-Overlay: @CmUI-Overlay;
-
-@AppLT-Sidebar-Theme: 'Dark';
-@AppLT-Sidebar-ThemeDark-Color: @CmColor-Font-Opposite;
-@AppLT-Sidebar-ThemeDark-Background: @CmColor-Primary-DarkDefault;
-@AppLT-Sidebar-ThemeLight-Color: @CmColor-Font;
-@AppLT-Sidebar-ThemeLight-Background: #ffffff;
-
 // /* ******* TEMPLATES ******* */
 
 @AppLT-Templates-Item-Padding: @CmIndent-XSmall;
@@ -144,7 +114,48 @@
 // /* ******* COMPONENTS ******* */
 // /* ************************************************ */
 
-// /* ******* WIDGETS ******* */
+// /* ******* TOP MENU ******* */
+
+@AppTopMenu-Height: @CmSize-XLarge;
+@AppTopMenu-Duration: 300ms;
+@AppTopMenu-Background: #000000;
+@AppTopMenu-Color: @CmColor-Font-Opposite;
+@AppTopMenu-HoverBackground: @CmColor-Primary-DarkDefault;
+@AppTopMenu-ItemIndent: 1px;
+@AppTopMenu-ItemBorder: @CmBorder-Width solid rgba(255,255,255,0.4);
+@AppTopMenu-ItemBackground: rgba(255,255,255,0.2);
+@AppTopMenu-Dropdown-FirstLevel: true;
+
+// /* ******* SIDEBAR ******* */
+
+@AppSidebar-Menu-Width: @CmSize-XLarge;
+@AppSidebar-Menu-Background: #000000;
+@AppSidebar-Content-Width: (@AppBlock-Dummy-Width * 3) - (@AppBlock-Dummy-Padding * 2) + (@AppSidebar-Content-Indent * 2);
+@AppSidebar-Content-Indent: @CmIndent-XSmall;
+@AppSidebar-Title-Height: @AppSidebar-Menu-Width;
+@AppSidebar-WidthExpanded: @AppSidebar-Menu-Width + @AppSidebar-Content-Width;
+@AppSidebar-WidthCollapsed: @AppSidebar-Menu-Width;
+@AppSidebar-Duration: @CmUI-Overlay-Duration;
+@AppSidebar-Overlay: @CmUI-Overlay;
+
+@AppSidebar-Theme: 'Dark';
+@AppSidebar-ThemeDark-Color: @CmColor-Font-Opposite;
+@AppSidebar-ThemeDark-Background: @CmColor-Primary-DarkDefault;
+@AppSidebar-ThemeLight-Color: @CmColor-Font;
+@AppSidebar-ThemeLight-Background: #ffffff;
+
+// /* ******* ZONE ******* */
+
+@AppZone-MinHeight: @CmIndent-Medium;
+@AppZone-Padding: @CmIndent-Small;
+@AppZone-BorderRadius: @CmBorder-Radius;
+
+@AppZone-Active-Background: hsla(@CmColor-Primary, @CmColor-Primary-DarkSaturation, 55%, 0.12);
+@AppZone-Active-Border: 1px dashed @CmColor-Primary-DarkDefault;
+@AppZone-Highlight-Background: hsla(@CmColor-Primary, @CmColor-Primary-DarkSaturation, 55%, 0.05);
+@AppZone-Highlight-Border: 1px dashed fade(@CmColor-Primary-DarkDefault, 30%);
+
+// /* ******* BLOCK ******* */
 
 @AppBlock-Indent: @CmIndent-Medium;
 
@@ -154,7 +165,7 @@
 
 @AppBlock-Category-Background: transparent;
 
-@AppBlock-Dummy-Theme: @AppLT-Sidebar-Theme;
+@AppBlock-Dummy-Theme: @AppSidebar-Theme;
 @AppBlock-Dummy-Width: 94px;
 @AppBlock-Dummy-Padding: 2px;
 @AppBlock-Dummy-BorderRadius: @CmBorder-Radius;
@@ -180,6 +191,11 @@
 @AppBlock-Dummy-ThemeLight-IconBackgroundNormal: @CmColor-Secondary-LightHover;
 @AppBlock-Dummy-ThemeLight-IconBackgroundHover: @CmColor-Primary-LightActive;
 @AppBlock-Dummy-ThemeLight-IconBackgroundActive: @CmColor-Primary-LightActive;
+
+// /* ******* DASHBOARD ******* */
+
+@AppDashboard-DropDuration: @PtDnD-DropDuration;
+@AppDashboard-MoveDuration: @PtDnD-MoveDuration;
 
 // /* ******* HELP TOUR ******* */
 
