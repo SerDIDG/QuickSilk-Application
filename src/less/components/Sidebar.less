@@ -30,6 +30,7 @@
             > li {
                 .app__sidebar-tag__menu-item;
                 margin: @CmIndent-XXXSmall 0 0 0;
+                .mx__transition(all, @CmUI-Transition-Duration);
 
                 &:first-child {
                     margin: 0;
@@ -60,6 +61,16 @@
                             .mx__transition(background, @CmUI-Transition-DurationReverse);
                         }
                     }
+                }
+
+                &.hidden {
+                    opacity: 0;
+                    visibility: hidden;
+                }
+
+                &.active {
+                    opacity: 1;
+                    visibility: visible;
                 }
 
                 &.is-immediately {
@@ -114,9 +125,14 @@
                 .mx__position(0, 0, 0, 0);
                 .mx__transition(all, @CmUI-Transition-Duration);
 
+                &.hidden {
+                    visibility: hidden;
+                }
+
                 &.active {
                     z-index: 2;
                     opacity: 1;
+                    visibility: visible;
                 }
 
                 &.is-immediately {
@@ -156,7 +172,7 @@
             .mx__position(0, 0, 0, 0);
         }
 
-        &.pt__dnd-area {
+        &.app__dashboard__zone {
             &.is-available {
                 .mx__transition(all, @CmUI-Transition-Duration);
 

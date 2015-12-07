@@ -47,6 +47,10 @@ function(params){
     that.isGracefulDegradation = false;
     that.isZonesHighlight = false;
     that.pageSize = {};
+    that.offset = {
+        'left' : 0,
+        'top' : 0
+    };
 
     that.blocks = [];
     that.dummyBlocks = [];
@@ -189,7 +193,7 @@ function(params){
         // Scroll node
         if(that.params['scroll']){
         //if(false){
-            if(y + 48 > pageSize['winHeight']){
+            if(y + 48 > that.pageSize['winHeight']){
                 toggleScroll(1);
             }else if(y - 48 < 0){
                 toggleScroll(-1);
@@ -358,9 +362,9 @@ function(params){
 
     var prepareBlock = function(block, params){
         block.updateDimensions();
-        // Get offset using pointer position (x and y)
-        block.dimensions['offsetLeft'] = block.dimensions['outer']['left'] - params['left'];
-        block.dimensions['offsetTop'] = block.dimensions['outer']['top'] - params['top'];
+        // Get offset using pointer position
+        that.offset['left'] = block.dimensions['outer']['left'] - params['left'];
+        that.offset['top'] = block.dimensions['outer']['top'] - params['top'];
         // Clone dummy block or unset area from block
         if(block.isDummy){
             that.currentBlock = block
@@ -756,7 +760,7 @@ function(params){
             }});
         }else if(speed > 0 && !isScrollProccess){
             isScrollProccess = true;
-            scrollRemaining = cm.getScrollHeight(that.params['scrollNode']) - pageSize['winHeight'];
+            scrollRemaining = cm.getScrollHeight(that.params['scrollNode']) - that.pageSize['winHeight'];
             if(cm.isWindow(that.params['scrollNode'])){
                 styles['docScrollTop'] = scrollRemaining;
             }else{

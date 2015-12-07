@@ -15,6 +15,7 @@
 @AppIcon-Layouts: '\e605';
 @AppIcon-Palette: '\e606';
 @AppIcon-Templates: '\e606';
+@AppIcon-Form: '\e602';
 
 @AppIcon-CircleHelp: '\e701';
 @AppIcon-CircleUser: '\e702';
@@ -739,6 +740,12 @@ body {
 .app-i__plus {
     &:before {
         content: @AppIcon-Plus;
+    }
+}
+
+.app-i__form {
+    &:before {
+        content: @AppIcon-Form;
     }
 }
 
@@ -2510,6 +2517,7 @@ html {
             > li {
                 .app__sidebar-tag__menu-item;
                 margin: @CmIndent-XXXSmall 0 0 0;
+                .mx__transition(all, @CmUI-Transition-Duration);
 
                 &:first-child {
                     margin: 0;
@@ -2540,6 +2548,16 @@ html {
                             .mx__transition(background, @CmUI-Transition-DurationReverse);
                         }
                     }
+                }
+
+                &.hidden {
+                    opacity: 0;
+                    visibility: hidden;
+                }
+
+                &.active {
+                    opacity: 1;
+                    visibility: visible;
                 }
 
                 &.is-immediately {
@@ -2594,9 +2612,14 @@ html {
                 .mx__position(0, 0, 0, 0);
                 .mx__transition(all, @CmUI-Transition-Duration);
 
+                &.hidden {
+                    visibility: hidden;
+                }
+
                 &.active {
                     z-index: 2;
                     opacity: 1;
+                    visibility: visible;
                 }
 
                 &.is-immediately {
@@ -2636,7 +2659,7 @@ html {
             .mx__position(0, 0, 0, 0);
         }
 
-        &.pt__dnd-area {
+        &.app__dashboard__zone {
             &.is-available {
                 .mx__transition(all, @CmUI-Transition-Duration);
 

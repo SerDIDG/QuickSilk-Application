@@ -10,7 +10,9 @@ cm.define('App.Sidebar', {
     'events' : [
         'onRender',
         'onCollapse',
-        'onExpand'
+        'onExpand',
+        'onTabShow',
+        'onTabHide'
     ],
     'params' : {
         'node' : cm.Node('div'),
@@ -18,9 +20,16 @@ cm.define('App.Sidebar', {
         'active' : 'modules',
         'target' : 'document.html',
         'remember' : true,
+        'ajax' : {
+            'type' : 'json',
+            'method' : 'get',
+            'url' : '',                                             // Request URL. Variables: %tab%, %callback% for JSONP.
+            'params' : ''                                           // Params object. %tab%, %callback% for JSONP.
+        },
         'Com.TabsetHelper' : {
             'node' : cm.Node('div'),
-            'name' : ''
+            'name' : '',
+            'responseHTML' : true
         }
     }
 },
@@ -56,22 +65,13 @@ function(params){
     var validateParams = function(){
         that.params['Com.TabsetHelper']['node'] = that.nodes['inner'];
         that.params['Com.TabsetHelper']['name'] = [that.params['name'], 'tabset'].join('-');
+        that.params['Com.TabsetHelper']['ajax'] = that.params['ajax'];
     };
 
     var render = function(){
         var helperMenuRule, helperContentRule;
-        cm.log(that.nodes);
         // Init tabset
-        cm.getConstructor('Com.TabsetHelper', function(classConstructor){
-            that.components['tabset'] = new classConstructor(that.params['Com.TabsetHelper'])
-                .addEvent('onLabelClick', function(tabset, data){
-                    if(!that.isExpanded || tabset.get() == data['id']){
-                        that.toggle();
-                    }
-                })
-                .addTabs(that.nodes['tabs'], that.nodes['labels'])
-                .set(that.params['active']);
-        });
+        processTabset();
         // Get sidebar dimensions from CSS
         scrollBarSize = cm._scrollSize;
         if(helperMenuRule = cm.getCSSRule('.app__sidebar-helper__menu-width')[0]){
@@ -103,6 +103,25 @@ function(params){
             that.collapse(true);
         }
         cm.addEvent(window, 'resize', onResize);
+    };
+
+    var processTabset = function(){
+        cm.getConstructor('Com.TabsetHelper', function(classConstructor){
+            that.components['tabset'] = new classConstructor(that.params['Com.TabsetHelper'])
+                .addEvent('onLabelClick', function(tabset, data){
+                    if(!that.isExpanded || tabset.get() == data['item']['id']){
+                        that.toggle();
+                    }
+                })
+                .addEvent('onTabHide', function(tabset, data){
+                    that.triggerEvent('onTabHide', data);
+                })
+                .addEvent('onTabShow', function(tabset, data){
+                    that.triggerEvent('onTabShow', data);
+                })
+                .processTabs(that.nodes['tabs'], that.nodes['labels'])
+                .set(that.params['active']);
+        });
     };
 
     var resize = function(){
@@ -206,6 +225,7 @@ function(params){
     that.setTab = function(id){
         if(that.components['tabset']){
             that.components['tabset'].set(id);
+            that.expand();
         }
         return that;
     };
