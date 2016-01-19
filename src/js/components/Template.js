@@ -7,16 +7,19 @@ cm.define('App.Template', {
         'Stack'
     ],
     'events' : [
+        'onRenderStart',
         'onRender',
-        'onRedraw'
+        'onRedraw',
+        'onResize'
     ],
     'params' : {
         'node' : cm.Node('div'),
         'name' : 'app-template',
         'fixedHeader' : false,
         'stickyFooter' : false,
-        'scroll' : 'document.body',
-        'scrollDuration' : 1000
+        'scrollNode' : 'document.body',
+        'scrollDuration' : 1000,
+        'topMenuName' : 'app-topmenu'
     }
 },
 function(params){
@@ -30,6 +33,7 @@ function(params){
         'buttonUp' : cm.Node('div')
     };
 
+    that.compoennts = {};
     that.anim = {};
 
     var init = function(){
@@ -37,19 +41,26 @@ function(params){
         that.convertEvents(that.params['events']);
         that.getDataNodes(that.params['node']);
         that.getDataConfig(that.params['node']);
-        that.addToStack(that.params['node']);
+        that.triggerEvent('onRenderStart');
         render();
+        that.addToStack(that.params['node']);
         that.triggerEvent('onRender');
         redraw(true);
     };
 
     var render = function(){
+        new cm.Finder('App.TopMenu', that.params['topMenuName'], null, function(classObject){
+            that.compoennts['topMenu'] = classObject;
+        });
         // Scroll Controllers
-        that.anim['scroll'] = new cm.Animation(that.params['scroll']);
+        that.anim['scroll'] = new cm.Animation(that.params['scrollNode']);
         cm.addEvent(that.nodes['buttonUp'], 'click', that.scrollToTop);
-        // Resize events
+        // Events
         cm.addEvent(window, 'resize', function(){
-            redraw(true);
+            animFrame(function(){
+                that.triggerEvent('onResize');
+                redraw(true);
+            });
         });
     };
 
@@ -75,9 +86,10 @@ function(params){
 
     var stickyFooter = function(){
         var windowHeight = cm.getPageSize('winHeight'),
-            contentTop = cm.getY(that.nodes['content']),
-            footerHeight = that.nodes['footer'].offsetHeight;
-        that.nodes['content'].style.minHeight = Math.max((windowHeight - contentTop - footerHeight), 0) + 'px';
+            headerHeight = that.nodes['header'].offsetHeight,
+            footerHeight = that.nodes['footer'].offsetHeight,
+            topMenu = that.compoennts['topMenu']? that.compoennts['topMenu'].getDimensions('height') : 0;
+        that.nodes['content'].style.minHeight = Math.max((windowHeight - topMenu - headerHeight - footerHeight), 0) + 'px';
     };
 
     /* ******* MAIN ******* */
@@ -88,8 +100,18 @@ function(params){
         return that;
     };
 
+    that.scrollTo = function(num, duration){
+        that.anim['scroll'].go({'style' : {'docScrollTop' : num}, 'duration' : duration, 'anim' : 'smooth'});
+        return that;
+    };
+
     that.scrollToTop = function(){
-        that.anim['scroll'].go({'style' : {'docScrollTop' : '0'}, 'duration' : that.params['scrollDuration'], 'anim' : 'smooth'});
+        that.scrollTo(0, that.params['scrollDuration']);
+        return that;
+    };
+
+    that.scrollStop = function(){
+        that.anim['scroll'].stop();
         return that;
     };
 

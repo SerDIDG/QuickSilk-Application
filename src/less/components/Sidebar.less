@@ -161,18 +161,16 @@
             color: @CmFont-UI-ColorOpposite;
         }
 
-        .pt__dnd-chassis {
-            visibility: hidden;
-        }
-
-        .com__dashboard__placeholder {
+        .app__dashboard__placeholder {
+            height: auto;
             position: absolute;
             z-index: 1;
             opacity: 0;
+            visibility: hidden;
             .mx__position(0, 0, 0, 0);
         }
 
-        &.app__dashboard__zone {
+        &.app__zone {
             &.is-available {
                 .mx__transition(all, @CmUI-Transition-Duration);
 
@@ -198,7 +196,7 @@
             }
         }
 
-        .com__dashboard__body & {
+        .app__dashboard__body & {
             visibility: visible;
             opacity: 1;
             background: fadeout(@CmColor-Danger-DarkDefault, 75%);
@@ -246,6 +244,10 @@
 
     .sidebar__content__text {
         .cm__box;
+    }
+
+    .app__block-container {
+        margin: 0;
     }
 
     &.is-expanded {
@@ -395,6 +397,12 @@
 
 .app__sidebar-tag__menu-item () {
 
+}
+
+/* *** HELPERS *** */
+
+.app__sidebar__duration {
+    transition-duration: @AppSidebar-Duration;
 }
 
 /* ******* COMPONENT: SIDEBAR: ADAPTIVE ******* */

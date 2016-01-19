@@ -139,7 +139,7 @@ function(params){
             that.components['topMenu'] = classObject;
             that.components['overlays']['topMenu'].embed(that.components['topMenu'].getNodes('inner'));
         });
-        // Get TopMenu
+        // Get Template
         cm.find('App.Template', that.params['templateName'], null, function(classObject){
             that.components['template'] = classObject;
             that.components['overlays']['template'].embed(that.components['template'].getNodes('container'));

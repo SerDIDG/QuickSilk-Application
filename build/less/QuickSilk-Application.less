@@ -5,7 +5,7 @@
 
 @AppIconVars-Family: 'QuickSilk-Glyphs';
 @AppIconVars-Color: @CmIconVars-Color;
-@AppIconVars-Version: 19;
+@AppIconVars-Version: 23;
 
 @AppIcon-QuickSilk: '\e600';
 @AppIcon-Plus: '\e601';
@@ -15,7 +15,7 @@
 @AppIcon-Layouts: '\e605';
 @AppIcon-Palette: '\e606';
 @AppIcon-Templates: '\e606';
-@AppIcon-Form: '\e602';
+@AppIcon-Form: '\e607';
 
 @AppIcon-CircleHelp: '\e701';
 @AppIcon-CircleUser: '\e702';
@@ -32,7 +32,7 @@
 // /* ******* BLOCK ******* */
 
 @AppIcon-Block-Size: 90px;
-@AppIcon-Block-Names: default anchor column menu divider spacer zone workingarea content logo googlemap tabs search blogcontent blogcategories blogroll blogblock blogarchive blogcalendar image imagegallery slider videogallery forum forum_build comment twitter socialmedia socialmedia_rating socialmedia_share login registration memberdirectory memberwidget filegridlist filegridlistwidget webexmeetings events eventscalendar latestevents flickr languageswitcher d3 rss breadcrumb breadcrumbs;
+@AppIcon-Block-Names: default anchor button column menu divider spacer zone workingarea content logo googlemap tabs search blogcontent blogcategories blogroll blogblock blogarchive blogcalendar image imagegallery slider videogallery forum forum_build comment twitter socialmedia socialmedia_rating socialmedia_share login registration memberdirectory memberwidget filegridlist filegridlistwidget webexmeetings events eventscalendar latestevents flickr languageswitcher d3 rss breadcrumb breadcrumbs form_builder;
 
 @AppIcon-Block-default: 0;
 @AppIcon-Block-anchor: 1;
@@ -80,6 +80,30 @@
 @AppIcon-Block-rss: 40;
 @AppIcon-Block-breadcrumb: 41;
 @AppIcon-Block-breadcrumbs: 41;
+@AppIcon-Block-button: 42;
+@AppIcon-Block-form_builder: 56;
+
+@AppIcon-Block-Element-Names: button column content divider spacer input text password hidden select checkbox radiobutton textarea wysiwyg multicheckbox captcha imagebrowser datepicker timepicker;
+
+@AppIcon-Block-Element-button: 42;
+@AppIcon-Block-Element-column: 2;
+@AppIcon-Block-Element-content: 7;
+@AppIcon-Block-Element-divider: 4;
+@AppIcon-Block-Element-spacer: 5;
+@AppIcon-Block-Element-input: 43;
+@AppIcon-Block-Element-text: 43;
+@AppIcon-Block-Element-password: 44;
+@AppIcon-Block-Element-hidden: 45;
+@AppIcon-Block-Element-select: 46;
+@AppIcon-Block-Element-checkbox: 47;
+@AppIcon-Block-Element-radiobutton: 48;
+@AppIcon-Block-Element-multicheckbox: 49;
+@AppIcon-Block-Element-textarea: 50;
+@AppIcon-Block-Element-wysiwyg: 51;
+@AppIcon-Block-Element-captcha: 52;
+@AppIcon-Block-Element-imagebrowser: 53;
+@AppIcon-Block-Element-timepicker: 54;
+@AppIcon-Block-Element-datepicker: 55;
 
 // /* ************************************************ */
 // /* ******* VARIABLES ******* */
@@ -167,9 +191,9 @@
 
 // /* ******* AREA ******* */
 
-@AppUI-Area-Width: @CmIndent-XLarge;
-@AppUI-Area-Height: @CmIndent-XLarge;
-@AppUI-Area-ContentHeight: 256px;
+@AppUI-Zone-Width: @CmIndent-XLarge;
+@AppUI-Zone-Height: @CmIndent-XLarge;
+@AppUI-Zone-ContentHeight: 256px;
 
 // /* ************************************************ */
 // /* ******* PARTS ******* */
@@ -233,9 +257,11 @@
 @AppZone-BorderRadius: @CmBorder-Radius;
 
 @AppZone-Active-Background: hsla(@CmColor-Primary, @CmColor-Primary-DarkSaturation, 55%, 0.12);
-@AppZone-Active-Border: 1px dashed @CmColor-Primary-DarkDefault;
+@AppZone-Active-BorderColor: @CmColor-Primary-DarkDefault;
+@AppZone-Active-Border: 1px dashed @AppZone-Active-BorderColor;
 @AppZone-Highlight-Background: hsla(@CmColor-Primary, @CmColor-Primary-DarkSaturation, 55%, 0.05);
-@AppZone-Highlight-Border: 1px dashed fade(@CmColor-Primary-DarkDefault, 30%);
+@AppZone-Highlight-BorderColor: fade(@CmColor-Primary-DarkDefault, 30%);
+@AppZone-Highlight-Border: 1px dashed @AppZone-Highlight-BorderColor;
 
 // /* ******* BLOCK ******* */
 
@@ -278,6 +304,8 @@
 
 @AppDashboard-DropDuration: @PtDnD-DropDuration;
 @AppDashboard-MoveDuration: @PtDnD-MoveDuration;
+
+@AppDashboard-Placeholder-Indent: @CmIndent-Medium;
 
 // /* ******* HELP TOUR ******* */
 
@@ -474,6 +502,8 @@ body {
     height: 24px;
     padding: 0 20px;
     border: 1px solid #AAAAAA;
+    background-color: #ffffff;
+    color: #555;
 }
 
 /* *** CKE EDITOR *** */
@@ -939,7 +969,7 @@ h1, h2, h3, h4, h5, h6 {
         .display-flex;
         .mx__flex(1 1 auto);
 
-        .app__area-header {
+        .app__zone-header {
             &.@{area} {
                 max-width: 100%;
                 .mx__flex(1 1 auto);
@@ -959,10 +989,23 @@ h1, h2, h3, h4, h5, h6 {
         .mx__flex-direction(row);
         .mx__justify-content(flex-start);
 
-        .app__area-main {
+        .app__zone-main {
             width: 100%;
             max-width: 100%;
             .mx__flex(1 1 auto);
+        }
+    }
+
+    @media print {
+        display: block;
+
+        .tpl__content__inner {
+            display: block;
+            .mx__flex(none);
+
+            .app__zone-main {
+                .mx__flex(none);
+            }
         }
     }
 }
@@ -975,7 +1018,7 @@ h1, h2, h3, h4, h5, h6 {
         .display-flex;
         .mx__flex(1 1 auto);
 
-        .app__area-footer {
+        .app__zone-footer {
             &.@{area} {
                 max-width: 100%;
                 .mx__flex(1 1 auto);
@@ -986,38 +1029,23 @@ h1, h2, h3, h4, h5, h6 {
 
 /* *** AREAS *** */
 
-.app__area-main {
-}
 
-.app__area-footer,
-.app__area-header {
-    .clearfix;
-    z-index: 1;
-
-    &:not(.main):not(.splash):not(.additional) {
-        padding: 0;
-    }
-
-    &:hover {
-        z-index: 100 !important;
-    }
-}
 
 /* *** WRAPPERS *** */
 
 html {
     &.is-topmenu {
-        .tpl__container {
-            margin-top: @AppTopMenu-Height;
-        }
-
         .app__sidebar {
             top: @AppTopMenu-Height;
         }
 
-        &.is-topmenu--expanded {
-            overflow: hidden;
+        .tpl__container {
+            margin-top: @AppTopMenu-Height;
         }
+    }
+
+    &.is-topmenu--expanded {
+        overflow: hidden;
     }
 
     &.is-sidebar {
@@ -1028,25 +1056,6 @@ html {
     }
 
     &.is-sidebar--expanded {
-        .app__area-main {
-            min-height: @AppUI-Area-ContentHeight;
-        }
-
-        .app__area-footer,
-        .app__area-header {
-            min-height: @AppUI-Area-Height;
-
-            &:not(.main):not(.splash):not(.additional) {
-                min-width: @AppUI-Area-Width;
-            }
-        }
-
-        .pt__dnd-area.is-available {
-            .app__block-container {
-                margin: 0 0 @AppBlock-Indent !important;
-            }
-        }
-
         .tpl__container {
             margin-left: @AppSidebar-WidthExpanded;
         }
@@ -1060,33 +1069,15 @@ html {
         }
     }
 
-    &.is-sidebar--collapsed {
-        .app__module__controls {
-            display: none;
-        }
-    }
-
-    &.is-sidebar--collapsed,
-    &:not(.is-sidebar--expanded):not(.is-sidebar--collapsed) {
-        .app__area-footer,
-        .app__area-header,
-        .app__area-main {
-            min-height: 0;
-        }
-
-        .pt__dnd-area {
-            min-height: 0;
-            padding: 0;
-        }
-
-        .app__block-container {
-            &:last-child {
-                margin: 0;
-            }
-        }
-
+    &:not(.is-editing) {
         .app__module__controls--edit {
             display: none;
+        }
+
+        &.is-editor {
+            .app__module__controls {
+                display: none;
+            }
         }
     }
 
@@ -1109,15 +1100,10 @@ html {
             max-width: 100%;
         }
 
-        &.is-sidebar {
+        &.is-sidebar,
+        &.is-sidebar--collapsed {
             .tpl__container {
                 margin-left: 0;
-            }
-
-            &.is-sidebar--collapsed {
-                .tpl__container {
-                    margin-left: 0;
-                }
             }
         }
     }
@@ -1129,6 +1115,11 @@ html {
 
     .tpl__container {
         margin: 0 !important;
+    }
+
+    .app__module__controls--edit,
+    .app__module__controls {
+        display: none !important;
     }
 
 }
@@ -2015,95 +2006,14 @@ html {
         .pt__editable__bundle > .normal;
         margin: 0;
         .mx__transition(opacity, @CmUI-Transition-Duration);
-
-        &.is-hidden {
-            display: none;
-        }
-
-        &.is-visible {
-            display: block;
-        }
-
-        &.is-editable {
-            .pt__editable__bundle > .editable;
-        }
-
-        &.is-hide {
-            .cm__transition-none;
-            overflow: hidden;
-            opacity: 0;
-        }
-
-        &.is-locked {
-        }
-    }
-
-    // /* Dummy */
-
-    > .app__block-dummy {
-        position: relative;
-        border-radius: @AppBlock-Dummy-BorderRadius;
-        cursor: move;
-        .mx__user-select(none);
-        .mx__transition(background-color box-shadow, @CmUI-Transition-Duration);
-
-        > .inner {
-            padding: @AppBlock-Dummy-Padding;
-        }
-
-        .icon {
-            //width: @AppBlock-Dummy-IconSize;
-            height: @AppBlock-Dummy-IconSize;
-            margin: 0 auto;
-            border-radius: @AppBlock-Dummy-IconBorderRadius;
-            background-repeat: no-repeat;
-            .mx__transition(background-color, @CmUI-Transition-Duration);
-
-            img {
-                width: 100%;
-                height: 100%;
-                display: block;
-            }
-        }
-
-        .caption {
-            .cm__font--small;
-            padding: 4px 0;
-            overflow: hidden;
-            text-align: center;
-            line-height: 15px;
-            .mx__transition(color, @CmUI-Transition-Duration);
-        }
-
-        .pt__box-loader {
-            background: @AppBlock-Loader-Background;
-            border: @AppBlock-Loader-Border;
-            border-radius: @AppBlock-Loader-BorderRadius;
-            opacity: 0;
-            .mx__transition(opacity, @CmUI-Transition-Duration);
-
-            &.fadein {
-                opacity: 1;
-            }
-        }
-
-        &.is-hide {
-            overflow: hidden;
-        }
     }
 
     &:hover {
         z-index: 10;
         .mx__transition(z-index, @CmUI-Transition-DurationReverse);
 
-        > .app__block.is-editable {
-            .pt__editable__bundle > .hover;
-        }
-
         > .app__block-dummy {
-            .icon {
-                .mx__transition(background-color, @CmUI-Transition-DurationReverse);
-            }
+            &:extend(.app__block-dummy--hover all);
         }
     }
 
@@ -2111,37 +2021,161 @@ html {
         z-index: 10;
         .mx__transition(z-index, @CmUI-Transition-DurationReverse);
 
-        > .app__block.is-editable {
-            .pt__editable__bundle > .hover;
-            .pt__editable__bundle > .active;
-            opacity: 0.7;
-            .mx__transition(opacity, @CmUI-Transition-DurationReverse);
+        > .app__block-dummy {
+            &:extend(.app__block-dummy--active all);
+        }
+    }
+
+    &:not(.is-editing):not(.is-replacing) {
+        &:last-child {
+            margin: 0;
+        }
+    }
+
+    &.is-editing {
+        margin: 0 0 @AppBlock-Indent;
+    }
+
+    &.is-editable {
+        > .app__block {
+            .pt__editable__bundle > .editable;
         }
 
-        > .app__block-dummy {
-            box-shadow: 0 1px 5px rgba(0,0,0,0.2);
-            .mx__transition(background-color box-shadow, @CmUI-Transition-DurationReverse);
+        &:hover {
+            > .app__block {
+                .pt__editable__bundle > .hover;
+            }
+        }
 
-            .icon {
-                .mx__transition(background-color, @CmUI-Transition-DurationReverse);
+        &.is-active {
+            > .app__block {
+                .pt__editable__bundle > .hover;
+                .pt__editable__bundle > .active;
+                opacity: 0.7;
+                .mx__transition(opacity, @CmUI-Transition-DurationReverse);
             }
         }
     }
 
-    &.pt__dnd-helper {
-        .pt__dnd-helper;
+    &.is-dragging {
+        position: fixed !important;
+        z-index: 9000 !important;
+        cursor: move !important;
+        .mx__position(0, auto, auto, 0);
+        .mx__user-select(none);
+
+        &.is-dropping {
+            .mx__transition(all, @AppDashboard-DropDuration);
+        }
     }
 
-    &.com__dashboard__helper {
-        .com__dashboard__helper;
+    &.is-replacing {
+        margin: 0 0 @AppBlock-Indent;
+        position: absolute !important;
+        z-index: 9000 !important;
+        opacity: 0;
+        .mx__position(0, 0, auto, 0);
     }
 
     &.is-hidden {
         display: none;
     }
 
-    &.is-hide {
+    &.is-visible {
+        display: block;
+    }
+
+    &.is-immediately {
+        > .app__block {
+            .pt__editable__bundle > .is-immediately;
+        }
+    }
+}
+
+/* *** SPINNER *** */
+
+.app__block-spinner {
+    position: absolute;
+    z-index: 10;
+    visibility: hidden;
+    opacity: 0;
+    background: @AppBlock-Loader-Background;
+    border: @AppBlock-Loader-Border;
+    border-radius: @AppBlock-Loader-BorderRadius;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15) inset;
+    .mx__position(0, 0, 0, 0);
+    .mx__transition(all, @CmUI-Transition-Duration);
+
+    &.is-visible {
+        visibility: visible;
+        opacity: 1;
+    }
+}
+
+/* *** DUMMY *** */
+
+.app__block-dummy {
+    position: relative;
+    border-radius: @AppBlock-Dummy-BorderRadius;
+    cursor: move;
+    .mx__user-select(none);
+    .mx__transition(background-color box-shadow, @CmUI-Transition-Duration);
+
+    > .inner {
+        padding: @AppBlock-Dummy-Padding;
+    }
+
+    .caption {
+        .cm__font--small;
+        padding: 4px 0;
         overflow: hidden;
+        text-align: center;
+        line-height: 15px;
+        .mx__transition(color, @CmUI-Transition-Duration);
+    }
+
+    .icon {
+        //width: @AppBlock-Dummy-IconSize;
+        height: @AppBlock-Dummy-IconSize;
+        margin: 0 auto;
+        border-radius: @AppBlock-Dummy-IconBorderRadius;
+        background-repeat: no-repeat;
+        .mx__transition(background-color, @CmUI-Transition-Duration);
+    }
+
+    .icon {
+        .for(@AppIcon-Block-Names); .-each(@name) {
+            &.module-@{name} {
+                @var: "AppIcon-Block-@{name}";
+                @rule: @@var;
+                background-position: 50% (-@rule * @AppIcon-Block-Size);
+            }
+        }
+    }
+
+    .icon {
+        .for(@AppIcon-Block-Element-Names); .-each(@name) {
+            &.module-element_@{name} {
+                @var: "AppIcon-Block-Element-@{name}";
+                @rule: @@var;
+                background-position: 50% (-@rule * @AppIcon-Block-Size);
+            }
+        }
+    }
+}
+
+.app__block-dummy--hover {
+    .icon {
+        .mx__transition(background-color, @CmUI-Transition-DurationReverse);
+    }
+}
+
+.app__block-dummy--active {
+    box-shadow: 0 1px 5px rgba(0,0,0,0.2);
+    .mx__transition(background-color box-shadow, @CmUI-Transition-DurationReverse);
+
+    .icon {
+        .mx__transition(background-color, @CmUI-Transition-DurationReverse);
     }
 }
 
@@ -2155,6 +2189,7 @@ html {
     }
 
     > dd {
+        width: @AppBlock-Dummy-Width * 3;
         margin: 0 -@AppBlock-Dummy-Padding;
         font-size: 0;
     }
@@ -2201,14 +2236,6 @@ html {
         .icon {
             background-image: url("@{AppPath-Images}/components/block/@{theme}.svg");
             background-position: 50% @AppIcon-Block-default;
-
-            .for(@AppIcon-Block-Names); .-each(@name) {
-                &.module-@{name} {
-                    @var: "AppIcon-Block-@{name}";
-                    @rule: @@var;
-                    background-position: 50% (-@rule * @AppIcon-Block-Size);
-                }
-            }
         }
     }
 }
@@ -2275,7 +2302,15 @@ html {
 
 .app__block-dummy__theme(@AppBlock-Dummy-Theme);
 .app__blocks-category__background(@AppBlock-Category-Background);
+
+/* *** HELPERS *** */
+
+.app__block-dummy-helper__width {
+    width: @AppBlock-Dummy-Width;
+}
 /* ******* COMPONENTS: DASHBOARD ******* */
+
+/* *** COMMON *** */
 
 .app__dashboard__body,
 .app__dashboard__body * {
@@ -2283,13 +2318,41 @@ html {
     .mx__user-select(none);
 }
 
-.app__dashboard__helper {
-    position: fixed !important;
-    z-index: 9000 !important;
-    .mx__user-select(none);
+.app__dashboard__removable {
+    overflow: hidden;
+}
 
-    &.is-drop {
-        .mx__transition(all, @AppDashboard-DropDuration);
+.app__dashboard__helper {
+    overflow: hidden;
+    position: relative;
+}
+
+/* *** PLACEHOLDER *** */
+
+.app__dashboard__placeholder {
+    height: 0;
+    position: relative;
+
+    &:before {
+        display: block;
+        position: absolute;
+        opacity: 0;
+        content: '';
+        background: url('@{CmPath-Images}/parts/pattern-diagonal-2x50.png') 0 0 repeat;
+        border: 2px dashed @AppZone-Active-BorderColor;
+        border-radius: @CmBorder-Radius;
+        box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.3);
+        .mx__position(0, 0, @AppDashboard-Placeholder-Indent, 0);
+    }
+
+    &.is-highlight {
+        &:before {
+            opacity: 1;
+        }
+    }
+
+    &.is-immediately {
+        .cm__transition-none;
     }
 }
 
@@ -2476,12 +2539,9 @@ html {
 
 @media print {
 
-    .app__module__controls {
-        display: none;
-    }
-
+    .app__module__controls,
     .app__module__controls--edit {
-        display: none;
+        display: none !important;
     }
 
 }
@@ -2648,18 +2708,16 @@ html {
             color: @CmFont-UI-ColorOpposite;
         }
 
-        .pt__dnd-chassis {
-            visibility: hidden;
-        }
-
-        .com__dashboard__placeholder {
+        .app__dashboard__placeholder {
+            height: auto;
             position: absolute;
             z-index: 1;
             opacity: 0;
+            visibility: hidden;
             .mx__position(0, 0, 0, 0);
         }
 
-        &.app__dashboard__zone {
+        &.app__zone {
             &.is-available {
                 .mx__transition(all, @CmUI-Transition-Duration);
 
@@ -2685,7 +2743,7 @@ html {
             }
         }
 
-        .com__dashboard__body & {
+        .app__dashboard__body & {
             visibility: visible;
             opacity: 1;
             background: fadeout(@CmColor-Danger-DarkDefault, 75%);
@@ -2733,6 +2791,10 @@ html {
 
     .sidebar__content__text {
         .cm__box;
+    }
+
+    .app__block-container {
+        margin: 0;
     }
 
     &.is-expanded {
@@ -2884,6 +2946,12 @@ html {
 
 }
 
+/* *** HELPERS *** */
+
+.app__sidebar__duration {
+    transition-duration: @AppSidebar-Duration;
+}
+
 /* ******* COMPONENT: SIDEBAR: ADAPTIVE ******* */
 
 
@@ -2966,12 +3034,9 @@ html {
 
 .app__zone {
     .clearfix;
+    min-height: 0;
+    padding: 0;
     position: relative;
-
-    &.is-editing {
-        min-height: @AppZone-MinHeight;
-        padding: @AppZone-Padding;
-    }
 
     &.is-available {
         .mx__transition(background-color, @CmUI-Transition-Duration);
@@ -3004,6 +3069,38 @@ html {
                     background-color: rgba(255,255,255,0.4);
                 }
             }
+        }
+    }
+
+    &.is-editable {
+        min-height: @AppZone-MinHeight;
+        padding: @AppZone-Padding;
+    }
+}
+
+/* *** PREDEFINE ZONES *** */
+
+.app__zone-main {
+    &.is-editable {
+        min-height: @AppUI-Zone-ContentHeight;
+    }
+}
+
+.app__zone-footer,
+.app__zone-header {
+    .clearfix;
+    z-index: 1;
+
+    &:hover {
+        z-index: 100 !important;
+    }
+
+    &.is-editable {
+        min-height: @AppUI-Zone-Height;
+
+        &:not(.main):not(.splash):not(.additional) {
+            min-width: @AppUI-Zone-Width;
+            padding: 0;
         }
     }
 }
@@ -3100,8 +3197,10 @@ html {
 
     html.is-adaptive {
         .app-mod__image {
-            .pt__image {
-                .pt__image.pull-center;
+            &.is-adaptive {
+                .pt__image {
+                    .pt__image.pull-center;
+                }
             }
         }
     }
@@ -3342,8 +3441,10 @@ html {
 
     html.is-adaptive {
         .app-mod__logo {
-            .pt__image {
-                .pt__image.pull-center;
+            &.is-adaptive {
+                .pt__image {
+                    .pt__image.pull-center;
+                }
             }
         }
     }

@@ -1,4 +1,5 @@
 var App = {
     'Elements': {},
-    'Nodes' : {}
+    'Nodes' : {},
+    'Test' : []
 };

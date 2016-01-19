@@ -4,61 +4,62 @@ cm.define('App.Dashboard', {
         'Events'
     ],
     'events' : [
+        'onRenderStart',
         'onRender',
-        'onInit',
         'onDragStart',
+        'onMove',
         'onDrop',
+        'onRemoveStart',
         'onRemove',
-        'onReplace'
+        'onRemoveEnd',
+        'onReplaceStart',
+        'onReplace',
+        'onReplaceEnd',
+        'onAppendStart',
+        'onAppend',
+        'onAppendEnd'
     ],
     'params' : {
         'draggableContainer' : 'document.body',
-        'scroll' : true,
-        'scrollNode' : window,
+        'scrollNode' : 'document.body',
         'scrollSpeed' : 1,                           // ms per 1px
+        'scrollStep' : 48,
         'useGracefulDegradation' : true,
         'dropDuration' : 400,
         'moveDuration' : 200,
         'highlightZones' : true,                     // highlight zones on drag start
         'highlightPlaceholders' : true,
-        'animateRemove' : true,
-        'removeNode' : true
+        'placeholderHeight' : 64,
+        'Com.Overlay' : {
+            'container' : 'document.body',
+            'duration' : 0,
+            'autoOpen' : false,
+            'removeOnClose' : true,
+            'showSpinner' : false,
+            'showContent' : false,
+            'position' : 'fixed',
+            'theme' : 'transparent'
+        }
     }
 },
 function(params){
-    var that = this,
-        anims = {},
-        zones = [],
-        zonesList = [],
-        blockList = [],
-        filteredAvailablezones = [],
-        checkInt,
-        placeholderInt,
-        pageSize,
-        isScrollProccess = false,
-
-        current,
-        currentAboveItem,
-        currentPosition,
-        currentZone,
-        currentPlaceholder,
-        previousZone;
+    var that = this;
 
     that.isGracefulDegradation = false;
-    that.isZonesHighlight = false;
-    that.pageSize = {};
-    that.offset = {
-        'left' : 0,
-        'top' : 0
-    };
+    that.isScrollProccess = false;
+    that.isProccess = false;
+    that.components = {};
+    that.anim = {};
 
+    that.zones = [];
     that.blocks = [];
     that.dummyBlocks = [];
-    that.zones = [];
 
-    that.currentZones = [];
-    that.currentZone = null;
+    that.currentZones = null;
+    that.currentBlocks = null;
     that.currentBlock = null;
+    that.currentBlockOffset = null;
+    that.currentBellow = null;
 
     /* *** INIT *** */
 
@@ -67,6 +68,7 @@ function(params){
         that.setParams(params);
         that.convertEvents(that.params['events']);
         validateParams();
+        that.triggerEvent('onRenderStart');
         render();
         that.triggerEvent('onRender');
     };
@@ -77,294 +79,179 @@ function(params){
     };
 
     var validateParams = function(){
+        that.params['Com.Overlay']['container'] = that.params['draggableContainer'];
         // Check Graceful Degradation, and turn it to mobile and old ie.
-        if(that.params['useGracefulDegradation'] && ((cm.is('IE') && cm.isVersion() < 9) || cm.isMobile())){
+        if(
+            that.params['useGracefulDegradation']
+            && ((cm.is('IE') && cm.isVersion() < 9)
+            || cm.isMobile())
+        ){
             that.isGracefulDegradation = true;
         }
+        // Permanent disable animation
+        that.isGracefulDegradation = true;
     };
 
     var render = function(){
-        anims['scroll'] = new cm.Animation(that.params['scrollNode']);
+        reset();
+        // Overlay, for protect content while dragging
+        cm.getConstructor('Com.Overlay', function(classConstructor){
+            that.components['overlays'] = new classConstructor(that.params['Com.Overlay']);
+        });
+        // Init scroll
+        that.anim['scroll'] = new cm.Animation(that.params['scrollNode']);
     };
 
-    /* *** DRAG AND DROP PROCESS ** */
+    /* *** DRAG AND DROP ** */
+
+    var reset = function(){
+        // Unset zone, blocks and placeholder bellow current graggable block
+        if(that.currentBellow){
+            unsetCurrentBelow();
+        }
+        // Remove placeholders
+        removePlaceholders();
+        // Reset variables
+        that.currentZones = [];
+        that.currentBlocks = [];
+        that.currentBlock = null;
+        that.currentBlockOffset = {
+            'left' : 0,
+            'top' : 0
+        };
+        that.currentBellow = {
+            'zone' : null,
+            'block' : null,
+            'position' : null,
+            'placeholder' : null
+        };
+        that.isProccess = false;
+    };
 
     var start = function(e, block){
         cm.preventDefault(e);
         // Prevent multiple drag event
-        if(that.currentBlock){
+        if(that.isProccess || that.currentBlock){
             return;
         }
         // Prevent drag event not on LMB
         if(!cm.isTouch && e.button){
             return;
         }
-        // Hide IFRAMES and EMBED tags
-        cm.hideSpecialTags();
+        that.isProccess = true;
+        // Variables
+        var params = getPosition(e);
         cm.addClass(document.body, 'app__dashboard__body');
-        that.pageSize = cm.getPageSize();
-        // Get pointer position
-        var params = {
-            'left' : cm._clientPosition['x'],
-            'top' : cm._clientPosition['y']
-        };
-        // Check event type and get cursor / finger position
-        var tempCurrentAboveItem,
-            tempCurrentPosition;
-        // Filter zones
-        that.currentZones = getDroppableZones(block);
+        // Open overlay to prevent lose focus on child iframe
+        that.components['overlays'].open();
+        // Filter zones and blocks to work with it
+        that.currentZones = getCurrentZones(block);
+        that.currentBlocks = getCurrentBlocks(block);
         // API onDragStart Event
         that.triggerEvent('onDragStart', {
             'item' : block,
             'node' : block.node,
-            'from' : block.zone
+            'zone' : block.zone
         });
         // Prepare widget, get offset, set start position, set widget as current
         prepareBlock(block, params);
         // Highlight zones
         if(that.params['highlightZones']){
-            toggleZonesHighlight();
+            highlightCurrentZones();
         }
-        // Calculate elements position and dimension
-        getPositionsAll();
-        // Render Placeholder Blocks
-        renderPlaceholderBlocks();
-        // Find above block item
-        cm.forEach(that.currentBlock.zone.blocks, function(block){
-            if(x >= block['dimensions']['absoluteX1'] && x < block['dimensions']['absoluteX2'] && y >= block['dimensions']['absoluteY1'] && y <= block['dimensions']['absoluteY2']){
-                tempCurrentAboveItem = block;
-                // Check above block position
-                if((y - tempCurrentAboveItem['dimensions']['absoluteY1']) < (tempCurrentAboveItem['dimensions']['absoluteHeight'] / 2)){
-                    tempCurrentPosition = 'top';
-                }else{
-                    tempCurrentPosition = 'bottom';
-                }
-            }
-        });
-        // If current current block not above other block items
-        if(!tempCurrentAboveItem && current['zone']['items'].length){
-            if(y < current['zone']['dimensions']['y1']){
-                tempCurrentAboveItem = current['zone']['items'][0];
-                tempCurrentPosition = 'top';
-            }else{
-                tempCurrentAboveItem = current['zone']['items'][current['zone']['items'].length - 1];
-                tempCurrentPosition = 'bottom';
-            }
-        }
-        // Set placeholder
-        if(tempCurrentAboveItem){
-            currentPlaceholder = tempCurrentAboveItem['placeholder'][tempCurrentPosition];
-        }else{
-            currentPlaceholder = current['zone']['placeholder'][0];
-        }
-        if(currentPlaceholder){
-            cm.addClass(currentPlaceholder['node'], 'is-active');
-            if(that.params['highlightPlaceholders']){
-                cm.addClass(currentPlaceholder['node'], 'is-highlight');
-            }
-            currentPlaceholder['node'].style.height = [current['dimensions']['absoluteHeight'], 'px'].join('');
-        }
-        // Set current zone and above
-        that.currentZone = current['zone'];
-        currentAboveItem = tempCurrentAboveItem;
-        currentPosition = tempCurrentPosition;
-        that.currentZone.active();
-        // Add move event on document
+        // Update positions of blocks and zones
+        getCurrentDimensions();
+        // Render placeholders
+        renderPlaceholders();
+        // Find zone, block and placeholder under current graggable block
+        setCurrentBelow(
+            getCurrentBelow(params)
+        );
+        // Add events
         cm.addEvent(window, 'mousemove', move);
         cm.addEvent(window, 'mouseup', stop);
+        cm.addEvent(window, 'scroll', scroll);
     };
 
     var move = function(e){
         cm.preventDefault(e);
-        // Check event type and get cursor / finger position
-        var x = cm._clientPosition['x'],
-            y = cm._clientPosition['y'],
-            posY = y - current['dimensions']['offsetY'],
-            posX = x - current['dimensions']['offsetX'],
-            styleX,
-            styleY,
-            tempCurrentzone,
-            tempCurrentAboveItem,
-            tempCurrentPosition;
-        // Calculate drag direction and set new position
-        styleX = [posX, 'px'].join('');
-        styleY = [posY, 'px'].join('');
-        cm.setCSSTranslate(current['node'], styleX, styleY);
+        // Variables
+        var params = getPosition(e);
         // Scroll node
-        if(that.params['scroll']){
-        //if(false){
-            if(y + 48 > that.pageSize['winHeight']){
-                toggleScroll(1);
-            }else if(y - 48 < 0){
-                toggleScroll(-1);
-            }else{
-                toggleScroll(0);
-            }
-        }
-        // Check and recalculate position
-        checkPosition();
-        // Find above zone
-        cm.forEach(filteredAvailablezones, function(zone){
-            if(x >= zone['dimensions']['x1'] && x < zone['dimensions']['x2'] && y >= zone['dimensions']['y1'] && y <= zone['dimensions']['y2']){
-                if(!tempCurrentzone){
-                    tempCurrentzone = zone;
-                }else if(zone['dimensions']['width'] < tempCurrentzone['dimensions']['width'] || zone['dimensions']['height'] < tempCurrentzone['dimensions']['height']){
-                    tempCurrentzone = zone;
-                }
-            }
-        });
-        // Find above block item
-        if(tempCurrentzone){
-            cm.forEach(tempCurrentzone['items'], function(block){
-                if(x >= block['dimensions']['absoluteX1'] && x < block['dimensions']['absoluteX2'] && y >= block['dimensions']['absoluteY1'] && y <= block['dimensions']['absoluteY2']){
-                    tempCurrentAboveItem = block;
-                    // Check above block position
-                    if((y - tempCurrentAboveItem['dimensions']['absoluteY1']) < (tempCurrentAboveItem['dimensions']['absoluteHeight'] / 2)){
-                        tempCurrentPosition = 'top';
-                    }else{
-                        tempCurrentPosition = 'bottom';
-                    }
-                }
-            });
+        if(params['top'] + that.params['scrollStep'] > cm._pageSize['winHeight']){
+            moveScroll(1);
+        }else if(params['top'] - that.params['scrollStep'] < 0){
+            moveScroll(-1);
         }else{
-            tempCurrentzone = currentZone;
+            moveScroll(0);
         }
-        // If current current block not above other block items
-        if(!tempCurrentAboveItem && tempCurrentzone['items'].length){
-            if(y < tempCurrentzone['dimensions']['innerY1']){
-                tempCurrentAboveItem = tempCurrentzone['items'][0];
-                tempCurrentPosition = 'top';
-            }else{
-                tempCurrentAboveItem = tempCurrentzone['items'][tempCurrentzone['items'].length - 1];
-                tempCurrentPosition = 'bottom';
-            }
-        }
-        // Animate previous placeholder and get current
-        if(currentPlaceholder){
-            cm.removeClass(currentPlaceholder['node'], 'is-active is-highlight');
-        }
-        if(currentAboveItem && tempCurrentAboveItem && currentAboveItem['placeholder'][currentPosition] != tempCurrentAboveItem['placeholder'][tempCurrentPosition]){
-            animatePlaceholder(currentAboveItem['placeholder'][currentPosition], 0, that.params['moveDuration']);
-            currentPlaceholder = tempCurrentAboveItem['placeholder'][tempCurrentPosition];
-        }else if(!currentAboveItem && tempCurrentAboveItem){
-            animatePlaceholder(currentZone['placeholder'][0], 0, that.params['moveDuration']);
-            currentPlaceholder = tempCurrentAboveItem['placeholder'][tempCurrentPosition];
-        }else if(currentAboveItem && !tempCurrentAboveItem){
-            animatePlaceholder(currentAboveItem['placeholder'][currentPosition], 0, that.params['moveDuration']);
-            currentPlaceholder = tempCurrentzone['placeholder'][0];
-        }else if(!currentAboveItem && !tempCurrentAboveItem && currentZone != tempCurrentzone){
-            animatePlaceholder(currentZone['placeholder'][0], 0, that.params['moveDuration']);
-            currentPlaceholder = tempCurrentzone['placeholder'][0];
-        }
-        // Animate current placeholder
-        if(currentPlaceholder){
-            cm.addClass(currentPlaceholder['node'], 'is-active');
-            if(that.params['highlightPlaceholders']){
-                cm.addClass(currentPlaceholder['node'], 'is-highlight');
-            }
-            animatePlaceholder(currentPlaceholder, current['dimensions']['absoluteHeight'], that.params['moveDuration']);
-        }
-        // Unset classname from previous active zone
-        if(currentZone && currentZone != tempCurrentzone){
-            cm.removeClass(currentZone['node'], 'is-active');
-            previousZone = currentZone;
-        }
-        // Set current to global
-        currentZone = tempCurrentzone;
-        currentAboveItem = tempCurrentAboveItem;
-        currentPosition = tempCurrentPosition;
-        // Set active zone class name
-        if(!(previousZone && previousZone['isTemporary'] && currentZone['isRemoveZone'])){
-            cm.addClass(currentZone['node'], 'is-active');
-        }
+        // Move block
+        moveBlock(that.currentBlock, params, true);
+        // Find zone, block and placeholder under current graggable block
+        setCurrentBelow(
+            getCurrentBelow(params)
+        );
     };
 
-    var stop = function(e){
-        var currentHeight;
-        // Remove check position event
-        //checkInt && clearInterval(checkInt);
-        // Remove move events attached on document
-        cm.removeClass(document.body, 'pt__dnd-body');
-        cm.removeEvent(window, 'mousemove', move);
-        cm.removeEvent(window, 'mouseup', stop);
-        // Calculate height of block block, like he already dropped in zone, to animate height of fake empty space
-        getPosition(current);
-        current['node'].style.width = [(currentZone['dimensions']['innerWidth'] - current['dimensions']['margin']['left'] - current['dimensions']['margin']['right']), 'px'].join('');
-        currentHeight = current['node'].offsetHeight + current['dimensions']['margin']['top'] + current['dimensions']['margin']['bottom'];
-        current['node'].style.width = [current['dimensions']['width'], 'px'].join('');
-        // If current block located above another block item, drops after/before it, or drops in zone
-        if(currentAboveItem){
-            // Animate placeholder blocks
-            if(currentHeight != currentAboveItem['placeholder'][currentPosition]['node'].offsetHeight){
-                animatePlaceholder(currentAboveItem['placeholder'][currentPosition], currentHeight, that.params['dropDuration']);
-            }
-            // Drop Item to zone
-            dropBlockToZone(current, currentZone, {
-                'target' : currentAboveItem['node'],
-                'append' : currentPosition == 'top' ? 'before' : 'after',
-                'index' : currentZone['items'].indexOf(currentAboveItem) + (currentPosition == 'top' ? 0 : 1),
-                'top' : [currentPosition == 'top'? currentAboveItem['dimensions']['absoluteY1'] : currentAboveItem['dimensions']['absoluteY2'], 'px'].join(''),
-                'onStop' : unsetCurrentBlock
-            });
-        }else if(currentZone['isRemoveZone'] || currentZone['isTemporary']){
-            removeBlock(current, {
-                'onStop' : unsetCurrentBlock
+    var stop = function(){
+        // Drop block
+        if(!that.currentBellow.zone || that.currentBellow.zone.params['type'] == 'remove'){
+            removeBlock(that.currentBlock, {
+                'onEnd' : reset
             });
         }else{
-            // Animate placeholder blocks
-            animatePlaceholder(currentZone['placeholder'][0], currentHeight, that.params['dropDuration']);
-            // Drop Item to zone
-            dropBlockToZone(current, currentZone, {
-                'onStop' : unsetCurrentBlock
+            dropBlock(that.currentBlock, {
+                'index' : that.currentBellow.placeholder.params['index'],
+                'zone' : that.currentBellow.zone,
+                'placeholder' : that.currentBellow.placeholder,
+                'onEnd' : reset
             });
         }
-        // Unset placeholder
-        if(currentPlaceholder){
-            cm.removeClass(currentPlaceholder['node'], 'is-active is-highlight');
-        }
-        // Unset active zone classname
-        if(currentZone){
-            cm.removeClass(currentZone['node'], 'is-active');
-        }
-        // Un Highlight zones
+        // Unhighlight zones
         if(that.params['highlightZones']){
-            toggleZonesHighlight();
+            unhighlightCurrentZones();
         }
-        // Show IFRAMES and EMBED tags
-        cm.showSpecialTags();
+        // Hide content blocker
+        that.components['overlays'].close();
+        cm.removeClass(document.body, 'app__dashboard__body');
+        // Remove events attached on document and template
+        cm.removeEvent(window, 'mousemove', move);
+        cm.removeEvent(window, 'mouseup', stop);
+        cm.removeEvent(window, 'scroll', scroll);
+    };
+
+    var scroll = function(e){
+        // Variables
+        var params = getPosition(e);
+        // Update positions of blocks and zones
+        updateCurrentDimensions();
+        // Find zone, block and placeholder under current graggable block
+        setCurrentBelow(
+            getCurrentBelow(params)
+        );
     };
 
     /* *** BLOCK *** */
 
-    var initBlock = function(node, zone, params){
-        // Config
-        var block = cm.merge({
-            'node' : node,
-            'styleObject' : cm.getStyleObject(node),
-            'type' : 'item',
-            'placeholder' : {
-                'top' : null,
-                'bottom' : null
-            },
-            'dimensions' : {
-                'offsetX' : 0,
-                'offsetY' : 0
-            }
-        }, params);
-        block['zone'] = zone;
-        block['anim'] = new cm.Animation(block['node']);
-        // Set block event on element
-        initBlockDrag(block);
-        // Return item to push in zone array
-        blockList.push(block);
-        return block;
+    var initBlock = function(item){
+        item.placeholders = {
+            'top' : null,
+            'bottom' : null
+        };
+        cm.forEach(item.getDragNodes(), function(node){
+            cm.addEvent(node, 'mousedown', function(e){
+                start(e, item);
+            });
+        });
+        resetBlock(item);
+        that.blocks.push(item);
     };
 
     var prepareBlock = function(block, params){
-        block.updateDimensions();
+        var dimensions = block.getDimensions();
         // Get offset using pointer position
-        that.offset['left'] = block.dimensions['outer']['left'] - params['left'];
-        that.offset['top'] = block.dimensions['outer']['top'] - params['top'];
+        that.currentBlockOffset['top'] = params['top'] - dimensions['outer']['top'];
+        that.currentBlockOffset['left'] = params['left'] - dimensions['outer']['left'];
         // Clone dummy block or unset area from block
         if(block.isDummy){
             that.currentBlock = block
@@ -373,29 +260,32 @@ function(params){
             that.currentBlock = block
                 .unsetZone();
         }
-        // Set widget start position
-        that.currentBlock['node'].style.top = 0;
-        that.currentBlock['node'].style.left = 0;
-        moveBlock(that.currentBlock, {
-            'left' : that.currentBlock.dimensions['outer']['left'],
-            'top' : that.currentBlock.dimensions['outer']['top'],
-            'width' : that.currentBlock.dimensions['offset']['width']
-        });
         // Insert widget to body
-        that.params['draggableContainer'].appendChild(that.currentBlock['node']);
+        cm.appendChild(that.currentBlock.node, that.params['draggableContainer']);
         // Set helper classes
-        cm.addClass(that.currentBlock['node'], 'app__dashboard__helper');
+        cm.addClass(that.currentBlock['node'], 'is-immediately');
+        cm.addClass(that.currentBlock['node'], 'is-dragging');
         cm.addClass(that.currentBlock['node'], 'is-active', true);
+        // Set widget start position
+        moveBlock(that.currentBlock, {
+            'top' : dimensions['outer']['top'],
+            'left' : dimensions['outer']['left'],
+            'width' : dimensions['offset']['width']
+        });
+        that.currentBlock.updateDimensions();
+        setTimeout(function(){
+            cm.removeClass(that.currentBlock['node'], 'is-immediately');
+        }, 5);
     };
 
     var moveBlock = function(block, params, offset){
         // Calculate
-        var left = params['left'],
-            top = params['top'],
+        var top = params['top'],
+            left = params['left'],
             node = params['node'] || block['node'];
         if(offset){
-            left += block.dimensions['offsetLeft'];
-            top += block.dimensions['offsetTop'];
+            top -= that.currentBlockOffset['top'];
+            left -= that.currentBlockOffset['left'];
         }
         if(typeof params['width'] != 'undefined'){
             node.style.width = [params['width'], 'px'].join('');
@@ -409,318 +299,518 @@ function(params){
         cm.setCSSTranslate(node, [left, 'px'].join(''), [top, 'px'].join(''));
     };
 
-
-    var cloneBlock = function(block){
-        var clonedNode = block['node'].cloneNode(true),
-            zone = zones[0],
-            clonedBlock = initBlock(clonedNode, zone, {});
-
-        clonedBlock['dimensions'] = cm.clone(block['dimensions']);
-        zone['items'].push(clonedBlock);
-        return clonedBlock;
-    };
-
-    var dropBlockToZone = function(block, zone, params){
+    var removeBlock = function(block, params){
+        var node;
+        that.isProccess = true;
+        // Merge params
         params = cm.merge({
-            'target' : zone['node'],
-            'append' : 'child',
-            'index' : 0,
-            'width' : [zone['dimensions']['innerWidth'], 'px'].join(''),
-            'top' : [zone['dimensions']['innerY1'] - block['dimensions']['margin']['top'], 'px'].join(''),
-            'left' : [zone['dimensions']['innerX1'] - block['dimensions']['margin']['left'], 'px'].join(''),
             'onStart' : function(){},
-            'onStop' : function(){}
+            'onEnd' : function(){},
+            'triggerEvent' : true
         }, params);
         // System onStart event
         params['onStart']();
-        // Animate block item, like it drops in zone
-        cm.addClass(block['node'], 'is-drop', true);
-        block['node'].style.width = params['width'];
-        cm.setCSSTranslate(block['node'], params['left'], params['top']);
-        // On Dnimate Stop
-        setTimeout(function(){
-            // Append element in new position
-            switch(params['append']){
-                case 'child' :
-                    cm.appendChild(block['node'], params['target']);
-                    break;
-                case 'before' :
-                    cm.insertBefore(block['node'], params['target']);
-                    break;
-                case 'after' :
-                    cm.insertAfter(block['node'], params['target']);
-                    break;
-                case 'first' :
-                    cm.insertFirst(block['node'], params['target']);
-                    break;
+        // Global event
+        if(params['triggerEvent']){
+            that.triggerEvent('onRemoveStart', block);
+        }
+        // Check if widget exists and placed in DOM
+        if(cm.hasParentNode(block.node)){
+            // Update block dimensions
+            block.updateDimensions();
+            // Init drop state
+            cm.addClass(block.node, 'is-dropping', true);
+            // Move widget
+            if(block === that.currentBlock){
+                node = block.node;
+                moveBlock(block, {
+                    'left' : -block.dimensions['outer']['width'],
+                    'top' : block.dimensions['outer']['top'],
+                    'opacity' : 0
+                });
+            }else{
+                node = cm.Node('div', {'class' : 'app__dashboard__helper'});
+                cm.insertAfter(node, block.node);
+                cm.appendChild(block.node, node);
+                cm.transition(node, {
+                    'properties' : {
+                        'height' : '0px',
+                        'opacity' : 0
+                    },
+                    'duration' : that.params['dropDuration']
+                });
             }
-            // Remove block helper classname
-            cm.removeClass(block['node'], 'pt__dnd-helper is-drop is-active', true);
-            // Reset styles
-            block['node'].style.left = 'auto';
-            block['node'].style.top = 'auto';
-            block['node'].style.width = 'auto';
-            cm.setCSSTranslate(current['node'], 'auto', 'auto');
-            // Set index of block item in new zone
-            zone['items'].splice(params['index'], 0, block);
-            // API onDrop Event
-            that.triggerEvent('onDrop', {
-                'item' : block,
-                'node' : block['node'],
-                'to' : zone,
-                'from' : block['zone'],
-                'index' : params['index']
-            });
-            // Set block new zone
-            block['zone'] = zone;
-            // System onStop event
-            params['onStop']();
+        }else{
+            node = block.node;
+        }
+        // After animation event
+        setTimeout(function(){
+            // Remove temporary node
+            cm.remove(node);
+            // Remove block
+            block.unsetZone()
+                 .remove();
+            if(params['triggerEvent']){
+                that.triggerEvent('onRemove', block);
+                that.triggerEvent('onRemoveEnd', block);
+            }
+            that.isProccess = false;
+            // System onEnd event
+            params['onEnd']();
         }, that.params['dropDuration']);
     };
 
-    var removeBlock = function(block, params){
-        var style, anim, node;
-        // Remove handler
-        var handler = function(){
-            if(that.params['removeNode']){
-                cm.remove(node);
-            }
-            // Remove from block list
-            blockList = blockList.filter(function(item){
-                return item != block;
-            });
-            unsetBlockFromZone(block);
-            // API onRemove Event
-            if(!params['noEvent']){
-                that.triggerEvent('onRemove', {
-                    'item' : block,
-                    'node' : block['node'],
-                    'from' : block['zone']
-                });
-            }
-            // System onStop event
-            params['onStop']();
-        };
-        // Config
+    var dropBlock = function(block, params){
+        var width, height;
+        // Merge params
         params = cm.merge({
-            'isCurrent' : block === current,
-            'isInDOM' : cm.inDOM(block['node']),
+            'index' : 0,
+            'zone' : null,
+            'placeholder' : null,
             'onStart' : function(){},
-            'onStop' : function(){}
+            'onEnd' : function(){}
         }, params);
         // System onStart event
         params['onStart']();
-        // If block not in DOM, we don't need to wrap and animate it
-        if(params['isInDOM'] && that.params['animateRemove']){
-            // If block is current - just animate pull out left, else - wrap to removable node
-            if(params['isCurrent']){
-                node = block['node'];
-                anim = block['anim'];
-                style = {
-                    'left' : [-(block['dimensions']['absoluteWidth'] + 50), 'px'].join(''),
-                    'opacity' : 0
-                }
-            }else{
-                node = cm.wrap(cm.Node('div', {'class' : 'pt__dnd-removable'}), block['node']);
-                anim = new cm.Animation(node);
-                style = {
-                    'height' : '0px',
-                    'opacity' : 0
-                }
-            }
-            // Animate block, like it disappear
-            anim.go({
-                'duration' : that.params['dropDuration'],
-                'anim' : 'smooth',
-                'style' : style,
-                'onStop' : handler
-            });
-        }else{
-            node = block['node'];
-            handler();
+        // Get dimensions
+        params.zone.getDimensions();
+        // Init drop state
+        if(block.isDummy){
+            block.showSpinner();
         }
+        // Get block height
+        width = params.zone.dimensions['inner']['width'] - block.dimensions['margin']['left'] - block.dimensions['margin']['right'];
+        block.node.style.width = [width, 'px'].join('');
+        height = block.node.offsetHeight + block.dimensions['margin']['top'] + block.dimensions['margin']['bottom'];
+        block.node.style.width = [block.dimensions['offset']['width'], 'px'].join('');
+        // Move block
+        cm.addClass(block.node, 'is-dropping', true);
+        if(params.placeholder){
+            params.placeholder.getDimensions();
+            moveBlock(block, {
+                'left' : params.placeholder.dimensions['outer']['left'] - block.dimensions['margin']['left'],
+                'top' : params.placeholder.dimensions['outer']['top'] - block.dimensions['margin']['top'],
+                'width' : width
+            });
+            // Animate placeholder
+            params.placeholder.show(height, that.params['dropDuration'], true);
+        }else{
+            moveBlock(block, {
+                'left' : params.zone.dimensions['inner']['left'] - block.dimensions['margin']['left'],
+                'top' : params.zone.dimensions['inner']['top'] - block.dimensions['margin']['top'],
+                'width' : width
+            });
+        }
+        // Animation end event
+        setTimeout(function(){
+            // Reset styles
+            resetBlock(block);
+            // Append
+            if(params.placeholder){
+                cm.insertAfter(block.node, params.placeholder.node);
+            }else{
+                cm.appendChild(block.node, params.zone.node);
+            }
+            block.setZone(params.zone, params['index']);
+            that.triggerEvent('onDrop', block);
+            // System onEnd event
+            params['onEnd']();
+        }, that.params['dropDuration']);
     };
 
-    var unsetBlockFromZone = function(block){
-        block['zone']['items'] = block['zone']['items'].filter(function(item){
-            return item != block;
+    var appendBlock = function(node, params){
+        var dimensions, temporaryNode;
+        that.isProccess = true;
+        // Merge params
+        params = cm.merge({
+            'block' : null,
+            'zone' : null,
+            'triggerEvent' : true,
+            'onStart' : function(){},
+            'onEnd' : function(){}
+        }, params);
+        // System onStart event
+        params['onStart']();
+        // Global event
+        if(params['triggerEvent']){
+            that.triggerEvent('onAppendStart', {
+                'node' : node
+            });
+        }
+        // Render temporary node
+        temporaryNode = cm.node('div');
+        temporaryNode.style.height = 0;
+        if(params.block){
+            cm.insertAfter(temporaryNode, params.block.node);
+        }else{
+            cm.appendChild(temporaryNode, params.zone.node);
+        }
+        cm.appendChild(node, temporaryNode);
+        cm.addClass(node, 'is-replacing', true);
+        cm.addClass(temporaryNode, 'app__dashboard__helper', true);
+        // Get new block dimensions
+        dimensions = cm.getNodeOffset(node);
+        // Animate
+        cm.transition(temporaryNode, {
+            'properties' : {
+                'height' : [dimensions['outer']['height'], 'px'].join('')
+            },
+            'duration' : that.params['dropDuration']
         });
+        cm.transition(node, {'properties' : {'opacity' : 1}, 'duration' : that.params['dropDuration']});
+        // After animation event
+        setTimeout(function(){
+            cm.removeClass(node, 'is-replacing');
+            cm.insertAfter(node, temporaryNode);
+            cm.remove(temporaryNode);
+            // Global event
+            if(params['triggerEvent']){
+                that.triggerEvent('onAppend', {
+                    'node' : node
+                });
+                that.triggerEvent('onAppendEnd', {
+                    'node' : node
+                });
+            }
+            that.isProccess = false;
+            // System onEnd event
+            params['onEnd']();
+        }, that.params['dropDuration']);
     };
 
-    var unsetCurrentBlock = function(){
-        // Remove placeholder blocks
-        removePlaceholderBlocks();
-        // Reset other
-        current = false;
-        currentAboveItem = false;
-        currentZone = false;
-        previousZone = false;
+    var replaceBlock = function(node, params){
+        var halfTime = that.params['dropDuration'] / 2,
+            dimensions,
+            temporaryNode;
+        that.isProccess = true;
+        // Merge params
+        params = cm.merge({
+            'block' : null,
+            'zone' : null,
+            'triggerEvent' : true,
+            'onStart' : function(){},
+            'onEnd' : function(){}
+        }, params);
+        // System onStart event
+        params['onStart']();
+        // Global event
+        if(params['triggerEvent']){
+            that.triggerEvent('onReplaceStart', {
+                'node' : node
+            });
+        }
+        temporaryNode = cm.node('div');
+        if(params.block){
+            cm.insertAfter(temporaryNode, params.block.node);
+            cm.appendChild(params.block.node, temporaryNode);
+            cm.appendChild(node, temporaryNode);
+            // Animate fade previous block
+            cm.transition(params.block.node, {'properties' : {'opacity' : 0}, 'duration' : halfTime});
+        }else{
+            cm.appendChild(temporaryNode, params.zone.node);
+            cm.appendChild(node, temporaryNode);
+            // Set initial styles
+            temporaryNode.style.height = 0;
+        }
+        cm.addClass(node, 'is-replacing', true);
+        cm.addClass(temporaryNode, 'app__dashboard__helper', true);
+        // Get new block dimensions
+        dimensions = cm.getNodeOffset(node);
+        // Animate
+        cm.transition(temporaryNode, {
+            'properties' : {
+                'height' : [dimensions['outer']['height'], 'px'].join('')
+            },
+            'duration' : that.params['dropDuration']
+        });
+        cm.transition(node, {'properties' : {'opacity' : 1}, 'duration' : halfTime, 'delayIn' : halfTime});
+        // After animation event
+        setTimeout(function(){
+            if(params.block){
+                params.block
+                    .unsetZone()
+                    .remove();
+            }
+            cm.removeClass(node, 'is-replacing');
+            cm.insertAfter(node, temporaryNode);
+            cm.remove(temporaryNode);
+            // Global event
+            if(params['triggerEvent']){
+                that.triggerEvent('onReplace', {
+                    'node' : node
+                });
+                that.triggerEvent('onReplaceEnd', {
+                    'node' : node
+                });
+            }
+            that.isProccess = false;
+            // System onEnd event
+            params['onEnd']();
+        }, that.params['dropDuration']);
+    };
+
+    var resetBlock = function(block){
+        // Remove helper classes
+        cm.removeClass(block.node, 'is-immediately is-dragging is-dropping is-active', true);
+        // Reset styles
+        block.node.style.left = '';
+        block.node.style.top = '';
+        block.node.style.width = '';
+        block.node.style.opacity = '';
+        cm.setCSSTranslate(block.node, 'auto', 'auto');
     };
 
     /* *** PLACEHOLDER *** */
 
-    var renderPlaceholderBlocks = function(){
+    var renderPlaceholders = function(){
         var placeholder;
-        cm.forEach(zones, function(zone){
-            if(zone['isLocked']){
-                return;
+        cm.forEach(that.currentZones, function(zone){
+            zone.placeholders = [];
+            if(!zone['blocks'].length){
+                placeholder = new App.DashboardPlaceholder({
+                    'highlight' : that.params['highlightPlaceholders'],
+                    'animate' : !that.isGracefulDegradation,
+                    'index' : 0,
+                    'container' : zone.node,
+                    'insert' : 'appendChild'
+                });
+                zone.placeholders.push(placeholder);
+            }else{
+                cm.forEach(zone['blocks'], function(block, i){
+                    block.placeholders = {};
+                    if(!i){
+                        placeholder = new App.DashboardPlaceholder({
+                            'highlight' : that.params['highlightPlaceholders'],
+                            'animate' : !that.isGracefulDegradation,
+                            'index' : i,
+                            'container' : block.node,
+                            'insert' : 'insertBefore'
+                        });
+                        zone.placeholders.push(placeholder);
+                    }
+                    placeholder = new App.DashboardPlaceholder({
+                        'highlight' : that.params['highlightPlaceholders'],
+                        'animate' : !that.isGracefulDegradation,
+                        'index' : i + 1,
+                        'container' : block.node,
+                        'insert' : 'insertAfter'
+                    });
+                    zone.placeholders.push(placeholder);
+                    // Associate with block
+                    block.placeholders['top'] = zone.placeholders[i];
+                    block.placeholders['bottom'] = zone.placeholders[i + 1];
+                });
             }
-
-            if(!zone['items'].length){
-                placeholder = renderPlaceholder();
-                cm.appendChild(placeholder['node'], zone['node']);
-                zone['placeholder'].push(placeholder);
-            }
-            cm.forEach(zone['items'], function(block, i){
-                if(i === 0){
-                    placeholder = renderPlaceholder();
-                    cm.insertBefore(placeholder['node'], block['node']);
-                    zone['placeholder'].push(placeholder);
-                }
-                placeholder = renderPlaceholder();
-                cm.insertAfter(placeholder['node'], block['node']);
-                zone['placeholder'].push(placeholder);
-                // Associate with block
-                block['placeholder']['top'] = zone['placeholder'][i];
-                block['placeholder']['bottom'] = zone['placeholder'][i + 1];
-            });
         });
     };
 
-    var renderPlaceholder = function(){
-        var node = cm.Node('div', {'class' : 'pt__dnd-placeholder'});
-        return {
-            'node' : node,
-            'anim' : new cm.Animation(node),
-            'isShow' : false
+    var removePlaceholders = function(){
+        cm.forEach(that.currentZones, function(zone){
+            cm.forEach(zone.placeholders, function(placeholder){
+                placeholder.remove();
+            });
+            zone.placeholders = [];
+        });
+    };
+
+    /* *** CURRENT *** */
+
+    var getCurrentDimensions = function(){
+        var isPlaceholderShow;
+        if(that.currentBellow.placeholder && (isPlaceholderShow = that.currentBellow.placeholder.isShow)){
+            that.currentBellow.placeholder.hide(0);
+        }
+        cm.forEach(that.currentZones, function(item){
+            item.getDimensions();
+        });
+        cm.forEach(that.currentBlocks, function(item){
+            item.getDimensions();
+        });
+        if(that.currentBellow.placeholder && isPlaceholderShow){
+           that.currentBellow.placeholder.restore(0);
+        }
+    };
+
+    var updateCurrentDimensions = function(){
+        var isPlaceholderShow;
+        if(that.currentBellow.placeholder && (isPlaceholderShow = that.currentBellow.placeholder.isShow)){
+            that.currentBellow.placeholder.hide(0);
+        }
+        cm.forEach(that.currentZones, function(item){
+            item.updateDimensions();
+        });
+        cm.forEach(that.currentBlocks, function(item){
+            item.updateDimensions();
+        });
+        if(that.currentBellow.placeholder && isPlaceholderShow){
+            that.currentBellow.placeholder.restore(0);
+        }
+    };
+
+    var getCurrentZones = function(block){
+        return that.zones.filter(function(zone){
+            if(
+                cm.isParent(block.params['node'], zone.params['node'])
+                || zone.params['locked']
+                || zone.params['type'] != 'remove' && block.params['type'] != zone.params['type']
+            ){
+                return false;
+            }
+            return true;
+        });
+    };
+
+    var getCurrentBlocks = function(block){
+        return that.blocks.filter(function(item){
+            if(
+                cm.isParent(block.params['node'], item.params['node'])
+                || block.params['type'] != item.params['type']
+            ){
+                return false;
+            }
+            return true;
+        });
+    };
+
+    var getCurrentBelow = function(params){
+        var temp = {
+            'zone' : null,
+            'block' : null,
+            'position' : null,
+            'placeholder' : null
         };
-    };
-
-    var removePlaceholderBlocks = function(){
-        cm.forEach(zones, function(zone){
-            cm.forEach(zone['placeholder'], function(placeholder){
-                cm.remove(placeholder['node']);
+        // Find zone below current graggable block
+        cm.forEach(that.currentZones, function(zone){
+            if(
+                params['left'] >= zone.dimensions['offset']['left']
+                && params['left'] < zone.dimensions['offset']['right']
+                && params['top'] >= zone.dimensions['offset']['top']
+                && params['top'] <= zone.dimensions['offset']['bottom']
+            ){
+                if(!temp.zone){
+                    temp.zone = zone;
+                }else if(
+                    zone.dimensions['offset']['width'] < temp.zone.dimensions['offset']['width']
+                    || zone.dimensions['offset']['height'] < temp.zone.dimensions['offset']['height']
+                ){
+                    temp.zone = zone;
+                }
+            }
+        });
+        if(!temp.zone){
+            temp.zone = that.currentBellow.zone;
+        }
+        // Find block below current graggable block
+        if(temp.zone){
+            cm.forEach(temp.zone['blocks'], function(block){
+                if(
+                    params['left'] >= block.dimensions['outer']['left']
+                    && params['left'] < block.dimensions['outer']['right']
+                    && params['top'] >= block.dimensions['outer']['top']
+                    && params['top'] <= block.dimensions['outer']['bottom']
+                ){
+                    temp.block = block;
+                    // Find position
+                    if((params['top'] - block.dimensions['outer']['top']) < (block.dimensions['outer']['height'] / 2)){
+                        temp.position = 'top';
+                    }else{
+                        temp.position = 'bottom';
+                    }
+                }
             });
-            zone['placeholder'] = [];
-        });
-    };
-
-    var animatePlaceholder = function(placeholder, height, duration) {
-        var style;
-        height = [height, 'px'].join('');
-        if(!that.isGracefulDegradation && (style = cm.getSupportedStyle('transition-duration'))){
-            placeholder['node'].style[style] = [duration, 'ms'].join('');
+            if(!temp.block && temp.zone['blocks'].length){
+                if(params['top'] < temp.zone.dimensions['inner']['top']){
+                    temp.block = temp.zone['blocks'][0];
+                    temp.position = 'top';
+                }else{
+                    temp.block = temp.zone['blocks'][temp.zone['blocks'].length - 1];
+                    temp.position = 'bottom';
+                }
+            }
         }
-        placeholder['node'].style.height = height;
-    };
-
-    /* *** POSITION CALCULATION FUNCTIONS *** */
-
-    var getPosition = function(item){
-        item['dimensions'] = cm.extend(item['dimensions'], cm.getFullRect(item['node'], item['styleObject']));
-    };
-
-    var getPositions = function(arr){
-        cm.forEach(arr, getPosition);
-    };
-
-    var getPositionsAll = function(){
-        getPositions(zones);
-        cm.forEach(zones, function(zone){
-            getPositions(zone['items']);
-        });
-    };
-
-    var recalculatePosition = function(item){
-        //item['dimensions']['x1'] = cm.getRealX(item['node']);
-        item['dimensions']['y1'] = cm.getRealY(item['node']);
-        //item['dimensions']['x2'] = item['dimensions']['x1'] + item['dimensions']['width'];
-        item['dimensions']['y2'] = item['dimensions']['y1'] + item['dimensions']['height'];
-
-        //item['dimensions']['innerX1'] = item['dimensions']['x1'] + item['dimensions']['padding']['left'];
-        item['dimensions']['innerY1'] = item['dimensions']['y1'] + item['dimensions']['padding']['top'];
-        //item['dimensions']['innerX2'] = item['dimensions']['innerX1'] + item['dimensions']['innerWidth'];
-        item['dimensions']['innerY2'] = item['dimensions']['innerY1'] + item['dimensions']['innerHeight'];
-
-        //item['dimensions']['absoluteX1'] = item['dimensions']['x1'] - item['dimensions']['margin']['left'];
-        item['dimensions']['absoluteY1'] = item['dimensions']['y1'] - item['dimensions']['margin']['top'];
-        //item['dimensions']['absoluteX2'] = item['dimensions']['x2'] + item['dimensions']['margin']['right'];
-        item['dimensions']['absoluteY2'] = item['dimensions']['y2'] + item['dimensions']['margin']['bottom'];
-    };
-
-    var recalculatePositions = function(arr){
-        cm.forEach(arr, recalculatePosition);
-    };
-
-    var recalculatePositionsAll = function(){
-        var placeholderHeight = 0;
-        // Reset current active placeholder height, cause we need to calculate clear positions
-        if(currentPlaceholder){
-            cm.addClass(currentPlaceholder['node'], 'is-immediately');
-            placeholderHeight = currentPlaceholder['node'].offsetHeight;
-            currentPlaceholder['node'].style.height = 0;
+        // Find placeholder
+        if(temp.block){
+            temp.placeholder = temp.block.placeholders[temp.position];
+        }else if(temp.zone){
+            temp.placeholder = temp.zone.placeholders[0];
         }
-        recalculatePositions(zones);
-        cm.forEach(zones, function(zone){
-            recalculatePositions(zone['items']);
-        });
-        // Restoring placeholder height after calculation
-        if(currentPlaceholder && placeholderHeight){
-            currentPlaceholder['node'].style.height = [placeholderHeight, 'px'].join('');
-            (function(currentPlaceholder){
-                setTimeout(function(){
-                    cm.removeClass(currentPlaceholder['node'], 'is-immediately');
-                }, 5);
-            })(currentPlaceholder);
-        }
+        return temp;
     };
 
-    var checkPosition = function(){
-        var filteredZones = getFilteredZones();
-        if(filteredZones[0]['dimensions']['y1'] != cm.getRealY(filteredZones[0]['node'])){
-            recalculatePositionsAll();
+    var setCurrentBelow = function(temp){
+        // Unset old zone and set new one
+        if(
+            that.currentBellow.zone
+            && that.currentBellow.zone.isActive
+            && that.currentBellow.zone != temp.zone
+        ){
+            that.currentBellow.zone.unactive();
+        }
+        if(
+            temp.zone
+            && !temp.zone.isActive
+            && temp.zone != that.currentBellow.placeholder
+        ){
+            temp.zone.active();
+        }
+        // Unset old placeholder and new new one
+        if(
+            that.currentBellow.placeholder
+            && that.currentBellow.placeholder.isActive
+            && that.currentBellow.placeholder != temp.placeholder
+        ){
+            that.currentBellow.placeholder.unactive();
+            that.currentBellow.placeholder.hide(that.params['moveDuration']);
+        }
+        if(
+            temp.placeholder
+            && !temp.placeholder.isActive
+            && temp.placeholder != that.currentBellow.placeholder
+        ){
+            temp.placeholder.active();
+            //temp.placeholder.show(that.currentBlock.dimensions['outer']['height'], that.params['moveDuration']);
+            temp.placeholder.show(that.params['placeholderHeight'], that.params['moveDuration']);
+        }
+        // Update positions of blocks and zones
+        if(
+            that.currentBellow.zone != temp.zone
+            || that.currentBellow.placeholder != temp.placeholder
+        ){
+            //updateCurrentDimensions();
+        }
+        // Set global variables
+        that.currentBellow = temp;
+    };
+
+    var unsetCurrentBelow = function(){
+        if(that.currentBellow.zone){
+            that.currentBellow.zone
+                .unactive();
+        }
+        if(that.currentBellow.placeholder){
+            that.currentBellow.placeholder
+                .unactive()
+                .hide()
+                .remove();
         }
     };
 
     /* *** ZONE *** */
 
     var initZone = function(item){
+        item.placeholders = [];
         that.zones.push(item);
     };
 
-    var getFilteredZones = function(){
-        return zones.filter(function(zone){
-            // Filter out locked zones and inner zones
-            if(zone['isTemporary'] || zone['isSystem']){
-                return false;
-            }
-            // True - pass zone
-            return true;
+    var highlightCurrentZones = function(){
+        cm.forEach(that.currentZones, function(zone){
+            zone.highlight();
         });
     };
 
-    var toggleZonesHighlight = function(){
-        if(that.currentZones){
-            if(that.isZonesHighlight){
-                that.isZonesHighlight = false;
-                cm.forEach(that.currentZones, function(zone){
-                    zone.unhighlight();
-                });
-            }else{
-                that.isZonesHighlight = true;
-                cm.forEach(that.currentZones, function(zone){
-                    zone.highlight();
-                });
-            }
-        }
-    };
-
-    var getDroppableZones = function(block){
-        return that.zones.filter(function(zone){
-            if(cm.isParent(block.params['node'], zone.params['node']) || zone.params['locked'] || block.params['type'] != zone.params['type']){
-                return false;
-            }
-            return true;
+    var unhighlightCurrentZones = function(){
+        cm.forEach(that.currentZones, function(zone){
+            zone.unhighlight();
         });
     };
 
@@ -737,222 +827,64 @@ function(params){
 
     /* *** HELPERS *** */
 
-    var toggleScroll = function(speed){
-        var scrollRemaining,
-            duration,
-            styles = {};
-
-        if(speed == 0){
-            isScrollProccess = false;
-            anims['scroll'].stop();
-        }else if(speed < 0 && !isScrollProccess){
-            isScrollProccess = true;
-            duration = cm.getScrollTop(that.params['scrollNode']) * that.params['scrollSpeed'];
-            if(cm.isWindow(that.params['scrollNode'])){
-                styles['docScrollTop'] = 0;
-            }else{
-                styles['scrollTop'] = 0;
-            }
-            anims['scroll'].go({'style' : styles, 'duration' : duration, 'onStop' : function(){
-                isScrollProccess = false;
-                //getPositionsAll();
-                //recalculatePositionsAll();
-            }});
-        }else if(speed > 0 && !isScrollProccess){
-            isScrollProccess = true;
-            scrollRemaining = cm.getScrollHeight(that.params['scrollNode']) - that.pageSize['winHeight'];
-            if(cm.isWindow(that.params['scrollNode'])){
-                styles['docScrollTop'] = scrollRemaining;
-            }else{
-                styles['scrollTop'] = scrollRemaining;
-            }
-            duration = scrollRemaining * that.params['scrollSpeed'];
-            anims['scroll'].go({'style' : styles, 'duration' : duration, 'onStop' : function(){
-                isScrollProccess = false;
-                //getPositionsAll();
-                //recalculatePositionsAll();
-            }});
+    var getPosition = function(e){
+        if(e.type == 'scroll'){
+            return cm._clientPosition;
         }
+        return cm.getEventClientPosition(e);
+    };
+
+    var moveScroll = function(speed){
+        var duration = 0,
+            move = 0;
+        if(speed == 0){
+            that.isScrollProccess = false;
+            that.anim['scroll'].stop();
+            return true;
+        }
+        if(that.isScrollProccess){
+           return true;
+        }
+        that.isScrollProccess = true;
+        if(speed < 0){
+            move = 0;
+            duration = cm.getBodyScrollTop() * that.params['scrollSpeed'];
+        }else{
+            move = Math.max(cm.getBodyScrollHeight() - cm._pageSize['winHeight'], 0);
+            duration = move * that.params['scrollSpeed'];
+        }
+        that.anim['scroll'].go({'style' : {'docScrollTop' : move}, 'duration' : duration, 'anim' : 'smooth'});
     };
 
     /* ******* MAIN ******* */
 
-    that.addBlock = function(item){
-        initBlock(item);
+    that.addBlock = function(block){
+        if(block.isDummy){
+            initDummyBlock(block);
+        }else{
+            initBlock(block);
+        }
         return that;
     };
 
-    that.addDummyBlock = function(item){
-        initDummyBlock(item);
+    that.removeBlock = function(block, params){
+        removeBlock(block, params);
+        return that;
+    };
+
+    that.replaceBlock = function(node, params){
+        replaceBlock(node, params);
+        return that;
+    };
+
+    that.appendBlock = function(node, params){
+        appendBlock(node, params);
         return that;
     };
 
     that.addZone = function(item){
         initZone(item);
         return that;
-    };
-
-
-
-    that.getZone = function(node){
-        var zone;
-        cm.forEach(zones, function(item){
-            if(item['node'] === node){
-                zone = item;
-            }
-        });
-        return zone;
-    };
-
-    that.registerZone = function(node, params){
-        if(cm.isNode(node) && node.tagName){
-            initZone(node, params || {});
-        }
-        return that;
-    };
-
-    that.removeZone = function(node, params){
-        if(cm.isNode(node) && cm.inArray(zonesList, node)){
-            zonesList = zonesList.filter(function(zone){
-                return zone != node;
-            });
-            zones = zones.filter(function(zone){
-                return zone['node'] != node;
-            });
-        }
-        return that;
-    };
-
-    that.getBlock = function(node){
-        var block;
-        cm.forEach(blockList, function(item){
-            if(item['node'] === node){
-                block = item;
-            }
-        });
-        return block;
-    };
-
-    that.getBlockList = function(){
-        return blockList;
-    };
-
-    that.registerBlock = function(node, zoneNode, params){
-        var block, zone, newBlock, index, childNodes, blockNodes = [];
-        // Find block item by node
-        block = that.getBlock(node);
-        // If block already exists - reinit it, else - init like new block item
-        if(block){
-            initBlockDrag(block);
-        }else if(cm.inArray(zonesList, zoneNode)){
-            node.setAttribute('data-com-draganddrop', 'block');
-            // Fins zone item by node
-            zone = that.getzone(zoneNode);
-            // Find block index
-            if(zone['blockInChildNodes']){
-                childNodes = zone['node'].childNodes;
-                cm.forEach(childNodes, function(node){
-                    if(node.tagName && node.getAttribute('data-com-draganddrop') == 'block'){
-                        blockNodes.push(node);
-                    }
-                });
-            }else{
-                blockNodes = cm.getByAttr('data-com-draganddrop', 'block', zone['node']);
-            }
-            index = blockNodes.indexOf(node);
-            // Register block
-            newBlock = initBlock(node, zone, params || {});
-            zone['items'].splice(index, 0, newBlock);
-        }
-        return that;
-    };
-
-    that.replaceBlock = function(oldBlockNode, newBlockNode, params){
-        var oldBlock,
-            newBlock;
-        // Find block item
-        cm.forEach(blockList, function(item){
-            if(item['node'] === oldBlockNode){
-                oldBlock = item;
-            }
-        });
-        if(oldBlock){
-            // Find old block zone and index in zone
-            var zone = oldBlock['zone'],
-                index = zone['items'].indexOf(oldBlock),
-                node = cm.wrap(cm.Node('div', {'class' : 'pt__dnd-removable', 'style' : 'height: 0px;'}), newBlockNode),
-                anim = new cm.Animation(node);
-            // Append new block into DOM
-            cm.insertAfter(node, oldBlockNode);
-            // Remove old block
-            removeBlock(oldBlock, params);
-            // Animate new block
-            anim.go({'style' : {'height' : [cm.getRealHeight(node, 'offset', 0), 'px'].join(''), 'opacity' : 1}, 'duration' : 300, 'anim' : 'simple', 'onStop' : function(){
-                cm.insertAfter(newBlockNode, node);
-                cm.remove(node);
-                // Register new block
-                newBlock = initBlock(newBlockNode, zone);
-                zone['items'].splice(index, 0, newBlock);
-                // API onEmbed event
-                that.triggerEvent('onReplace', {
-                    'item' : newBlock,
-                    'node' : newBlock['node'],
-                    'to' : newBlock['to']
-                });
-            }});
-        }
-        return that;
-    };
-
-    that.removeBlock = function(node, params){
-        var block;
-        // Find block item
-        cm.forEach(blockList, function(item){
-            if(item['node'] === node){
-                block = item;
-            }
-        });
-        if(block){
-            // Remove
-            removeBlock(block, params || {});
-        }
-        return that;
-    };
-
-    that.getOrderingNodes = function(){
-        var results = [],
-            arr,
-            filteredZones = getFilteredZones();
-        // Build array
-        cm.forEach(filteredZones, function(zone){
-            arr = {
-                'zone' : zone['node'],
-                'items' : []
-            };
-            cm.forEach(zone['items'], function(item){
-                arr['items'].push(item['node']);
-            });
-            results.push(arr);
-        });
-        return filteredZones.length == 1 ? arr['items'] : results;
-    };
-
-    that.getOrderingIDs = function(){
-        var results = {},
-            arr,
-            filteredZones = getFilteredZones();
-        // Build array
-        cm.forEach(filteredZones, function(zone){
-            arr = {};
-            cm.forEach(zone['items'], function(item, i){
-                if(!item['id']){
-                    throw new Error('Attribute "data-id" not specified on item node.');
-                }
-                arr[item['id']] = i;
-            });
-            results[zone['id']] = arr;
-        });
-        return filteredZones.length == 1 ? arr : results;
     };
     
     init();

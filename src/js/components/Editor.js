@@ -8,36 +8,54 @@ cm.define('App.Editor', {
         'Storage'
     ],
     'events' : [
+        'onRenderStart',
         'onRender',
         'onExpand',
         'onCollapse',
-        'onDrop',
-        'onAppend',
-        'onRemove',
-        'onEmbed',
-        'onReplace',
-        'onUpdate',
-        'onForceRender'
+
+        'create',
+        'replace',
+        'move',
+        'delete',
+        'update',
+        'duplicate',
+
+        'createRequest',
+        'replaceRequest',
+        'moveRequest',
+        'deleteRequest',
+        'updateRequest',
+        'duplicateRequest',
+
+        'onProcessEnd'
     ],
     'params' : {
         'node' : cm.Node('div'),
         'name' : 'app-editor',
+        'topMenuName' : 'app-topmenu',
         'sidebarName' : 'app-sidebar',
-        'App.Dashboard' : {}
+        'templateName' : 'app-template',
+        'App.Dashboard' : {},
+        'Com.Overlay' : {
+            'container' : 'document.body',
+            'autoOpen' : false,
+            'removeOnClose' : true,
+            'showSpinner' : true,
+            'showContent' : false,
+            'position' : 'fixed',
+            'theme' : 'light'
+        }
     }
 },
 function(params){
     var that = this;
-    
+
     that.components = {};
     that.nodes = {};
-    that.states = {
-        'sidebarExpanded' : false
-    };
 
-    that.zones = {};
-    that.blocks = {};
-    that.dummyBlocks = {};
+    that.zones = [];
+    that.blocks = [];
+    that.dummyBlocks = [];
     that.isProcessed = false;
     that.isExpanded = false;
 
@@ -48,117 +66,71 @@ function(params){
         that.convertEvents(that.params['events']);
         that.getDataNodes(that.params['node']);
         that.getDataConfig(that.params['node']);
+        that.triggerEvent('onRenderStart');
         render();
         that.addToStack(that.params['node']);
         that.triggerEvent('onRender');
     };
 
     var render = function(){
-        initSidebar();
-        initDashboard();
-        windowResize();
-        cm.addEvent(window, 'resize', windowResize);
-    };
-
-    var initSidebar = function(){
-        new cm.Finder('App.Sidebar', that.params['sidebarName'], null, function(classObject){
+        cm.getConstructor('App.Dashboard', function(classConstructor, className){
+            that.components['dashboard'] = new classConstructor(that.params[className])
+                .addEvent('onDrop', dropRequest)
+                .addEvent('onRemove', removeRequest);
+        });
+        cm.find('App.TopMenu', that.params['topMenuName'], null, function(classObject){
+            that.components['topmenu'] = classObject;
+        });
+        cm.find('App.Sidebar', that.params['sidebarName'], null, function(classObject){
             that.components['sidebar'] = classObject
-                .addEvent('onExpand', sidebarExpandAction)
-                .addEvent('onCollapse', sidebarCollapseAction);
-
-            if(that.components['sidebar'].isExpanded){
-                sidebarExpandAction();
-            }else{
-                sidebarCollapseAction();
-            }
+                .addEvent('onResize', sidebarResizeAction)
+                .addEvent('onExpandEnd', sidebarExpandAction)
+                .addEvent('onCollapseEnd', sidebarCollapseAction);
         });
+        cm.find('App.Template', that.params['templateName'], null, function(classObject){
+            that.components['template'] = classObject;
+        });
+        process();
     };
 
-    var initDashboard = function(){
-        cm.getConstructor('App.Dashboard', function(classConstructor){
-            that.components['dashboard'] = new classConstructor(that.params['App.Dashboard'])
-                .addEvent('onDrop', onDrop)
-                .addEvent('onReplace', onReplace)
-                .addEvent('onRemove', onRemove);
-            // Add Blocks
-            cm.forEach(that.dummyBlocks, function(item){
-                that.components['dashboard'].addDummyBlock(item);
-            });
-            cm.forEach(that.zones, function(item){
-                that.components['dashboard'].addZone(item);
-            });
-        });
+    var process = function(){
+        cm.addClass(cm.getDocumentHtml(), 'is-editor');
+        if(that.components['sidebar'] && that.components['sidebar'].isExpanded){
+            that.components['sidebar'].resize();
+            sidebarExpandAction();
+        }else{
+            sidebarCollapseAction();
+        }
+        if(!that.components['sidebar'] && that.components['topmenu']){
+            adminPageAction();
+        }
+    };
+
+    var sidebarResizeAction = function(sidebar, params){
+        var rule;
+        cm.addClass(cm.getDocumentHtml(), 'is-immediately');
+        if(rule = cm.getCSSRule('html.is-sidebar--expanded .tpl__container')[0]){
+            rule.style.marginLeft = [params['width'], 'px'].join('');
+        }
+        setTimeout(function(){
+            cm.removeClass(cm.getDocumentHtml(), 'is-immediately');
+        }, 5);
     };
 
     var sidebarExpandAction = function(){
         that.isExpanded = true;
+        cm.addClass(cm.getDocumentHtml(), 'is-editing');
         cm.forEach(that.zones, function(item){
             item.enableEditing();
         });
         cm.forEach(that.blocks, function(item){
             item.enableEditing();
         });
+        cm.forEach(that.dummyBlocks, function(item){
+            item.enableEditing();
+        });
+        that.components['template'].redraw();
         that.triggerEvent('onExpand');
-
-        return false;
-
-        var elements;
-        // Enable widgets editable
-        /*
-        elements = cm.getByClass('app__block');
-        cm.forEach(elements, function(widget){
-            if(!cm.isClass(widget, 'is-locked')){
-                cm.addClass(widget, 'is-editable');
-            }
-            if(cm.isClass(widget, 'is-hidden')){
-                cm.addClass(widget, 'is-visible');
-            }
-        });
-        */
-        // Enable columns editable
-        elements = cm.getByClass('app-mod__columns');
-        cm.forEach(elements, function(column){
-            if(!cm.isClass(column, 'is-locked')){
-                cm.addClass(column, 'is-editable');
-            }
-            if(cm.isClass(column, 'is-hidden')){
-                cm.addClass(column, 'is-visible');
-            }
-        });
-        // Enable spacers editable
-        elements = cm.getByClass('app-mod__spacer');
-        cm.forEach(elements, function(spacer){
-            if(!cm.isClass(spacer, 'is-locked')){
-                cm.addClass(spacer, 'is-editable');
-            }
-            if(cm.isClass(spacer, 'is-hidden')){
-                cm.addClass(spacer, 'is-visible');
-            }
-        });
-        // Enable slider editable
-        elements = cm.getByClass('app-mod__slider');
-        cm.forEach(elements, function(slider){
-            if(!cm.isClass(slider, 'is-locked')){
-                cm.addClass(slider, 'is-editable');
-            }
-            if(cm.isClass(slider, 'is-hidden')){
-                cm.addClass(slider, 'is-visible');
-            }
-        });
-        // Enable block editable
-        /*
-        cm.find('App.Block', null, that.nodes['AppTemplate']['container'], function(classObject){
-            classObject.enableEditMode();
-        });
-        */
-        // Enable gridlist editable
-        cm.find('Com.GridlistHelper', null, that.nodes['AppTemplate']['container'], function(classObject){
-            classObject.enableEditMode();
-        });
-        // Redraw template
-        cm.find('App.Template', null, that.nodes['AppTemplate']['container'], function(classObject){
-            classObject.redraw();
-        });
     };
 
     var sidebarCollapseAction = function(){
@@ -169,224 +141,192 @@ function(params){
         cm.forEach(that.blocks, function(item){
             item.disableEditing();
         });
+        cm.forEach(that.dummyBlocks, function(item){
+            item.disableEditing();
+        });
+        cm.removeClass(cm.getDocumentHtml(), 'is-editing');
+        that.components['template'].redraw();
         that.triggerEvent('onCollapse');
-
-        return false;
-
-        var elements;
-        // Disable widgets editable
-        /*
-        elements = cm.getByClass('app__block');
-        cm.forEach(elements, function(widget){
-            cm.removeClass(widget, 'is-editable is-visible');
-        });
-        */
-        // Disable columns editable
-        elements = cm.getByClass('app-mod__columns');
-        cm.forEach(elements, function(column){
-            cm.removeClass(column, 'is-editable is-visible');
-        });
-        // Disable spacers editable
-        elements = cm.getByClass('app-mod__spacer');
-        cm.forEach(elements, function(spacer){
-            cm.removeClass(spacer, 'is-editable is-visible');
-        });
-        // Disable slider editable
-        elements = cm.getByClass('app-mod__slider');
-        cm.forEach(elements, function(slider){
-            cm.removeClass(slider, 'is-editable is-visible');
-        });
-        // Disable block editable
-        /*
-        cm.find('App.Block', null, that.nodes['AppTemplate']['container'], function(classObject){
-            classObject.disableEditMode();
-        });
-        */
-        // Disable gridlist editable
-        cm.find('Com.GridlistHelper', null, that.nodes['AppTemplate']['container'], function(classObject){
-            classObject.disableEditMode();
-        });
-        // Redraw template
-        cm.find('App.Template', null, that.nodes['AppTemplate']['container'], function(classObject){
-            classObject.redraw();
-        });
     };
 
-    var onAdminPage = function(){
+    var adminPageAction = function(){
         // Enable gridlist editable
-        cm.find('Com.GridlistHelper', null, that.nodes['AppTemplate']['container'], function(classObject){
-            classObject.enableEditMode();
+        cm.find('Com.GridlistHelper', null, null, function(classObject){
+            classObject.enableEditing();
         });
     };
 
-    var windowResize = function(){
-        // This code must be placed in Sidebar component!!!
-        animFrame(function(){
-            var pageSize = cm.getPageSize();
+    /* *** DASHBOARD REQUEST EVENTS *** */
 
-            if(that.components['sidebar']){
-                if(pageSize['winWidth'] <= cm._config['adaptiveFrom']){
-                    if(that.components['sidebar'].isExpanded && that.isExpanded){
-                        that.states['sidebarExpanded'] = true;
-                        that.components['sidebar'].collapse(true);
-                    }
-                }else{
-                    if(that.states['sidebarExpanded'] && !that.isExpanded){
-                        that.states['sidebarExpanded'] = false;
-                        that.components['sidebar'].expand(true);
-                    }
-                }
-            }
-        });
-    };
-
-    /* *** DROP EVENTS *** */
-
-    var onDrop = function(dd, widget){
-        if(widget['from']['isTemporary']){
-            widget['dummy'] = widget['item']['drag'];
-            // Embed loader box
-            widget['loaderBox'] = renderLoaderBox();
-            widget['dummy'].appendChild(widget['loaderBox']);
-            cm.addClass(widget['loaderBox'], 'fadein', true);
-            // API onAppend event
-            that.triggerEvent('onAppend', {
-                'item' : widget,
-                'node' : widget['node'],
-                'to' : widget['to'],
-                'index' : widget['index']
-            });
+    var dropRequest = function(dashboard, block){
+        if(block.isDummy){
+            that.createRequest(block);
         }else{
-            // API onDrop event
-            that.triggerEvent('onDrop', widget);
+            that.moveRequest(block);
         }
     };
 
-    var onRemove = function(dd, widget){
-        // API onRemove event
-        that.triggerEvent('onRemove', widget);
-    };
-
-    var onReplace = function(dd, widget){
-        // API onRemove event
-        that.triggerEvent('onReplace', widget);
+    var removeRequest = function(dashboard, block){
+        if(!block.isDummy){
+            that.deleteRequest(block);
+        }
     };
 
     /* ******* MAIN ******* */
 
-    that.addZone = function(name, item){
-        that.zones[name] = item;
-        if(that.components['dashboard']){
-            that.components['dashboard'].addZone(item);
+    /* *** REQUESTS *** */
+
+    that.createRequest = function(block){
+        that.triggerEvent('createRequest', block);
+        return that;
+    };
+
+    that.deleteRequest = function(block){
+        that.triggerEvent('deleteRequest', block);
+        return that;
+    };
+
+    that.moveRequest = function(block){
+        that.triggerEvent('moveRequest', block);
+        return that;
+    };
+
+    that.replaceRequest = function(block){
+        that.triggerEvent('replaceRequest', block);
+        return that;
+    };
+
+    that.updateRequest = function(block){
+        that.triggerEvent('updateRequest', block);
+        return that;
+    };
+
+    that.duplicateRequest = function(block){
+        that.triggerEvent('duplicateRequest', block);
+        return that;
+    };
+
+    /* *** ACTIONS *** */
+
+    that.create = function(node, block){
+        if(node && block){
+            node = !cm.isNode(node) ? cm.strToHTML(node) : node;
+            that.components['dashboard'].replaceBlock(node, {
+                'block' : block,
+                'zone' : block.zone,
+                'onEnd' : function(){
+                    that.triggerEvent('create', node);
+                    that.triggerEvent('onProcessEnd', node);
+                }
+            });
         }
         return that;
     };
 
-    that.removeZone = function(name){
-        delete that.zones[name];
-        return that;
-    };
-
-    that.addBlock = function(name, item){
-        that.blocks[name] = item;
-        if(that.components['dashboard']){
-            that.components['dashboard'].addBlock(item);
+    that.replace = function(node, block){
+        if(node && block){
+            node = !cm.isNode(node) ? cm.strToHTML(node) : node;
+            that.components['dashboard'].replaceBlock(node, {
+                'block' : block,
+                'zone' : block.zone,
+                'onEnd' : function(){
+                    that.triggerEvent('replace', node);
+                    that.triggerEvent('onProcessEnd', node);
+                }
+            });
         }
         return that;
     };
 
-    that.removeBlock = function(name){
-        delete that.blocks[name];
-        return that;
-    };
-
-    that.addDummyBlock = function(name, item){
-        that.dummyBlocks[name] = item;
-        if(that.components['dashboard']){
-            that.components['dashboard'].addDummyBlock(item);
+    that.delete = function(block){
+        if(block){
+            that.components['dashboard'].removeBlock(block, {
+                'triggerEvent' : false,
+                'onEnd' : function(){
+                    that.triggerEvent('delete', block.node);
+                    that.triggerEvent('onProcessEnd', block.node);
+                }
+            });
         }
         return that;
     };
 
-
-
-
-
-    that.registerArea = function(area, params){
-        that.components['dd'].registerArea(area, params);
-        return that;
-    };
-
-    that.removeArea = function(area, params){
-        that.components['dd'].removeArea(area, params);
-        return that;
-    };
-
-    that.removeWidget = function(widget, params){
-        that.components['dd'].removeDraggable(widget, params);
-        return that;
-    };
-
-    that.replaceWidget = function(oldNode, newNode, params){
-        that.components['dd'].replaceDraggable(oldNode, newNode, params);
-        return that;
-    };
-
-    that.deleteAllTemporary = function() {
-        var dummy = cm.getByAttr('data-node', 'dummy', that.nodes['AppTemplate']['container']);
-        cm.forEach(dummy, function(node) {
-            that.removeWidget(node.parentNode);
-        });
-    };
-
-    that.updateTemporaryWidget = function(content) {
-        var dummy = cm.getByAttr('data-node', 'dummy', that.nodes['AppTemplate']['container']);
-        cm.forEach(dummy, function(node) {
-            var element = cm.strToHTML(content);
-            that.components['dd'].replaceDraggable(node.parentNode, element, {'noEvent': true, 'onStop': function() {
-                //register drop areas
-                var areas = cm.getByAttr('data-com-draganddrop', 'area', element);
-                cm.forEach(areas, function(area) {
-                    that.components['dd'].registerArea(area, {});
-                });
-                that.triggerEvent('onUpdate', {'node': element});
-            }});
-        });
-    };
-
-    that.getWidget = function(id) {
-        var draggableList = that.components['dd'].getDraggableList(),
-            widgets = [],
-            result = null;
-        cm.forEach(draggableList, function(item) {
-            widgets = cm.getByClass('app__block', item['node']);
-            if (widgets[0] && widgets[0].getAttribute('data-block-position-id') == id) {
-                result = item;
-            }
-        });
-        return result;
-    };
-
-    that.updateWidget = function(content, id) {
-        var item = that.getWidget(id);
-        if(item){
-            var element = cm.strToHTML(content);
-            that.components['dd'].replaceDraggable(item['node'], element, {'noEvent': true, 'onStop': function() {
-                //register drop areas
-                var areas = cm.getByAttr('data-com-draganddrop', 'area', element);
-                cm.forEach(areas, function(area) {
-                    that.components['dd'].registerArea(area, {});
-                });
-                that.triggerEvent('onUpdate', {'node': element});
-            }});
+    that.duplicate = function(node, block){
+        if(node && block){
+            node = !cm.isNode(node) ? cm.strToHTML(node) : node;
+            that.components['dashboard'].appendBlock(node, {
+                'block' : block,
+                'zone' : block.zone,
+                'onEnd' : function(){
+                    that.triggerEvent('duplicate', node);
+                    that.triggerEvent('onProcessEnd', node);
+                }
+            });
         }
+        return that;
     };
 
-    that.deleteWidget = function(id) {
-        var item = that.getWidget(id);
-        if(item){
-            that.components['dd'].removeDraggable(item['node'], {'noEvent': true});
+    that.update = function(node, block){
+        if(node && block){
+            node = !cm.isNode(node) ? cm.strToHTML(node) : node;
+            cm.remove(block.getInnerNode());
+            cm.appendChild(node, block.getInnerNode());
+            that.triggerEvent('update', node);
+            that.triggerEvent('onProcessEnd', node);
         }
+        return that;
+    };
+
+    /* *** SYSTEM *** */
+
+    that.addZone = function(zone){
+        that.zones.push(zone);
+        that.components['dashboard'].addZone(zone);
+        if(that.components['sidebar'] && that.components['sidebar'].isExpanded){
+            zone.enableEditing();
+        }else{
+            zone.disableEditing();
+        }
+        return that;
+    };
+
+    that.removeZone = function(zone){
+        cm.arrayRemove(that.zones, zone);
+        return that;
+    };
+
+    that.addBlock = function(block){
+        if(block.isDummy){
+            that.dummyBlocks.push(block);
+        }else{
+            var menu = block.getMenuNodes();
+            cm.addEvent(menu['edit'], 'click', function(){
+                that.replaceRequest(block);
+            });
+            cm.addEvent(menu['duplicate'], 'click', function(){
+                that.duplicateRequest(block);
+            });
+            cm.addEvent(menu['delete'], 'click', function(){
+                that.deleteRequest(block);
+            });
+            that.blocks.push(block);
+        }
+        that.components['dashboard'].addBlock(block);
+        if(that.components['sidebar'] && that.components['sidebar'].isExpanded){
+            block.enableEditing();
+        }else{
+            block.disableEditing();
+        }
+        return that;
+    };
+
+    that.removeBlock = function(block){
+        if(block.isDummy){
+            cm.arrayRemove(that.dummyBlocks, block);
+        }else{
+            cm.arrayRemove(that.blocks, block);
+        }
+        return that;
     };
 
     init();

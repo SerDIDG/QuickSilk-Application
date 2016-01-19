@@ -2,12 +2,9 @@
 
 .app__zone {
     .clearfix;
+    min-height: 0;
+    padding: 0;
     position: relative;
-
-    &.is-editing {
-        min-height: @AppZone-MinHeight;
-        padding: @AppZone-Padding;
-    }
 
     &.is-available {
         .mx__transition(background-color, @CmUI-Transition-Duration);
@@ -40,6 +37,38 @@
                     background-color: rgba(255,255,255,0.4);
                 }
             }
+        }
+    }
+
+    &.is-editable {
+        min-height: @AppZone-MinHeight;
+        padding: @AppZone-Padding;
+    }
+}
+
+/* *** PREDEFINE ZONES *** */
+
+.app__zone-main {
+    &.is-editable {
+        min-height: @AppUI-Zone-ContentHeight;
+    }
+}
+
+.app__zone-footer,
+.app__zone-header {
+    .clearfix;
+    z-index: 1;
+
+    &:hover {
+        z-index: 100 !important;
+    }
+
+    &.is-editable {
+        min-height: @AppUI-Zone-Height;
+
+        &:not(.main):not(.splash):not(.additional) {
+            min-width: @AppUI-Zone-Width;
+            padding: 0;
         }
     }
 }

@@ -8,15 +8,22 @@ cm.define('App.Sidebar', {
         'Stack'
     ],
     'events' : [
+        'onRenderStart',
         'onRender',
+        'onCollapseStart',
         'onCollapse',
+        'onCollapseEnd',
+        'onExpandStart',
         'onExpand',
+        'onExpandEnd',
         'onTabShow',
-        'onTabHide'
+        'onTabHide',
+        'onResize'
     ],
     'params' : {
         'node' : cm.Node('div'),
         'name' : 'app-sidebar',
+        'duration' : 300,
         'active' : 'modules',
         'target' : 'document.html',
         'remember' : true,
@@ -48,18 +55,25 @@ function(params){
     };
     that.components = {};
     that.isExpanded = false;
+    that.openInterval = null;
 
     /* *** CLASS FUNCTIONS *** */
 
     var init = function(){
+        getCSSHelpers();
         that.setParams(params);
         that.convertEvents(that.params['events']);
         that.getDataNodes(that.params['node']);
         that.getDataConfig(that.params['node']);
-        that.addToStack(that.params['node']);
         validateParams();
+        that.triggerEvent('onRenderStart');
         render();
+        that.addToStack(that.params['node']);
         that.triggerEvent('onRender');
+    };
+
+    var getCSSHelpers = function(){
+        that.params['duration'] = cm.getTransitionDurationFromRule('.app__sidebar__duration');
     };
 
     var validateParams = function(){
@@ -102,7 +116,8 @@ function(params){
         }else{
             that.collapse(true);
         }
-        cm.addEvent(window, 'resize', onResize);
+        cm.addEvent(window, 'resize', resizeAction);
+        cm.customEvent.add(that.nodes['container'], 'scrollSizeChange', resizeAction);
     };
 
     var processTabset = function(){
@@ -125,40 +140,56 @@ function(params){
     };
 
     var resize = function(){
-        var rule;
+        var rule,
+            params = {
+                'innerWidth' : contentWidth + scrollBarSize,
+                'width' : menuWidth + contentWidth + scrollBarSize,
+                'contentWidth' : contentWidth,
+                'menuWidth' : menuWidth,
+                'scrollBarSize' : scrollBarSize
+            };
         cm.addClass(that.nodes['container'], 'is-immediately');
         if(rule = cm.getCSSRule('.app__sidebar .sidebar__content')[0]){
-            rule.style.width = [contentWidth + scrollBarSize, 'px'].join('');
+            rule.style.width = [params['innerWidth'], 'px'].join('');
         }
         if(rule = cm.getCSSRule('.app__sidebar .sidebar__remove-zone')[0]){
-            rule.style.width = [contentWidth + scrollBarSize, 'px'].join('');
+            rule.style.width = [params['innerWidth'], 'px'].join('');
         }
         if((rule = cm.getCSSRule('.app__sidebar.is-expanded')[0]) || (rule = cm.getCSSRule('.is-expanded.app__sidebar')[0])){
-            rule.style.width = [menuWidth + contentWidth + scrollBarSize, 'px'].join('');
-        }
-        if(rule = cm.getCSSRule('html.is-sidebar--expanded .tpl__container')[0]){
-            rule.style.marginLeft = [menuWidth + contentWidth + scrollBarSize, 'px'].join('');
+            rule.style.width = [params['width'], 'px'].join('');
         }
         if(rule = cm.getCSSRule('.app__sidebar-helper__width-expanded')[0]){
-            rule.style.width = [menuWidth + contentWidth + scrollBarSize, 'px'].join('');
+            rule.style.width = [params['width'], 'px'].join('');
         }
+        that.triggerEvent('onResize', params);
         setTimeout(function(){
             cm.removeClass(that.nodes['container'], 'is-immediately');
         }, 5);
     };
 
-    var onResize = function(){
-        if(cm._scrollSize != scrollBarSize){
-            scrollBarSize = cm._scrollSize;
-            resize();
-        }
+    var resizeAction = function(){
+        animFrame(function(){
+            if(cm._scrollSize != scrollBarSize){
+                scrollBarSize = cm._scrollSize;
+                resize();
+            }
+            if(cm._pageSize['winWidth'] <= cm._config['adaptiveFrom']){
+                if(that.isExpanded){
+                    that.collapse(true);
+                }
+            }
+        });
     };
 
     /* ******* MAIN ******* */
 
     that.collapse = function(isImmediately){
-        var tab;
         that.isExpanded = false;
+        // Write storage
+        if(that.params['remember']){
+            that.storageWrite('isExpanded', false);
+        }
+        that.triggerEvent('onCollapseStart');
         // Set immediately animation hack
         if(isImmediately){
             cm.addClass(that.nodes['container'], 'is-immediately');
@@ -171,22 +202,30 @@ function(params){
             cm.removeClass(item['container'], 'active');
         });
         // Remove immediately animation hack
+        that.openInterval && clearTimeout(that.openInterval);
         if(isImmediately){
-            setTimeout(function(){
+            that.openInterval = setTimeout(function(){
                 cm.removeClass(that.nodes['container'], 'is-immediately');
                 cm.removeClass(that.params['target'], 'is-immediately');
+                that.triggerEvent('onCollapse');
+                that.triggerEvent('onCollapseEnd');
             }, 5);
+        }else{
+            that.openInterval = setTimeout(function(){
+                that.triggerEvent('onCollapse');
+                that.triggerEvent('onCollapseEnd');
+            }, that.params['duration'] + 5);
         }
-        // Write storage
-        if(that.params['remember']){
-            that.storageWrite('isExpanded', false);
-        }
-        that.triggerEvent('onCollapse');
         return that;
     };
 
     that.expand = function(isImmediately){
         that.isExpanded = true;
+        // Write storage
+        if(that.params['remember']){
+            that.storageWrite('isExpanded', true);
+        }
+        that.triggerEvent('onExpandStart');
         // Set immediately animation hack
         if(isImmediately){
             cm.addClass(that.nodes['container'], 'is-immediately');
@@ -199,17 +238,20 @@ function(params){
             cm.addClass(item['container'], 'active');
         });
         // Remove immediately animation hack
+        that.openInterval && clearTimeout(that.openInterval);
         if(isImmediately){
-            setTimeout(function(){
+            that.openInterval = setTimeout(function(){
                 cm.removeClass(that.nodes['container'], 'is-immediately');
                 cm.removeClass(that.params['target'], 'is-immediately');
+                that.triggerEvent('onExpand');
+                that.triggerEvent('onExpandEnd');
             }, 5);
+        }else{
+            that.openInterval = setTimeout(function(){
+                that.triggerEvent('onExpand');
+                that.triggerEvent('onExpandEnd');
+            }, that.params['duration'] + 5);
         }
-        // Write storage
-        if(that.params['remember']){
-            that.storageWrite('isExpanded', true);
-        }
-        that.triggerEvent('onExpand');
         return that;
     };
 
@@ -225,7 +267,6 @@ function(params){
     that.setTab = function(id){
         if(that.components['tabset']){
             that.components['tabset'].set(id);
-            that.expand();
         }
         return that;
     };
@@ -242,6 +283,11 @@ function(params){
             return that.components['tabset'].get();
         }
         return null;
+    };
+
+    that.resize = function(){
+        resize();
+        return that;
     };
 
     that.getNodes = function(key){

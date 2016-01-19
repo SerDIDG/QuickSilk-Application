@@ -12,95 +12,14 @@
         .pt__editable__bundle > .normal;
         margin: 0;
         .mx__transition(opacity, @CmUI-Transition-Duration);
-
-        &.is-hidden {
-            display: none;
-        }
-
-        &.is-visible {
-            display: block;
-        }
-
-        &.is-editable {
-            .pt__editable__bundle > .editable;
-        }
-
-        &.is-hide {
-            .cm__transition-none;
-            overflow: hidden;
-            opacity: 0;
-        }
-
-        &.is-locked {
-        }
-    }
-
-    // /* Dummy */
-
-    > .app__block-dummy {
-        position: relative;
-        border-radius: @AppBlock-Dummy-BorderRadius;
-        cursor: move;
-        .mx__user-select(none);
-        .mx__transition(background-color box-shadow, @CmUI-Transition-Duration);
-
-        > .inner {
-            padding: @AppBlock-Dummy-Padding;
-        }
-
-        .icon {
-            //width: @AppBlock-Dummy-IconSize;
-            height: @AppBlock-Dummy-IconSize;
-            margin: 0 auto;
-            border-radius: @AppBlock-Dummy-IconBorderRadius;
-            background-repeat: no-repeat;
-            .mx__transition(background-color, @CmUI-Transition-Duration);
-
-            img {
-                width: 100%;
-                height: 100%;
-                display: block;
-            }
-        }
-
-        .caption {
-            .cm__font--small;
-            padding: 4px 0;
-            overflow: hidden;
-            text-align: center;
-            line-height: 15px;
-            .mx__transition(color, @CmUI-Transition-Duration);
-        }
-
-        .pt__box-loader {
-            background: @AppBlock-Loader-Background;
-            border: @AppBlock-Loader-Border;
-            border-radius: @AppBlock-Loader-BorderRadius;
-            opacity: 0;
-            .mx__transition(opacity, @CmUI-Transition-Duration);
-
-            &.fadein {
-                opacity: 1;
-            }
-        }
-
-        &.is-hide {
-            overflow: hidden;
-        }
     }
 
     &:hover {
         z-index: 10;
         .mx__transition(z-index, @CmUI-Transition-DurationReverse);
 
-        > .app__block.is-editable {
-            .pt__editable__bundle > .hover;
-        }
-
         > .app__block-dummy {
-            .icon {
-                .mx__transition(background-color, @CmUI-Transition-DurationReverse);
-            }
+            &:extend(.app__block-dummy--hover all);
         }
     }
 
@@ -108,37 +27,161 @@
         z-index: 10;
         .mx__transition(z-index, @CmUI-Transition-DurationReverse);
 
-        > .app__block.is-editable {
-            .pt__editable__bundle > .hover;
-            .pt__editable__bundle > .active;
-            opacity: 0.7;
-            .mx__transition(opacity, @CmUI-Transition-DurationReverse);
+        > .app__block-dummy {
+            &:extend(.app__block-dummy--active all);
+        }
+    }
+
+    &:not(.is-editing):not(.is-replacing) {
+        &:last-child {
+            margin: 0;
+        }
+    }
+
+    &.is-editing {
+        margin: 0 0 @AppBlock-Indent;
+    }
+
+    &.is-editable {
+        > .app__block {
+            .pt__editable__bundle > .editable;
         }
 
-        > .app__block-dummy {
-            box-shadow: 0 1px 5px rgba(0,0,0,0.2);
-            .mx__transition(background-color box-shadow, @CmUI-Transition-DurationReverse);
+        &:hover {
+            > .app__block {
+                .pt__editable__bundle > .hover;
+            }
+        }
 
-            .icon {
-                .mx__transition(background-color, @CmUI-Transition-DurationReverse);
+        &.is-active {
+            > .app__block {
+                .pt__editable__bundle > .hover;
+                .pt__editable__bundle > .active;
+                opacity: 0.7;
+                .mx__transition(opacity, @CmUI-Transition-DurationReverse);
             }
         }
     }
 
-    &.pt__dnd-helper {
-        .pt__dnd-helper;
+    &.is-dragging {
+        position: fixed !important;
+        z-index: 9000 !important;
+        cursor: move !important;
+        .mx__position(0, auto, auto, 0);
+        .mx__user-select(none);
+
+        &.is-dropping {
+            .mx__transition(all, @AppDashboard-DropDuration);
+        }
     }
 
-    &.com__dashboard__helper {
-        .com__dashboard__helper;
+    &.is-replacing {
+        margin: 0 0 @AppBlock-Indent;
+        position: absolute !important;
+        z-index: 9000 !important;
+        opacity: 0;
+        .mx__position(0, 0, auto, 0);
     }
 
     &.is-hidden {
         display: none;
     }
 
-    &.is-hide {
+    &.is-visible {
+        display: block;
+    }
+
+    &.is-immediately {
+        > .app__block {
+            .pt__editable__bundle > .is-immediately;
+        }
+    }
+}
+
+/* *** SPINNER *** */
+
+.app__block-spinner {
+    position: absolute;
+    z-index: 10;
+    visibility: hidden;
+    opacity: 0;
+    background: @AppBlock-Loader-Background;
+    border: @AppBlock-Loader-Border;
+    border-radius: @AppBlock-Loader-BorderRadius;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15) inset;
+    .mx__position(0, 0, 0, 0);
+    .mx__transition(all, @CmUI-Transition-Duration);
+
+    &.is-visible {
+        visibility: visible;
+        opacity: 1;
+    }
+}
+
+/* *** DUMMY *** */
+
+.app__block-dummy {
+    position: relative;
+    border-radius: @AppBlock-Dummy-BorderRadius;
+    cursor: move;
+    .mx__user-select(none);
+    .mx__transition(background-color box-shadow, @CmUI-Transition-Duration);
+
+    > .inner {
+        padding: @AppBlock-Dummy-Padding;
+    }
+
+    .caption {
+        .cm__font--small;
+        padding: 4px 0;
         overflow: hidden;
+        text-align: center;
+        line-height: 15px;
+        .mx__transition(color, @CmUI-Transition-Duration);
+    }
+
+    .icon {
+        //width: @AppBlock-Dummy-IconSize;
+        height: @AppBlock-Dummy-IconSize;
+        margin: 0 auto;
+        border-radius: @AppBlock-Dummy-IconBorderRadius;
+        background-repeat: no-repeat;
+        .mx__transition(background-color, @CmUI-Transition-Duration);
+    }
+
+    .icon {
+        .for(@AppIcon-Block-Names); .-each(@name) {
+            &.module-@{name} {
+                @var: "AppIcon-Block-@{name}";
+                @rule: @@var;
+                background-position: 50% (-@rule * @AppIcon-Block-Size);
+            }
+        }
+    }
+
+    .icon {
+        .for(@AppIcon-Block-Element-Names); .-each(@name) {
+            &.module-element_@{name} {
+                @var: "AppIcon-Block-Element-@{name}";
+                @rule: @@var;
+                background-position: 50% (-@rule * @AppIcon-Block-Size);
+            }
+        }
+    }
+}
+
+.app__block-dummy--hover {
+    .icon {
+        .mx__transition(background-color, @CmUI-Transition-DurationReverse);
+    }
+}
+
+.app__block-dummy--active {
+    box-shadow: 0 1px 5px rgba(0,0,0,0.2);
+    .mx__transition(background-color box-shadow, @CmUI-Transition-DurationReverse);
+
+    .icon {
+        .mx__transition(background-color, @CmUI-Transition-DurationReverse);
     }
 }
 
@@ -152,6 +195,7 @@
     }
 
     > dd {
+        width: @AppBlock-Dummy-Width * 3;
         margin: 0 -@AppBlock-Dummy-Padding;
         font-size: 0;
     }
@@ -198,14 +242,6 @@
         .icon {
             background-image: url("@{AppPath-Images}/components/block/@{theme}.svg");
             background-position: 50% @AppIcon-Block-default;
-
-            .for(@AppIcon-Block-Names); .-each(@name) {
-                &.module-@{name} {
-                    @var: "AppIcon-Block-@{name}";
-                    @rule: @@var;
-                    background-position: 50% (-@rule * @AppIcon-Block-Size);
-                }
-            }
         }
     }
 }
@@ -272,3 +308,9 @@
 
 .app__block-dummy__theme(@AppBlock-Dummy-Theme);
 .app__blocks-category__background(@AppBlock-Category-Background);
+
+/* *** HELPERS *** */
+
+.app__block-dummy-helper__width {
+    width: @AppBlock-Dummy-Width;
+}

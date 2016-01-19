@@ -85,9 +85,9 @@
 
 // /* ******* AREA ******* */
 
-@AppUI-Area-Width: @CmIndent-XLarge;
-@AppUI-Area-Height: @CmIndent-XLarge;
-@AppUI-Area-ContentHeight: 256px;
+@AppUI-Zone-Width: @CmIndent-XLarge;
+@AppUI-Zone-Height: @CmIndent-XLarge;
+@AppUI-Zone-ContentHeight: 256px;
 
 // /* ************************************************ */
 // /* ******* PARTS ******* */
@@ -151,9 +151,11 @@
 @AppZone-BorderRadius: @CmBorder-Radius;
 
 @AppZone-Active-Background: hsla(@CmColor-Primary, @CmColor-Primary-DarkSaturation, 55%, 0.12);
-@AppZone-Active-Border: 1px dashed @CmColor-Primary-DarkDefault;
+@AppZone-Active-BorderColor: @CmColor-Primary-DarkDefault;
+@AppZone-Active-Border: 1px dashed @AppZone-Active-BorderColor;
 @AppZone-Highlight-Background: hsla(@CmColor-Primary, @CmColor-Primary-DarkSaturation, 55%, 0.05);
-@AppZone-Highlight-Border: 1px dashed fade(@CmColor-Primary-DarkDefault, 30%);
+@AppZone-Highlight-BorderColor: fade(@CmColor-Primary-DarkDefault, 30%);
+@AppZone-Highlight-Border: 1px dashed @AppZone-Highlight-BorderColor;
 
 // /* ******* BLOCK ******* */
 
@@ -196,6 +198,8 @@
 
 @AppDashboard-DropDuration: @PtDnD-DropDuration;
 @AppDashboard-MoveDuration: @PtDnD-MoveDuration;
+
+@AppDashboard-Placeholder-Indent: @CmIndent-Medium;
 
 // /* ******* HELP TOUR ******* */
 
