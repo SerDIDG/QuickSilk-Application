@@ -65,16 +65,19 @@ function(params){
     };
 
     var validateParams = function(){
+        var index;
         that.params['name'] = that.params['positionId'];
         that.params['zoneName'] = [that.params['parentId'], that.params['zone']].join('_');
-        that.params['index'] = parseInt(that.params['node'].getAttribute('data-index')) || 0;
-        that.params['node'].removeAttribute('data-index');
+        if(index = that.params['node'].getAttribute('data-index')){
+            that.params['index'] = parseInt(index);
+            that.params['node'].removeAttribute('data-index');
+        }
     };
 
     var render = function(){
         that.node = that.params['node'];
         // Calculate dimensions
-        that.getDimensions();
+        that.getDimensions(); 
         // Construct
         new cm.Finder('App.Zone', that.params['zoneName'], null, function(classObject){
             constructZone(classObject, that.params['index']);

@@ -70,16 +70,19 @@ function(params){
     };
 
     var validateParams = function(){
+        var index;
         that.params['name'] = that.params['positionId'];
         that.params['zoneName'] = [that.params['parentId'], that.params['zone']].join('_');
-        that.params['index'] = parseInt(that.params['node'].getAttribute('data-index')) || 0;
-        that.params['node'].removeAttribute('data-index');
+        if(index = that.params['node'].getAttribute('data-index')){
+            that.params['index'] = parseInt(index);
+            that.params['node'].removeAttribute('data-index');
+        }
     };
 
     var render = function(){
         that.node = that.params['node'];
         // Calculate dimensions
-        that.getDimensions();
+        that.getDimensions(); 
         // Construct
         new cm.Finder('App.Zone', that.params['zoneName'], null, function(classObject){
             constructZone(classObject, that.params['index']);
@@ -3427,32 +3430,31 @@ function(params){
         // Fixed Header
         that.offsets['top'] = that.compoennts['topMenu']? that.compoennts['topMenu'].getDimensions('height') : 0;
         that.offsets['left'] = that.compoennts['sidebar']? that.compoennts['sidebar'].getDimensions('width') : 0;
-
-        if(that.params['header']['fixed'] && !that.params['header']['overlapping']){
-            fixedHeader();
-        }
-        // Sticky Footer
-        if(that.params['stickyFooter']){
-            stickyFooter();
+        that.offsets['header'] = that.nodes['header'].offsetHeight;
+        that.offsets['footer'] = that.nodes['footer'].offsetHeight;
+        that.offsets['height'] = cm.getPageSize('winHeight') - that.offsets['top'];
+        // Resize
+        if(that.isEditing){
+            that.nodes['content'].style.top = 0;
+            if(that.params['stickyFooter']){
+                that.nodes['content'].style.minHeight = Math.max((that.offsets['height'] - that.offsets['header'] - that.offsets['footer']), 0) + 'px';
+            }
+        }else{
+            if(that.params['header']['fixed'] && !that.params['header']['overlapping']){
+                that.nodes['content'].style.top = that.offsets['header'] + 'px';
+            }
+            if(that.params['stickyFooter']){
+                if(that.params['header']['overlapping']){
+                    that.nodes['content'].style.minHeight = Math.max((that.offsets['height'] - that.offsets['footer']), 0) + 'px';
+                }else{
+                    that.nodes['content'].style.minHeight = Math.max((that.offsets['height'] - that.offsets['header'] - that.offsets['footer']), 0) + 'px';
+                }
+            }
         }
         // Redraw Events
         if(triggerEvents){
             that.triggerEvent('onRedraw');
         }
-    };
-
-    var fixedHeader = function(){
-        var headerHeight = that.nodes['header'].offsetHeight,
-            topMenu = that.compoennts['topMenu']? that.compoennts['topMenu'].getDimensions('height') : 0;
-        that.nodes['content'].style.marginTop = headerHeight + 'px';
-    };
-
-    var stickyFooter = function(){
-        var windowHeight = cm.getPageSize('winHeight'),
-            headerHeight = that.nodes['header'].offsetHeight,
-            footerHeight = that.nodes['footer'].offsetHeight,
-            topMenu = that.compoennts['topMenu']? that.compoennts['topMenu'].getDimensions('height') : 0;
-        that.nodes['content'].style.minHeight = Math.max((windowHeight - topMenu - headerHeight - footerHeight), 0) + 'px';
     };
 
     /* ******* MAIN ******* */
@@ -3466,7 +3468,6 @@ function(params){
     that.enableEditing = function(){
         if(!that.isEditing){
             that.isEditing = true;
-            // Process Header
             cm.removeClass(that.nodes['headerContainer'], 'is-overlapping is-fixed');
             that.redraw();
             that.triggerEvent('enableEditing');
@@ -3477,7 +3478,6 @@ function(params){
     that.disableEditing = function(){
         if(that.isEditing){
             that.isEditing = false;
-            // Process Header
             if(that.params['header']['overlapping']){
                 cm.addClass(that.nodes['headerContainer'], 'is-overlapping');
             }
