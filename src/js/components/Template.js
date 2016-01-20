@@ -49,6 +49,8 @@ function(params){
 
     that.nodes = {
         'container' : cm.Node('div'),
+        'inner' : cm.Node('div'),
+        'headerContainer' : cm.Node('div'),
         'header' : cm.Node('div'),
         'content' : cm.Node('div'),
         'footer' : cm.Node('div'),
@@ -115,6 +117,7 @@ function(params){
         that.offsets['footer'] = that.nodes['footer'].offsetHeight;
         that.offsets['height'] = cm.getPageSize('winHeight') - that.offsets['top'];
         // Resize
+        that.nodes['inner'].style.minHeight = that.offsets['height'] + 'px';
         if(that.isEditing){
             that.nodes['content'].style.top = 0;
             if(that.params['stickyFooter']){
