@@ -77,7 +77,7 @@ function(params){
     var render = function(){
         that.node = that.params['node'];
         // Calculate dimensions
-        that.getDimensions(); 
+        that.getDimensions();
         // Construct
         new cm.Finder('App.Zone', that.params['zoneName'], null, function(classObject){
             constructZone(classObject, that.params['index']);

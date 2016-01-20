@@ -102,9 +102,6 @@ function(params){
         if(rule = cm.getCSSRule('html.is-sidebar--expanded .tpl__container')[0]){
             rule.style.marginLeft = [params['sidebar']['width'], 'px'].join('');
         }
-        if(rule = cm.getCSSRule('html.is-sidebar--expanded .tpl__header__container.is-overlapping')[0]){
-            rule.style.left = [params['sidebar']['width'], 'px'].join('');
-        }
         if(rule = cm.getCSSRule('html.is-sidebar--expanded .tpl__header__container.is-fixed')[0]){
             rule.style.left = [params['sidebar']['width'], 'px'].join('');
         }
@@ -112,8 +109,8 @@ function(params){
 
     var redraw = function(triggerEvents){
         // Fixed Header
-        that.offsets['top'] = that.compoennts['topMenu']? that.compoennts['topMenu'].getDimensions('height') : 0;
-        that.offsets['left'] = that.compoennts['sidebar']? that.compoennts['sidebar'].getDimensions('width') : 0;
+        that.offsets['top'] = that.compoennts['topMenu'] ? that.compoennts['topMenu'].getDimensions('height') : 0;
+        that.offsets['left'] = that.compoennts['sidebar'] ? that.compoennts['sidebar'].getDimensions('width') : 0;
         that.offsets['header'] = that.nodes['header'].offsetHeight;
         that.offsets['footer'] = that.nodes['footer'].offsetHeight;
         that.offsets['height'] = cm.getPageSize('winHeight') - that.offsets['top'];

@@ -93,8 +93,7 @@
     }
 
     .tpl__header__container {
-        &.is-fixed,
-        &.is-overlapping {
+        &.is-fixed {
             padding: 0 @AppTpl-Container-Indent;
 
             .tpl__header {
@@ -207,8 +206,7 @@ html {
         }
 
         .tpl__header__container {
-            &.is-fixed,
-            &.is-overlapping {
+            &.is-fixed {
                 left: @AppSidebar-WidthCollapsed;
                 .mx__transition(left, @AppSidebar-Duration);
             }
@@ -221,8 +219,7 @@ html {
         }
 
         .tpl__header__container {
-            &.is-fixed,
-            &.is-overlapping {
+            &.is-fixed {
                 left: @AppSidebar-WidthExpanded;
             }
         }
@@ -274,9 +271,9 @@ html {
             .tpl__container {
                 margin-left: 0;
             }
+
             .tpl__header__container {
-                &.is-fixed,
-                &.is-overlapping {
+                &.is-fixed {
                     left: 0;
                 }
             }
