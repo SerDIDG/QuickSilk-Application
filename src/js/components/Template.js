@@ -10,16 +10,38 @@ cm.define('App.Template', {
         'onRenderStart',
         'onRender',
         'onRedraw',
-        'onResize'
+        'onResize',
+        'enableEditing',
+        'disableEditing'
     ],
     'params' : {
         'node' : cm.Node('div'),
         'name' : 'app-template',
-        'fixedHeader' : false,
         'stickyFooter' : false,
         'scrollNode' : 'document.body',
         'scrollDuration' : 1000,
-        'topMenuName' : 'app-topmenu'
+        'topMenuName' : 'app-topmenu',
+        'sidebarName' : 'app-sidebar',
+        'editorName' : 'app-editor',
+        'isEditing' : false,
+        'template' : {
+            'type' : 'box',            // wide | box
+            'width' : 1000,
+            'align' : 'center',
+            'indent' : 24
+        },
+        'header' : {
+            'type' : 'box',            // wide | box
+            'width' : 1000,
+            'align' : 'center',
+            'fixed' : false,
+            'overlapping' : false
+        },
+        'footer' : {
+            'type' : 'box',            // wide | box
+            'width' : 1000,
+            'align' : 'center'
+        }
     }
 },
 function(params){
@@ -33,8 +55,10 @@ function(params){
         'buttonUp' : cm.Node('div')
     };
 
+    that.isEditing = false;
     that.compoennts = {};
     that.anim = {};
+    that.offsets = {};
 
     var init = function(){
         that.setParams(params);
@@ -45,12 +69,19 @@ function(params){
         render();
         that.addToStack(that.params['node']);
         that.triggerEvent('onRender');
-        redraw(true);
     };
 
     var render = function(){
-        new cm.Finder('App.TopMenu', that.params['topMenuName'], null, function(classObject){
+        // Find components
+        cm.find('App.TopMenu', that.params['topMenuName'], null, function(classObject){
             that.compoennts['topMenu'] = classObject;
+        });
+        cm.find('App.Sidebar', that.params['sidebarName'], null, function(classObject){
+            that.compoennts['sidebar'] = classObject;
+        });
+        cm.find('App.Editor', that.params['editorName'], null, function(classObject){
+            that.compoennts['editor'] = classObject
+                .addEvent('onResize', resize);
         });
         // Scroll Controllers
         that.anim['scroll'] = new cm.Animation(that.params['scrollNode']);
@@ -62,12 +93,30 @@ function(params){
                 redraw(true);
             });
         });
+        // Editing
+        that.params['isEditing'] && that.enableEditing();
+    };
+
+    var resize = function(editor, params){
+        var rule;
+        if(rule = cm.getCSSRule('html.is-sidebar--expanded .tpl__container')[0]){
+            rule.style.marginLeft = [params['sidebar']['width'], 'px'].join('');
+        }
+        if(rule = cm.getCSSRule('html.is-sidebar--expanded .tpl__header__container.is-overlapping')[0]){
+            rule.style.left = [params['sidebar']['width'], 'px'].join('');
+        }
+        if(rule = cm.getCSSRule('html.is-sidebar--expanded .tpl__header__container.is-fixed')[0]){
+            rule.style.left = [params['sidebar']['width'], 'px'].join('');
+        }
     };
 
     var redraw = function(triggerEvents){
         // Fixed Header
-        if(that.params['fixedHeader']){
-            //fixedHeader();
+        that.offsets['top'] = that.compoennts['topMenu']? that.compoennts['topMenu'].getDimensions('height') : 0;
+        that.offsets['left'] = that.compoennts['sidebar']? that.compoennts['sidebar'].getDimensions('width') : 0;
+
+        if(that.params['header']['fixed'] && !that.params['header']['overlapping']){
+            fixedHeader();
         }
         // Sticky Footer
         if(that.params['stickyFooter']){
@@ -80,7 +129,8 @@ function(params){
     };
 
     var fixedHeader = function(){
-        var headerHeight = that.nodes['header'].offsetHeight;
+        var headerHeight = that.nodes['header'].offsetHeight,
+            topMenu = that.compoennts['topMenu']? that.compoennts['topMenu'].getDimensions('height') : 0;
         that.nodes['content'].style.marginTop = headerHeight + 'px';
     };
 
@@ -97,6 +147,33 @@ function(params){
     that.redraw = function(triggerEvents){
         triggerEvents = typeof triggerEvents == 'undefined'? true : triggerEvents;
         redraw(triggerEvents);
+        return that;
+    };
+
+    that.enableEditing = function(){
+        if(!that.isEditing){
+            that.isEditing = true;
+            // Process Header
+            cm.removeClass(that.nodes['headerContainer'], 'is-overlapping is-fixed');
+            that.redraw();
+            that.triggerEvent('enableEditing');
+        }
+        return that;
+    };
+
+    that.disableEditing = function(){
+        if(that.isEditing){
+            that.isEditing = false;
+            // Process Header
+            if(that.params['header']['overlapping']){
+                cm.addClass(that.nodes['headerContainer'], 'is-overlapping');
+            }
+            if(that.params['header']['fixed']){
+                cm.addClass(that.nodes['headerContainer'], 'is-fixed');
+            }
+            that.redraw();
+            that.triggerEvent('disableEditing');
+        }
         return that;
     };
 

@@ -72,7 +72,8 @@ function(params){
     var validateParams = function(){
         that.params['name'] = that.params['positionId'];
         that.params['zoneName'] = [that.params['parentId'], that.params['zone']].join('_');
-        that.params['index'] = cm.isString(that.params['index']) ? parseInt(that.params['index']) : that.params['index'];
+        that.params['index'] = parseInt(that.params['node'].getAttribute('data-index')) || 0;
+        that.params['node'].removeAttribute('data-index');
     };
 
     var render = function(){
@@ -677,6 +678,7 @@ function(params){
             'block' : null,
             'zone' : null,
             'triggerEvent' : true,
+            'index' : 0,
             'onStart' : function(){},
             'onEnd' : function(){}
         }, params);
@@ -692,6 +694,7 @@ function(params){
         temporaryNode = cm.node('div');
         temporaryNode.style.height = 0;
         if(params.block){
+            node.setAttribute('data-index', params.index.toString());
             cm.insertAfter(temporaryNode, params.block.node);
         }else{
             cm.appendChild(temporaryNode, params.zone.node);
@@ -739,6 +742,7 @@ function(params){
             'block' : null,
             'zone' : null,
             'triggerEvent' : true,
+            'index' : 0,
             'onStart' : function(){},
             'onEnd' : function(){}
         }, params);
@@ -750,8 +754,10 @@ function(params){
                 'node' : node
             });
         }
+        // Temporary node
         temporaryNode = cm.node('div');
         if(params.block){
+            node.setAttribute('data-index', params.index.toString());
             cm.insertAfter(temporaryNode, params.block.node);
             cm.appendChild(params.block.node, temporaryNode);
             cm.appendChild(node, temporaryNode);
@@ -1456,6 +1462,7 @@ cm.define('App.Editor', {
         'onRender',
         'onExpand',
         'onCollapse',
+        'onResize',
 
         'create',
         'replace',
@@ -1539,11 +1546,13 @@ function(params){
 
     var process = function(){
         cm.addClass(cm.getDocumentHtml(), 'is-editor');
-        if(that.components['sidebar'] && that.components['sidebar'].isExpanded){
+        if(that.components['sidebar']){
             that.components['sidebar'].resize();
-            sidebarExpandAction();
-        }else{
-            sidebarCollapseAction();
+            if(that.components['sidebar'].isExpanded){
+                sidebarExpandAction();
+            }else{
+                sidebarCollapseAction();
+            }
         }
         if(!that.components['sidebar'] && that.components['topmenu']){
             adminPageAction();
@@ -1551,11 +1560,10 @@ function(params){
     };
 
     var sidebarResizeAction = function(sidebar, params){
-        var rule;
         cm.addClass(cm.getDocumentHtml(), 'is-immediately');
-        if(rule = cm.getCSSRule('html.is-sidebar--expanded .tpl__container')[0]){
-            rule.style.marginLeft = [params['width'], 'px'].join('');
-        }
+        that.triggerEvent('onResize', {
+            'sidebar' : params
+        });
         setTimeout(function(){
             cm.removeClass(cm.getDocumentHtml(), 'is-immediately');
         }, 5);
@@ -1573,12 +1581,13 @@ function(params){
         cm.forEach(that.dummyBlocks, function(item){
             item.enableEditing();
         });
-        that.components['template'].redraw();
+        that.components['template'].enableEditing();
         that.triggerEvent('onExpand');
     };
 
     var sidebarCollapseAction = function(){
         that.isExpanded = false;
+        cm.removeClass(cm.getDocumentHtml(), 'is-editing');
         cm.forEach(that.zones, function(item){
             item.disableEditing();
         });
@@ -1588,8 +1597,7 @@ function(params){
         cm.forEach(that.dummyBlocks, function(item){
             item.disableEditing();
         });
-        cm.removeClass(cm.getDocumentHtml(), 'is-editing');
-        that.components['template'].redraw();
+        that.components['template'].disableEditing();
         that.triggerEvent('onCollapse');
     };
 
@@ -1658,6 +1666,7 @@ function(params){
             that.components['dashboard'].replaceBlock(node, {
                 'block' : block,
                 'zone' : block.zone,
+                'index' : block.getIndex(),
                 'onEnd' : function(){
                     that.triggerEvent('create', node);
                     that.triggerEvent('onProcessEnd', node);
@@ -1673,6 +1682,7 @@ function(params){
             that.components['dashboard'].replaceBlock(node, {
                 'block' : block,
                 'zone' : block.zone,
+                'index' : block.getIndex(),
                 'onEnd' : function(){
                     that.triggerEvent('replace', node);
                     that.triggerEvent('onProcessEnd', node);
@@ -1701,6 +1711,7 @@ function(params){
             that.components['dashboard'].appendBlock(node, {
                 'block' : block,
                 'zone' : block.zone,
+                'index' : block.getIndex() + 1,
                 'onEnd' : function(){
                     that.triggerEvent('duplicate', node);
                     that.triggerEvent('onProcessEnd', node);
@@ -2830,6 +2841,11 @@ function(params){
         return that;
     };
 
+    that.getDimensions = function(key){
+        var rect = cm.getRect(that.nodes['container']);
+        return rect[key] || rect;
+    };
+
     that.getNodes = function(key){
         return that.nodes[key] || that.nodes;
     };
@@ -3307,16 +3323,38 @@ cm.define('App.Template', {
         'onRenderStart',
         'onRender',
         'onRedraw',
-        'onResize'
+        'onResize',
+        'enableEditing',
+        'disableEditing'
     ],
     'params' : {
         'node' : cm.Node('div'),
         'name' : 'app-template',
-        'fixedHeader' : false,
         'stickyFooter' : false,
         'scrollNode' : 'document.body',
         'scrollDuration' : 1000,
-        'topMenuName' : 'app-topmenu'
+        'topMenuName' : 'app-topmenu',
+        'sidebarName' : 'app-sidebar',
+        'editorName' : 'app-editor',
+        'isEditing' : false,
+        'template' : {
+            'type' : 'box',            // wide | box
+            'width' : 1000,
+            'align' : 'center',
+            'indent' : 24
+        },
+        'header' : {
+            'type' : 'box',            // wide | box
+            'width' : 1000,
+            'align' : 'center',
+            'fixed' : false,
+            'overlapping' : false
+        },
+        'footer' : {
+            'type' : 'box',            // wide | box
+            'width' : 1000,
+            'align' : 'center'
+        }
     }
 },
 function(params){
@@ -3330,8 +3368,10 @@ function(params){
         'buttonUp' : cm.Node('div')
     };
 
+    that.isEditing = false;
     that.compoennts = {};
     that.anim = {};
+    that.offsets = {};
 
     var init = function(){
         that.setParams(params);
@@ -3342,12 +3382,19 @@ function(params){
         render();
         that.addToStack(that.params['node']);
         that.triggerEvent('onRender');
-        redraw(true);
     };
 
     var render = function(){
-        new cm.Finder('App.TopMenu', that.params['topMenuName'], null, function(classObject){
+        // Find components
+        cm.find('App.TopMenu', that.params['topMenuName'], null, function(classObject){
             that.compoennts['topMenu'] = classObject;
+        });
+        cm.find('App.Sidebar', that.params['sidebarName'], null, function(classObject){
+            that.compoennts['sidebar'] = classObject;
+        });
+        cm.find('App.Editor', that.params['editorName'], null, function(classObject){
+            that.compoennts['editor'] = classObject
+                .addEvent('onResize', resize);
         });
         // Scroll Controllers
         that.anim['scroll'] = new cm.Animation(that.params['scrollNode']);
@@ -3359,12 +3406,30 @@ function(params){
                 redraw(true);
             });
         });
+        // Editing
+        that.params['isEditing'] && that.enableEditing();
+    };
+
+    var resize = function(editor, params){
+        var rule;
+        if(rule = cm.getCSSRule('html.is-sidebar--expanded .tpl__container')[0]){
+            rule.style.marginLeft = [params['sidebar']['width'], 'px'].join('');
+        }
+        if(rule = cm.getCSSRule('html.is-sidebar--expanded .tpl__header__container.is-overlapping')[0]){
+            rule.style.left = [params['sidebar']['width'], 'px'].join('');
+        }
+        if(rule = cm.getCSSRule('html.is-sidebar--expanded .tpl__header__container.is-fixed')[0]){
+            rule.style.left = [params['sidebar']['width'], 'px'].join('');
+        }
     };
 
     var redraw = function(triggerEvents){
         // Fixed Header
-        if(that.params['fixedHeader']){
-            //fixedHeader();
+        that.offsets['top'] = that.compoennts['topMenu']? that.compoennts['topMenu'].getDimensions('height') : 0;
+        that.offsets['left'] = that.compoennts['sidebar']? that.compoennts['sidebar'].getDimensions('width') : 0;
+
+        if(that.params['header']['fixed'] && !that.params['header']['overlapping']){
+            fixedHeader();
         }
         // Sticky Footer
         if(that.params['stickyFooter']){
@@ -3377,7 +3442,8 @@ function(params){
     };
 
     var fixedHeader = function(){
-        var headerHeight = that.nodes['header'].offsetHeight;
+        var headerHeight = that.nodes['header'].offsetHeight,
+            topMenu = that.compoennts['topMenu']? that.compoennts['topMenu'].getDimensions('height') : 0;
         that.nodes['content'].style.marginTop = headerHeight + 'px';
     };
 
@@ -3394,6 +3460,33 @@ function(params){
     that.redraw = function(triggerEvents){
         triggerEvents = typeof triggerEvents == 'undefined'? true : triggerEvents;
         redraw(triggerEvents);
+        return that;
+    };
+
+    that.enableEditing = function(){
+        if(!that.isEditing){
+            that.isEditing = true;
+            // Process Header
+            cm.removeClass(that.nodes['headerContainer'], 'is-overlapping is-fixed');
+            that.redraw();
+            that.triggerEvent('enableEditing');
+        }
+        return that;
+    };
+
+    that.disableEditing = function(){
+        if(that.isEditing){
+            that.isEditing = false;
+            // Process Header
+            if(that.params['header']['overlapping']){
+                cm.addClass(that.nodes['headerContainer'], 'is-overlapping');
+            }
+            if(that.params['header']['fixed']){
+                cm.addClass(that.nodes['headerContainer'], 'is-fixed');
+            }
+            that.redraw();
+            that.triggerEvent('disableEditing');
+        }
         return that;
     };
 

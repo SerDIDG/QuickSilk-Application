@@ -426,6 +426,7 @@ function(params){
             'block' : null,
             'zone' : null,
             'triggerEvent' : true,
+            'index' : 0,
             'onStart' : function(){},
             'onEnd' : function(){}
         }, params);
@@ -441,6 +442,7 @@ function(params){
         temporaryNode = cm.node('div');
         temporaryNode.style.height = 0;
         if(params.block){
+            node.setAttribute('data-index', params.index.toString());
             cm.insertAfter(temporaryNode, params.block.node);
         }else{
             cm.appendChild(temporaryNode, params.zone.node);
@@ -488,6 +490,7 @@ function(params){
             'block' : null,
             'zone' : null,
             'triggerEvent' : true,
+            'index' : 0,
             'onStart' : function(){},
             'onEnd' : function(){}
         }, params);
@@ -499,8 +502,10 @@ function(params){
                 'node' : node
             });
         }
+        // Temporary node
         temporaryNode = cm.node('div');
         if(params.block){
+            node.setAttribute('data-index', params.index.toString());
             cm.insertAfter(temporaryNode, params.block.node);
             cm.appendChild(params.block.node, temporaryNode);
             cm.appendChild(node, temporaryNode);

@@ -67,7 +67,8 @@ function(params){
     var validateParams = function(){
         that.params['name'] = that.params['positionId'];
         that.params['zoneName'] = [that.params['parentId'], that.params['zone']].join('_');
-        that.params['index'] = cm.isString(that.params['index']) ? parseInt(that.params['index']) : that.params['index'];
+        that.params['index'] = parseInt(that.params['node'].getAttribute('data-index')) || 0;
+        that.params['node'].removeAttribute('data-index');
     };
 
     var render = function(){

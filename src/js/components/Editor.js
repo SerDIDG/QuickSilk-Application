@@ -12,6 +12,7 @@ cm.define('App.Editor', {
         'onRender',
         'onExpand',
         'onCollapse',
+        'onResize',
 
         'create',
         'replace',
@@ -95,11 +96,13 @@ function(params){
 
     var process = function(){
         cm.addClass(cm.getDocumentHtml(), 'is-editor');
-        if(that.components['sidebar'] && that.components['sidebar'].isExpanded){
+        if(that.components['sidebar']){
             that.components['sidebar'].resize();
-            sidebarExpandAction();
-        }else{
-            sidebarCollapseAction();
+            if(that.components['sidebar'].isExpanded){
+                sidebarExpandAction();
+            }else{
+                sidebarCollapseAction();
+            }
         }
         if(!that.components['sidebar'] && that.components['topmenu']){
             adminPageAction();
@@ -107,11 +110,10 @@ function(params){
     };
 
     var sidebarResizeAction = function(sidebar, params){
-        var rule;
         cm.addClass(cm.getDocumentHtml(), 'is-immediately');
-        if(rule = cm.getCSSRule('html.is-sidebar--expanded .tpl__container')[0]){
-            rule.style.marginLeft = [params['width'], 'px'].join('');
-        }
+        that.triggerEvent('onResize', {
+            'sidebar' : params
+        });
         setTimeout(function(){
             cm.removeClass(cm.getDocumentHtml(), 'is-immediately');
         }, 5);
@@ -129,12 +131,13 @@ function(params){
         cm.forEach(that.dummyBlocks, function(item){
             item.enableEditing();
         });
-        that.components['template'].redraw();
+        that.components['template'].enableEditing();
         that.triggerEvent('onExpand');
     };
 
     var sidebarCollapseAction = function(){
         that.isExpanded = false;
+        cm.removeClass(cm.getDocumentHtml(), 'is-editing');
         cm.forEach(that.zones, function(item){
             item.disableEditing();
         });
@@ -144,8 +147,7 @@ function(params){
         cm.forEach(that.dummyBlocks, function(item){
             item.disableEditing();
         });
-        cm.removeClass(cm.getDocumentHtml(), 'is-editing');
-        that.components['template'].redraw();
+        that.components['template'].disableEditing();
         that.triggerEvent('onCollapse');
     };
 
@@ -214,6 +216,7 @@ function(params){
             that.components['dashboard'].replaceBlock(node, {
                 'block' : block,
                 'zone' : block.zone,
+                'index' : block.getIndex(),
                 'onEnd' : function(){
                     that.triggerEvent('create', node);
                     that.triggerEvent('onProcessEnd', node);
@@ -229,6 +232,7 @@ function(params){
             that.components['dashboard'].replaceBlock(node, {
                 'block' : block,
                 'zone' : block.zone,
+                'index' : block.getIndex(),
                 'onEnd' : function(){
                     that.triggerEvent('replace', node);
                     that.triggerEvent('onProcessEnd', node);
@@ -257,6 +261,7 @@ function(params){
             that.components['dashboard'].appendBlock(node, {
                 'block' : block,
                 'zone' : block.zone,
+                'index' : block.getIndex() + 1,
                 'onEnd' : function(){
                     that.triggerEvent('duplicate', node);
                     that.triggerEvent('onProcessEnd', node);

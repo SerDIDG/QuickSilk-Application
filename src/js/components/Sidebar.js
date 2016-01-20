@@ -290,6 +290,11 @@ function(params){
         return that;
     };
 
+    that.getDimensions = function(key){
+        var rect = cm.getRect(that.nodes['container']);
+        return rect[key] || rect;
+    };
+
     that.getNodes = function(key){
         return that.nodes[key] || that.nodes;
     };
