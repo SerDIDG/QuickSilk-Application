@@ -126,18 +126,19 @@ function(params){
     that.enableEditing = function(){
         if(!that.isEditing){
             that.isEditing = true;
-            cm.addClass(that.params['node'], 'is-editing');
+            cm.addClass(that.node, 'is-editing');
             if(!that.params['visible']){
-                cm.addClass(that.params['node'], 'is-visible');
+                cm.addClass(that.node, 'is-visible');
             }
             if(!that.params['locked']){
-                cm.addClass(that.params['node'], 'is-editable');
-                cm.customEvent.trigger(that.params['node'], 'enableEditable', {
+                cm.addClass(that.node, 'is-editable');
+                cm.customEvent.trigger(that.node, 'enableEditable', {
                     'type' : 'child',
                     'self' : false
                 });
             }
-            cm.customEvent.trigger(that.params['node'], 'enableEditing', {
+            cm.removeClass(that.nodes['block']['container'], 'cm__animate');
+            cm.customEvent.trigger(that.node, 'enableEditing', {
                 'type' : 'child',
                 'self' : false
             });
@@ -149,18 +150,19 @@ function(params){
     that.disableEditing = function(){
         if(that.isEditing){
             that.isEditing = false;
-            cm.removeClass(that.params['node'], 'is-editing');
+            cm.removeClass(that.node, 'is-editing');
             if(!that.params['visible']){
-                cm.removeClass(that.params['node'], 'is-visible');
+                cm.removeClass(that.node, 'is-visible');
             }
             if(!that.params['locked']){
-                cm.removeClass(that.params['node'], 'is-editable');
-                cm.customEvent.trigger(that.params['node'], 'disableEditable', {
+                cm.removeClass(that.node, 'is-editable');
+                cm.customEvent.trigger(that.node, 'disableEditable', {
                     'type' : 'child',
                     'self' : false
                 });
             }
-            cm.customEvent.trigger(that.params['node'], 'disableEditing', {
+            cm.addClass(that.nodes['block']['container'], 'cm__animate');
+            cm.customEvent.trigger(that.node, 'disableEditing', {
                 'type' : 'child',
                 'self' : false
             });
