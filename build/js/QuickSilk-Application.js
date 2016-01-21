@@ -1733,7 +1733,7 @@ function(params){
     that.update = function(node, block){
         if(node && block){
             node = !cm.isNode(node) ? cm.strToHTML(node) : node;
-            cm.remove(block.getInnerNode());
+            cm.clear(block.getInnerNode());
             cm.appendChild(node, block.getInnerNode());
             that.triggerEvent('update', node);
             that.triggerEvent('onProcessEnd', node);
