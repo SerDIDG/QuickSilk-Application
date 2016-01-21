@@ -23,7 +23,6 @@ cm.define('App.Template', {
         'topMenuName' : 'app-topmenu',
         'sidebarName' : 'app-sidebar',
         'editorName' : 'app-editor',
-        'isEditing' : false,
         'template' : {
             'type' : 'box',            // wide | box
             'width' : 1000,
@@ -71,6 +70,7 @@ function(params){
         render();
         that.addToStack(that.params['node']);
         that.triggerEvent('onRender');
+        redraw(true);
     };
 
     var render = function(){
@@ -95,8 +95,6 @@ function(params){
                 redraw(true);
             });
         });
-        // Editing
-        that.params['isEditing'] && that.enableEditing();
     };
 
     var resize = function(editor, params){
