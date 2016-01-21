@@ -216,6 +216,7 @@ function(params){
             that.components['dashboard'].replaceBlock(node, {
                 'block' : block,
                 'zone' : block.zone,
+                'index' : block.getIndex(),
                 'onEnd' : function(){
                     that.triggerEvent('create', node);
                     that.triggerEvent('onProcessEnd', node);

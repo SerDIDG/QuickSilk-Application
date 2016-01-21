@@ -683,7 +683,7 @@ function(params){
             'block' : null,
             'zone' : null,
             'triggerEvent' : true,
-            'index' : 0,
+            'index' : false,
             'onStart' : function(){},
             'onEnd' : function(){}
         }, params);
@@ -695,11 +695,13 @@ function(params){
                 'node' : node
             });
         }
+        if(cm.isNumber(params.index)){
+            node.setAttribute('data-index', params.index.toString());
+        }
         // Render temporary node
         temporaryNode = cm.node('div');
         temporaryNode.style.height = 0;
         if(params.block){
-            node.setAttribute('data-index', params.index.toString());
             cm.insertAfter(temporaryNode, params.block.node);
         }else{
             cm.appendChild(temporaryNode, params.zone.node);
@@ -747,7 +749,7 @@ function(params){
             'block' : null,
             'zone' : null,
             'triggerEvent' : true,
-            'index' : 0,
+            'index' : false,
             'onStart' : function(){},
             'onEnd' : function(){}
         }, params);
@@ -759,10 +761,12 @@ function(params){
                 'node' : node
             });
         }
+        if(cm.isNumber(params.index)){
+            node.setAttribute('data-index', params.index.toString());
+        }
         // Temporary node
         temporaryNode = cm.node('div');
         if(params.block){
-            node.setAttribute('data-index', params.index.toString());
             cm.insertAfter(temporaryNode, params.block.node);
             cm.appendChild(params.block.node, temporaryNode);
             cm.appendChild(node, temporaryNode);
@@ -1671,6 +1675,7 @@ function(params){
             that.components['dashboard'].replaceBlock(node, {
                 'block' : block,
                 'zone' : block.zone,
+                'index' : block.getIndex(),
                 'onEnd' : function(){
                     that.triggerEvent('create', node);
                     that.triggerEvent('onProcessEnd', node);
