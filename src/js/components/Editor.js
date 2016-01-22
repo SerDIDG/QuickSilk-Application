@@ -274,7 +274,7 @@ function(params){
     that.update = function(node, block){
         if(node && block){
             node = !cm.isNode(node) ? cm.strToHTML(node) : node;
-            cm.clear(block.getInnerNode());
+            cm.clearNode(block.getInnerNode());
             cm.appendChild(node, block.getInnerNode());
             that.triggerEvent('update', node);
             that.triggerEvent('onProcessEnd', node);
