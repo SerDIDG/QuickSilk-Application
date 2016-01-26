@@ -10,6 +10,7 @@ cm.define('App.Editor', {
     'events' : [
         'onRenderStart',
         'onRender',
+        'onProcessStart',
         'onExpand',
         'onCollapse',
         'onResize',
@@ -57,8 +58,9 @@ function(params){
     that.zones = [];
     that.blocks = [];
     that.dummyBlocks = [];
+    that.isRendered = false;
     that.isProcessed = false;
-    that.isExpanded = false;
+    that.isExpanded = null;
 
     /* *** INIT *** */
 
@@ -67,9 +69,9 @@ function(params){
         that.convertEvents(that.params['events']);
         that.getDataNodes(that.params['node']);
         that.getDataConfig(that.params['node']);
+        that.addToStack(that.params['node']);
         that.triggerEvent('onRenderStart');
         render();
-        that.addToStack(that.params['node']);
         that.triggerEvent('onRender');
     };
 
@@ -95,6 +97,7 @@ function(params){
     };
 
     var process = function(){
+        that.triggerEvent('onProcessStart');
         cm.addClass(cm.getDocumentHtml(), 'is-editor');
         if(that.components['sidebar']){
             that.components['sidebar'].resize();
@@ -103,10 +106,13 @@ function(params){
             }else{
                 sidebarCollapseAction();
             }
+        }else{
+            sidebarCollapseAction();
         }
         if(!that.components['sidebar'] && that.components['topmenu']){
             adminPageAction();
         }
+        that.isRendered = true;
     };
 
     var sidebarResizeAction = function(sidebar, params){
@@ -120,35 +126,39 @@ function(params){
     };
 
     var sidebarExpandAction = function(){
-        that.isExpanded = true;
-        cm.addClass(cm.getDocumentHtml(), 'is-editing');
-        cm.forEach(that.zones, function(item){
-            item.enableEditing();
-        });
-        cm.forEach(that.blocks, function(item){
-            item.enableEditing();
-        });
-        cm.forEach(that.dummyBlocks, function(item){
-            item.enableEditing();
-        });
-        that.components['template'].enableEditing();
-        that.triggerEvent('onExpand');
+        if(typeof that.isExpanded !== 'boolean' || !that.isExpanded){
+            that.isExpanded = true;
+            cm.addClass(cm.getDocumentHtml(), 'is-editing');
+            cm.forEach(that.zones, function(item){
+                item.enableEditing();
+            });
+            cm.forEach(that.blocks, function(item){
+                item.enableEditing();
+            });
+            cm.forEach(that.dummyBlocks, function(item){
+                item.enableEditing();
+            });
+            that.components['template'].enableEditing();
+            that.triggerEvent('onExpand');
+        }
     };
 
     var sidebarCollapseAction = function(){
-        that.isExpanded = false;
-        cm.removeClass(cm.getDocumentHtml(), 'is-editing');
-        cm.forEach(that.zones, function(item){
-            item.disableEditing();
-        });
-        cm.forEach(that.blocks, function(item){
-            item.disableEditing();
-        });
-        cm.forEach(that.dummyBlocks, function(item){
-            item.disableEditing();
-        });
-        that.components['template'].disableEditing();
-        that.triggerEvent('onCollapse');
+        if(typeof that.isExpanded !== 'boolean' || that.isExpanded){
+            that.isExpanded = false;
+            cm.removeClass(cm.getDocumentHtml(), 'is-editing');
+            cm.forEach(that.zones, function(item){
+                item.disableEditing();
+            });
+            cm.forEach(that.blocks, function(item){
+                item.disableEditing();
+            });
+            cm.forEach(that.dummyBlocks, function(item){
+                item.disableEditing();
+            });
+            that.components['template'].disableEditing();
+            that.triggerEvent('onCollapse');
+        }
     };
 
     var adminPageAction = function(){
@@ -287,10 +297,12 @@ function(params){
     that.addZone = function(zone){
         that.zones.push(zone);
         that.components['dashboard'].addZone(zone);
-        if(that.components['sidebar'] && that.components['sidebar'].isExpanded){
-            zone.enableEditing();
-        }else{
-            zone.disableEditing();
+        if(that.isRendered){
+            if(that.components['sidebar'] && that.components['sidebar'].isExpanded){
+                zone.enableEditing();
+            }else{
+                zone.disableEditing();
+            }
         }
         return that;
     };
@@ -317,10 +329,12 @@ function(params){
             that.blocks.push(block);
         }
         that.components['dashboard'].addBlock(block);
-        if(that.components['sidebar'] && that.components['sidebar'].isExpanded){
-            block.enableEditing();
-        }else{
-            block.disableEditing();
+        if(that.isRendered){
+            if(that.components['sidebar'] && that.components['sidebar'].isExpanded){
+                block.enableEditing();
+            }else{
+                block.disableEditing();
+            }
         }
         return that;
     };

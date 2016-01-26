@@ -54,7 +54,7 @@ function(params){
         'tabs' : []
     };
     that.components = {};
-    that.isExpanded = false;
+    that.isExpanded = null;
     that.openInterval = null;
 
     /* *** CLASS FUNCTIONS *** */
@@ -83,7 +83,7 @@ function(params){
     };
 
     var render = function(){
-        var helperMenuRule, helperContentRule;
+        var isExpanded, helperMenuRule, helperContentRule;
         // Init tabset
         processTabset();
         // Get sidebar dimensions from CSS
@@ -101,20 +101,20 @@ function(params){
         // Resize sidebar relative to scroll bar size
         resize();
         // Check toggle class
-        that.isExpanded = cm.isClass(that.nodes['container'], 'is-expanded');
+        isExpanded = cm.isClass(that.nodes['container'], 'is-expanded');
         // Check storage
         if(that.params['remember']){
-            that.isExpanded = that.storageRead('isExpanded');
+            isExpanded = that.storageRead('isExpanded');
         }
         // Check sidebars visibility
         if(!cm.inDOM(that.nodes['container']) || cm.getStyle(that.nodes['container'], 'display') == 'none'){
-            that.isExpanded = false;
+            isExpanded = false;
         }
         // Trigger events
-        if(that.isExpanded){
-            that.expand(true);
+        if(isExpanded){
+            that.expand(true, true);
         }else{
-            that.collapse(true);
+            that.collapse(true, true);
         }
         cm.addEvent(window, 'resize', resizeAction);
         cm.customEvent.add(that.nodes['container'], 'scrollSizeChange', resizeAction);
@@ -123,7 +123,7 @@ function(params){
     var processTabset = function(){
         cm.getConstructor('Com.TabsetHelper', function(classConstructor){
             that.components['tabset'] = new classConstructor(that.params['Com.TabsetHelper'])
-                .addEvent('onLabelClick', function(tabset, data){
+                .addEvent('onLabelTarget', function(tabset, data){
                     if(!that.isExpanded || tabset.get() == data['item']['id']){
                         that.toggle();
                     }
@@ -183,74 +183,78 @@ function(params){
 
     /* ******* MAIN ******* */
 
-    that.collapse = function(isImmediately){
-        that.isExpanded = false;
-        // Write storage
-        if(that.params['remember']){
-            that.storageWrite('isExpanded', false);
-        }
-        that.triggerEvent('onCollapseStart');
-        // Set immediately animation hack
-        if(isImmediately){
-            cm.addClass(that.nodes['container'], 'is-immediately');
-            cm.addClass(that.params['target'], 'is-immediately');
-        }
-        cm.replaceClass(that.nodes['container'], 'is-expanded', 'is-collapsed', true);
-        cm.replaceClass(that.params['target'], 'is-sidebar--expanded', 'is-sidebar--collapsed', true);
-        // Unset active class to collapse buttons
-        cm.forEach(that.nodes['collapseButtons'], function(item){
-            cm.removeClass(item['container'], 'active');
-        });
-        // Remove immediately animation hack
-        that.openInterval && clearTimeout(that.openInterval);
-        if(isImmediately){
-            that.openInterval = setTimeout(function(){
-                cm.removeClass(that.nodes['container'], 'is-immediately');
-                cm.removeClass(that.params['target'], 'is-immediately');
+    that.collapse = function(isImmediately, force){
+        if(force || typeof that.isExpanded !== 'boolean' || that.isExpanded){
+            that.isExpanded = false;
+            // Write storage
+            if(that.params['remember']){
+                that.storageWrite('isExpanded', false);
+            }
+            that.triggerEvent('onCollapseStart');
+            // Set immediately animation hack
+            if(isImmediately){
+                cm.addClass(that.nodes['container'], 'is-immediately');
+                cm.addClass(that.params['target'], 'is-immediately');
+            }
+            cm.replaceClass(that.nodes['container'], 'is-expanded', 'is-collapsed', true);
+            cm.replaceClass(that.params['target'], 'is-sidebar--expanded', 'is-sidebar--collapsed', true);
+            // Unset active class to collapse buttons
+            cm.forEach(that.nodes['collapseButtons'], function(item){
+                cm.removeClass(item['container'], 'active');
+            });
+            // Remove immediately animation hack
+            that.openInterval && clearTimeout(that.openInterval);
+            if(isImmediately){
                 that.triggerEvent('onCollapse');
                 that.triggerEvent('onCollapseEnd');
-            }, 5);
-        }else{
-            that.openInterval = setTimeout(function(){
-                that.triggerEvent('onCollapse');
-                that.triggerEvent('onCollapseEnd');
-            }, that.params['duration'] + 5);
+                that.openInterval = setTimeout(function(){
+                    cm.removeClass(that.nodes['container'], 'is-immediately');
+                    cm.removeClass(that.params['target'], 'is-immediately');
+                }, 5);
+            }else{
+                that.openInterval = setTimeout(function(){
+                    that.triggerEvent('onCollapse');
+                    that.triggerEvent('onCollapseEnd');
+                }, that.params['duration'] + 5);
+            }
         }
         return that;
     };
 
-    that.expand = function(isImmediately){
-        that.isExpanded = true;
-        // Write storage
-        if(that.params['remember']){
-            that.storageWrite('isExpanded', true);
-        }
-        that.triggerEvent('onExpandStart');
-        // Set immediately animation hack
-        if(isImmediately){
-            cm.addClass(that.nodes['container'], 'is-immediately');
-            cm.addClass(that.params['target'], 'is-immediately');
-        }
-        cm.replaceClass(that.nodes['container'], 'is-collapsed', 'is-expanded', true);
-        cm.replaceClass(that.params['target'], 'is-sidebar--collapsed', 'is-sidebar--expanded', true);
-        // Set active class to collapse buttons
-        cm.forEach(that.nodes['collapseButtons'], function(item){
-            cm.addClass(item['container'], 'active');
-        });
-        // Remove immediately animation hack
-        that.openInterval && clearTimeout(that.openInterval);
-        if(isImmediately){
-            that.openInterval = setTimeout(function(){
-                cm.removeClass(that.nodes['container'], 'is-immediately');
-                cm.removeClass(that.params['target'], 'is-immediately');
+    that.expand = function(isImmediately, force){
+        if(force || typeof that.isExpanded !== 'boolean' || !that.isExpanded){
+            that.isExpanded = true;
+            // Write storage
+            if(that.params['remember']){
+                that.storageWrite('isExpanded', true);
+            }
+            that.triggerEvent('onExpandStart');
+            // Set immediately animation hack
+            if(isImmediately){
+                cm.addClass(that.nodes['container'], 'is-immediately');
+                cm.addClass(that.params['target'], 'is-immediately');
+            }
+            cm.replaceClass(that.nodes['container'], 'is-collapsed', 'is-expanded', true);
+            cm.replaceClass(that.params['target'], 'is-sidebar--collapsed', 'is-sidebar--expanded', true);
+            // Set active class to collapse buttons
+            cm.forEach(that.nodes['collapseButtons'], function(item){
+                cm.addClass(item['container'], 'active');
+            });
+            // Remove immediately animation hack
+            that.openInterval && clearTimeout(that.openInterval);
+            if(isImmediately){
                 that.triggerEvent('onExpand');
                 that.triggerEvent('onExpandEnd');
-            }, 5);
-        }else{
-            that.openInterval = setTimeout(function(){
-                that.triggerEvent('onExpand');
-                that.triggerEvent('onExpandEnd');
-            }, that.params['duration'] + 5);
+                that.openInterval = setTimeout(function(){
+                    cm.removeClass(that.nodes['container'], 'is-immediately');
+                    cm.removeClass(that.params['target'], 'is-immediately');
+                }, 5);
+            }else{
+                that.openInterval = setTimeout(function(){
+                    that.triggerEvent('onExpand');
+                    that.triggerEvent('onExpandEnd');
+                }, that.params['duration'] + 5);
+            }
         }
         return that;
     };

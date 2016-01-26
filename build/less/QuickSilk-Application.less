@@ -369,6 +369,10 @@
 @AppMod-Menu-Vertical-Indent: @AppMod-Menu-Default-Indent;
 @AppMod-Menu-Vertical-ChildIndent: @CmIndent-Medium;
 
+// /* ******* HIDDEN TABS ******* */
+
+@AppMod-HiddenTabs-Indent: @CmIndent-XSmall;
+
 // /* ************************************************ */
 // /* ******* PAGES ******* */
 // /* ************************************************ */
@@ -3230,6 +3234,133 @@ html {
         .app-pt__latest-posts__descr-lines(@AppMod-ForumWidget-DescrLines);
     }
 }
+.app-mod__hidden-tabs {
+    .tabs__head {
+        > .inner {
+        }
+
+        ul {
+            .cm__list-clear;
+            .cm__list-inline--base;
+
+            > li {
+                position: relative;
+                z-index: 1;
+
+                > a {
+                    display: block;
+                    white-space: nowrap;
+                    .mx__transition(all, @CmUI-Transition-Duration);
+
+                    &:hover {
+                        .mx__transition(all, @CmUI-Transition-DurationReverse);
+                    }
+                }
+
+                &:first-child {
+                    margin: 0;
+                }
+
+                &:last-child {
+                    margin: 0;
+                }
+
+                &:hover {
+                    z-index: 2;
+                }
+            }
+        }
+    }
+
+    &.pull-justify {
+        .tabs__head {
+            ul {
+                .display-flex;
+                .mx__flex-flow(row wrap);
+
+                > li {
+                    max-width: 100%;
+                    .mx__flex(1 1 auto);
+
+                    > a {
+                        .cm__text-nowrap;
+                        text-align: center;
+                    }
+                }
+            }
+        }
+    }
+
+    .app-mod__hidden-tabs__indent(@AppMod-HiddenTabs-Indent);
+}
+
+// /* *** MIXINS *** */
+
+.app-mod__hidden-tabs__indent (@indent: @AppMod-HiddenTabs-Indent) {
+    &.pull-left {
+        .tabs__head {
+            ul {
+                text-align: left;
+
+                > li {
+                    margin-right: @indent;
+
+                    &:last-child {
+                        margin-right: 0;
+                    }
+                }
+            }
+        }
+    }
+
+    &.pull-center {
+        .tabs__head {
+            ul {
+                text-align: center;
+
+                > li {
+                    margin-right: @indent;
+
+                    &:last-child {
+                        margin-right: 0;
+                    }
+                }
+            }
+        }
+    }
+
+    &.pull-right {
+        .tabs__head {
+            ul {
+                text-align: right;
+
+                > li {
+                    margin-left: @indent;
+
+                    &:first-child {
+                        margin-left: 0;
+                    }
+                }
+            }
+        }
+    }
+
+    &.pull-justify {
+        .tabs__head {
+            ul {
+                text-align: center;
+
+                > li {
+                    margin-right: @indent;
+
+                    &:last-child {
+                        margin-right: 0;
+                    }
+                }
+            }
+        }
+    }
+}
 /* ******* MODULES: IMAGE ******* */
 
 .app-mod__image {
@@ -3511,14 +3642,6 @@ html {
             position: relative;
             z-index: 1;
 
-            &:first-child {
-                margin: 0;
-            }
-
-            &:last-child {
-                margin: 0;
-            }
-
             > a {
                 display: block;
                 white-space: nowrap;
@@ -3527,6 +3650,14 @@ html {
                 &:hover {
                     .mx__transition(color, @CmUI-Transition-DurationReverse);
                 }
+            }
+
+            &:first-child {
+                margin: 0;
+            }
+
+            &:last-child {
+                margin: 0;
             }
 
             &.sep {

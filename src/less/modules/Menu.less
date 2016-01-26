@@ -9,14 +9,6 @@
             position: relative;
             z-index: 1;
 
-            &:first-child {
-                margin: 0;
-            }
-
-            &:last-child {
-                margin: 0;
-            }
-
             > a {
                 display: block;
                 white-space: nowrap;
@@ -25,6 +17,14 @@
                 &:hover {
                     .mx__transition(color, @CmUI-Transition-DurationReverse);
                 }
+            }
+
+            &:first-child {
+                margin: 0;
+            }
+
+            &:last-child {
+                margin: 0;
             }
 
             &.sep {

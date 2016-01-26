@@ -56,7 +56,7 @@ function(params){
         'buttonUp' : cm.Node('div')
     };
 
-    that.isEditing = false;
+    that.isEditing = null;
     that.compoennts = {};
     that.anim = {};
     that.offsets = {};
@@ -81,10 +81,10 @@ function(params){
         cm.find('App.Sidebar', that.params['sidebarName'], null, function(classObject){
             that.compoennts['sidebar'] = classObject;
         });
-        cm.find('App.Editor', that.params['editorName'], null, function(classObject){
+        new cm.Finder('App.Editor', that.params['editorName'], null, function(classObject){
             that.compoennts['editor'] = classObject
                 .addEvent('onResize', resize);
-        });
+        }, {'event' : 'onProcessStart'});
         // Scroll Controllers
         that.anim['scroll'] = new cm.Animation(that.params['scrollNode']);
         cm.addEvent(that.nodes['buttonUp'], 'click', that.scrollToTop);
@@ -148,7 +148,7 @@ function(params){
     };
 
     that.enableEditing = function(){
-        if(!that.isEditing){
+        if(typeof that.isEditing !== 'boolean' || !that.isEditing){
             that.isEditing = true;
             cm.removeClass(that.nodes['headerContainer'], 'is-overlapping is-fixed');
             that.redraw();
@@ -158,7 +158,7 @@ function(params){
     };
 
     that.disableEditing = function(){
-        if(that.isEditing){
+        if(typeof that.isEditing !== 'boolean' || that.isEditing){
             that.isEditing = false;
             if(that.params['header']['overlapping']){
                 cm.addClass(that.nodes['headerContainer'], 'is-overlapping');

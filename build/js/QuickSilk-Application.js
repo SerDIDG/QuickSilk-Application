@@ -35,7 +35,7 @@ function(params){
 
     that.isDummy = false;
     that.isRemoved = false;
-    that.isEditing = false;
+    that.isEditing = null;
     that.styleObject = null;
     that.dimensions = null;
 
@@ -89,7 +89,7 @@ function(params){
         });
         new cm.Finder('App.Editor', that.params['editorName'], null, function(classObject){
             constructEditor(classObject);
-        });
+        }, {'event' : 'onProcessStart'});
     };
 
     var constructZone = function(classObject, index){
@@ -124,7 +124,7 @@ function(params){
     /* ******* PUBLIC ******* */
 
     that.enableEditing = function(){
-        if(!that.isEditing){
+        if(typeof that.isEditing !== 'boolean' || !that.isEditing){
             that.isEditing = true;
             cm.addClass(that.node, 'is-editing');
             if(!that.params['visible']){
@@ -148,7 +148,7 @@ function(params){
     };
 
     that.disableEditing = function(){
-        if(that.isEditing){
+        if(typeof that.isEditing !== 'boolean' || that.isEditing){
             that.isEditing = false;
             cm.removeClass(that.node, 'is-editing');
             if(!that.params['visible']){
@@ -1335,7 +1335,7 @@ function(params){
         // Calculate dimensions
         that.getDimensions();
         // Construct
-        new cm.Finder('App.Editor', that.params['editorName'], null, constructEditor);
+        new cm.Finder('App.Editor', that.params['editorName'], null, constructEditor, {'event' : 'onProcessStart'});
     };
 
     var constructZone = function(classObject, index){
@@ -1372,14 +1372,18 @@ function(params){
     /* ******* PUBLIC ******* */
 
     that.enableEditing = function(){
-        that.isEditing = true;
-        cm.addClass(that.params['node'], 'is-editing is-editable is-visible');
+        if(typeof that.isEditing !== 'boolean' || !that.isEditing){
+            that.isEditing = true;
+            cm.addClass(that.params['node'], 'is-editing is-editable is-visible');
+        }
         return that;
     };
 
     that.disableEditing = function(){
-        that.isEditing = false;
-        cm.removeClass(that.params['node'], 'is-editing is-editable is-visible');
+        if(typeof that.isEditing !== 'boolean' || that.isEditing){
+            that.isEditing = false;
+            cm.removeClass(that.params['node'], 'is-editing is-editable is-visible');
+        }
         return that;
     };
 
@@ -1469,6 +1473,7 @@ cm.define('App.Editor', {
     'events' : [
         'onRenderStart',
         'onRender',
+        'onProcessStart',
         'onExpand',
         'onCollapse',
         'onResize',
@@ -1516,8 +1521,9 @@ function(params){
     that.zones = [];
     that.blocks = [];
     that.dummyBlocks = [];
+    that.isRendered = false;
     that.isProcessed = false;
-    that.isExpanded = false;
+    that.isExpanded = null;
 
     /* *** INIT *** */
 
@@ -1526,9 +1532,9 @@ function(params){
         that.convertEvents(that.params['events']);
         that.getDataNodes(that.params['node']);
         that.getDataConfig(that.params['node']);
+        that.addToStack(that.params['node']);
         that.triggerEvent('onRenderStart');
         render();
-        that.addToStack(that.params['node']);
         that.triggerEvent('onRender');
     };
 
@@ -1554,6 +1560,7 @@ function(params){
     };
 
     var process = function(){
+        that.triggerEvent('onProcessStart');
         cm.addClass(cm.getDocumentHtml(), 'is-editor');
         if(that.components['sidebar']){
             that.components['sidebar'].resize();
@@ -1562,10 +1569,13 @@ function(params){
             }else{
                 sidebarCollapseAction();
             }
+        }else{
+            sidebarCollapseAction();
         }
         if(!that.components['sidebar'] && that.components['topmenu']){
             adminPageAction();
         }
+        that.isRendered = true;
     };
 
     var sidebarResizeAction = function(sidebar, params){
@@ -1579,35 +1589,39 @@ function(params){
     };
 
     var sidebarExpandAction = function(){
-        that.isExpanded = true;
-        cm.addClass(cm.getDocumentHtml(), 'is-editing');
-        cm.forEach(that.zones, function(item){
-            item.enableEditing();
-        });
-        cm.forEach(that.blocks, function(item){
-            item.enableEditing();
-        });
-        cm.forEach(that.dummyBlocks, function(item){
-            item.enableEditing();
-        });
-        that.components['template'].enableEditing();
-        that.triggerEvent('onExpand');
+        if(typeof that.isExpanded !== 'boolean' || !that.isExpanded){
+            that.isExpanded = true;
+            cm.addClass(cm.getDocumentHtml(), 'is-editing');
+            cm.forEach(that.zones, function(item){
+                item.enableEditing();
+            });
+            cm.forEach(that.blocks, function(item){
+                item.enableEditing();
+            });
+            cm.forEach(that.dummyBlocks, function(item){
+                item.enableEditing();
+            });
+            that.components['template'].enableEditing();
+            that.triggerEvent('onExpand');
+        }
     };
 
     var sidebarCollapseAction = function(){
-        that.isExpanded = false;
-        cm.removeClass(cm.getDocumentHtml(), 'is-editing');
-        cm.forEach(that.zones, function(item){
-            item.disableEditing();
-        });
-        cm.forEach(that.blocks, function(item){
-            item.disableEditing();
-        });
-        cm.forEach(that.dummyBlocks, function(item){
-            item.disableEditing();
-        });
-        that.components['template'].disableEditing();
-        that.triggerEvent('onCollapse');
+        if(typeof that.isExpanded !== 'boolean' || that.isExpanded){
+            that.isExpanded = false;
+            cm.removeClass(cm.getDocumentHtml(), 'is-editing');
+            cm.forEach(that.zones, function(item){
+                item.disableEditing();
+            });
+            cm.forEach(that.blocks, function(item){
+                item.disableEditing();
+            });
+            cm.forEach(that.dummyBlocks, function(item){
+                item.disableEditing();
+            });
+            that.components['template'].disableEditing();
+            that.triggerEvent('onCollapse');
+        }
     };
 
     var adminPageAction = function(){
@@ -1746,10 +1760,12 @@ function(params){
     that.addZone = function(zone){
         that.zones.push(zone);
         that.components['dashboard'].addZone(zone);
-        if(that.components['sidebar'] && that.components['sidebar'].isExpanded){
-            zone.enableEditing();
-        }else{
-            zone.disableEditing();
+        if(that.isRendered){
+            if(that.components['sidebar'] && that.components['sidebar'].isExpanded){
+                zone.enableEditing();
+            }else{
+                zone.disableEditing();
+            }
         }
         return that;
     };
@@ -1776,10 +1792,12 @@ function(params){
             that.blocks.push(block);
         }
         that.components['dashboard'].addBlock(block);
-        if(that.components['sidebar'] && that.components['sidebar'].isExpanded){
-            block.enableEditing();
-        }else{
-            block.disableEditing();
+        if(that.isRendered){
+            if(that.components['sidebar'] && that.components['sidebar'].isExpanded){
+                block.enableEditing();
+            }else{
+                block.disableEditing();
+            }
         }
         return that;
     };
@@ -2457,45 +2475,6 @@ function(params){
 
     init();
 });
-cm.define('App.ModuleMenu', {
-    'modules' : [
-        'Params',
-        'DataNodes'
-    ],
-    'params' : {
-        'node' : cm.Node('div')
-    }
-},
-function(params){
-    var that = this;
-
-    that.nodes = {
-        'select' : cm.Node('select')
-    };
-
-    /* *** CLASS FUNCTIONS *** */
-
-    var init = function(){
-        that.setParams(params);
-        that.getDataNodes(that.params['node']);
-        render();
-    };
-
-    var render = function(){
-        cm.addEvent(that.nodes['select'], 'change', toggle);
-    };
-
-    var toggle = function(){
-        var value = that.nodes['select'].value;
-        if(!cm.isEmpty(value)){
-            window.location.href = value;
-        }
-    };
-
-    /* *** MAIN *** */
-
-    init();
-});
 cm.define('App.SearchBox', {
     'modules' : [
         'Params',
@@ -2614,7 +2593,7 @@ function(params){
         'tabs' : []
     };
     that.components = {};
-    that.isExpanded = false;
+    that.isExpanded = null;
     that.openInterval = null;
 
     /* *** CLASS FUNCTIONS *** */
@@ -2643,7 +2622,7 @@ function(params){
     };
 
     var render = function(){
-        var helperMenuRule, helperContentRule;
+        var isExpanded, helperMenuRule, helperContentRule;
         // Init tabset
         processTabset();
         // Get sidebar dimensions from CSS
@@ -2661,20 +2640,20 @@ function(params){
         // Resize sidebar relative to scroll bar size
         resize();
         // Check toggle class
-        that.isExpanded = cm.isClass(that.nodes['container'], 'is-expanded');
+        isExpanded = cm.isClass(that.nodes['container'], 'is-expanded');
         // Check storage
         if(that.params['remember']){
-            that.isExpanded = that.storageRead('isExpanded');
+            isExpanded = that.storageRead('isExpanded');
         }
         // Check sidebars visibility
         if(!cm.inDOM(that.nodes['container']) || cm.getStyle(that.nodes['container'], 'display') == 'none'){
-            that.isExpanded = false;
+            isExpanded = false;
         }
         // Trigger events
-        if(that.isExpanded){
-            that.expand(true);
+        if(isExpanded){
+            that.expand(true, true);
         }else{
-            that.collapse(true);
+            that.collapse(true, true);
         }
         cm.addEvent(window, 'resize', resizeAction);
         cm.customEvent.add(that.nodes['container'], 'scrollSizeChange', resizeAction);
@@ -2683,7 +2662,7 @@ function(params){
     var processTabset = function(){
         cm.getConstructor('Com.TabsetHelper', function(classConstructor){
             that.components['tabset'] = new classConstructor(that.params['Com.TabsetHelper'])
-                .addEvent('onLabelClick', function(tabset, data){
+                .addEvent('onLabelTarget', function(tabset, data){
                     if(!that.isExpanded || tabset.get() == data['item']['id']){
                         that.toggle();
                     }
@@ -2743,74 +2722,78 @@ function(params){
 
     /* ******* MAIN ******* */
 
-    that.collapse = function(isImmediately){
-        that.isExpanded = false;
-        // Write storage
-        if(that.params['remember']){
-            that.storageWrite('isExpanded', false);
-        }
-        that.triggerEvent('onCollapseStart');
-        // Set immediately animation hack
-        if(isImmediately){
-            cm.addClass(that.nodes['container'], 'is-immediately');
-            cm.addClass(that.params['target'], 'is-immediately');
-        }
-        cm.replaceClass(that.nodes['container'], 'is-expanded', 'is-collapsed', true);
-        cm.replaceClass(that.params['target'], 'is-sidebar--expanded', 'is-sidebar--collapsed', true);
-        // Unset active class to collapse buttons
-        cm.forEach(that.nodes['collapseButtons'], function(item){
-            cm.removeClass(item['container'], 'active');
-        });
-        // Remove immediately animation hack
-        that.openInterval && clearTimeout(that.openInterval);
-        if(isImmediately){
-            that.openInterval = setTimeout(function(){
-                cm.removeClass(that.nodes['container'], 'is-immediately');
-                cm.removeClass(that.params['target'], 'is-immediately');
+    that.collapse = function(isImmediately, force){
+        if(force || typeof that.isExpanded !== 'boolean' || that.isExpanded){
+            that.isExpanded = false;
+            // Write storage
+            if(that.params['remember']){
+                that.storageWrite('isExpanded', false);
+            }
+            that.triggerEvent('onCollapseStart');
+            // Set immediately animation hack
+            if(isImmediately){
+                cm.addClass(that.nodes['container'], 'is-immediately');
+                cm.addClass(that.params['target'], 'is-immediately');
+            }
+            cm.replaceClass(that.nodes['container'], 'is-expanded', 'is-collapsed', true);
+            cm.replaceClass(that.params['target'], 'is-sidebar--expanded', 'is-sidebar--collapsed', true);
+            // Unset active class to collapse buttons
+            cm.forEach(that.nodes['collapseButtons'], function(item){
+                cm.removeClass(item['container'], 'active');
+            });
+            // Remove immediately animation hack
+            that.openInterval && clearTimeout(that.openInterval);
+            if(isImmediately){
                 that.triggerEvent('onCollapse');
                 that.triggerEvent('onCollapseEnd');
-            }, 5);
-        }else{
-            that.openInterval = setTimeout(function(){
-                that.triggerEvent('onCollapse');
-                that.triggerEvent('onCollapseEnd');
-            }, that.params['duration'] + 5);
+                that.openInterval = setTimeout(function(){
+                    cm.removeClass(that.nodes['container'], 'is-immediately');
+                    cm.removeClass(that.params['target'], 'is-immediately');
+                }, 5);
+            }else{
+                that.openInterval = setTimeout(function(){
+                    that.triggerEvent('onCollapse');
+                    that.triggerEvent('onCollapseEnd');
+                }, that.params['duration'] + 5);
+            }
         }
         return that;
     };
 
-    that.expand = function(isImmediately){
-        that.isExpanded = true;
-        // Write storage
-        if(that.params['remember']){
-            that.storageWrite('isExpanded', true);
-        }
-        that.triggerEvent('onExpandStart');
-        // Set immediately animation hack
-        if(isImmediately){
-            cm.addClass(that.nodes['container'], 'is-immediately');
-            cm.addClass(that.params['target'], 'is-immediately');
-        }
-        cm.replaceClass(that.nodes['container'], 'is-collapsed', 'is-expanded', true);
-        cm.replaceClass(that.params['target'], 'is-sidebar--collapsed', 'is-sidebar--expanded', true);
-        // Set active class to collapse buttons
-        cm.forEach(that.nodes['collapseButtons'], function(item){
-            cm.addClass(item['container'], 'active');
-        });
-        // Remove immediately animation hack
-        that.openInterval && clearTimeout(that.openInterval);
-        if(isImmediately){
-            that.openInterval = setTimeout(function(){
-                cm.removeClass(that.nodes['container'], 'is-immediately');
-                cm.removeClass(that.params['target'], 'is-immediately');
+    that.expand = function(isImmediately, force){
+        if(force || typeof that.isExpanded !== 'boolean' || !that.isExpanded){
+            that.isExpanded = true;
+            // Write storage
+            if(that.params['remember']){
+                that.storageWrite('isExpanded', true);
+            }
+            that.triggerEvent('onExpandStart');
+            // Set immediately animation hack
+            if(isImmediately){
+                cm.addClass(that.nodes['container'], 'is-immediately');
+                cm.addClass(that.params['target'], 'is-immediately');
+            }
+            cm.replaceClass(that.nodes['container'], 'is-collapsed', 'is-expanded', true);
+            cm.replaceClass(that.params['target'], 'is-sidebar--collapsed', 'is-sidebar--expanded', true);
+            // Set active class to collapse buttons
+            cm.forEach(that.nodes['collapseButtons'], function(item){
+                cm.addClass(item['container'], 'active');
+            });
+            // Remove immediately animation hack
+            that.openInterval && clearTimeout(that.openInterval);
+            if(isImmediately){
                 that.triggerEvent('onExpand');
                 that.triggerEvent('onExpandEnd');
-            }, 5);
-        }else{
-            that.openInterval = setTimeout(function(){
-                that.triggerEvent('onExpand');
-                that.triggerEvent('onExpandEnd');
-            }, that.params['duration'] + 5);
+                that.openInterval = setTimeout(function(){
+                    cm.removeClass(that.nodes['container'], 'is-immediately');
+                    cm.removeClass(that.params['target'], 'is-immediately');
+                }, 5);
+            }else{
+                that.openInterval = setTimeout(function(){
+                    that.triggerEvent('onExpand');
+                    that.triggerEvent('onExpandEnd');
+                }, that.params['duration'] + 5);
+            }
         }
         return that;
     };
@@ -3378,7 +3361,7 @@ function(params){
         'buttonUp' : cm.Node('div')
     };
 
-    that.isEditing = false;
+    that.isEditing = null;
     that.compoennts = {};
     that.anim = {};
     that.offsets = {};
@@ -3403,10 +3386,10 @@ function(params){
         cm.find('App.Sidebar', that.params['sidebarName'], null, function(classObject){
             that.compoennts['sidebar'] = classObject;
         });
-        cm.find('App.Editor', that.params['editorName'], null, function(classObject){
+        new cm.Finder('App.Editor', that.params['editorName'], null, function(classObject){
             that.compoennts['editor'] = classObject
                 .addEvent('onResize', resize);
-        });
+        }, {'event' : 'onProcessStart'});
         // Scroll Controllers
         that.anim['scroll'] = new cm.Animation(that.params['scrollNode']);
         cm.addEvent(that.nodes['buttonUp'], 'click', that.scrollToTop);
@@ -3470,7 +3453,7 @@ function(params){
     };
 
     that.enableEditing = function(){
-        if(!that.isEditing){
+        if(typeof that.isEditing !== 'boolean' || !that.isEditing){
             that.isEditing = true;
             cm.removeClass(that.nodes['headerContainer'], 'is-overlapping is-fixed');
             that.redraw();
@@ -3480,7 +3463,7 @@ function(params){
     };
 
     that.disableEditing = function(){
-        if(that.isEditing){
+        if(typeof that.isEditing !== 'boolean' || that.isEditing){
             that.isEditing = false;
             if(that.params['header']['overlapping']){
                 cm.addClass(that.nodes['headerContainer'], 'is-overlapping');
@@ -3662,7 +3645,7 @@ cm.define('App.Zone', {
 function(params){
     var that = this;
 
-    that.isEditing = false;
+    that.isEditing = null;
     that.isRemoved = false;
     that.isActive = false;
     that.styleObject = null;
@@ -3705,7 +3688,7 @@ function(params){
         }
         // Construct
         new cm.Finder('App.Block', that.params['blockName'], null, constructBlock);
-        new cm.Finder('App.Editor', that.params['editorName'], null, constructEditor);
+        new cm.Finder('App.Editor', that.params['editorName'], null, constructEditor, {'event' : 'onProcessStart'});
     };
 
     var constructBlock = function(classObject){
@@ -3740,22 +3723,22 @@ function(params){
     /* ******* PUBLIC ******* */
 
     that.enableEditing = function(){
-        if(!that.isEditing){
+        if(typeof that.isEditing !== 'boolean' || !that.isEditing){
             that.isEditing = true;
-            cm.addClass(that.node, 'is-editing');
+            cm.addClass(that.node, 'is-editing', true);
             if(!that.params['locked']){
-                cm.addClass(that.node, 'is-editable');
+                cm.addClass(that.node, 'is-editable', true);
             }
         }
         return that;
     };
 
     that.disableEditing = function(){
-        if(that.isEditing){
+        if(typeof that.isEditing !== 'boolean' || that.isEditing){
             that.isEditing = false;
-            cm.removeClass(that.node, 'is-editing');
+            cm.removeClass(that.node, 'is-editing', true);
             if(!that.params['locked']){
-                cm.removeClass(that.node, 'is-editable');
+                cm.removeClass(that.node, 'is-editable', true);
             }
         }
         return that;
@@ -3856,6 +3839,124 @@ function(params){
         that.dimensions = cm.getNodeOffset(that.node, that.styleObject, that.dimensions);
         return that.dimensions;
     };
+
+    init();
+});
+cm.define('App.ModuleHiddenTabs', {
+    'modules' : [
+        'Params',
+        'Events',
+        'Langs',
+        'DataConfig',
+        'DataNodes',
+        'Stack'
+    ],
+    'events' : [
+        'onRenderStart',
+        'onRender',
+        'onTabShow',
+        'onTabHide'
+    ],
+    'params' : {
+        'node' : cm.Node('div'),
+        'name' : '',
+        'active' : false,
+        'Com.TabsetHelper' : {
+            'node' : cm.Node('div'),
+            'name' : ''
+        }
+    }
+},
+function(params){
+    var that = this;
+
+    that.nodes = {
+        'container' : cm.node('div'),
+        'inner' : cm.node('div'),
+        'labels' : [],
+        'tabs' : []
+    };
+    that.components = {};
+
+    var init = function(){
+        that.setParams(params);
+        that.convertEvents(that.params['events']);
+        that.getDataNodes(that.params['node']);
+        that.getDataConfig(that.params['node']);
+        validateParams();
+        that.triggerEvent('onRenderStart');
+        render();
+        that.addToStack(that.params['node']);
+        that.triggerEvent('onRender');
+    };
+
+    var validateParams = function(){
+        that.params['Com.TabsetHelper']['node'] = that.nodes['inner'];
+        that.params['Com.TabsetHelper']['name'] = [that.params['name'], 'tabset'].join('-');
+    };
+
+    var render = function(){
+        cm.log(that.nodes);
+        processTabset();
+    };
+
+    var processTabset = function(){
+        cm.getConstructor('Com.TabsetHelper', function(classConstructor){
+            that.components['tabset'] = new classConstructor(that.params['Com.TabsetHelper'])
+                .addEvent('onLabelTarget', function(tabset, data){
+
+                })
+                .addEvent('onTabHide', function(tabset, data){
+                    that.triggerEvent('onTabHide', data);
+                })
+                .addEvent('onTabShow', function(tabset, data){
+                    that.triggerEvent('onTabShow', data);
+                })
+                .processTabs(that.nodes['tabs'], that.nodes['labels'])
+                .set(that.params['active']);
+        });
+    };
+
+    /* ******* PUBLIC ******* */
+
+    init();
+});
+cm.define('App.ModuleMenu', {
+    'modules' : [
+        'Params',
+        'DataNodes'
+    ],
+    'params' : {
+        'node' : cm.Node('div')
+    }
+},
+function(params){
+    var that = this;
+
+    that.nodes = {
+        'select' : cm.Node('select')
+    };
+
+    /* *** CLASS FUNCTIONS *** */
+
+    var init = function(){
+        that.setParams(params);
+        that.getDataNodes(that.params['node']);
+        render();
+    };
+
+    var render = function(){
+        cm.addEvent(that.nodes['select'], 'change', toggle);
+    };
+
+    var toggle = function(){
+        var value = that.nodes['select'].value;
+        if(!cm.isEmpty(value)){
+            window.location.href = value;
+        }
+    };
+
+    /* *** MAIN *** */
 
     init();
 });

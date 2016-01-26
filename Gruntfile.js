@@ -55,6 +55,7 @@ module.exports = function(grunt) {
                 src: [
                     'src/js/Application.js',
                     'src/js/components/**/*.js',
+                    'src/js/modules/**/*.js',
                     '!src/js/components/dev/**/*.js',
                     '!src/js/components/old/**/*.js'
                 ],

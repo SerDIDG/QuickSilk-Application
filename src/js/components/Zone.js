@@ -22,7 +22,7 @@ cm.define('App.Zone', {
 function(params){
     var that = this;
 
-    that.isEditing = false;
+    that.isEditing = null;
     that.isRemoved = false;
     that.isActive = false;
     that.styleObject = null;
@@ -65,7 +65,7 @@ function(params){
         }
         // Construct
         new cm.Finder('App.Block', that.params['blockName'], null, constructBlock);
-        new cm.Finder('App.Editor', that.params['editorName'], null, constructEditor);
+        new cm.Finder('App.Editor', that.params['editorName'], null, constructEditor, {'event' : 'onProcessStart'});
     };
 
     var constructBlock = function(classObject){
@@ -100,22 +100,22 @@ function(params){
     /* ******* PUBLIC ******* */
 
     that.enableEditing = function(){
-        if(!that.isEditing){
+        if(typeof that.isEditing !== 'boolean' || !that.isEditing){
             that.isEditing = true;
-            cm.addClass(that.node, 'is-editing');
+            cm.addClass(that.node, 'is-editing', true);
             if(!that.params['locked']){
-                cm.addClass(that.node, 'is-editable');
+                cm.addClass(that.node, 'is-editable', true);
             }
         }
         return that;
     };
 
     that.disableEditing = function(){
-        if(that.isEditing){
+        if(typeof that.isEditing !== 'boolean' || that.isEditing){
             that.isEditing = false;
-            cm.removeClass(that.node, 'is-editing');
+            cm.removeClass(that.node, 'is-editing', true);
             if(!that.params['locked']){
-                cm.removeClass(that.node, 'is-editable');
+                cm.removeClass(that.node, 'is-editable', true);
             }
         }
         return that;

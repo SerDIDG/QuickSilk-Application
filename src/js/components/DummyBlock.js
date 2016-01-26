@@ -59,7 +59,7 @@ function(params){
         // Calculate dimensions
         that.getDimensions();
         // Construct
-        new cm.Finder('App.Editor', that.params['editorName'], null, constructEditor);
+        new cm.Finder('App.Editor', that.params['editorName'], null, constructEditor, {'event' : 'onProcessStart'});
     };
 
     var constructZone = function(classObject, index){
@@ -96,14 +96,18 @@ function(params){
     /* ******* PUBLIC ******* */
 
     that.enableEditing = function(){
-        that.isEditing = true;
-        cm.addClass(that.params['node'], 'is-editing is-editable is-visible');
+        if(typeof that.isEditing !== 'boolean' || !that.isEditing){
+            that.isEditing = true;
+            cm.addClass(that.params['node'], 'is-editing is-editable is-visible');
+        }
         return that;
     };
 
     that.disableEditing = function(){
-        that.isEditing = false;
-        cm.removeClass(that.params['node'], 'is-editing is-editable is-visible');
+        if(typeof that.isEditing !== 'boolean' || that.isEditing){
+            that.isEditing = false;
+            cm.removeClass(that.params['node'], 'is-editing is-editable is-visible');
+        }
         return that;
     };
 

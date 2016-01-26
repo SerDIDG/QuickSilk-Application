@@ -30,7 +30,7 @@ function(params){
 
     that.isDummy = false;
     that.isRemoved = false;
-    that.isEditing = false;
+    that.isEditing = null;
     that.styleObject = null;
     that.dimensions = null;
 
@@ -84,7 +84,7 @@ function(params){
         });
         new cm.Finder('App.Editor', that.params['editorName'], null, function(classObject){
             constructEditor(classObject);
-        });
+        }, {'event' : 'onProcessStart'});
     };
 
     var constructZone = function(classObject, index){
@@ -119,7 +119,7 @@ function(params){
     /* ******* PUBLIC ******* */
 
     that.enableEditing = function(){
-        if(!that.isEditing){
+        if(typeof that.isEditing !== 'boolean' || !that.isEditing){
             that.isEditing = true;
             cm.addClass(that.node, 'is-editing');
             if(!that.params['visible']){
@@ -143,7 +143,7 @@ function(params){
     };
 
     that.disableEditing = function(){
-        if(that.isEditing){
+        if(typeof that.isEditing !== 'boolean' || that.isEditing){
             that.isEditing = false;
             cm.removeClass(that.node, 'is-editing');
             if(!that.params['visible']){
