@@ -713,9 +713,7 @@ function(params){
         if(temp.zone){
             cm.forEach(temp.zone['blocks'], function(block){
                 if(
-                    params['left'] >= block.dimensions['outer']['left']
-                    && params['left'] < block.dimensions['outer']['right']
-                    && params['top'] >= block.dimensions['outer']['top']
+                    params['top'] >= block.dimensions['outer']['top']
                     && params['top'] <= block.dimensions['outer']['bottom']
                 ){
                     temp.block = block;

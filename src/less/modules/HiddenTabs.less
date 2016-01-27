@@ -1,76 +1,277 @@
+/* ******* MODULES: HIDDEN TABS ******* */
+
 .app-mod__hidden-tabs {
-    .tabs__head {
-        > .inner {
-        }
+    > .inner {
+        position: relative;
 
-        ul {
-            .cm__list-clear;
-            .cm__list-inline--base;
+        > .tabs__head {
+            position: relative;
+            z-index: 2;
 
-            > li {
-                position: relative;
-                z-index: 1;
+            ul {
+                .cm__list-clear;
+                .cm__list-inline--base;
 
-                > a {
-                    display: block;
-                    white-space: nowrap;
+                > li {
+                    position: relative;
+                    z-index: 1;
                     .mx__transition(all, @CmUI-Transition-Duration);
 
+                    > a {
+                        display: block;
+                        white-space: nowrap;
+                        line-height: @ComTabset-Tabs-Height;
+                        .mx__transition(all, @CmUI-Transition-Duration);
+
+                        &:hover {
+                            .mx__transition(all, @CmUI-Transition-DurationReverse);
+                        }
+                    }
+
+                    &:first-child {
+                        margin: 0;
+                    }
+
+                    &:last-child {
+                        margin: 0;
+                    }
+
                     &:hover {
+                        z-index: 2;
                         .mx__transition(all, @CmUI-Transition-DurationReverse);
                     }
                 }
+            }
+        }
 
-                &:first-child {
-                    margin: 0;
+        > .tabs__content {
+            position: absolute;
+            z-index: 1;
+            visibility: hidden;
+            opacity: 0;
+            .mx__position(100%, 0, auto, 0);
+            .mx__transition(opacity visibility height, @CmUI-Transition-Duration);
+
+            > .inner {
+                > ul {
+                    .cm__list-clear;
+                    position: relative;
+                    .mx__transition(height, @AppMod-HiddenTabs-Duration);
+
+                    > li {
+                        position: absolute;
+                        z-index: 1;
+                        visibility: hidden;
+                        opacity: 0;
+                        overflow: hidden;
+                        .mx__position(0, 0, 0, 0);
+                        .mx__transition(all, @AppMod-HiddenTabs-Duration);
+
+                        &.active {
+                            position: relative;
+                            z-index: 2;
+                            visibility: visible;
+                            opacity: 1;
+                            overflow: visible;
+                        }
+                    }
+                }
+            }
+
+            &.is-show {
+                visibility: visible;
+                opacity: 1;
+                .mx__transition(opacity visibility height, @CmUI-Transition-DurationReverse);
+            }
+        }
+
+        > .tabs__menu {
+            display: none;
+            position: relative;
+            z-index: 3;
+
+            > .inner {
+                position: relative;
+
+                .label {
+                    .cm__font;
+                    .cm__text-nowrap;
+                    min-height: @AppMod-HiddenTabs-Menu-Height;
+                    line-height: @AppMod-HiddenTabs-Menu-Height;
+                    padding: 0 @AppMod-HiddenTabs-Menu-Indent;
                 }
 
-                &:last-child {
-                    margin: 0;
+                .icon {
+                    width: @AppMod-HiddenTabs-Menu-Height;
+                    height: @AppMod-HiddenTabs-Menu-Height;
+                    float: right;
+
+                    &.default {
+                        .icon.medium.menu;
+                    }
                 }
 
-                &:hover {
-                    z-index: 2;
+                &:hover,
+                &.active {
+                    .pt__menu-dropdown {
+                        .pt__menu-dropdown--active;
+                    }
+                }
+            }
+
+            .pt__menu-dropdown {
+                .pt__menu-dropdown--base;
+                min-width: 100%;
+                top: 100%;
+            }
+        }
+    }
+
+    &.is-editing {
+        > .inner {
+            > .tabs__content {
+                position: relative;
+                top: auto;
+
+                > .inner {
+                    > ul {
+                        > li {
+                            display: none;
+
+                            &.active {
+                                display: block;
+                            }
+                        }
+                    }
                 }
             }
         }
     }
 
     &.pull-justify {
-        .tabs__head {
-            ul {
-                .display-flex;
-                .mx__flex-flow(row wrap);
+        > .inner {
+            > .tabs__head {
+                ul {
+                    .display-flex;
+                    .mx__flex-flow(row wrap);
 
-                > li {
-                    max-width: 100%;
-                    .mx__flex(1 1 auto);
+                    > li {
+                        max-width: 100%;
+                        .mx__flex(1 1 auto);
 
-                    > a {
-                        .cm__text-nowrap;
-                        text-align: center;
+                        > a {
+                            .cm__text-nowrap;
+                            text-align: center;
+                        }
                     }
                 }
             }
         }
     }
 
-    .app-mod__hidden-tabs__indent(@AppMod-HiddenTabs-Indent);
+    .app-mod__hidden-tabs__label-indent(@AppMod-HiddenTabs-Label-Indent);
+    .app-mod__hidden-tabs__content-indent(@AppMod-HiddenTabs-Content-Indent);
+}
+
+/* *** THEMES *** */
+
+.app-mod__hidden-tabs {
+    &.theme-initial {
+        > .inner {
+            > .tabs__head {
+                > .inner {
+                    ul {
+                        > li {
+                            border: @AppMod-HiddenTabs-Border;
+                            border-radius: @AppMod-HiddenTabs-BorderRadius;
+
+                            > a {
+                                .cm__font;
+                                padding: 0 @AppMod-HiddenTabs-Label-InnerIndent;
+                                line-height: @AppMod-HiddenTabs-Label-Height;
+                                text-decoration: none;
+                            }
+                        }
+                    }
+                }
+            }
+
+            > .tabs__menu {
+                > .inner {
+                    border: @AppMod-HiddenTabs-Border;
+                    border-radius: @AppMod-HiddenTabs-BorderRadius;
+                }
+            }
+
+            > .tabs__content {
+                > .inner {
+                    padding: @CmIndent-XSmall;
+                    border: @AppMod-HiddenTabs-Border;
+                    border-radius: @AppMod-HiddenTabs-BorderRadius;
+                    box-shadow: @CmUI-Shadow-Bottom;
+                }
+            }
+        }
+    }
+
+    &.theme-light {
+        > .inner {
+            > .tabs__head {
+                > .inner {
+                    ul {
+                        > li {
+                            background: @ComTabset-Tabs-DefaultBackground;
+                            border-color: @AppMod-HiddenTabs-ThemeLight-BorderColor;
+
+                            &:hover {
+                                background: @ComTabset-Tabs-HoverBackground;
+                            }
+
+                            &.active {
+                                background: @ComTabset-Tabs-ActiveBackground;
+                            }
+                        }
+                    }
+                }
+            }
+
+            > .tabs__menu {
+                > .inner {
+                    background: @AppMod-HiddenTabs-ThemeLight-Menu-Background;
+                    border-color: @AppMod-HiddenTabs-ThemeLight-BorderColor;
+                }
+            }
+
+            > .tabs__content {
+                > .inner {
+                    background-color: @AppMod-HiddenTabs-ThemeLight-Content-Background;
+                    border-color: @AppMod-HiddenTabs-ThemeLight-BorderColor;
+                }
+            }
+        }
+    }
+
+    &.theme-default {
+        &:extend(.app-mod__hidden-tabs.theme-initial all);
+        &:extend(.app-mod__hidden-tabs.theme-light all);
+    }
 }
 
 // /* *** MIXINS *** */
 
-.app-mod__hidden-tabs__indent (@indent: @AppMod-HiddenTabs-Indent) {
+.app-mod__hidden-tabs__label-indent (@indent: @AppMod-HiddenTabs-Label-Indent) {
     &.pull-left {
-        .tabs__head {
-            ul {
-                text-align: left;
+        > .inner {
+            > .tabs__head {
+                ul {
+                    text-align: left;
 
-                > li {
-                    margin-right: @indent;
+                    > li {
+                        margin-right: @indent;
 
-                    &:last-child {
-                        margin-right: 0;
+                        &:last-child {
+                            margin-right: 0;
+                        }
                     }
                 }
             }
@@ -78,15 +279,17 @@
     }
 
     &.pull-center {
-        .tabs__head {
-            ul {
-                text-align: center;
+        > .inner {
+            > .tabs__head {
+                ul {
+                    text-align: center;
 
-                > li {
-                    margin-right: @indent;
+                    > li {
+                        margin-right: @indent;
 
-                    &:last-child {
-                        margin-right: 0;
+                        &:last-child {
+                            margin-right: 0;
+                        }
                     }
                 }
             }
@@ -94,15 +297,17 @@
     }
 
     &.pull-right {
-        .tabs__head {
-            ul {
-                text-align: right;
+        > .inner {
+            > .tabs__head {
+                ul {
+                    text-align: right;
 
-                > li {
-                    margin-left: @indent;
+                    > li {
+                        margin-left: @indent;
 
-                    &:first-child {
-                        margin-left: 0;
+                        &:first-child {
+                            margin-left: 0;
+                        }
                     }
                 }
             }
@@ -110,15 +315,66 @@
     }
 
     &.pull-justify {
-        .tabs__head {
-            ul {
-                text-align: center;
+        > .inner {
+            > .tabs__head {
+                ul {
+                    text-align: center;
 
-                > li {
-                    margin-right: @indent;
+                    > li {
+                        margin-right: @indent;
 
-                    &:last-child {
-                        margin-right: 0;
+                        &:last-child {
+                            margin-right: 0;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+.app-mod__hidden-tabs__content-indent (@indent: @AppMod-HiddenTabs-Content-Indent) {
+    > .inner {
+        > .tabs__content {
+            top: ~'calc(100% + @{indent})';
+        }
+    }
+
+    &.is-editing {
+        > .inner {
+            > .tabs__content {
+                margin-top: @indent;
+            }
+        }
+    }
+}
+
+// /* *** HELPERS *** */
+
+.app-mod__hidden-tabs__duration {
+    transition-duration: @AppMod-HiddenTabs-Duration;
+}
+
+/* ******* COMPONENTS: TABSET: ADAPTIVE ******* */
+
+@media only screen and (max-width : @AppMod-HiddenTabs-AdaptiveFrom) {
+
+    html.is-adaptive {
+        .app-mod__hidden-tabs {
+            > .inner {
+                > .tabs__head {
+                    display: none;
+                }
+
+                > .tabs__menu {
+                    display: block;
+                }
+
+                > .tabs__content {
+                    > .inner {
+                        > ul {
+                            .cm__transition-none;
+                        }
                     }
                 }
             }

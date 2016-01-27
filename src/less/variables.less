@@ -265,7 +265,26 @@
 
 // /* ******* HIDDEN TABS ******* */
 
-@AppMod-HiddenTabs-Indent: @CmIndent-XSmall;
+@AppMod-HiddenTabs-AdaptiveFrom: @CmUI-AdaptiveFrom;
+@AppMod-HiddenTabs-BorderRadius: @CmBorder-Radius;
+@AppMod-HiddenTabs-BorderWidth: @CmBorder-Width;
+@AppMod-HiddenTabs-Border: @AppMod-HiddenTabs-BorderWidth solid transparent;
+@AppMod-HiddenTabs-Duration: @CmUI-Transition-Duration;
+
+@AppMod-HiddenTabs-Label-Height: @CmForm-FieldHeight;
+@AppMod-HiddenTabs-Label-Indent: @CmIndent-XXXSmall;
+@AppMod-HiddenTabs-Label-InnerIndent: @CmIndent-XSmall;
+@AppMod-HiddenTabs-Menu-Height: @CmForm-FieldHeight;
+@AppMod-HiddenTabs-Menu-Indent: @CmIndent-XSmall;
+@AppMod-HiddenTabs-Content-Indent: 4px;
+
+@AppMod-HiddenTabs-ThemeLight-BorderColor: @CmColor-Border;
+
+@AppMod-HiddenTabs-ThemeLight-Label-DefaultBackground: @CmColor-Secondary-LightHighlight;
+@AppMod-HiddenTabs-ThemeLight-Label-HoverBackground: @CmColor-Secondary-LightHover;
+@AppMod-HiddenTabs-ThemeLight-Label-ActiveBackground: #ffffff;
+@AppMod-HiddenTabs-ThemeLight-Menu-Background: @CmColor-Background;
+@AppMod-HiddenTabs-ThemeLight-Content-Background: @CmColor-Background;
 
 // /* ************************************************ */
 // /* ******* PAGES ******* */
@@ -310,9 +329,3 @@
 @CmFont-Base-LineHeight: @AppFont-P-LineHeight;
 @CmFont-Base-Size: @AppFont-P-Size;
 @CmFont-Base-Weight: @AppFont-P-Weight;
-
-// /* ******* PARTS ******* */
-
-// /* *** DnD *** */
-
-@PtDnD-Chassis-HighlightIndent: @AppBlock-Indent;

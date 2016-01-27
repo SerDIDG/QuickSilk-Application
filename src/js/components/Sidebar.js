@@ -106,10 +106,6 @@ function(params){
         if(that.params['remember']){
             isExpanded = that.storageRead('isExpanded');
         }
-        // Check sidebars visibility
-        if(!cm.inDOM(that.nodes['container']) || cm.getStyle(that.nodes['container'], 'display') == 'none'){
-            isExpanded = false;
-        }
         // Trigger events
         if(isExpanded){
             that.expand(true, true);
