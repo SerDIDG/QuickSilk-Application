@@ -201,12 +201,12 @@ function(params){
 
     that.getLower = function(){
         var index = that.getIndex();
-        return that.zone.getBlock(index - 1) || null;
+        return that.zone.getBlock(index + 1) || null;
     };
 
     that.getUpper = function(){
         var index = that.getIndex();
-        return that.zone.getBlock(index + 1) || null;
+        return that.zone.getBlock(index - 1) || null;
     };
 
     that.getDragNodes = function(){
@@ -1405,12 +1405,12 @@ function(params){
 
     that.getLower = function(){
         var index = that.getIndex();
-        return that.zone.getBlock(index - 1) || null;
+        return that.zone.getBlock(index + 1) || null;
     };
 
     that.getUpper = function(){
         var index = that.getIndex();
-        return that.zone.getBlock(index + 1) || null;
+        return that.zone.getBlock(index - 1) || null;
     };
 
     that.getDragNodes = function(){
