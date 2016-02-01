@@ -127,9 +127,7 @@ function(params){
         if(typeof that.isEditing !== 'boolean' || !that.isEditing){
             that.isEditing = true;
             cm.addClass(that.node, 'is-editing');
-            if(!that.params['visible']){
-                cm.addClass(that.node, 'is-visible');
-            }
+            cm.addClass(that.node, 'is-visible');
             if(!that.params['locked']){
                 cm.addClass(that.node, 'is-editable');
                 cm.customEvent.trigger(that.node, 'enableEditable', {

@@ -1,6 +1,9 @@
 /* ******* MODULES: HIDDEN TABS ******* */
 
 .app-mod__hidden-tabs {
+    z-index: 1;
+    .mx__transition(z-index, @CmUI-Transition-Duration);
+
     > .inner {
         position: relative;
 
@@ -20,7 +23,6 @@
                     > a {
                         display: block;
                         white-space: nowrap;
-                        line-height: @ComTabset-Tabs-Height;
                         .mx__transition(all, @CmUI-Transition-Duration);
 
                         &:hover {
@@ -44,12 +46,47 @@
             }
         }
 
+        > .tabs__menu {
+            display: none;
+            position: relative;
+            z-index: 3;
+
+            > .inner {
+                position: relative;
+
+                .label {
+                    .cm__text-nowrap;
+                }
+
+                .icon {
+                    float: right;
+
+                    &.default {
+                        .icon.medium.menu;
+                    }
+                }
+
+                &:hover,
+                &.active {
+                    .pt__menu-dropdown {
+                        .pt__menu-dropdown--active;
+                    }
+                }
+            }
+
+            .pt__menu-dropdown {
+                .pt__menu-dropdown--base;
+                min-width: 100%;
+                top: 100%;
+            }
+        }
+
         > .tabs__content {
             position: absolute;
             z-index: 1;
             visibility: hidden;
             opacity: 0;
-            .mx__position(100%, 0, auto, 0);
+            .mx__position(auto, 0, auto, 0);
             .mx__transition(opacity visibility height, @CmUI-Transition-Duration);
 
             > .inner {
@@ -84,54 +121,12 @@
                 .mx__transition(opacity visibility height, @CmUI-Transition-DurationReverse);
             }
         }
-
-        > .tabs__menu {
-            display: none;
-            position: relative;
-            z-index: 3;
-
-            > .inner {
-                position: relative;
-
-                .label {
-                    .cm__font;
-                    .cm__text-nowrap;
-                    min-height: @AppMod-HiddenTabs-Menu-Height;
-                    line-height: @AppMod-HiddenTabs-Menu-Height;
-                    padding: 0 @AppMod-HiddenTabs-Menu-Indent;
-                }
-
-                .icon {
-                    width: @AppMod-HiddenTabs-Menu-Height;
-                    height: @AppMod-HiddenTabs-Menu-Height;
-                    float: right;
-
-                    &.default {
-                        .icon.medium.menu;
-                    }
-                }
-
-                &:hover,
-                &.active {
-                    .pt__menu-dropdown {
-                        .pt__menu-dropdown--active;
-                    }
-                }
-            }
-
-            .pt__menu-dropdown {
-                .pt__menu-dropdown--base;
-                min-width: 100%;
-                top: 100%;
-            }
-        }
     }
 
     &.is-editing {
         > .inner {
             > .tabs__content {
                 position: relative;
-                top: auto;
 
                 > .inner {
                     > ul {
@@ -143,6 +138,22 @@
                             }
                         }
                     }
+                }
+            }
+        }
+
+        &.expand-top {
+            > .inner {
+                > .tabs__content {
+                    bottom: auto;
+                }
+            }
+        }
+
+        &.expand-bottom {
+            > .inner {
+                > .tabs__content {
+                    top: auto;
                 }
             }
         }
@@ -167,6 +178,10 @@
                 }
             }
         }
+    }
+
+    &:hover {
+        z-index: 10;
     }
 
     .app-mod__hidden-tabs__label-indent(@AppMod-HiddenTabs-Label-Indent);
@@ -200,6 +215,18 @@
                 > .inner {
                     border: @AppMod-HiddenTabs-Border;
                     border-radius: @AppMod-HiddenTabs-BorderRadius;
+
+                    .label {
+                        .cm__font;
+                        min-height: @AppMod-HiddenTabs-Menu-Height;
+                        line-height: @AppMod-HiddenTabs-Menu-Height;
+                        padding: 0 @AppMod-HiddenTabs-Menu-Indent;
+                    }
+
+                    .icon {
+                        width: @AppMod-HiddenTabs-Menu-Height;
+                        height: @AppMod-HiddenTabs-Menu-Height;
+                    }
                 }
             }
 
@@ -334,16 +361,34 @@
 }
 
 .app-mod__hidden-tabs__content-indent (@indent: @AppMod-HiddenTabs-Content-Indent) {
-    > .inner {
-        > .tabs__content {
-            top: ~'calc(100% + @{indent})';
+    &.expand-bottom {
+        > .inner {
+            > .tabs__content {
+                top: ~'calc(100% + @{indent})';
+            }
+        }
+
+        &.is-editing {
+            > .inner {
+                > .tabs__content {
+                    margin-top: @indent;
+                }
+            }
         }
     }
 
-    &.is-editing {
+    &.expand-top {
         > .inner {
             > .tabs__content {
-                margin-top: @indent;
+                bottom: ~'calc(100% + @{indent})';
+            }
+        }
+
+        &.is-editing {
+            > .inner {
+                > .tabs__content {
+                    margin-bottom: @indent;
+                }
             }
         }
     }
