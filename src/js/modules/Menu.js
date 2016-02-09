@@ -1,4 +1,4 @@
-cm.define('App.ModuleMenu', {
+cm.define('Module.Menu', {
     'modules' : [
         'Params',
         'DataNodes'

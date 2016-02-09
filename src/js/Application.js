@@ -3,3 +3,5 @@ var App = {
     'Nodes' : {},
     'Test' : []
 };
+
+var Module = {};

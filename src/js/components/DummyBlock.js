@@ -131,7 +131,7 @@ function(params){
 
     that.getLower = function(){
         var index = that.getIndex();
-        return that.zone.getBlock(index + 1) || null;
+        return that.zone.getBlock(index) || null;
     };
 
     that.getUpper = function(){

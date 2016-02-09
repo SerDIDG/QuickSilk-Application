@@ -133,6 +133,10 @@ function(params){
                 .processTabs(that.nodes['tabs'], that.nodes['labels'])
                 .set(that.params['active']);
         });
+        // Tabs events
+        cm.forEach(that.nodes['tabs'], function(item){
+            cm.addIsolateScrolling(item['descr']);
+        });
     };
 
     var resize = function(){

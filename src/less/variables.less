@@ -286,6 +286,36 @@
 @AppMod-HiddenTabs-ThemeLight-Menu-Background: @CmColor-Background;
 @AppMod-HiddenTabs-ThemeLight-Content-Background: @CmColor-Background;
 
+// /* ******* CALENDAR ******* */
+
+@AppCalendar-BorderWidth: @CmBorder-Width;
+@AppCalendar-BorderColor: @CmColor-Border;
+@AppCalendar-Border: @AppCalendar-BorderWidth solid @AppCalendar-BorderColor;
+@AppCalendar-Background: #ffffff;
+
+@AppCalendar-ViewMonth-Item-Count: 3;
+@AppCalendar-ViewMonth-Item-LineHeight: @CmFont-Base-LineHeight;
+@AppCalendar-ViewMonth-Item-Height: @AppCalendar-ViewMonth-Item-LineHeight + (@AppCalendar-BorderWidth * 2);
+@AppCalendar-ViewMonth-Item-Indent: 1px;
+@AppCalendar-ViewMonth-Day-Indent: @CmIndent-XXXSmall;
+@AppCalendar-ViewMonth-Day-Items : @AppCalendar-ViewMonth-Item-Count + 2;
+@AppCalendar-ViewMonth-Day-Height: (@AppCalendar-ViewMonth-Item-Height * @AppCalendar-ViewMonth-Day-Items) + (@AppCalendar-ViewMonth-Item-Indent * (@AppCalendar-ViewMonth-Day-Items - 1)) + (@AppCalendar-ViewMonth-Day-Indent * 2);
+
+@AppCalendar-ViewMonth-Default-Background: #ffffff;
+@AppCalendar-ViewMonth-Default-BackgroundHover: @CmColor-Secondary-LightHover;
+
+@AppCalendar-ViewMonth-Inactive-Background: #ffffff;
+@AppCalendar-ViewMonth-Inactive-BackgroundHover: @CmColor-Secondary-LightHover;
+
+@AppCalendar-ViewMonth-Weekend-Background: @CmColor-Secondary-LightActive;
+@AppCalendar-ViewMonth-Weekend-BackgroundHover: @CmColor-Secondary-LightActiveHover;
+
+@AppCalendar-ViewMonth-Today-Background: @CmColor-Primary-LightActive;
+@AppCalendar-ViewMonth-Today-BackgroundHover: @CmColor-Primary-LightActiveHover;
+
+@AppCalendar-ViewMonth-Active-Background: @CmColor-Primary-LightActive;
+@AppCalendar-ViewMonth-Active-BackgroundHover: @CmColor-Primary-LightActiveHover;
+
 // /* ************************************************ */
 // /* ******* PAGES ******* */
 // /* ************************************************ */
