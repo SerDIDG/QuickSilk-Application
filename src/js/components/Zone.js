@@ -14,7 +14,9 @@ cm.define('App.Zone', {
         'node' : cm.Node('div'),
         'zone' : 0,
         'parentId' : 0,
-        'type' : 'content',          // content | form | mail | remove
+        'layerId' : 0,
+        'type' : 'template-manager',            // template-manager | form-manager | mail | remove
+        'link' : false,                         // {'parentId' : 0, 'layerId' : 0, type' : ''}
         'locked' : false,
         'editorName' : 'app-editor'
     }
@@ -47,8 +49,13 @@ function(params){
     };
 
     var validateParams = function(){
-        that.params['name'] = [that.params['parentId'], that.params['zone']].join('_');
-        that.params['blockName'] = that.params['parentId'];
+        if(that.params['link']){
+            that.params['linkName'] = [that.params['link']['type'], that.params['link']['layerId'], that.params['link']['parentId'], that.params['zone']].join('_');
+            that.params['blockName'] = [that.params['link']['type'], that.params['link']['layerId'], that.params['link']['parentId']].join('_');
+        }else{
+            that.params['blockName'] = [that.params['type'], that.params['layerId'], that.params['parentId']].join('_');
+        }
+        that.params['name'] = [that.params['type'], that.params['layerId'], that.params['parentId'], that.params['zone']].join('_');
     };
 
     var render = function(){

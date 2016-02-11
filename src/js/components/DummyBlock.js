@@ -15,7 +15,7 @@ cm.define('App.DummyBlock', {
         'node' : cm.Node('div'),
         'name' : '',
         'keyword' : '',
-        'type' : 'content',                     // content | form | mail
+        'type' : 'template-manager',            // template-manager | form-manager | mail
         'editorName' : 'app-editor'
     }
 },

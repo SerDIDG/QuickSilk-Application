@@ -534,7 +534,7 @@ App.HelpTourScenario = [{
         'topMenu' : 'dark',
         'template' : 'dark'
     },
-    'sidebar' : 'modules',
+    'sidebar' : 'template-manager',
     'topMenu' : false,
     'content' : '<h3>Installed Modules</h3><p>The modules tab provides quick access to the modules that you\'ve subscribed to. Once you\'ve opened a page or a template, open the modules tab to drag and drop the modules you wish to include.</p>'
 },{

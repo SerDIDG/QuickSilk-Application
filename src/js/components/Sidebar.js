@@ -24,7 +24,7 @@ cm.define('App.Sidebar', {
         'node' : cm.Node('div'),
         'name' : 'app-sidebar',
         'duration' : 300,
-        'active' : 'modules',
+        'active' : 'template-manager',
         'target' : 'document.html',
         'remember' : true,
         'ajax' : {
@@ -73,7 +73,7 @@ function(params){
     };
 
     var getCSSHelpers = function(){
-        that.params['duration'] = cm.getTransitionDurationFromRule('.app__sidebar__duration');
+        that.params['duration'] = cm.getTransitionDurationFromRule('.app__sidebar-helper__duration');
     };
 
     var validateParams = function(){

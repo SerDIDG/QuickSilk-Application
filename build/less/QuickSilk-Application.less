@@ -392,36 +392,6 @@
 @AppMod-HiddenTabs-ThemeLight-Menu-Background: @CmColor-Background;
 @AppMod-HiddenTabs-ThemeLight-Content-Background: @CmColor-Background;
 
-// /* ******* CALENDAR ******* */
-
-@AppCalendar-BorderWidth: @CmBorder-Width;
-@AppCalendar-BorderColor: @CmColor-Border;
-@AppCalendar-Border: @AppCalendar-BorderWidth solid @AppCalendar-BorderColor;
-@AppCalendar-Background: #ffffff;
-
-@AppCalendar-ViewMonth-Item-Count: 3;
-@AppCalendar-ViewMonth-Item-LineHeight: @CmFont-Base-LineHeight;
-@AppCalendar-ViewMonth-Item-Height: @AppCalendar-ViewMonth-Item-LineHeight + (@AppCalendar-BorderWidth * 2);
-@AppCalendar-ViewMonth-Item-Indent: 1px;
-@AppCalendar-ViewMonth-Day-Indent: @CmIndent-XXXSmall;
-@AppCalendar-ViewMonth-Day-Items : @AppCalendar-ViewMonth-Item-Count + 2;
-@AppCalendar-ViewMonth-Day-Height: (@AppCalendar-ViewMonth-Item-Height * @AppCalendar-ViewMonth-Day-Items) + (@AppCalendar-ViewMonth-Item-Indent * (@AppCalendar-ViewMonth-Day-Items - 1)) + (@AppCalendar-ViewMonth-Day-Indent * 2);
-
-@AppCalendar-ViewMonth-Default-Background: #ffffff;
-@AppCalendar-ViewMonth-Default-BackgroundHover: @CmColor-Secondary-LightHover;
-
-@AppCalendar-ViewMonth-Inactive-Background: #ffffff;
-@AppCalendar-ViewMonth-Inactive-BackgroundHover: @CmColor-Secondary-LightHover;
-
-@AppCalendar-ViewMonth-Weekend-Background: @CmColor-Secondary-LightActive;
-@AppCalendar-ViewMonth-Weekend-BackgroundHover: @CmColor-Secondary-LightActiveHover;
-
-@AppCalendar-ViewMonth-Today-Background: @CmColor-Primary-LightActive;
-@AppCalendar-ViewMonth-Today-BackgroundHover: @CmColor-Primary-LightActiveHover;
-
-@AppCalendar-ViewMonth-Active-Background: @CmColor-Primary-LightActive;
-@AppCalendar-ViewMonth-Active-BackgroundHover: @CmColor-Primary-LightActiveHover;
-
 // /* ************************************************ */
 // /* ******* PAGES ******* */
 // /* ************************************************ */
@@ -2566,6 +2536,10 @@ html {
     width: @AppSidebar-WidthExpanded;
 }
 
+.app__sidebar-helper__duration {
+    transition-duration: @AppSidebar-Duration;
+}
+
 /* *** FONT *** */
 
 .app__sidebar-font {
@@ -2669,12 +2643,6 @@ html {
 
 .app__sidebar-tag__menu-item () {
 
-}
-
-/* *** HELPERS *** */
-
-.app__sidebar__duration {
-    transition-duration: @AppSidebar-Duration;
 }
 
 /* ******* COMPONENT: SIDEBAR: ADAPTIVE ******* */
@@ -3258,192 +3226,7 @@ html {
 /* ******* MODULES: CALENDAR ******* */
 
 .module__calendar {
-    .calendar__event {
-        border: @CmBorder-Default;
-        border-radius: @CmBorder-Radius;
-        background-color: @CmColor-Secondary-LightHighlight;
-        cursor: pointer;
-        .mx__transition(all, @CmUI-Transition-Duration);
-
-        > .label {
-            .cm__font--hint;
-            padding: 0 @CmIndent-XXXSmall;
-            color: @CmColor-Font;
-
-            .time {
-                color: @CmColor-Font-Hint;
-            }
-        }
-
-        &.is-short {
-            margin-top: @AppCalendar-ViewMonth-Item-Indent;
-
-            &:first-child {
-                margin-top: 0;
-            }
-
-            > .label {
-                .cm__text-nowrap;
-                line-height: @AppCalendar-ViewMonth-Item-LineHeight;
-
-                .time {
-                    margin: 0 0 0 @CmIndent-XXXSmall;
-                    float: right;
-                }
-
-                .title {
-                    .cm__text-nowrap;
-                }
-            }
-        }
-
-        &:hover {
-            border-color: @CmColor-Primary-DarkDefault;
-            background-color: @CmColor-Primary-LightHover;
-            .mx__transition(all, @CmUI-Transition-DurationReverse);
-        }
-    }
-
-    /* *** VIEW MONTH *** */
-
-    .calendar__view-month {
-        table {
-            table-layout: fixed;
-
-            th {
-                padding: @CmIndent-XXXSmall;
-                vertical-align: top;
-                text-align: center;
-            }
-
-            td {
-                border: @AppCalendar-Border;
-                vertical-align: top;
-                text-align: left;
-                .mx__transition(all, @CmUI-Transition-Duration);
-
-                &:hover {
-                    .mx__transition(all, @CmUI-Transition-DurationReverse);
-                }
-
-                &.default {
-                    background-color: @AppCalendar-ViewMonth-Default-Background;
-
-                    &:hover {
-                        background-color: @AppCalendar-ViewMonth-Default-BackgroundHover;
-                    }
-
-                    .calendar__view-month__dayname {
-                        .calendar__view-month__dayname--default;
-                    }
-                }
-
-                &.inactive {
-                    background-color: @AppCalendar-ViewMonth-Inactive-Background;
-
-                    &:hover {
-                        background-color: @AppCalendar-ViewMonth-Inactive-BackgroundHover;
-                    }
-                }
-
-                &.weekend {
-                    background-color: @AppCalendar-ViewMonth-Weekend-Background;
-
-                    &:hover {
-                        background-color: @AppCalendar-ViewMonth-Weekend-BackgroundHover;
-                    }
-                }
-
-                &.today {
-                    background-color: @AppCalendar-ViewMonth-Today-Background;
-
-                    &:hover {
-                        background-color: @AppCalendar-ViewMonth-Today-BackgroundHover;
-                    }
-                }
-            }
-        }
-    }
-
-    .calendar__view-month__day {
-        height: @AppCalendar-ViewMonth-Day-Height;
-        padding: @AppCalendar-ViewMonth-Day-Indent;
-        position: relative;
-    }
-
-    .calendar__view-month__dayname {
-        height: @AppCalendar-ViewMonth-Item-Height;
-
-        > .label {
-            .cm__font--hint;
-            line-height: @AppCalendar-ViewMonth-Item-Height;
-            text-align: right;
-        }
-    }
-
-    .calendar__view-month__dayname--default {
-        > .label {
-            color: @CmColor-Font;
-            font-weight: @CmFont-Base-BoldWeight;
-        }
-    }
-
-    .calendar__view-month__events-holder {
-        margin-top: @AppCalendar-ViewMonth-Item-Indent;
-    }
-
-    .calendar__view-month__more {
-        height: @AppCalendar-ViewMonth-Item-Height;
-        margin-top: @AppCalendar-ViewMonth-Item-Indent;
-
-        > .label {
-            .cm__font--hint;
-            .cm__text-nowrap;
-            line-height: @AppCalendar-ViewMonth-Item-Height;
-            text-align: right;
-        }
-    }
-
-    .calendar__view-month__more-holder {
-        .cm__scroll-y-a;
-        position: absolute;
-        z-index: 10;
-        visibility: hidden;
-        opacity: 0;
-        .mx__position(0, 0, 0, 0);
-        .mx__transition(all, @CmUI-Transition-Duration);
-
-        > .inner {
-            padding: @AppCalendar-ViewMonth-Day-Indent;
-            background-color: @AppCalendar-Background;
-        }
-
-        &.is-show {
-            visibility: visible;
-            opacity: 1;
-            .mx__transition(all, @CmUI-Transition-DurationReverse);
-        }
-    }
 }
-
-/* *** TOOLTIP *** */
-
-.com__tooltip {
-    &.module__calendar__event-tooltip {
-        width: 250px;
-
-        > .inner {
-            padding: @CmIndent-XSmall;
-        }
-    }
-}
-
-/* *** HELPERS *** */
-
-.module__calendar__view-month__item-indent {
-    height: @AppCalendar-ViewMonth-Item-Indent;
-}
-
 /* ******* MODULES: COLUMNS ******* */
 
 .app-mod__columns {
