@@ -4045,7 +4045,7 @@ function(params){
 
     init();
 });
-cm.define('Module.Menu', {
+cm.define('App.ModuleMenu', {
     'modules' : [
         'Params',
         'DataNodes'
