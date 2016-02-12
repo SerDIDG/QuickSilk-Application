@@ -12,10 +12,11 @@ cm.define('App.Zone', {
     ],
     'params' : {
         'node' : cm.Node('div'),
+        'type' : 'template-manager',            // template-manager | form-manager | mail | remove
+        'instanceId' : false,
         'zone' : 0,
         'parentId' : 0,
         'layerId' : 0,
-        'type' : 'template-manager',            // template-manager | form-manager | mail | remove
         'link' : false,                         // {'parentId' : 0, 'layerId' : 0, type' : ''}
         'locked' : false,
         'editorName' : 'app-editor'
@@ -50,12 +51,16 @@ function(params){
 
     var validateParams = function(){
         if(that.params['link']){
-            that.params['linkName'] = [that.params['link']['type'], that.params['link']['layerId'], that.params['link']['parentId'], that.params['zone']].join('_');
-            that.params['blockName'] = [that.params['link']['type'], that.params['link']['layerId'], that.params['link']['parentId']].join('_');
+            that.params['linkName'] = [that.params['link']['type'], that.params['link']['parentId'], that.params['zone']].join('_');
+            that.params['blockName'] = [that.params['link']['type'], that.params['link']['parentId']].join('_');
         }else{
-            that.params['blockName'] = [that.params['type'], that.params['layerId'], that.params['parentId']].join('_');
+            that.params['blockName'] = [that.params['type'], that.params['parentId']].join('_');
         }
-        that.params['name'] = [that.params['type'], that.params['layerId'], that.params['parentId'], that.params['zone']].join('_');
+        if(cm.isNumber(that.params['instanceId']) || cm.isString(that.params['instanceId'])){
+            that.params['name'] = [that.params['type'], that.params['instanceId'], that.params['parentId'], that.params['zone']].join('_');
+        }else{
+            that.params['name'] = [that.params['type'], that.params['parentId'], that.params['zone']].join('_');
+        }
     };
 
     var render = function(){

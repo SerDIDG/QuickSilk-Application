@@ -16,6 +16,7 @@ cm.define('App.Block', {
     'params' : {
         'node' : cm.Node('div'),
         'type' : 'template-manager',            // template-manager | form-manager | mail
+        'instanceId' : false,
         'positionId' : 0,
         'zone' : 0,
         'parentId' : 0,
@@ -67,8 +68,13 @@ function(params){
 
     var validateParams = function(){
         var index;
-        that.params['name'] = [that.params['type'], that.params['layerId'], that.params['positionId']].join('_');
-        that.params['zoneName'] = [that.params['type'], that.params['layerId'], that.params['parentId'], that.params['zone']].join('_');
+        if(cm.isNumber(that.params['instanceId']) || cm.isString(that.params['instanceId'])){
+            that.params['name'] = [that.params['type'], that.params['instanceId'], that.params['positionId']].join('_');
+            that.params['zoneName'] = [that.params['type'], that.params['instanceId'], that.params['parentId'], that.params['zone']].join('_');
+        }else{
+            that.params['name'] = [that.params['type'], that.params['positionId']].join('_');
+            that.params['zoneName'] = [that.params['type'], that.params['parentId'], that.params['zone']].join('_');
+        }
         if(index = that.params['node'].getAttribute('data-index')){
             that.params['index'] = parseInt(index);
             that.params['node'].removeAttribute('data-index');
