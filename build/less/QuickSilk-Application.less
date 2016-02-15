@@ -380,13 +380,15 @@
 @AppMod-HiddenTabs-Label-Height: @CmForm-FieldHeight;
 @AppMod-HiddenTabs-Label-Indent: @CmIndent-XXXSmall;
 @AppMod-HiddenTabs-Label-InnerIndent: @CmIndent-XSmall;
+@AppMod-HiddenTabs-Label-TitleIndent: @CmIndent-XXSmall;
+@AppMod-HiddenTabs-Image-Size: @CmSize-Medium;
 @AppMod-HiddenTabs-Menu-Height: @CmForm-FieldHeight;
 @AppMod-HiddenTabs-Menu-Indent: @CmIndent-XSmall;
 @AppMod-HiddenTabs-Content-Indent: 4px;
 
 @AppMod-HiddenTabs-ThemeLight-BorderColor: @CmColor-Border;
 
-@AppMod-HiddenTabs-ThemeLight-Label-DefaultBackground: @CmColor-Secondary-LightHighlight;
+@AppMod-HiddenTabs-ThemeLight-Label-DefaultBackground: @CmColor-Secondary-LightActive;
 @AppMod-HiddenTabs-ThemeLight-Label-HoverBackground: @CmColor-Secondary-LightHover;
 @AppMod-HiddenTabs-ThemeLight-Label-ActiveBackground: #ffffff;
 @AppMod-HiddenTabs-ThemeLight-Menu-Background: @CmColor-Background;
@@ -3279,9 +3281,30 @@ html {
                     .mx__transition(all, @CmUI-Transition-Duration);
 
                     > a {
-                        display: block;
+                        .display-flex;
                         white-space: nowrap;
                         .mx__transition(all, @CmUI-Transition-Duration);
+                        .mx__align-items(center);
+
+                        .pt__image {
+                            margin: 0;
+                            padding: 0;
+                            cursor: inherit;
+                            background: transparent;
+                        }
+
+                        .title {
+                            margin-left: @AppMod-HiddenTabs-Label-TitleIndent;
+                            margin-right: @AppMod-HiddenTabs-Label-TitleIndent;
+
+                            &:first-child {
+                                margin-left: 0;
+                            }
+
+                            &:last-child {
+                                margin-right: 0;
+                            }
+                        }
 
                         &:hover {
                             .mx__transition(all, @CmUI-Transition-DurationReverse);
@@ -3444,6 +3467,7 @@ html {
 
     .app-mod__hidden-tabs__label-indent(@AppMod-HiddenTabs-Label-Indent);
     .app-mod__hidden-tabs__content-indent(@AppMod-HiddenTabs-Content-Indent);
+    .app-mod__hidden-tabs__image-size(@AppMod-HiddenTabs-Image-Size);
 }
 
 /* *** THEMES *** */
@@ -3505,15 +3529,15 @@ html {
                 > .inner {
                     ul {
                         > li {
-                            background: @ComTabset-Tabs-DefaultBackground;
+                            background: @AppMod-HiddenTabs-ThemeLight-Label-DefaultBackground;
                             border-color: @AppMod-HiddenTabs-ThemeLight-BorderColor;
 
                             &:hover {
-                                background: @ComTabset-Tabs-HoverBackground;
+                                background: @AppMod-HiddenTabs-ThemeLight-Label-HoverBackground;
                             }
 
                             &.active {
-                                background: @ComTabset-Tabs-ActiveBackground;
+                                background: @AppMod-HiddenTabs-ThemeLight-Label-ActiveBackground;
                             }
                         }
                     }
@@ -3647,6 +3671,17 @@ html {
                 > .tabs__content {
                     margin-bottom: @indent;
                 }
+            }
+        }
+    }
+}
+
+.app-mod__hidden-tabs__image-size (@size: @AppMod-HiddenTabs-Image-Size) {
+    > .inner {
+        > .tabs__head {
+            .pt__image {
+                width: @size;
+                height: @size;
             }
         }
     }

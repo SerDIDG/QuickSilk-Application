@@ -76,6 +76,7 @@ function(params){
     var validateParams = function(){
         var index;
         if(cm.isNumber(that.params['instanceId']) || cm.isString(that.params['instanceId'])){
+            cm.log(that.params['instanceId']);
             that.params['name'] = [that.params['type'], that.params['instanceId'], that.params['positionId']].join('_');
             that.params['zoneName'] = [that.params['type'], that.params['instanceId'], that.params['parentId'], that.params['zone']].join('_');
         }else{
@@ -1505,6 +1506,7 @@ cm.define('App.Editor', {
         'topMenuName' : 'app-topmenu',
         'sidebarName' : 'app-sidebar',
         'templateName' : 'app-template',
+        'editorType' : 'template-manager',
         'App.Dashboard' : {},
         'Com.Overlay' : {
             'container' : 'document.body',
@@ -1520,12 +1522,14 @@ cm.define('App.Editor', {
 function(params){
     var that = this;
 
+    that.types = ['template-manager', 'form-manager'];
     that.components = {};
     that.nodes = {};
 
     that.zones = [];
     that.blocks = [];
     that.dummyBlocks = [];
+    that.editorType = null;
     that.isRendered = false;
     that.isProcessed = false;
     that.isExpanded = null;
@@ -1539,8 +1543,13 @@ function(params){
         that.getDataConfig(that.params['node']);
         that.addToStack(that.params['node']);
         that.triggerEvent('onRenderStart');
+        validateParams();
         render();
         that.triggerEvent('onRender');
+    };
+
+    var validateParams = function(){
+        that.editorType = that.params['editorType'];
     };
 
     var render = function(){
@@ -1556,7 +1565,10 @@ function(params){
             that.components['sidebar'] = classObject
                 .addEvent('onResize', sidebarResizeAction)
                 .addEvent('onExpandEnd', sidebarExpandAction)
-                .addEvent('onCollapseEnd', sidebarCollapseAction);
+                .addEvent('onCollapseEnd', sidebarCollapseAction)
+                .addEvent('onTabShow', function(sidebar, data){
+                    setEditorType(data.item['id']);
+                });
         });
         cm.find('App.Template', that.params['templateName'], null, function(classObject){
             that.components['template'] = classObject;
@@ -1634,6 +1646,12 @@ function(params){
         cm.find('Com.GridlistHelper', null, null, function(classObject){
             classObject.enableEditing();
         });
+    };
+
+    var setEditorType = function(type){
+        if(cm.inArray(that.types, type) && type != that.editorType){
+            that.editorType = type;
+        }
     };
 
     /* *** DASHBOARD REQUEST EVENTS *** */
@@ -3904,6 +3922,8 @@ function(params){
         'tabs' : []
     };
     that.components = {};
+    that.tabs = [];
+    that.options = [];
 
     that.isEditing = null;
     that.isProcessing = false;
@@ -3935,8 +3955,8 @@ function(params){
 
     var render = function(){
         // Process Tabset
-        cm.getConstructor('Com.TabsetHelper', function(classConstructor){
-            that.components['tabset'] = new classConstructor(that.params['Com.TabsetHelper'])
+        cm.getConstructor('Com.TabsetHelper', function(classConstructor, className){
+            that.components['tabset'] = new classConstructor(that.params[className])
                 .addEvent('onTabHide', function(tabset, data){
                     that.triggerEvent('onTabHide', data);
                 })
@@ -3963,15 +3983,56 @@ function(params){
                 })
                 .processTabs(that.nodes['tabs'], that.nodes['labels']);
         });
+        // Tabs
+        processTabs();
         // Mobile menu
-        cm.forEach(that.nodes['options'], function(item){
-            var config = that.getNodeDataConfig(item['container']);
-            cm.addEvent(item['container'], 'click', function(){
-                that.components['tabset'].set(config['id']);
-                show();
+        processMenu();
+        // Set target events
+        setTargetEvents();
+        // Add custom event
+        if(that.params['customEvents']){
+            cm.customEvent.add(that.params['node'], 'redraw', function(){
+                that.redraw();
+            });
+            cm.customEvent.add(that.params['node'], 'enableEditable', function(){
+                that.enableEditing();
+            });
+            cm.customEvent.add(that.params['node'], 'disableEditable', function(){
+                that.disableEditing();
+            });
+        }
+        // Editing
+        that.params['isEditing'] && that.enableEditing();
+    };
+
+    var processTabs = function(){
+        that.tabs = that.components['tabset'].getTabs();
+        cm.forEach(that.tabs, function(item){
+            cm.addEvent(item['label']['link'], 'click', function(e){
+                if(that.params['event'] == 'click' && that.components['tabset'].get() != item['id']){
+                    cm.preventDefault(e);
+                }
             });
         });
-        // Target events
+    };
+
+    var processMenu = function(){
+        var item;
+        cm.forEach(that.nodes['options'], function(nodes){
+            item = that.getNodeDataConfig(nodes['container']) || {};
+            item['nodes'] = nodes;
+            cm.addEvent(nodes['container'], 'click', function(e){
+                if(that.components['tabset'].get() != item['id']){
+                    cm.preventDefault(e);
+                    that.components['tabset'].set(item['id']);
+                    show();
+                }
+            });
+            that.options.push(item);
+        });
+    };
+
+    var setTargetEvents = function(){
         if(that.params['event'] == 'hover'){
             cm.addEvent(that.nodes['container'], 'mouseover', function(e){
                 show();
@@ -3991,20 +4052,6 @@ function(params){
                 show();
             }
         });
-        // Add custom event
-        if(that.params['customEvents']){
-            cm.customEvent.add(that.params['node'], 'redraw', function(){
-                that.redraw();
-            });
-            cm.customEvent.add(that.params['node'], 'enableEditable', function(){
-                that.enableEditing();
-            });
-            cm.customEvent.add(that.params['node'], 'disableEditable', function(){
-                that.disableEditing();
-            });
-        }
-        // Editing
-        that.params['isEditing'] && that.enableEditing();
     };
 
     var hide = function(){
@@ -4028,7 +4075,7 @@ function(params){
     /* ******* PUBLIC ******* */
 
     that.enableEditing = function(){
-        if(typeof that.isEditing !== 'boolean' || !that.isEditing){
+        if(!cm.isBoolean(that.isEditing) || !that.isEditing){
             that.isEditing = true;
             cm.addClass(that.params['node'], 'is-editing is-editable');
             that.components['tabset'].setByIndex(0);
@@ -4040,7 +4087,7 @@ function(params){
     };
 
     that.disableEditing = function(){
-        if(typeof that.isEditing !== 'boolean' || that.isEditing){
+        if(!cm.isBoolean(that.isEditing) || that.isEditing){
             that.isEditing = false;
             cm.removeClass(that.params['node'], 'is-editing is-editable');
             hide();

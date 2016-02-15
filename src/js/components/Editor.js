@@ -37,6 +37,7 @@ cm.define('App.Editor', {
         'topMenuName' : 'app-topmenu',
         'sidebarName' : 'app-sidebar',
         'templateName' : 'app-template',
+        'editorType' : 'template-manager',
         'App.Dashboard' : {},
         'Com.Overlay' : {
             'container' : 'document.body',
@@ -52,12 +53,14 @@ cm.define('App.Editor', {
 function(params){
     var that = this;
 
+    that.types = ['template-manager', 'form-manager'];
     that.components = {};
     that.nodes = {};
 
     that.zones = [];
     that.blocks = [];
     that.dummyBlocks = [];
+    that.editorType = null;
     that.isRendered = false;
     that.isProcessed = false;
     that.isExpanded = null;
@@ -71,8 +74,13 @@ function(params){
         that.getDataConfig(that.params['node']);
         that.addToStack(that.params['node']);
         that.triggerEvent('onRenderStart');
+        validateParams();
         render();
         that.triggerEvent('onRender');
+    };
+
+    var validateParams = function(){
+        that.editorType = that.params['editorType'];
     };
 
     var render = function(){
@@ -88,7 +96,10 @@ function(params){
             that.components['sidebar'] = classObject
                 .addEvent('onResize', sidebarResizeAction)
                 .addEvent('onExpandEnd', sidebarExpandAction)
-                .addEvent('onCollapseEnd', sidebarCollapseAction);
+                .addEvent('onCollapseEnd', sidebarCollapseAction)
+                .addEvent('onTabShow', function(sidebar, data){
+                    setEditorType(data.item['id']);
+                });
         });
         cm.find('App.Template', that.params['templateName'], null, function(classObject){
             that.components['template'] = classObject;
@@ -166,6 +177,12 @@ function(params){
         cm.find('Com.GridlistHelper', null, null, function(classObject){
             classObject.enableEditing();
         });
+    };
+
+    var setEditorType = function(type){
+        if(cm.inArray(that.types, type) && type != that.editorType){
+            that.editorType = type;
+        }
     };
 
     /* *** DASHBOARD REQUEST EVENTS *** */

@@ -42,6 +42,8 @@ function(params){
         'tabs' : []
     };
     that.components = {};
+    that.tabs = [];
+    that.options = [];
 
     that.isEditing = null;
     that.isProcessing = false;
@@ -73,8 +75,8 @@ function(params){
 
     var render = function(){
         // Process Tabset
-        cm.getConstructor('Com.TabsetHelper', function(classConstructor){
-            that.components['tabset'] = new classConstructor(that.params['Com.TabsetHelper'])
+        cm.getConstructor('Com.TabsetHelper', function(classConstructor, className){
+            that.components['tabset'] = new classConstructor(that.params[className])
                 .addEvent('onTabHide', function(tabset, data){
                     that.triggerEvent('onTabHide', data);
                 })
@@ -101,15 +103,56 @@ function(params){
                 })
                 .processTabs(that.nodes['tabs'], that.nodes['labels']);
         });
+        // Tabs
+        processTabs();
         // Mobile menu
-        cm.forEach(that.nodes['options'], function(item){
-            var config = that.getNodeDataConfig(item['container']);
-            cm.addEvent(item['container'], 'click', function(){
-                that.components['tabset'].set(config['id']);
-                show();
+        processMenu();
+        // Set target events
+        setTargetEvents();
+        // Add custom event
+        if(that.params['customEvents']){
+            cm.customEvent.add(that.params['node'], 'redraw', function(){
+                that.redraw();
+            });
+            cm.customEvent.add(that.params['node'], 'enableEditable', function(){
+                that.enableEditing();
+            });
+            cm.customEvent.add(that.params['node'], 'disableEditable', function(){
+                that.disableEditing();
+            });
+        }
+        // Editing
+        that.params['isEditing'] && that.enableEditing();
+    };
+
+    var processTabs = function(){
+        that.tabs = that.components['tabset'].getTabs();
+        cm.forEach(that.tabs, function(item){
+            cm.addEvent(item['label']['link'], 'click', function(e){
+                if(that.params['event'] == 'click' && that.components['tabset'].get() != item['id']){
+                    cm.preventDefault(e);
+                }
             });
         });
-        // Target events
+    };
+
+    var processMenu = function(){
+        var item;
+        cm.forEach(that.nodes['options'], function(nodes){
+            item = that.getNodeDataConfig(nodes['container']) || {};
+            item['nodes'] = nodes;
+            cm.addEvent(nodes['container'], 'click', function(e){
+                if(that.components['tabset'].get() != item['id']){
+                    cm.preventDefault(e);
+                    that.components['tabset'].set(item['id']);
+                    show();
+                }
+            });
+            that.options.push(item);
+        });
+    };
+
+    var setTargetEvents = function(){
         if(that.params['event'] == 'hover'){
             cm.addEvent(that.nodes['container'], 'mouseover', function(e){
                 show();
@@ -129,20 +172,6 @@ function(params){
                 show();
             }
         });
-        // Add custom event
-        if(that.params['customEvents']){
-            cm.customEvent.add(that.params['node'], 'redraw', function(){
-                that.redraw();
-            });
-            cm.customEvent.add(that.params['node'], 'enableEditable', function(){
-                that.enableEditing();
-            });
-            cm.customEvent.add(that.params['node'], 'disableEditable', function(){
-                that.disableEditing();
-            });
-        }
-        // Editing
-        that.params['isEditing'] && that.enableEditing();
     };
 
     var hide = function(){
@@ -166,7 +195,7 @@ function(params){
     /* ******* PUBLIC ******* */
 
     that.enableEditing = function(){
-        if(typeof that.isEditing !== 'boolean' || !that.isEditing){
+        if(!cm.isBoolean(that.isEditing) || !that.isEditing){
             that.isEditing = true;
             cm.addClass(that.params['node'], 'is-editing is-editable');
             that.components['tabset'].setByIndex(0);
@@ -178,7 +207,7 @@ function(params){
     };
 
     that.disableEditing = function(){
-        if(typeof that.isEditing !== 'boolean' || that.isEditing){
+        if(!cm.isBoolean(that.isEditing) || that.isEditing){
             that.isEditing = false;
             cm.removeClass(that.params['node'], 'is-editing is-editable');
             hide();
