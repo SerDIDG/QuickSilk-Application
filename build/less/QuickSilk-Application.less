@@ -285,7 +285,7 @@
 @AppBlock-Dummy-ThemeDark-ColorActive: @CmColor-Font;
 @AppBlock-Dummy-ThemeDark-BackgroundNormal: trannsparent;
 @AppBlock-Dummy-ThemeDark-BackgroundHover: trannsparent;
-@AppBlock-Dummy-ThemeDark-BackgroundActive: #ffffff;
+@AppBlock-Dummy-ThemeDark-BackgroundActive: @CmColor-Background;
 @AppBlock-Dummy-ThemeDark-IconBackgroundNormal: rgba(255, 255, 255, 0.2);
 @AppBlock-Dummy-ThemeDark-IconBackgroundHover: rgba(255, 255, 255, 0.5);
 @AppBlock-Dummy-ThemeDark-IconBackgroundActive: @CmColor-Primary-DarkDefault;
@@ -295,7 +295,7 @@
 @AppBlock-Dummy-ThemeLight-ColorActive: @CmColor-Font;
 @AppBlock-Dummy-ThemeLight-BackgroundNormal: trannsparent;
 @AppBlock-Dummy-ThemeLight-BackgroundHover: trannsparent;
-@AppBlock-Dummy-ThemeLight-BackgroundActive: #ffffff;
+@AppBlock-Dummy-ThemeLight-BackgroundActive: @CmColor-Background;
 @AppBlock-Dummy-ThemeLight-IconBackgroundNormal: @CmColor-Secondary-LightHover;
 @AppBlock-Dummy-ThemeLight-IconBackgroundHover: @CmColor-Primary-LightActive;
 @AppBlock-Dummy-ThemeLight-IconBackgroundActive: @CmColor-Primary-LightActive;
@@ -376,6 +376,7 @@
 @AppMod-HiddenTabs-BorderWidth: @CmBorder-Width;
 @AppMod-HiddenTabs-Border: @AppMod-HiddenTabs-BorderWidth solid transparent;
 @AppMod-HiddenTabs-Duration: @CmUI-Transition-Duration;
+@AppMod-HiddenTabs-Theme: 'Light';
 
 @AppMod-HiddenTabs-Label-Height: @CmForm-FieldHeight;
 @AppMod-HiddenTabs-Label-Indent: @CmIndent-XXXSmall;
@@ -387,10 +388,9 @@
 @AppMod-HiddenTabs-Content-Indent: 4px;
 
 @AppMod-HiddenTabs-ThemeLight-BorderColor: @CmColor-Border;
-
 @AppMod-HiddenTabs-ThemeLight-Label-DefaultBackground: @CmColor-Secondary-LightActive;
 @AppMod-HiddenTabs-ThemeLight-Label-HoverBackground: @CmColor-Secondary-LightHover;
-@AppMod-HiddenTabs-ThemeLight-Label-ActiveBackground: #ffffff;
+@AppMod-HiddenTabs-ThemeLight-Label-ActiveBackground: @CmColor-Background;
 @AppMod-HiddenTabs-ThemeLight-Menu-Background: @CmColor-Background;
 @AppMod-HiddenTabs-ThemeLight-Content-Background: @CmColor-Background;
 
@@ -3286,17 +3286,15 @@ html {
                         .mx__transition(all, @CmUI-Transition-Duration);
                         .mx__align-items(center);
 
-                        .pt__image {
-                            margin: 0;
-                            padding: 0;
-                            cursor: inherit;
-                            background: transparent;
+                        .image {
+                            position: relative;
+
+                            img {
+                                .cm__image-centered;
+                            }
                         }
 
                         .title {
-                            margin-left: @AppMod-HiddenTabs-Label-TitleIndent;
-                            margin-right: @AppMod-HiddenTabs-Label-TitleIndent;
-
                             &:first-child {
                                 margin-left: 0;
                             }
@@ -3466,6 +3464,7 @@ html {
     }
 
     .app-mod__hidden-tabs__label-indent(@AppMod-HiddenTabs-Label-Indent);
+    .app-mod__hidden-tabs__label-title-indent(@AppMod-HiddenTabs-Label-TitleIndent);
     .app-mod__hidden-tabs__content-indent(@AppMod-HiddenTabs-Content-Indent);
     .app-mod__hidden-tabs__image-size(@AppMod-HiddenTabs-Image-Size);
 }
@@ -3642,6 +3641,31 @@ html {
     }
 }
 
+.app-mod__hidden-tabs__label-title-indent (@indent: @AppMod-HiddenTabs-Label-TitleIndent) {
+    > .inner {
+        > .tabs__head {
+            ul {
+                > li {
+                    > a {
+                        .title {
+                            margin-left: @AppMod-HiddenTabs-Label-TitleIndent;
+                            margin-right: @AppMod-HiddenTabs-Label-TitleIndent;
+
+                            &:first-child {
+                                margin-left: 0;
+                            }
+
+                            &:last-child {
+                                margin-right: 0;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
 .app-mod__hidden-tabs__content-indent (@indent: @AppMod-HiddenTabs-Content-Indent) {
     &.expand-bottom {
         > .inner {
@@ -3679,6 +3703,17 @@ html {
 .app-mod__hidden-tabs__image-size (@size: @AppMod-HiddenTabs-Image-Size) {
     > .inner {
         > .tabs__head {
+            ul {
+                > li {
+                    > a {
+                        .image {
+                            width: @size;
+                            height: @size;
+                        }
+                    }
+                }
+            }
+
             .pt__image {
                 width: @size;
                 height: @size;
@@ -3689,7 +3724,7 @@ html {
 
 // /* *** HELPERS *** */
 
-.app-mod__hidden-tabs__duration {
+.app-mod__hidden-tabs-helper__duration {
     transition-duration: @AppMod-HiddenTabs-Duration;
 }
 

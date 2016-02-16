@@ -3944,7 +3944,7 @@ function(params){
     };
 
     var getCSSHelpers = function(){
-        that.params['duration'] = cm.getTransitionDurationFromRule('.app-mod__hidden-tabs__duration') || that.params['duration'];
+        that.params['duration'] = cm.getTransitionDurationFromRule('.app-mod__hidden-tabs-helper__duration') || that.params['duration'];
     };
 
     var validateParams = function(){
