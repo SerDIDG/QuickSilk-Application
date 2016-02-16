@@ -3273,7 +3273,7 @@ html {
 
             ul {
                 .cm__list-clear;
-                .cm__list-inline--base;
+                .cm__list-inline;
 
                 > li {
                     position: relative;
@@ -3285,6 +3285,7 @@ html {
                         white-space: nowrap;
                         .mx__transition(all, @CmUI-Transition-Duration);
                         .mx__align-items(center);
+                        .mx__flex-flow(row nowrap);
 
                         .image {
                             position: relative;
@@ -3307,14 +3308,6 @@ html {
                         &:hover {
                             .mx__transition(all, @CmUI-Transition-DurationReverse);
                         }
-                    }
-
-                    &:first-child {
-                        margin: 0;
-                    }
-
-                    &:last-child {
-                        margin: 0;
                     }
 
                     &:hover {
@@ -3438,20 +3431,54 @@ html {
         }
     }
 
+    &.pull-left {
+        > .inner {
+            > .tabs__head {
+                ul {
+                    text-align: left;
+                }
+            }
+        }
+    }
+
+    &.pull-center {
+        > .inner {
+            > .tabs__head {
+                ul {
+                    text-align: center;
+                }
+            }
+        }
+    }
+
+    &.pull-right {
+        > .inner {
+            > .tabs__head {
+                ul {
+                    text-align: right;
+                }
+            }
+        }
+    }
+
     &.pull-justify {
         > .inner {
             > .tabs__head {
                 ul {
                     .display-flex;
+                    text-align: center;
                     .mx__flex-flow(row wrap);
 
                     > li {
                         max-width: 100%;
-                        .mx__flex(1 1 auto);
+                        .mx__flex(1 1 0);
 
                         > a {
-                            .cm__text-nowrap;
-                            text-align: center;
+                            .mx__justify-content(center);
+
+                            .title {
+                                .cm__text-nowrap;
+                            }
                         }
                     }
                 }
@@ -3483,8 +3510,6 @@ html {
 
                             > a {
                                 .cm__font;
-                                padding: 0 @AppMod-HiddenTabs-Label-InnerIndent;
-                                line-height: @AppMod-HiddenTabs-Label-Height;
                                 text-decoration: none;
                             }
                         }
@@ -3520,6 +3545,9 @@ html {
                 }
             }
         }
+
+        .app-mod__hidden-tabs__label-inner-indent(@AppMod-HiddenTabs-Label-InnerIndent);
+        .app-mod__hidden-tabs__label-height(@AppMod-HiddenTabs-Label-Height);
     }
 
     &.theme-light {
@@ -3568,71 +3596,44 @@ html {
 // /* *** MIXINS *** */
 
 .app-mod__hidden-tabs__label-indent (@indent: @AppMod-HiddenTabs-Label-Indent) {
-    &.pull-left {
-        > .inner {
-            > .tabs__head {
+    > .inner {
+        > .tabs__head {
+            ul {
+                margin: -(@indent / 2);
+
+                > li {
+                    margin: (@indent / 2);
+                }
+            }
+        }
+    }
+}
+
+.app-mod__hidden-tabs__label-inner-indent (@indent: @AppMod-HiddenTabs-Label-InnerIndent) {
+    > .inner {
+        > .tabs__head {
+            > .inner {
                 ul {
-                    text-align: left;
-
                     > li {
-                        margin-right: @indent;
-
-                        &:last-child {
-                            margin-right: 0;
+                        > a {
+                            padding: 0 @indent;
                         }
                     }
                 }
             }
         }
     }
+}
 
-    &.pull-center {
-        > .inner {
-            > .tabs__head {
+.app-mod__hidden-tabs__label-height (@height: @AppMod-HiddenTabs-Label-Height) {
+    > .inner {
+        > .tabs__head {
+            > .inner {
                 ul {
-                    text-align: center;
-
                     > li {
-                        margin-right: @indent;
-
-                        &:last-child {
-                            margin-right: 0;
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    &.pull-right {
-        > .inner {
-            > .tabs__head {
-                ul {
-                    text-align: right;
-
-                    > li {
-                        margin-left: @indent;
-
-                        &:first-child {
-                            margin-left: 0;
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    &.pull-justify {
-        > .inner {
-            > .tabs__head {
-                ul {
-                    text-align: center;
-
-                    > li {
-                        margin-right: @indent;
-
-                        &:last-child {
-                            margin-right: 0;
+                        > a {
+                            height: @height;
+                            line-height: @height;
                         }
                     }
                 }
@@ -3648,8 +3649,8 @@ html {
                 > li {
                     > a {
                         .title {
-                            margin-left: @AppMod-HiddenTabs-Label-TitleIndent;
-                            margin-right: @AppMod-HiddenTabs-Label-TitleIndent;
+                            margin-left: @indent;
+                            margin-right: @indent;
 
                             &:first-child {
                                 margin-left: 0;
@@ -3882,6 +3883,12 @@ html {
             .icon {
                 display: none;
                 vertical-align: middle;
+            }
+
+            &.active {
+                a {
+                    color: @CmFont-Base-Color;
+                }
             }
         }
     }
