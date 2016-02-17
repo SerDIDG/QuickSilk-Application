@@ -106,7 +106,7 @@ function(params){
         // Tabs
         processTabs();
         // Mobile menu
-        processMenu();
+        cm.forEach(that.nodes['options'], processMenuItem);
         // Set target events
         setTargetEvents();
         // Add custom event
@@ -136,20 +136,19 @@ function(params){
         });
     };
 
-    var processMenu = function(){
-        var item;
-        cm.forEach(that.nodes['options'], function(nodes){
-            item = that.getNodeDataConfig(nodes['container']) || {};
-            item['nodes'] = nodes;
-            cm.addEvent(nodes['container'], 'click', function(e){
-                if(that.components['tabset'].get() != item['id']){
-                    cm.preventDefault(e);
-                    that.components['tabset'].set(item['id']);
-                    show();
-                }
-            });
-            that.options.push(item);
+    var processMenuItem = function(nodes){
+        var item = cm.merge({
+                'id' : '',
+                'nodes' : nodes
+            }, that.getNodeDataConfig(nodes['container']));
+        cm.addEvent(nodes['container'], 'click', function(e){
+            if(that.components['tabset'].get() != item['id']){
+                cm.preventDefault(e);
+                that.components['tabset'].set(item['id']);
+                show();
+            }
         });
+        that.options.push(item);
     };
 
     var setTargetEvents = function(){
