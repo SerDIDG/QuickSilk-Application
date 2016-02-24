@@ -3385,7 +3385,7 @@ function(params){
     };
 
     that.isEditing = null;
-    that.compoennts = {};
+    that.components = {};
     that.anim = {};
     that.offsets = {};
 
@@ -3404,13 +3404,13 @@ function(params){
     var render = function(){
         // Find components
         cm.find('App.TopMenu', that.params['topMenuName'], null, function(classObject){
-            that.compoennts['topMenu'] = classObject;
+            that.components['topMenu'] = classObject;
         });
         cm.find('App.Sidebar', that.params['sidebarName'], null, function(classObject){
-            that.compoennts['sidebar'] = classObject;
+            that.components['sidebar'] = classObject;
         });
         new cm.Finder('App.Editor', that.params['editorName'], null, function(classObject){
-            that.compoennts['editor'] = classObject
+            that.components['editor'] = classObject
                 .addEvent('onResize', resize);
         }, {'event' : 'onProcessStart'});
         // Scroll Controllers
@@ -3437,8 +3437,8 @@ function(params){
 
     var redraw = function(triggerEvents){
         // Fixed Header
-        that.offsets['top'] = that.compoennts['topMenu'] ? that.compoennts['topMenu'].getDimensions('height') : 0;
-        that.offsets['left'] = that.compoennts['sidebar'] ? that.compoennts['sidebar'].getDimensions('width') : 0;
+        that.offsets['top'] = that.components['topMenu'] ? that.components['topMenu'].getDimensions('height') : 0;
+        that.offsets['left'] = that.components['sidebar'] ? that.components['sidebar'].getDimensions('width') : 0;
         that.offsets['header'] = that.nodes['header'].offsetHeight;
         that.offsets['footer'] = that.nodes['footer'].offsetHeight;
         that.offsets['height'] = cm.getPageSize('winHeight') - that.offsets['top'];
