@@ -179,6 +179,25 @@ function(params){
         return that;
     };
 
+    that.remove = function(){
+        if(!that.isRemoved){
+            that.isRemoved = true;
+            destructZone(that.zone);
+            destructEditor(that.components['editor']);
+            while(that.zones.length){
+                that.zones[0].remove();
+            }
+            cm.customEvent.trigger(that.node, 'destruct', {
+                'type' : 'child',
+                'self' : false
+            });
+            that.removeFromStack();
+            cm.remove(that.node);
+            that.triggerEvent('onRemove');
+        }
+        return that;
+    };
+
     that.addZone = function(item){
         that.zones.push(item);
         return that;
@@ -231,21 +250,6 @@ function(params){
 
     that.getInnerNode = function(){
         return that.nodes['block']['inner'];
-    };
-
-    that.remove = function(){
-        if(!that.isRemoved){
-            that.isRemoved = true;
-            destructZone(that.zone);
-            destructEditor(that.components['editor']);
-            while(that.zones.length){
-                that.zones[0].remove();
-            }
-            that.removeFromStack();
-            cm.remove(that.node);
-            that.triggerEvent('onRemove');
-        }
-        return that;
     };
 
     that.getDimensions = function(){
@@ -3901,6 +3905,8 @@ cm.define('App.ModuleHiddenTabs', {
         'node' : cm.Node('div'),
         'name' : '',
         'event' : 'hover',              // hover | click
+        'useMouseOut' : true,
+        'showEmptyTab' : false,
         'duration' : 'cm._config.animDuration',
         'delay' : 'cm._config.hideDelay',
         'isEditing' : false,
@@ -3979,7 +3985,12 @@ function(params){
                     that.triggerEvent('onTabShow', data);
                 })
                 .addEvent('onLabelTarget', function(tabset, data){
-                    show();
+                    // If not in editing mod and tab does not contains any blocks, do not show it
+                    if(!that.params['showEmptyTab'] && !that.isEditing && !cm.find('App.Block', null, data.item['tab']['inner']).length){
+                        hide();
+                    }else{
+                        show();
+                    }
                 })
                 .processTabs(that.nodes['tabs'], that.nodes['labels']);
         });
@@ -3991,6 +4002,9 @@ function(params){
         setTargetEvents();
         // Add custom event
         if(that.params['customEvents']){
+            cm.customEvent.add(that.params['node'], 'destruct', function(){
+                that.destruct();
+            });
             cm.customEvent.add(that.params['node'], 'redraw', function(){
                 that.redraw();
             });
@@ -4009,7 +4023,10 @@ function(params){
         that.tabs = that.components['tabset'].getTabs();
         cm.forEach(that.tabs, function(item){
             cm.addEvent(item['label']['link'], 'click', function(e){
-                if(that.params['event'] == 'click' && that.components['tabset'].get() != item['id']){
+                if(
+                    that.isEditing
+                    || (that.params['event'] == 'click' && that.components['tabset'].get() != item['id'])
+                ){
                     cm.preventDefault(e);
                 }
             });
@@ -4033,24 +4050,22 @@ function(params){
 
     var setTargetEvents = function(){
         if(that.params['event'] == 'hover'){
-            cm.addEvent(that.nodes['container'], 'mouseover', function(e){
-                show();
-            });
-            cm.addEvent(that.nodes['container'], 'mouseout', function(e){
-                var target = cm.getRelatedTarget(e);
-                if(!cm.isParent(that.nodes['container'], target, true)){
-                    !that.isEditing && hide();
-                }
-            });
+            cm.addEvent(that.nodes['container'], 'mouseover', mouseOverEvent);
         }
-        cm.addEvent(window, 'click', function(e){
-            var target = cm.getEventTarget(e);
-            if(!cm.isParent(that.nodes['container'], target, true)){
-                !that.isEditing && hide();
-            }else{
-                show();
-            }
-        });
+        if(that.params['event'] == 'hover' || that.params['useMouseOut']){
+            cm.addEvent(that.nodes['container'], 'mouseout', mouseOutEvent);
+        }
+        cm.addEvent(window, 'click', clickOutEvent);
+    };
+
+    var removeTargetEvents = function(){
+        if(that.params['event'] == 'hover'){
+            cm.removeEvent(that.nodes['container'], 'mouseover', mouseOverEvent);
+        }
+        if(that.params['event'] == 'hover' || that.params['useMouseOut']){
+            cm.removeEvent(that.nodes['container'], 'mouseout', mouseOutEvent);
+        }
+        cm.removeEvent(window, 'click', clickOutEvent);
     };
 
     var hide = function(){
@@ -4065,9 +4080,32 @@ function(params){
     };
 
     var show = function(){
-        if(that.components['tabset'].current){
+        var item = that.components['tabset'].getCurrentTab();
+        if(item && (that.params['showEmptyTab'] || that.isEditing || cm.find('App.Block', null, item['tab']['inner']).length)){
             that.hideInterval && clearTimeout(that.hideInterval);
             cm.addClass(that.nodes['content'], 'is-show', true);
+        }
+    };
+
+    var mouseOverEvent = function(){
+        show();
+    };
+
+    var mouseOutEvent = function(e){
+        var target = cm.getRelatedTarget(e);
+        if(!cm.isParent(that.nodes['container'], target, true)){
+            !that.isEditing && hide();
+        }else{
+            show();
+        }
+    };
+
+    var clickOutEvent = function(e){
+        var target = cm.getEventTarget(e);
+        if(!cm.isParent(that.nodes['container'], target, true)){
+            !that.isEditing && hide();
+        }else{
+            show();
         }
     };
 
@@ -4092,6 +4130,16 @@ function(params){
             hide();
             that.triggerEvent('disableEditing');
             that.triggerEvent('disableEditable');
+        }
+        return that;
+    };
+
+    that.destruct = function(){
+        if(!that.isDestructed){
+            that.isDestructed = true;
+            removeTargetEvents();
+            that.removeFromStack();
+            cm.remove(that.nodes['container']);
         }
         return that;
     };

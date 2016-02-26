@@ -172,6 +172,25 @@ function(params){
         return that;
     };
 
+    that.remove = function(){
+        if(!that.isRemoved){
+            that.isRemoved = true;
+            destructZone(that.zone);
+            destructEditor(that.components['editor']);
+            while(that.zones.length){
+                that.zones[0].remove();
+            }
+            cm.customEvent.trigger(that.node, 'destruct', {
+                'type' : 'child',
+                'self' : false
+            });
+            that.removeFromStack();
+            cm.remove(that.node);
+            that.triggerEvent('onRemove');
+        }
+        return that;
+    };
+
     that.addZone = function(item){
         that.zones.push(item);
         return that;
@@ -224,21 +243,6 @@ function(params){
 
     that.getInnerNode = function(){
         return that.nodes['block']['inner'];
-    };
-
-    that.remove = function(){
-        if(!that.isRemoved){
-            that.isRemoved = true;
-            destructZone(that.zone);
-            destructEditor(that.components['editor']);
-            while(that.zones.length){
-                that.zones[0].remove();
-            }
-            that.removeFromStack();
-            cm.remove(that.node);
-            that.triggerEvent('onRemove');
-        }
-        return that;
     };
 
     that.getDimensions = function(){
