@@ -102,7 +102,7 @@ function(params){
                 })
                 .addEvent('onLabelTarget', function(tabset, data){
                     // If not in editing mod and tab does not contains any blocks, do not show it
-                    if(!that.params['showEmptyTab'] && !that.isEditing && !cm.find('App.Block', null, data.item['tab']['inner']).length){
+                    if(!that.params['showEmptyTab'] && !that.isEditing && !data.item['tab']['inner'].childNodes.length){
                         hide();
                     }else{
                         show();
@@ -197,7 +197,7 @@ function(params){
 
     var show = function(){
         var item = that.components['tabset'].getCurrentTab();
-        if(item && (that.params['showEmptyTab'] || that.isEditing || cm.find('App.Block', null, item['tab']['inner']).length)){
+        if(item && (that.params['showEmptyTab'] || that.isEditing || item['tab']['inner'].childNodes.length)){
             that.hideInterval && clearTimeout(that.hideInterval);
             cm.addClass(that.nodes['content'], 'is-show', true);
         }
