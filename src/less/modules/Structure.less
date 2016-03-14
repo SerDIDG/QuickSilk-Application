@@ -1,0 +1,45 @@
+/* ******* MODULES: STRUCTURE ******* */
+
+.mod__structure {
+    position: relative;
+
+    .mod__structure__inner {
+        width: 100%;
+        max-width: 100%;
+        position: relative;
+    }
+
+    &.pull-left {
+        .mod__structure__inner {
+            .mx__align(left);
+        }
+    }
+
+    &.pull-center {
+        .mod__structure__inner {
+            .mx__align(center);
+        }
+    }
+
+    &.pull-right {
+        .mod__structure__inner {
+            .mx__align(right);
+        }
+    }
+}
+
+/* ******* MODULES: STRUCTURE: ADAPTIVE ******* */
+
+@media only screen and (max-width : @CmUI-AdaptiveFrom) {
+
+    html.is-adaptive {
+        .mod__structure {
+            .mod__structure.pull-center;
+
+            .mod__structure__inner {
+                max-width: 100%;
+            }
+        }
+    }
+
+}
