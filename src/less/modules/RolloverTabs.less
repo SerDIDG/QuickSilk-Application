@@ -1,6 +1,6 @@
-/* ******* MODULES: HIDDEN TABS ******* */
+/* ******* MODULES: ROLLOVER TABS ******* */
 
-.app-mod__hidden-tabs {
+.app-mod__rollover-tabs {
     z-index: 1;
     .mx__transition(z-index, @CmUI-Transition-Duration);
 
@@ -105,7 +105,7 @@
                 > ul {
                     .cm__list-clear;
                     position: relative;
-                    .mx__transition(height, @AppMod-HiddenTabs-Duration);
+                    .mx__transition(height, @AppMod-RolloverTabs-Duration);
 
                     > li {
                         position: absolute;
@@ -114,7 +114,7 @@
                         opacity: 0;
                         overflow: hidden;
                         .mx__position(0, 0, 0, 0);
-                        .mx__transition(all, @AppMod-HiddenTabs-Duration);
+                        .mx__transition(all, @AppMod-RolloverTabs-Duration);
 
                         &.active {
                             position: relative;
@@ -230,23 +230,23 @@
         z-index: 10;
     }
 
-    .app-mod__hidden-tabs__label-indent(@AppMod-HiddenTabs-Label-Indent);
-    .app-mod__hidden-tabs__label-title-indent(@AppMod-HiddenTabs-Label-TitleIndent);
-    .app-mod__hidden-tabs__content-indent(@AppMod-HiddenTabs-Content-Indent);
-    .app-mod__hidden-tabs__image-size(@AppMod-HiddenTabs-Image-Size);
+    .app-mod__rollover-tabs__label-indent(@AppMod-RolloverTabs-Label-Indent);
+    .app-mod__rollover-tabs__label-title-indent(@AppMod-RolloverTabs-Label-TitleIndent);
+    .app-mod__rollover-tabs__content-indent(@AppMod-RolloverTabs-Content-Indent);
+    .app-mod__rollover-tabs__image-size(@AppMod-RolloverTabs-Image-Size);
 }
 
 /* *** THEMES *** */
 
-.app-mod__hidden-tabs {
+.app-mod__rollover-tabs {
     &.theme-initial {
         > .inner {
             > .tabs__head {
                 > .inner {
                     ul {
                         > li {
-                            border: @AppMod-HiddenTabs-Border;
-                            border-radius: @AppMod-HiddenTabs-BorderRadius;
+                            border: @AppMod-RolloverTabs-Border;
+                            border-radius: @AppMod-RolloverTabs-BorderRadius;
 
                             > a {
                                 .cm__font;
@@ -259,19 +259,19 @@
 
             > .tabs__menu {
                 > .inner {
-                    border: @AppMod-HiddenTabs-Border;
-                    border-radius: @AppMod-HiddenTabs-BorderRadius;
+                    border: @AppMod-RolloverTabs-Border;
+                    border-radius: @AppMod-RolloverTabs-BorderRadius;
 
                     .label {
                         .cm__font;
-                        min-height: @AppMod-HiddenTabs-Menu-Height;
-                        line-height: @AppMod-HiddenTabs-Menu-Height;
-                        padding: 0 @AppMod-HiddenTabs-Menu-Indent;
+                        min-height: @AppMod-RolloverTabs-Menu-Height;
+                        line-height: @AppMod-RolloverTabs-Menu-Height;
+                        padding: 0 @AppMod-RolloverTabs-Menu-Indent;
                     }
 
                     .icon {
-                        width: @AppMod-HiddenTabs-Menu-Height;
-                        height: @AppMod-HiddenTabs-Menu-Height;
+                        width: @AppMod-RolloverTabs-Menu-Height;
+                        height: @AppMod-RolloverTabs-Menu-Height;
                     }
                 }
             }
@@ -279,15 +279,15 @@
             > .tabs__content {
                 > .inner {
                     padding: @CmIndent-XSmall;
-                    border: @AppMod-HiddenTabs-Border;
-                    border-radius: @AppMod-HiddenTabs-BorderRadius;
+                    border: @AppMod-RolloverTabs-Border;
+                    border-radius: @AppMod-RolloverTabs-BorderRadius;
                     box-shadow: @CmUI-Shadow-Bottom;
                 }
             }
         }
 
-        .app-mod__hidden-tabs__label-inner-indent(@AppMod-HiddenTabs-Label-InnerIndent);
-        .app-mod__hidden-tabs__label-height(@AppMod-HiddenTabs-Label-Height);
+        .app-mod__rollover-tabs__label-inner-indent(@AppMod-RolloverTabs-Label-InnerIndent);
+        .app-mod__rollover-tabs__label-height(@AppMod-RolloverTabs-Label-Height);
     }
 
     &.theme-light {
@@ -296,15 +296,15 @@
                 > .inner {
                     ul {
                         > li {
-                            background: @AppMod-HiddenTabs-ThemeLight-Label-DefaultBackground;
-                            border-color: @AppMod-HiddenTabs-ThemeLight-BorderColor;
+                            background: @AppMod-RolloverTabs-ThemeLight-Label-DefaultBackground;
+                            border-color: @AppMod-RolloverTabs-ThemeLight-BorderColor;
 
                             &:hover {
-                                background: @AppMod-HiddenTabs-ThemeLight-Label-HoverBackground;
+                                background: @AppMod-RolloverTabs-ThemeLight-Label-HoverBackground;
                             }
 
                             &.active {
-                                background: @AppMod-HiddenTabs-ThemeLight-Label-ActiveBackground;
+                                background: @AppMod-RolloverTabs-ThemeLight-Label-ActiveBackground;
                             }
                         }
                     }
@@ -313,29 +313,29 @@
 
             > .tabs__menu {
                 > .inner {
-                    background: @AppMod-HiddenTabs-ThemeLight-Menu-Background;
-                    border-color: @AppMod-HiddenTabs-ThemeLight-BorderColor;
+                    background: @AppMod-RolloverTabs-ThemeLight-Menu-Background;
+                    border-color: @AppMod-RolloverTabs-ThemeLight-BorderColor;
                 }
             }
 
             > .tabs__content {
                 > .inner {
-                    background-color: @AppMod-HiddenTabs-ThemeLight-Content-Background;
-                    border-color: @AppMod-HiddenTabs-ThemeLight-BorderColor;
+                    background-color: @AppMod-RolloverTabs-ThemeLight-Content-Background;
+                    border-color: @AppMod-RolloverTabs-ThemeLight-BorderColor;
                 }
             }
         }
     }
 
     &.theme-default {
-        &:extend(.app-mod__hidden-tabs.theme-initial all);
-        &:extend(.app-mod__hidden-tabs.theme-light all);
+        &:extend(.app-mod__rollover-tabs.theme-initial all);
+        &:extend(.app-mod__rollover-tabs.theme-light all);
     }
 }
 
 // /* *** MIXINS *** */
 
-.app-mod__hidden-tabs__label-indent (@indent: @AppMod-HiddenTabs-Label-Indent) {
+.app-mod__rollover-tabs__label-indent (@indent: @AppMod-RolloverTabs-Label-Indent) {
     > .inner {
         > .tabs__head {
             ul {
@@ -349,7 +349,7 @@
     }
 }
 
-.app-mod__hidden-tabs__label-inner-indent (@indent: @AppMod-HiddenTabs-Label-InnerIndent) {
+.app-mod__rollover-tabs__label-inner-indent (@indent: @AppMod-RolloverTabs-Label-InnerIndent) {
     > .inner {
         > .tabs__head {
             > .inner {
@@ -365,7 +365,7 @@
     }
 }
 
-.app-mod__hidden-tabs__label-height (@height: @AppMod-HiddenTabs-Label-Height) {
+.app-mod__rollover-tabs__label-height (@height: @AppMod-RolloverTabs-Label-Height) {
     > .inner {
         > .tabs__head {
             > .inner {
@@ -382,7 +382,7 @@
     }
 }
 
-.app-mod__hidden-tabs__label-title-indent (@indent: @AppMod-HiddenTabs-Label-TitleIndent) {
+.app-mod__rollover-tabs__label-title-indent (@indent: @AppMod-RolloverTabs-Label-TitleIndent) {
     > .inner {
         > .tabs__head {
             ul {
@@ -407,7 +407,7 @@
     }
 }
 
-.app-mod__hidden-tabs__content-indent (@indent: @AppMod-HiddenTabs-Content-Indent) {
+.app-mod__rollover-tabs__content-indent (@indent: @AppMod-RolloverTabs-Content-Indent) {
     &.expand-bottom {
         > .inner {
             > .tabs__content {
@@ -441,7 +441,7 @@
     }
 }
 
-.app-mod__hidden-tabs__image-size (@size: @AppMod-HiddenTabs-Image-Size) {
+.app-mod__rollover-tabs__image-size (@size: @AppMod-RolloverTabs-Image-Size) {
     > .inner {
         > .tabs__head {
             ul {
@@ -465,16 +465,16 @@
 
 // /* *** HELPERS *** */
 
-.app-mod__hidden-tabs-helper__duration {
-    transition-duration: @AppMod-HiddenTabs-Duration;
+.app-mod__rollover-tabs-helper__duration {
+    transition-duration: @AppMod-RolloverTabs-Duration;
 }
 
 /* ******* COMPONENTS: TABSET: ADAPTIVE ******* */
 
-@media only screen and (max-width : @AppMod-HiddenTabs-AdaptiveFrom) {
+@media only screen and (max-width : @AppMod-RolloverTabs-AdaptiveFrom) {
 
     html.is-adaptive {
-        .app-mod__hidden-tabs {
+        .app-mod__rollover-tabs {
             > .inner {
                 > .tabs__head {
                     display: none;

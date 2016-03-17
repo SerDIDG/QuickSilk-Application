@@ -1,3 +1,4 @@
+/*! ************ QuickSilk-Application v3.7.0 (2016-03-17 19:12) ************ */
 var App = {
     'Elements': {},
     'Nodes' : {},
@@ -3882,7 +3883,46 @@ function(params){
     init();
 });
 
-cm.define('App.ModuleHiddenTabs', {
+cm.define('App.ModuleMenu', {
+    'modules' : [
+        'Params',
+        'DataNodes'
+    ],
+    'params' : {
+        'node' : cm.Node('div')
+    }
+},
+function(params){
+    var that = this;
+
+    that.nodes = {
+        'select' : cm.Node('select')
+    };
+
+    /* *** CLASS FUNCTIONS *** */
+
+    var init = function(){
+        that.setParams(params);
+        that.getDataNodes(that.params['node']);
+        render();
+    };
+
+    var render = function(){
+        cm.addEvent(that.nodes['select'], 'change', toggle);
+    };
+
+    var toggle = function(){
+        var value = that.nodes['select'].value;
+        if(!cm.isEmpty(value)){
+            window.location.href = value;
+        }
+    };
+
+    /* *** MAIN *** */
+
+    init();
+});
+cm.define('App.ModuleRolloverTabs', {
     'modules' : [
         'Params',
         'Events',
@@ -3950,7 +3990,7 @@ function(params){
     };
 
     var getCSSHelpers = function(){
-        that.params['duration'] = cm.getTransitionDurationFromRule('.app-mod__hidden-tabs-helper__duration') || that.params['duration'];
+        that.params['duration'] = cm.getTransitionDurationFromRule('.app-mod__rollover-tabs-helper__duration') || that.params['duration'];
     };
 
     var validateParams = function(){
@@ -4147,45 +4187,6 @@ function(params){
     that.redraw = function(){
         return that;
     };
-
-    init();
-});
-cm.define('App.ModuleMenu', {
-    'modules' : [
-        'Params',
-        'DataNodes'
-    ],
-    'params' : {
-        'node' : cm.Node('div')
-    }
-},
-function(params){
-    var that = this;
-
-    that.nodes = {
-        'select' : cm.Node('select')
-    };
-
-    /* *** CLASS FUNCTIONS *** */
-
-    var init = function(){
-        that.setParams(params);
-        that.getDataNodes(that.params['node']);
-        render();
-    };
-
-    var render = function(){
-        cm.addEvent(that.nodes['select'], 'change', toggle);
-    };
-
-    var toggle = function(){
-        var value = that.nodes['select'].value;
-        if(!cm.isEmpty(value)){
-            window.location.href = value;
-        }
-    };
-
-    /* *** MAIN *** */
 
     init();
 });

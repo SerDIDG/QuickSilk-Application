@@ -1,27 +1,4 @@
 module.exports = function(grunt) {
-    // Custom config
-    var config = {
-        'less' : {
-            'files' : [
-                'src/less/variables/**/*.less',
-                'src/less/variables.less',
-                'src/less/mixins.less',
-                'src/less/application.less',
-                'src/less/common/Font.less',
-                'src/less/common/Icons.less',
-                'src/less/common/Tags.less',
-                'src/less/common/UI.less',
-                'src/less/common/**/*.less',
-                'src/less/parts/**/*.less',
-                'src/less/layouts/**/*.less',
-                'src/less/components/**/*.less',
-                'src/less/modules/**/*.less',
-                'src/less/pages/**/*.less',
-                '!src/less/index.less',
-                '!src/less/components/old/**/*.less'
-            ]
-        }
-    };
     // Load all grunt tasks matching the `grunt-*` pattern.
     require('load-grunt-tasks')(grunt);
     // Display how match time it took to build each task
@@ -29,100 +6,154 @@ module.exports = function(grunt) {
     // Project configuration.
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
+        banner : '/*! ************ <%= pkg.name %> v<%= pkg.version %> (<%= grunt.template.today("yyyy-mm-dd HH:MM") %>) ************ */\n',
+
+        paths : {
+            src : 'src',
+            build : 'build',
+            temp : 'temp'
+        },
 
         clean: {
-            build : [
-                'build'
+            scripts : [
+                '<%= paths.build %>/js'
             ],
-            post : [
-                'temp',
-                'lib'
+            styles : [
+                '<%= paths.build %>/less',
+                '<%= paths.build %>/css'
+            ],
+            images : [
+                '<%= paths.build %>/img'
+            ],
+            fonts : [
+                '<%= paths.build %>/fonts'
+            ],
+            temp : [
+                '<%= paths.temp %>'
             ]
         },
 
-        less_imports: {
-            source: {
+        concat : {
+            scripts : {
                 options: {
-                    banner: '/* ************ QUICKSILK: APPLICATION ************ */'
+                    banner: '<%= banner %>'
                 },
-                src: config['less']['files'],
-                dest: 'src/less/index.less'
-            }
-        },
-
-        concat: {
-            build_scripts: {
-                src: [
-                    'src/js/Application.js',
-                    'src/js/components/**/*.js',
-                    'src/js/modules/**/*.js',
-                    '!src/js/components/dev/**/*.js',
-                    '!src/js/components/old/**/*.js'
+                src : [
+                    '<%= paths.src %>/js/Application.js',
+                    '<%= paths.src %>/js/components/**/*.js',
+                    '<%= paths.src %>/js/modules/**/*.js',
+                    '!<%= paths.src %>/js/components/dev/**/*.js',
+                    '!<%= paths.src %>/js/components/old/**/*.js'
                 ],
-                dest: 'build/js/<%= pkg.name %>.js'
+                dest : '<%= paths.build %>/js/<%= pkg.name %>.js'
             },
-            build_styles: {
-                files: [{
-                    src: [
-                        'src/css/**/*.css',
-                        config['less']['files']
-                    ],
-                    dest: 'build/less/<%= pkg.name %>.less'
-                }]
+            styles : {
+                options: {
+                    banner: '<%= banner %>'
+                },
+                src : [
+                    '<%= paths.src %>/less/variables/**/*.less',
+                    '<%= paths.src %>/less/variables.less',
+                    '<%= paths.src %>/less/mixins.less',
+                    '<%= paths.src %>/less/application.less',
+                    '<%= paths.src %>/less/common/Font.less',
+                    '<%= paths.src %>/less/common/Icons.less',
+                    '<%= paths.src %>/less/common/Tags.less',
+                    '<%= paths.src %>/less/common/UI.less',
+                    '<%= paths.src %>/less/common/**/*.less',
+                    '<%= paths.src %>/less/parts/**/*.less',
+                    '<%= paths.src %>/less/layouts/**/*.less',
+                    '<%= paths.src %>/less/components/**/*.less',
+                    '<%= paths.src %>/less/modules/**/*.less',
+                    '<%= paths.src %>/less/pages/**/*.less',
+                    '!<%= paths.src %>/less/components/old/**/*.less'
+                ],
+                dest : '<%= paths.build %>/less/<%= pkg.name %>.less'
             }
         },
 
-        uglify: {
-            build: {
-                src : 'build/js/<%= pkg.name %>.js',
-                dest : 'build/js/<%= pkg.name %>.min.js'
+        uglify : {
+            build : {
+                src : ['<%= paths.build %>/js/<%= pkg.name %>.js'],
+                dest : '<%= paths.build %>/js/<%= pkg.name %>.min.js'
             }
         },
 
-        imagemin: {
-            build: {
+        imagemin : {
+            build : {
                 options: {
                     optimizationLevel: 3
                 },
-                files: [{
-                    expand: true,
-                    cwd: 'src/img/',
-                    src: ['**/*.*'],
-                    dest: 'build/img/'
+                files : [{
+                    expand : true,
+                    cwd : '<%= paths.build %>/img/',
+                    src : ['**/*.*'],
+                    dest : '<%= paths.temp %>/img/'
                 }]
             }
         },
 
         copy: {
-            build: {
+            images : {
+                files : [{
+                    expand : true,
+                    cwd : '<%= paths.src %>/img/',
+                    src : ['**/*.*'],
+                    dest : '<%= paths.build %>/img/'
+                }]
+            },
+            image_optimize : {
+                files : [{
+                    expand : true,
+                    cwd : '<%= paths.temp %>/img/',
+                    src : ['**/*.*'],
+                    dest : '<%= paths.build %>/img/'
+                }]
+            },
+            fonts : {
                 files: [{
-                    expand: true,
-                    cwd: 'src/fonts/',
-                    src: [
-                        '**/*.*',
-                        '!**/*.json'
-                    ],
-                    dest: 'build/fonts/'
+                    expand : true,
+                    cwd : '<%= paths.src %>/fonts/',
+                    src : ['**/*.*', '!**/*.json'],
+                    dest : '<%= paths.build %>/fonts/'
                 }]
             }
         },
 
-
-        watcher: {
-            development: {
-                files: [
-                    'src/js/**/*.js',
-                    'src/css/**/*.css',
-                    'src/less/**/*.less'
+        watch : {
+            scripts : {
+                files : [
+                    '<%= paths.src %>/js/**/*.js'
                 ],
-                tasks: ['dev'],
-                options: {
-                    spawn: false
-                }
+                tasks : ['scripts']
+            },
+            styles : {
+                files : [
+                    '<%= paths.src %>/less/**/*.less'
+                ],
+                tasks : ['styles']
+            },
+            images : {
+                files : [
+                    '<%= paths.src %>/img/**/*.*'
+                ],
+                tasks : ['images']
+            },
+            fonts : {
+                files : [
+                    '<%= paths.src %>/fonts/**/*.*',
+                    '!<%= paths.src %>/fonts/**/*.json'
+                ],
+                tasks : ['fonts']
             }
         }
     });
-    // Tasks
-    grunt.registerTask('default', ['clean', 'less_imports', 'concat', 'uglify', 'imagemin', 'copy', 'clean:post']);
-    grunt.registerTask('dev', ['less_imports', 'concat', 'clean:post']);
+    // Custom Tasks
+    grunt.registerTask('default', ['scripts', 'styles', 'images', 'fonts']);
+    grunt.registerTask('optimize', ['clean:temp', 'default', 'uglify', 'imagemin', 'copy:image_optimize', 'clean:temp']);
+
+    grunt.registerTask('scripts', ['clean:scripts', 'concat:scripts']);
+    grunt.registerTask('styles', ['clean:styles', 'concat:styles']);
+    grunt.registerTask('images', ['clean:images', 'copy:images']);
+    grunt.registerTask('fonts', ['clean:fonts', 'copy:fonts']);
 };
