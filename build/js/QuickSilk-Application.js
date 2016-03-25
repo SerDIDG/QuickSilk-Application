@@ -1,4 +1,4 @@
-/*! ************ QuickSilk-Application v3.7.0 (2016-03-21 17:34) ************ */
+/*! ************ QuickSilk-Application v3.7.0 (2016-03-25 17:23) ************ */
 var App = {
     'Elements': {},
     'Nodes' : {},
@@ -3350,7 +3350,6 @@ cm.define('App.Template', {
     'params' : {
         'node' : cm.Node('div'),
         'name' : 'app-template',
-        'stickyFooter' : false,
         'scrollNode' : 'document.body',
         'scrollDuration' : 1000,
         'topMenuName' : 'app-topmenu',
@@ -3363,16 +3362,11 @@ cm.define('App.Template', {
             'indent' : 24
         },
         'header' : {
-            'type' : 'box',            // wide | box
-            'width' : 1000,
-            'align' : 'center',
             'fixed' : false,
             'overlapping' : false
         },
         'footer' : {
-            'type' : 'box',            // wide | box
-            'width' : 1000,
-            'align' : 'center'
+            'sticky' : false
         }
     }
 },
@@ -3386,7 +3380,8 @@ function(params){
         'header' : cm.Node('div'),
         'content' : cm.Node('div'),
         'footer' : cm.Node('div'),
-        'buttonUp' : cm.Node('div')
+        'buttonUp' : cm.Node('div'),
+        'buttonsUp' : []
     };
 
     that.isEditing = null;
@@ -3451,14 +3446,14 @@ function(params){
         that.nodes['inner'].style.minHeight = that.offsets['height'] + 'px';
         if(that.isEditing){
             that.nodes['content'].style.top = 0;
-            if(that.params['stickyFooter']){
+            if(that.params['footer']['sticky']){
                 that.nodes['content'].style.minHeight = Math.max((that.offsets['height'] - that.offsets['header'] - that.offsets['footer']), 0) + 'px';
             }
         }else{
             if(that.params['header']['fixed'] && !that.params['header']['overlapping']){
                 that.nodes['content'].style.top = that.offsets['header'] + 'px';
             }
-            if(that.params['stickyFooter']){
+            if(that.params['footer']['sticky']){
                 if(that.params['header']['overlapping']){
                     that.nodes['content'].style.minHeight = Math.max((that.offsets['height'] - that.offsets['footer']), 0) + 'px';
                 }else{
