@@ -33,7 +33,7 @@ cm.define('App.Template', {
             'overlapping' : false
         },
         'footer' : {
-            'sticky' : false
+            'sticky' : true
         }
     }
 },
@@ -61,14 +61,18 @@ function(params){
         that.convertEvents(that.params['events']);
         that.getDataNodes(that.params['node']);
         that.getDataConfig(that.params['node']);
+        that.addToStack(that.params['node']);
         that.triggerEvent('onRenderStart');
         render();
-        that.addToStack(that.params['node']);
-        that.triggerEvent('onRender');
+        setState();
         redraw(true);
+        that.triggerEvent('onRender');
     };
 
     var render = function(){
+        // Structure
+        that.nodes['headerFake'] = cm.node('div', {'class' : 'tpl__header__fake'});
+        cm.insertAfter(that.nodes['headerFake'], that.nodes['headerContainer']);
         // Find components
         cm.find('App.TopMenu', that.params['topMenuName'], null, function(classObject){
             that.components['topMenu'] = classObject;
@@ -92,6 +96,23 @@ function(params){
         });
     };
 
+    var setState = function(){
+        if(that.params['header']['overlapping']){
+            cm.addClass(that.nodes['headerContainer'], 'is-overlapping');
+        }
+        if(that.params['header']['fixed']){
+            cm.addClass(that.nodes['headerContainer'], 'is-fixed');
+        }
+        if(that.params['header']['fixed'] && !that.params['header']['overlapping']){
+            cm.addClass(that.nodes['headerFake'], 'is-show');
+        }
+    };
+
+    var unsetState = function(){
+        cm.removeClass(that.nodes['headerContainer'], 'is-overlapping is-fixed');
+        cm.removeClass(that.nodes['headerFake'], 'is-show');
+    };
+
     var resize = function(editor, params){
         var rule;
         if(rule = cm.getCSSRule('html.is-sidebar--expanded .tpl__container')[0]){
@@ -112,13 +133,12 @@ function(params){
         // Resize
         that.nodes['inner'].style.minHeight = that.offsets['height'] + 'px';
         if(that.isEditing){
-            that.nodes['content'].style.top = 0;
             if(that.params['footer']['sticky']){
                 that.nodes['content'].style.minHeight = Math.max((that.offsets['height'] - that.offsets['header'] - that.offsets['footer']), 0) + 'px';
             }
         }else{
             if(that.params['header']['fixed'] && !that.params['header']['overlapping']){
-                that.nodes['content'].style.top = that.offsets['header'] + 'px';
+                that.nodes['headerFake'].style.height = that.offsets['header'] + 'px';
             }
             if(that.params['footer']['sticky']){
                 if(that.params['header']['overlapping']){
@@ -145,7 +165,7 @@ function(params){
     that.enableEditing = function(){
         if(typeof that.isEditing !== 'boolean' || !that.isEditing){
             that.isEditing = true;
-            cm.removeClass(that.nodes['headerContainer'], 'is-overlapping is-fixed');
+            unsetState();
             that.redraw();
             that.triggerEvent('enableEditing');
         }
@@ -155,12 +175,7 @@ function(params){
     that.disableEditing = function(){
         if(typeof that.isEditing !== 'boolean' || that.isEditing){
             that.isEditing = false;
-            if(that.params['header']['overlapping']){
-                cm.addClass(that.nodes['headerContainer'], 'is-overlapping');
-            }
-            if(that.params['header']['fixed']){
-                cm.addClass(that.nodes['headerContainer'], 'is-fixed');
-            }
+            setState();
             that.redraw();
             that.triggerEvent('disableEditing');
         }
