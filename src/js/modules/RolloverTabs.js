@@ -27,9 +27,7 @@ cm.define('App.ModuleRolloverTabs', {
         'delay' : 'cm._config.hideDelay',
         'isEditing' : false,
         'customEvents' : true,
-        'Com.TabsetHelper' : {
-
-        }
+        'Com.TabsetHelper' : {}
     }
 },
 function(params){
