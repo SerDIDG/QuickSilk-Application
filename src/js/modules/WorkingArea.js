@@ -19,7 +19,8 @@ cm.define('Module.WorkingArea', {
         'node' : cm.node('div'),
         'name' : '',
         'isEditing' : false,
-        'customEvents' : true
+        'customEvents' : true,
+        'href' : '_self'
     }
 },
 function(params){
@@ -46,10 +47,15 @@ function(params){
     };
 
     var validateParams = function(){
-
+        if(cm.isNode(that.params['node'])){
+            that.params['href'] = that.params['node'].getAttribute('href') || that.params['href'];
+            that.params['target'] = that.params['node'].getAttribute('target') || that.params['target'];
+        }
     };
 
     var render = function(){
+        // Set State
+        defaultState();
         // Add custom event
         if(that.params['customEvents']){
             cm.customEvent.add(that.params['node'], 'enableEditable', function(){
@@ -63,8 +69,32 @@ function(params){
         that.params['isEditing'] && that.enableEditing();
     };
 
-    var preventLinkEvent = function(e){
+    var editState = function(){
+        cm.addClass(that.nodes['container'], 'is-editing is-editable');
+        if(!cm.isEmpty(that.params['href'])){
+            cm.removeClass(that.nodes['container'], 'is-link');
+            cm.removeEvent(that.nodes['container'], 'click', linkAction);
+        }
+    };
+
+    var defaultState = function(){
+        cm.removeClass(that.nodes['container'], 'is-editing is-editable');
+        if(!cm.isEmpty(that.params['href'])){
+            cm.addClass(that.nodes['container'], 'is-link');
+            cm.addEvent(that.nodes['container'], 'click', linkAction);
+        }
+    };
+
+    var linkAction = function(e){
         cm.preventDefault(e);
+        switch(that.params['target']){
+            case '_blank':
+                window.open(that.params['href'],'_blank');
+                break;
+            default:
+                window.location.href = that.params['href'];
+                break;
+        }
     };
 
     /* ******* PUBLIC ******* */
@@ -72,8 +102,7 @@ function(params){
     that.enableEditing = function(){
         if(!cm.isBoolean(that.isEditing) || !that.isEditing){
             that.isEditing = true;
-            cm.addClass(that.params['node'], 'is-editing is-editable');
-            cm.addEvent(that.nodes['container'], 'click', preventLinkEvent);
+            editState();
             that.triggerEvent('enableEditing');
             that.triggerEvent('enableEditable');
         }
@@ -83,8 +112,7 @@ function(params){
     that.disableEditing = function(){
         if(!cm.isBoolean(that.isEditing) || that.isEditing){
             that.isEditing = false;
-            cm.removeClass(that.params['node'], 'is-editing is-editable');
-            cm.removeEvent(that.nodes['container'], 'click', preventLinkEvent);
+            defaultState();
             that.triggerEvent('disableEditing');
             that.triggerEvent('disableEditable');
         }
