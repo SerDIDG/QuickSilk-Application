@@ -1,4 +1,4 @@
-/*! ************ QuickSilk-Application v3.7.0 (2016-04-05 21:35) ************ */
+/*! ************ QuickSilk-Application v3.7.0 (2016-04-05 21:37) ************ */
 var App = {
     '_version' : '3.5.1',
     'Elements': {},
@@ -4222,7 +4222,8 @@ cm.define('Module.WorkingArea', {
         'name' : '',
         'isEditing' : false,
         'customEvents' : true,
-        'href' : '_self'
+        'href' : '',
+        'target' : '_self'
     }
 },
 function(params){

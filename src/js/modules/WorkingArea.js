@@ -20,7 +20,8 @@ cm.define('Module.WorkingArea', {
         'name' : '',
         'isEditing' : false,
         'customEvents' : true,
-        'href' : '_self'
+        'href' : '',
+        'target' : '_self'
     }
 },
 function(params){
