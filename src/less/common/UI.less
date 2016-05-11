@@ -129,6 +129,10 @@ html {
             top: @AppTopMenu-Height;
         }
 
+        .app__panel {
+            top: @AppTopMenu-Height;
+        }
+
         .tpl__container {
             margin-top: @AppTopMenu-Height;
         }
@@ -161,6 +165,10 @@ html {
             &.is-fixed {
                 left: @AppSidebar-WidthExpanded;
             }
+        }
+
+        .tpl__content {
+            margin: @AppTpl-Content-EditableIndent 0;
         }
 
         .tpl__header__container,
@@ -216,6 +224,10 @@ html {
                     left: 0;
                 }
             }
+
+            .tpl__content {
+                margin: 0;
+            }
         }
     }
 }
@@ -233,6 +245,10 @@ html {
         &.is-overlapping {
             left: 0 !important;
         }
+    }
+
+    .tpl__content {
+        margin: 0 !important;
     }
 
     .app__module__controls--edit,

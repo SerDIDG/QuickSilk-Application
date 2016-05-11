@@ -1,0 +1,185 @@
+/* ******* COMPONENTS: PANEL ******* */
+
+.app__panel {
+    visibility: hidden;
+    position: fixed;
+    z-index: 210;
+    .mx__transition(all, @AppPanel-Duration);
+
+    &.is-open {
+        visibility: visible;
+    }
+}
+
+.app__panel--sidebar,
+.app__panel--story {
+    .mx__position(0, 0, 0, 0);
+
+    .app__panel__dialog {
+        .mx__transform(translateX(-100%));
+        .mx__transition(all, @AppPanel-Duration, @CmUI-MotionAsymmetric);
+
+        > .inner {
+            opacity: 0;
+            .mx__transition(all, @AppPanel-Duration, @CmUI-MotionAsymmetric);
+        }
+    }
+
+    &.is-open {
+        .app__panel__dialog {
+            .mx__transform(translateX(0));
+
+            > .inner {
+                opacity: 1;
+            }
+        }
+    }
+}
+
+.app__panel--sidebar {
+    .app__panel__dialog {
+        box-shadow: @CmUI-Shadow-Right;
+    }
+}
+
+.app__panel--story {
+    .mx__position(0, auto, 0, 0);
+}
+
+/* *** DIALOG *** */
+
+.app__panel__dialog {
+    width: @AppPanel-Dialog-Width;
+    position: absolute;
+    background-color: @AppPanel-Dialog-Background;
+    .mx__position(0, auto, 0, 0);
+
+    > .inner {
+        position: absolute;
+        background-color: @AppPanel-Dialog-ContentBackground;
+        .mx__position(0, 0, 0, 0);
+
+        > .title {
+            height: @AppPanel-Dialog-TitleHeight;
+            position: absolute;
+            z-index: 3;
+            background-color: @CmColor-Primary-DarkDefault;
+            .mx__position(0, 0, auto, 0);
+            .mx__user-select(none);
+
+            > .label {
+                .cm__font--ui-h1;
+                .cm__text-nowrap;
+                line-height: @AppPanel-Dialog-TitleHeight;
+                color: @CmColor-Font-Opposite;
+
+                &:first-child {
+                    margin-left: @AppPanel-Dialog-Indent;
+                }
+
+                &:last-child {
+                    margin-right: @AppPanel-Dialog-Indent;
+                }
+
+                &:not(:first-child) {
+                    margin-left: @AppPanel-Dialog-TitleHeight;
+                }
+
+                &:not(:last-child) {
+                    margin-right: @AppPanel-Dialog-TitleHeight;
+                }
+            }
+
+            > .icon {
+                .icon.linked;
+                position: absolute;
+                cursor: pointer;
+                color: @CmColor-Font-Opposite;
+                .cm-i__size(@CmSize-Medium);
+                .cm-i__b-size(@AppSidebar-Title-Height);
+
+                &:first-child {
+                    .mx__position(0, auto, 0, 0);
+                }
+
+                &:last-child {
+                    .mx__position(0, 0, 0, auto);
+                }
+            }
+        }
+
+        > .content {
+            position: absolute;
+            z-index: 1;
+            background-color: @AppPanel-Dialog-ContentBackground;
+            .mx__position(0, 0, 0, 0);
+
+            > .inner {
+                .cm__scroll-y;
+                position: absolute;
+                .mx__position(0, 0, 0, 0);
+            }
+
+            &:not(:first-child) {
+                top: @AppPanel-Dialog-TitleHeight;
+            }
+
+            &:not(:last-child) {
+                bottom: @AppPanel-Dialog-ButtonsHeight
+            }
+        }
+
+        > .buttons {
+            position: absolute;
+            z-index: 2;
+            padding: @AppPanel-Dialog-Indent;
+            background-color: @CmColor-Secondary-LightActive;
+            .mx__position(auto, 0, 0, 0);
+
+            > .inner {
+                opacity: 0;
+                visibility: hidden;
+                .mx__transition(all, @CmUI-Transition-Duration);
+            }
+
+            &.is-show {
+                > .inner {
+                    opacity: 1;
+                    visibility: visible;
+                }
+            }
+
+            &.is-immediately {
+                > .inner {
+                    .cm__transition-none;
+                }
+            }
+        }
+    }
+}
+
+/* *** COMPONENTS *** */
+
+.app__panel__togglebox {
+    margin: 0;
+
+    &.has-title-bg {
+        border-bottom: 0 solid @AppPanel-Dialog-ContentBackground;
+
+        > dt {
+            border-radius: 0;
+        }
+
+        &.is-hide {
+            border-bottom-width: 1px;
+        }
+    }
+}
+
+.app__panel__box {
+    padding: @AppPanel-Box-Indent;
+}
+
+.app__panel__field {
+    .cm__box;
+}

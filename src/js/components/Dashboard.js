@@ -64,7 +64,7 @@ function(params){
     /* *** INIT *** */
 
     var init = function(){
-        getCSSHelpers();
+        getLESSVariables();
         that.setParams(params);
         that.convertEvents(that.params['events']);
         validateParams();
@@ -73,9 +73,9 @@ function(params){
         that.triggerEvent('onRender');
     };
 
-    var getCSSHelpers = function(){
-        that.params['dropDuration'] = cm.getTransitionDurationFromRule('.app__dashboard__drop-duration');
-        that.params['moveDuration'] = cm.getTransitionDurationFromRule('.app__dashboard__move-duration');
+    var getLESSVariables = function(){
+        that.params['dropDuration'] = cm.getTransitionDurationFromLESS('AppDashboard-DropDuration', that.params['dropDuration']);
+        that.params['moveDuration'] = cm.getTransitionDurationFromLESS('AppDashboard-MoveDuration', that.params['moveDuration']);
     };
 
     var validateParams = function(){
@@ -661,7 +661,8 @@ function(params){
             if(
                 cm.isParent(block.params['node'], zone.params['node'])
                 || zone.params['locked']
-                || zone.params['type'] != 'remove' && block.params['type'] != zone.params['type']
+                || (zone.params['type'] != 'remove' && block.params['type'] != zone.params['type'])
+                || (zone.params['type'] == 'remove' && !block.params['removable'])
             ){
                 return false;
             }

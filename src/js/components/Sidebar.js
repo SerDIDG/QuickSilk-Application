@@ -41,10 +41,7 @@ cm.define('App.Sidebar', {
     }
 },
 function(params){
-    var that = this,
-        scrollBarSize = 0,
-        menuWidth = 0,
-        contentWidth;
+    var that = this;
 
     that.nodes = {
         'container' : cm.Node('div'),
@@ -60,7 +57,7 @@ function(params){
     /* *** CLASS FUNCTIONS *** */
 
     var init = function(){
-        getCSSHelpers();
+        getLESSVariables();
         that.setParams(params);
         that.convertEvents(that.params['events']);
         that.getDataNodes(that.params['node']);
@@ -72,8 +69,8 @@ function(params){
         that.triggerEvent('onRender');
     };
 
-    var getCSSHelpers = function(){
-        that.params['duration'] = cm.getTransitionDurationFromRule('.app__sidebar-helper__duration');
+    var getLESSVariables = function(){
+        that.params['duration'] = cm.getTransitionDurationFromLESS('AppSidebar-Duration', that.params['duration']);
     };
 
     var validateParams = function(){
@@ -83,23 +80,13 @@ function(params){
     };
 
     var render = function(){
-        var isExpanded, helperMenuRule, helperContentRule;
+        var isExpanded;
         // Init tabset
         processTabset();
-        // Get sidebar dimensions from CSS
-        scrollBarSize = cm._scrollSize;
-        if(helperMenuRule = cm.getCSSRule('.app__sidebar-helper__menu-width')[0]){
-            menuWidth = cm.styleToNumber(helperMenuRule.style.width);
-        }
-        if(helperContentRule = cm.getCSSRule('.app__sidebar-helper__content-width')[0]){
-            contentWidth = cm.styleToNumber(helperContentRule.style.width);
-        }
         // Add events on collapse buttons
         cm.forEach(that.nodes['collapseButtons'], function(item){
             cm.addEvent(item['container'], 'click', that.toggle);
         });
-        // Resize sidebar relative to scroll bar size
-        resize();
         // Check toggle class
         isExpanded = cm.isClass(that.nodes['container'], 'is-expanded');
         // Check storage
@@ -139,40 +126,8 @@ function(params){
         });
     };
 
-    var resize = function(){
-        var rule,
-            params = {
-                'innerWidth' : contentWidth + scrollBarSize,
-                'width' : menuWidth + contentWidth + scrollBarSize,
-                'contentWidth' : contentWidth,
-                'menuWidth' : menuWidth,
-                'scrollBarSize' : scrollBarSize
-            };
-        cm.addClass(that.nodes['container'], 'is-immediately');
-        if(rule = cm.getCSSRule('.app__sidebar .sidebar__content')[0]){
-            rule.style.width = [params['innerWidth'], 'px'].join('');
-        }
-        if(rule = cm.getCSSRule('.app__sidebar .sidebar__remove-zone')[0]){
-            rule.style.width = [params['innerWidth'], 'px'].join('');
-        }
-        if((rule = cm.getCSSRule('.app__sidebar.is-expanded')[0]) || (rule = cm.getCSSRule('.is-expanded.app__sidebar')[0])){
-            rule.style.width = [params['width'], 'px'].join('');
-        }
-        if(rule = cm.getCSSRule('.app__sidebar-helper__width-expanded')[0]){
-            rule.style.width = [params['width'], 'px'].join('');
-        }
-        that.triggerEvent('onResize', params);
-        setTimeout(function(){
-            cm.removeClass(that.nodes['container'], 'is-immediately');
-        }, 5);
-    };
-
     var resizeAction = function(){
         animFrame(function(){
-            if(cm._scrollSize != scrollBarSize){
-                scrollBarSize = cm._scrollSize;
-                resize();
-            }
             if(cm._pageSize['winWidth'] <= cm._config['adaptiveFrom']){
                 if(that.isExpanded){
                     that.collapse(true);
@@ -287,11 +242,6 @@ function(params){
             return that.components['tabset'].get();
         }
         return null;
-    };
-
-    that.resize = function(){
-        resize();
-        return that;
     };
 
     that.getDimensions = function(key){

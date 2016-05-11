@@ -16,6 +16,7 @@ cm.define('App.Editor', {
         'onResize',
 
         'create',
+        'place',
         'replace',
         'move',
         'delete',
@@ -94,7 +95,6 @@ function(params){
         });
         cm.find('App.Sidebar', that.params['sidebarName'], null, function(classObject){
             that.components['sidebar'] = classObject
-                .addEvent('onResize', sidebarResizeAction)
                 .addEvent('onExpandEnd', sidebarExpandAction)
                 .addEvent('onCollapseEnd', sidebarCollapseAction)
                 .addEvent('onTabShow', function(sidebar, data){
@@ -111,7 +111,6 @@ function(params){
         that.triggerEvent('onProcessStart');
         cm.addClass(cm.getDocumentHtml(), 'is-editor');
         if(that.components['sidebar']){
-            that.components['sidebar'].resize();
             if(that.components['sidebar'].isExpanded){
                 sidebarExpandAction();
             }else{
@@ -124,16 +123,6 @@ function(params){
             adminPageAction();
         }
         that.isRendered = true;
-    };
-
-    var sidebarResizeAction = function(sidebar, params){
-        cm.addClass(cm.getDocumentHtml(), 'is-immediately');
-        that.triggerEvent('onResize', {
-            'sidebar' : params
-        });
-        setTimeout(function(){
-            cm.removeClass(cm.getDocumentHtml(), 'is-immediately');
-        }, 5);
     };
 
     var sidebarExpandAction = function(){
@@ -246,6 +235,19 @@ function(params){
                 'index' : block.getIndex(),
                 'onEnd' : function(){
                     that.triggerEvent('create', node);
+                    that.triggerEvent('onProcessEnd', node);
+                }
+            });
+        }
+        return that;
+    };
+
+    that.place = function(node){
+        if(node && block){
+            node = !cm.isNode(node) ? cm.strToHTML(node) : node;
+            that.components['dashboard'].appendBlock(node, {
+                'onEnd' : function(){
+                    that.triggerEvent('place', node);
                     that.triggerEvent('onProcessEnd', node);
                 }
             });

@@ -16,6 +16,7 @@ cm.define('App.DummyBlock', {
         'name' : '',
         'keyword' : '',
         'type' : 'template-manager',            // template-manager | form-manager | mail
+        'removable' : true,
         'editorName' : 'app-editor'
     }
 },

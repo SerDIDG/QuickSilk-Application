@@ -1,4 +1,7 @@
-/* ************ APPLICATION: STYLES ************ */
+
+// /* ************************************************ */
+// /* ******* QUICKSILK: COMMON ******* */
+// /* ************************************************ */
 
 @font-face {
     font-family: @AppIconVars-Family;
@@ -94,20 +97,37 @@ body {
 /* *** CKE EDITOR *** */
 
 .cke_dialog {
-    color: #000;
+    color: @Stuff-CKE-Color;
 
     .cm__tags {
-        color: #000;
+        color: @Stuff-CKE-Color;
     }
 
     .input {
-        color: #000;
+        color: @Stuff-CKE-Color;
         background: #fff;
 
         &:hover,
         &:active {
-            color: #000;
+            color: @Stuff-CKE-Color;
             background: #fff;
+        }
+    }
+}
+
+.cke_panel_listItem {
+    color: @Stuff-CKE-Color;
+
+    .cm__tags {
+        color: @Stuff-CKE-Color;
+    }
+
+    a {
+        color: @Stuff-CKE-Color;
+
+        &:hover,
+        &:active {
+            color: @Stuff-CKE-Color;
         }
     }
 }

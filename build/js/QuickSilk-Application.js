@@ -1,6 +1,11 @@
-/*! ************ QuickSilk-Application v3.7.0 (2016-04-06 20:01) ************ */
+/*! ************ QuickSilk-Application v3.8.0 (2016-05-11 20:46) ************ */
+
+// /* ************************************************ */
+// /* ******* QUICKSILK: COMMON ******* */
+// /* ************************************************ */
+
 var App = {
-    '_version' : '3.5.1',
+    '_version' : '3.5.2',
     'Elements': {},
     'Nodes' : {},
     'Test' : []
@@ -34,6 +39,7 @@ cm.define('App.Block', {
         'index' : false,
         'locked' : false,
         'visible' : true,
+        'removable' : true,
         'editorName' : 'app-editor'
     }
 },
@@ -79,7 +85,6 @@ function(params){
     var validateParams = function(){
         var index;
         if(cm.isNumber(that.params['instanceId']) || cm.isString(that.params['instanceId'])){
-            cm.log(that.params['instanceId']);
             that.params['name'] = [that.params['type'], that.params['instanceId'], that.params['positionId']].join('_');
             that.params['zoneName'] = [that.params['type'], that.params['instanceId'], that.params['parentId'], that.params['zone']].join('_');
         }else{
@@ -336,7 +341,7 @@ function(params){
     /* *** INIT *** */
 
     var init = function(){
-        getCSSHelpers();
+        getLESSVariables();
         that.setParams(params);
         that.convertEvents(that.params['events']);
         validateParams();
@@ -345,9 +350,9 @@ function(params){
         that.triggerEvent('onRender');
     };
 
-    var getCSSHelpers = function(){
-        that.params['dropDuration'] = cm.getTransitionDurationFromRule('.app__dashboard__drop-duration');
-        that.params['moveDuration'] = cm.getTransitionDurationFromRule('.app__dashboard__move-duration');
+    var getLESSVariables = function(){
+        that.params['dropDuration'] = cm.getTransitionDurationFromLESS('AppDashboard-DropDuration', that.params['dropDuration']);
+        that.params['moveDuration'] = cm.getTransitionDurationFromLESS('AppDashboard-MoveDuration', that.params['moveDuration']);
     };
 
     var validateParams = function(){
@@ -933,7 +938,8 @@ function(params){
             if(
                 cm.isParent(block.params['node'], zone.params['node'])
                 || zone.params['locked']
-                || zone.params['type'] != 'remove' && block.params['type'] != zone.params['type']
+                || (zone.params['type'] != 'remove' && block.params['type'] != zone.params['type'])
+                || (zone.params['type'] == 'remove' && !block.params['removable'])
             ){
                 return false;
             }
@@ -1305,6 +1311,7 @@ cm.define('App.DummyBlock', {
         'name' : '',
         'keyword' : '',
         'type' : 'template-manager',            // template-manager | form-manager | mail
+        'removable' : true,
         'editorName' : 'app-editor'
     }
 },
@@ -1492,6 +1499,7 @@ cm.define('App.Editor', {
         'onResize',
 
         'create',
+        'place',
         'replace',
         'move',
         'delete',
@@ -1570,7 +1578,6 @@ function(params){
         });
         cm.find('App.Sidebar', that.params['sidebarName'], null, function(classObject){
             that.components['sidebar'] = classObject
-                .addEvent('onResize', sidebarResizeAction)
                 .addEvent('onExpandEnd', sidebarExpandAction)
                 .addEvent('onCollapseEnd', sidebarCollapseAction)
                 .addEvent('onTabShow', function(sidebar, data){
@@ -1587,7 +1594,6 @@ function(params){
         that.triggerEvent('onProcessStart');
         cm.addClass(cm.getDocumentHtml(), 'is-editor');
         if(that.components['sidebar']){
-            that.components['sidebar'].resize();
             if(that.components['sidebar'].isExpanded){
                 sidebarExpandAction();
             }else{
@@ -1600,16 +1606,6 @@ function(params){
             adminPageAction();
         }
         that.isRendered = true;
-    };
-
-    var sidebarResizeAction = function(sidebar, params){
-        cm.addClass(cm.getDocumentHtml(), 'is-immediately');
-        that.triggerEvent('onResize', {
-            'sidebar' : params
-        });
-        setTimeout(function(){
-            cm.removeClass(cm.getDocumentHtml(), 'is-immediately');
-        }, 5);
     };
 
     var sidebarExpandAction = function(){
@@ -1722,6 +1718,19 @@ function(params){
                 'index' : block.getIndex(),
                 'onEnd' : function(){
                     that.triggerEvent('create', node);
+                    that.triggerEvent('onProcessEnd', node);
+                }
+            });
+        }
+        return that;
+    };
+
+    that.place = function(node){
+        if(node && block){
+            node = !cm.isNode(node) ? cm.strToHTML(node) : node;
+            that.components['dashboard'].appendBlock(node, {
+                'onEnd' : function(){
+                    that.triggerEvent('place', node);
                     that.triggerEvent('onProcessEnd', node);
                 }
             });
@@ -1913,7 +1922,7 @@ function(params){
     that.sceneIntervals = {};
 
     var init = function(){
-        getCSSHelpers();
+        getLESSVariables();
         that.setParams(params);
         that.convertEvents(that.params['events']);
         that.getDataNodes(that.params['node']);
@@ -1925,12 +1934,9 @@ function(params){
         that.params['autoStart'] && prepare();
     };
 
-    var getCSSHelpers = function(){
-        var rule;
-        that.params['duration'] = cm.getTransitionDurationFromRule('.app__helptour-helper__duration');
-        if(rule = cm.getCSSRule('.app__helptour-helper__adaptive-from')[0]){
-            that.params['adaptiveFrom'] = cm.styleToNumber(rule.style.width);
-        }
+    var getLESSVariables = function(){
+        that.params['duration'] = cm.getTransitionDurationFromLESS('AppHelpTour-Duration', that.params['duration']);
+        that.params['adaptiveFrom'] = cm.getLESSVariable('AppHelpTour-AdaptiveFrom', that.params['adaptiveFrom'], true);
     };
 
     var validateParams = function(){
@@ -1954,16 +1960,9 @@ function(params){
     };
 
     var getDimensions = function(){
-        var rule;
-        if(rule = cm.getCSSRule('.app__sidebar-helper__width-collapsed')[0]){
-            dimensions['sidebarCollapsed'] = cm.styleToNumber(rule.style.width);
-        }
-        if(rule = cm.getCSSRule('.app__sidebar-helper__width-expanded')[0]){
-            dimensions['sidebarExpanded'] = cm.styleToNumber(rule.style.width);
-        }
-        if(rule = cm.getCSSRule('.app__topmenu-helper__height')[0]){
-            dimensions['topMenu'] = cm.styleToNumber(rule.style.height);
-        }
+        dimensions['sidebarCollapsed'] = cm.getLESSVariable('AppSidebar-WidthCollapsed', 0, true);
+        dimensions['sidebarExpanded'] = cm.getLESSVariable('AppSidebar-WidthExpanded', 0, true);
+        dimensions['topMenu'] = cm.getLESSVariable('AppTopMenu-Height', 0, true);
         if(!dimensions['popupSelfHeight']){
             dimensions['popupSelfHeight'] = that.nodes['popup'].offsetHeight;
         }
@@ -2004,6 +2003,10 @@ function(params){
     var start = function(){
         // Render Popup
         renderPopup();
+        // Close Panels
+        cm.find('App.Panel', null, null, function(classObject){
+            classObject.close();
+        });
         // Save Sidebar State
         startOptions['sidebarExpanded'] = that.components['sidebar'].isExpanded;
         if(that.components['sidebar'].isExpanded){
@@ -2505,6 +2508,664 @@ function(params){
 
     init();
 });
+cm.define('App.Panel', {
+    'modules' : [
+        'Params',
+        'Events',
+        'Langs',
+        'Structure',
+        'DataConfig',
+        'Storage',
+        'Stack'
+    ],
+    'events' : [
+        'onRenderStart',
+        'onRender',
+        'onOpenStart',
+        'onOpen',
+        'onCloseStart',
+        'onClose',
+        'onError',
+        'onSaveStart',
+        'onSave',
+        'onSaveEnd',
+        'onSaveError',
+        'onSaveSuccess',
+        'onSaveFailure',
+        'onLoadStart',
+        'onLoad',
+        'onLoadEnd',
+        'onLoadError',
+        'onCancelStart',
+        'onCancel'
+    ],
+    'params' : {
+        'node' : cm.node('div'),
+        'container' : 'document.body',
+        'name' : '',
+        'embedStructure' : 'append',
+        'type' : 'sidebar',                             // sidebar | story | fullscreen
+        'duration' : 'cm._config.animDurationLong',
+        'autoOpen' : true,
+        'destructOnClose' : true,
+        'showCloseButton' : true,
+        'showBackButton' : false,
+        'showButtons' : true,
+        'showOverlay' : true,
+        'overlayDelay' : 0 ,
+        'overlayPosition' : 'content',                  // dialog | content
+        'title' : null,
+        'content' : null,
+        'collector' : null,
+        'constructCollector' : true,
+        'responseKey' : 'data',
+        'responseContentKey' : 'data.content',
+        'responseTitleKey' : 'data.title',
+        'responseStatusKey' : 'data.success',
+        'renderContentOnSuccess' : false,
+        'closeOnSuccess' : true,
+        'get' : {                                       // Get dialog content ajax
+            'type' : 'json',
+            'method' : 'GET',
+            'url' : '',                                 // Request URL. Variables: %baseurl%, %callback%.
+            'params' : ''                               // Params object. Variables: %baseurl%, %callback%.
+        },
+        'post' : {                                      // Submit form ajax
+            'type' : 'json',
+            'method' : 'POST',
+            'url' : '',                                 // Request URL. Variables: %baseurl%, %callback%.
+            'params' : ''                               // Params object. Variables: %baseurl%, %callback%.
+        },
+        'langs' : {
+            'close' : 'Close',
+            'cancel' : 'Cancel',
+            'save' : 'Save',
+            'saving' : 'Saving...',
+            'reload' : 'Reload',
+            'cancelDescription' : 'Cancel'
+        },
+        'Com.Request' : {
+            'wrapContent' : true,
+            'swapContentOnError' : false,
+            'renderContentOnSuccess' : false,
+            'autoSend' : false,
+            'responseKey' : 'data',
+            'responseHTML' : true
+        },
+        'Com.Overlay' : {
+            'autoOpen' : false,
+            'removeOnClose' : true,
+            'showSpinner' : true,
+            'showContent' : false,
+            'position' : 'absolute',
+            'theme' : 'light'
+        }
+    }
+},
+function(params){
+    var that = this;
+    that.nodes = {};
+    that.components = {};
+    that.isOpen = false;
+    that.isLoaded = false;
+    that.isDestructed = false;
+    that.isProccesing = false;
+    that.destructOnClose = false;
+    that.hasGetRequest = false;
+    that.hasPostRequest = false;
+    that.isGetRequest = false;
+    that.isPostRequest = false;
+    that.transitionInterval = null;
+    that.construct(params);
+});
+
+cm.getConstructor('App.Panel', function(classConstructor, className, classProto){
+
+    /* *** PUBLIC *** */
+
+    classProto.construct = function(params){
+        var that = this;
+        that.openHandler = that.open.bind(that);
+        that.closeHandler = that.close.bind(that);
+        that.saveHandler = that.save.bind(that);
+        that.cancelHandler = that.cancel.bind(that);
+        that.loadHandler = that.load.bind(that);
+        that.transitionOpenHandler = that.transitionOpen.bind(that);
+        that.transitionCloseHandler = that.transitionClose.bind(that);
+        that.windowKeydownHandler = that.windowKeydown.bind(that);
+        that.getLESSVariables();
+        that.setParams(params);
+        that.convertEvents(that.params['events']);
+        that.getDataConfig(that.params['node']);
+        that.validateParams();
+        that.addToStack(that.params['node']);
+        that.triggerEvent('onRenderStart');
+        that.render();
+        that.setEvents();
+        that.addToStack(that.nodes['container']);
+        that.triggerEvent('onRender');
+        that.params['autoOpen'] && that.open();
+        return that;
+    };
+
+    classProto.destruct = function(){
+        var that = this;
+        if(that.isOpen){
+            that.destructOnClose = true;
+            that.close();
+        }else if(!that.isDestructed){
+            that.isDestructed = true;
+            cm.customEvent.trigger(that.nodes['contentHolder'], 'destruct', {
+                'type' : 'child',
+                'self' : false
+            });
+            that.unsetEvents();
+            that.removeFromStack();
+            cm.remove(that.nodes['container']);
+        }
+        return that;
+    };
+
+    classProto.open = function(){
+        var that = this;
+        if(!that.isOpen){
+            that.embedStructure(that.nodes['container']);
+            that.triggerEvent('onOpenStart');
+            // Get
+            if(that.hasGetRequest){
+                that.load();
+            }else{
+                that.isLoaded = true;
+                that.showButton(['close', 'save']);
+                that.params['showButtons'] && that.showButtons(true);
+                cm.customEvent.trigger(that.nodes['contentHolder'], 'redraw', {
+                    'type' : 'child',
+                    'self' : false
+                });
+            }
+            // Animate
+            that.nodes['contentHolder'].scrollTop = 0;
+            cm.addClass(that.nodes['container'], 'is-open', true);
+            that.transitionInterval = setTimeout(that.transitionOpenHandler, that.params['duration']);
+        }
+        return that;
+    };
+
+    classProto.close = function(){
+        var that = this;
+        if(that.isProccesing){
+            that.cancel();
+        }
+        if(that.isOpen){
+            that.triggerEvent('onCloseStart');
+            cm.removeClass(that.nodes['container'], 'is-open', true);
+            that.transitionInterval = setTimeout(that.transitionCloseHandler, that.params['duration']);
+        }
+        return that;
+    };
+
+    classProto.save = function(){
+        var that = this,
+            params;
+        if(that.isProccesing){
+            that.cancel();
+        }
+        that.isPostRequest = true;
+        that.triggerEvent('onSaveStart');
+        if(that.hasPostRequest){
+            // Get Params and Form Data
+            params = cm.clone(that.params['post']);
+            if(params['formData']){
+                params['params'] = new FormData(that.nodes['contentHolder']);
+            }else{
+                params['params'] = cm.merge(params['params'], cm.getFDO(that.nodes['contentHolder']));
+            }
+            // Send
+            that.showButton(['cancel', 'saving']);
+            that.components['request']
+                .setAction(params, 'update')
+                .send();
+        }else{
+            that.showButton(['close', 'save']);
+            that.triggerEvent('onSave');
+            that.triggerEvent('onSaveEnd');
+        }
+        return that;
+    };
+    
+    classProto.load = function(){
+        var that = this;
+        if(that.isProccesing){
+            that.cancel();
+        }
+        that.isGetRequest = true;
+        that.triggerEvent('onLoadStart');
+        if(that.hasGetRequest){
+            that.showButton('cancel');
+            that.components['request']
+                .setAction(that.params['get'], 'update')
+                .send();
+        }else{
+            that.showButton(['close', 'save']);
+            that.triggerEvent('onLoad');
+            that.triggerEvent('onLoadEnd');
+        }
+        return that;
+    };
+
+    classProto.cancel = function(){
+        var that = this;
+        that.triggerEvent('onCancelStart');
+        that.components['request'].abort();
+        if(that.isLoaded){
+            that.showButton(['close', 'save']);
+        }else{
+            that.showButton(['close', 'reload']);
+        }
+        that.triggerEvent('onCancel');
+        return that;
+    };
+
+    /* *** CONTENT *** */
+
+    classProto.setTitle = function(value){
+        var that = this;
+        cm.clearNode(that.nodes['label']);
+        if(cm.isNode(value)){
+            cm.appendChild(value, that.nodes['label']);
+        }else if(!cm.isEmpty(value)){
+            that.nodes['label'].innerHTML = value;
+        }
+        return that;
+    };
+
+    classProto.setContent = function(node){
+        var that = this;
+        cm.clearNode(that.nodes['contentHolder']);
+        if(cm.isNode(node)){
+            cm.appendChild(node, that.nodes['contentHolder']);
+        }
+        return that;
+    };
+
+    /* *** SYSTEM *** */
+
+    classProto.getLESSVariables = function(){
+        var that = this;
+        that.params['duration'] = cm.getTransitionDurationFromLESS('AppPanel-Duration', that.params['duration']);
+        return that;
+    };
+
+    classProto.validateParams = function(){
+        var that = this;
+        that.params['Com.Request']['Com.Overlay'] = that.params['Com.Overlay'];
+        that.params['Com.Request']['showOverlay'] = that.params['showOverlay'];
+        that.params['Com.Request']['overlayDelay'] = that.params['overlayDelay'];
+        that.params['Com.Request']['responseKey'] = that.params['responseKey'];
+        that.params['Com.Request']['responseHTMLKey'] = that.params['responseContentKey'];
+        that.params['Com.Request']['responseStatusKey'] = that.params['responseStatusKey'];
+        that.params['Com.Request']['renderContentOnSuccess'] = that.params['renderContentOnSuccess'];
+        that.destructOnClose = that.params['destructOnClose'];
+        that.hasGetRequest = !cm.isEmpty(that.params['get']['url']);
+        that.hasPostRequest = !cm.isEmpty(that.params['post']['url']);
+        return that;
+    };
+
+    classProto.render = function(){
+        var that = this;
+        // Structure
+        that.renderView();
+        // Attributes
+        that.setAttributes();
+        // Content
+        that.setTitle(that.params['title']);
+        that.setContent(that.params['content']);
+        // Overlay
+        switch(that.params['overlayPosition']){
+            case 'content':
+                that.params['Com.Overlay']['container'] = that.nodes['content'];
+                that.params['Com.Request']['overlayContainer'] = that.nodes['content'];
+                break;
+            case 'dialog':
+            default:
+                that.params['Com.Overlay']['container'] = that.nodes['dialog'];
+                that.params['Com.Request']['overlayContainer'] = that.nodes['dialog'];
+                break;
+        }
+        // Request
+        that.params['Com.Request']['container'] = that.nodes['contentHolder'];
+        cm.getConstructor('Com.Request', function(classConstructor, className){
+            that.components['request'] = new classConstructor(that.params[className]);
+            that.components['request']
+                .addEvent('onStart', function(){
+                    that.isProccesing = true;
+                })
+                .addEvent('onEnd', function(){
+                    that.isProccesing = false;
+                    that.params['showButtons'] && that.showButtons();
+                    if(that.isGetRequest){
+                        that.triggerEvent('onLoadEnd');
+                    }else if(that.isPostRequest){
+                        that.triggerEvent('onSaveEnd');
+                    }
+                    that.isGetRequest = false;
+                    that.isPostRequest = false;
+                })
+                .addEvent('onSuccess', function(my, data){
+                    if(that.isGetRequest){
+                        that.loadResponse(data);
+                    }else if(that.isPostRequest){
+                        that.saveResponse(data);
+                    }
+                })
+                .addEvent('onError', function(){
+                    if(that.isGetRequest){
+                        that.loadError();
+                    }else if(that.isPostRequest){
+                        that.saveError();
+                    }
+                })
+                .addEvent('onContentRender', function(){
+                    that.constructCollector();
+                })
+                .addEvent('onContentRenderEnd', function(){
+                    cm.customEvent.trigger(that.nodes['contentHolder'], 'redraw', {
+                        'type' : 'child',
+                        'self' : false
+                    });
+                });
+        });
+        return that;
+    };
+
+    classProto.renderView = function(){
+        var that = this;
+        // Structure
+        that.nodes['container'] = cm.node('div', {'class' : 'app__panel'},
+            that.nodes['dialog'] = cm.node('div', {'class' : 'app__panel__dialog'},
+                that.nodes['inner'] = cm.node('div', {'class' : 'inner'},
+                    that.nodes['title'] = cm.node('div', {'class' : 'title'},
+                        that.nodes['label'] = cm.node('div', {'class' : 'label'})
+                    ),
+                    that.nodes['content'] = cm.node('div', {'class' : 'content'},
+                        that.nodes['contentHolder'] = cm.node('div', {'class' : 'inner'})
+                    )
+                )
+            )
+        );
+        // Close Buttons
+        that.nodes['close'] = cm.node('div', {'class' : 'icon cm-i cm-i__circle-close'});
+        if(that.params['showCloseButton']){
+            cm.insertLast(that.nodes['close'], that.nodes['title']);
+        }
+        that.nodes['back'] = cm.node('div', {'class' : 'icon cm-i cm-i__circle-arrow-left'});
+        if(that.params['showBackButton']){
+            cm.insertFirst(that.nodes['back'], that.nodes['title']);
+        }
+        // Buttons
+        that.nodes['buttons'] = that.renderButtons();
+        if(that.params['showButtons']){
+            cm.appendChild(that.nodes['buttons'], that.nodes['inner']);
+        }
+        return that;
+    };
+
+    classProto.showButton = function(items){
+        var that = this;
+        cm.forEach(that.nodes['button'], function(node){
+            cm.addClass(node, 'display-none');
+        });
+        if(cm.isArray(items)){
+            cm.forEach(items, function(item){
+                if(that.nodes['button'][item]){
+                    cm.removeClass(that.nodes['button'][item], 'display-none');
+                }
+            });
+        }else if(that.nodes['button'][items]){
+            cm.removeClass(that.nodes['button'][items], 'display-none');
+        }
+    };
+
+    classProto.showButtons = function(immediately){
+        var that = this;
+        cm.appendChild(that.nodes['buttons'], that.nodes['inner']);
+        if(immediately){
+            cm.addClass(that.nodes['buttons'], 'is-immediately', true);
+        }
+        cm.addClass(that.nodes['buttons'], 'is-show', true);
+        return that;
+    };
+
+    classProto.renderButtons = function(){
+        var that = this;
+        that.nodes['button'] = {};
+        // Structure
+        that.nodes['buttons'] = cm.node('div', {'class' : 'buttons'},
+            cm.node('div', {'class' : 'inner'},
+                cm.node('div', {'class' : 'pt__buttons pull-justify'},
+                    cm.node('div', {'class' : 'inner'},
+                        that.nodes['button']['close'] = cm.node('div', {'class' : 'button button-danger'}, that.lang('close')),
+                        that.nodes['button']['cancel'] = cm.node('div', {'class' : 'button button-danger'}, that.lang('cancel')),
+                        that.nodes['button']['save'] = cm.node('div', {'class' : 'button button-primary'}, that.lang('save')),
+                        that.nodes['button']['reload'] = cm.node('div', {'class' : 'button button-primary'}, that.lang('reload')),
+                        that.nodes['button']['saving'] = cm.node('div', {'class' : 'button button-primary has-icon has-icon-small'},
+                            cm.node('div', {'class' : 'icon small loader'}),
+                            cm.node('div', {'class' : 'label'}, that.lang('saving'))
+                        )
+                    )
+                )
+            )
+        );
+        // Attributes
+        that.nodes['button']['cancel'].setAttribute('title', that.lang('cancelDescription'));
+        that.nodes['button']['saving'].setAttribute('title', that.lang('cancelDescription'));
+        // Events
+        cm.addEvent(that.nodes['button']['save'], 'click', that.saveHandler);
+        cm.addEvent(that.nodes['button']['close'], 'click', that.closeHandler);
+        cm.addEvent(that.nodes['button']['cancel'], 'click', that.cancelHandler);
+        cm.addEvent(that.nodes['button']['saving'], 'click', that.cancelHandler);
+        cm.addEvent(that.nodes['button']['reload'], 'click', that.loadHandler);
+        return that.nodes['buttons'];
+    };
+
+    classProto.setAttributes = function(){
+        var that = this;
+        // Attributes
+        cm.addClass(that.nodes['container'], ['app__panel', that.params['type']].join('--'));
+        that.nodes['back'].setAttribute('title', that.lang('close'));
+        that.nodes['close'].setAttribute('title', that.lang('close'));
+        // Events
+        cm.addEvent(that.nodes['back'], 'click', that.closeHandler);
+        cm.addEvent(that.nodes['close'], 'click', that.closeHandler);
+        return that;
+    };
+
+    classProto.setEvents = function(){
+        var that = this;
+        cm.addEvent(window, 'keydown', that.windowKeydownHandler);
+        return that;
+    };
+
+    classProto.unsetEvents = function(){
+        var that = this;
+        cm.removeEvent(window, 'keydown', that.windowKeydownHandler);
+        return that;
+    };
+
+    classProto.windowKeydown = function(e){
+        var that = this,
+            target = cm.getEventTarget(e);
+        if(cm.isKeyCode(e.keyCode, 'escape')){
+            that.close();
+        }
+        return that;
+    };
+
+    classProto.constructCollector = function(){
+        var that = this;
+        if(that.params['constructCollector']){
+            if(that.params['collector']){
+                that.params['collector'].construct(that.nodes['contentHolder']);
+            }else{
+                cm.find('Com.Collector', null, null, function(classObject){
+                    classObject.construct(that.nodes['contentHolder']);
+                });
+            }
+        }
+        return that;
+    };
+
+    classProto.transitionOpen = function(){
+        var that = this;
+        that.isOpen = true;
+        that.triggerEvent('onOpen');
+        return that;
+    };
+
+    classProto.transitionClose = function(){
+        var that = this;
+        that.destructOnClose && that.destruct();
+        cm.remove(that.nodes['container']);
+        that.isOpen = false;
+        that.triggerEvent('onClose');
+        return that;
+    };
+
+    classProto.loadResponse = function(data){
+        var that = this;
+        that.isLoaded = true;
+        that.setTitle(cm.objectSelector(that.params['responseTitleKey'], data['response']));
+        that.showButton(['close', 'save']);
+        that.triggerEvent('onLoad');
+        return that;
+    };
+
+    classProto.loadError = function(){
+        var that = this;
+        if(!that.isLoaded){
+            that.showButton(['close', 'reload']);
+        }else{
+            that.showButton(['close', 'save']);
+        }
+        that.triggerEvent('onLoadError');
+        that.triggerEvent('onError', 'load');
+        return that;
+    };
+
+    classProto.saveResponse = function(data){
+        var that = this;
+        if(!data['status'] || (data['status'] && that.params['renderContentOnSuccess'])){
+            that.setTitle(cm.objectSelector(that.params['responseTitleKey'], data['response']));
+            that.showButton(['close', 'save']);
+        }
+        if(data['status']){
+            if(that.params['closeOnSuccess']){
+                that.close();
+            }
+            that.triggerEvent('onSaveSuccess', data);
+        }else{
+            that.triggerEvent('onSaveFailure', data);
+        }
+        that.triggerEvent('onSave', data);
+        return that;
+    };
+
+    classProto.saveError = function(){
+        var that = this;
+        that.showButton(['close', 'save']);
+        that.triggerEvent('onSaveError');
+        that.triggerEvent('onError', 'save');
+        return that;
+    };
+});
+cm.define('App.PanelHolder', {
+    'extend' : 'App.Panel',
+    'modules' : [
+        'DataNodes'
+    ],
+    'params' : {
+        'type' : 'story',
+        'autoOpen' : false,
+        'showButtons' : false,
+        'showBackButton' : true,
+        'showCloseButton' : false
+    }
+},
+function(params){
+    var that = this;
+    that.myNodes = {
+        'container' : cm.node('div'),
+        'button' : cm.node('div'),
+        'holder' : cm.node('div'),
+        'content' : cm.node('div')
+    };
+    App.Panel.apply(that, arguments);
+});
+
+cm.getConstructor('App.PanelHolder', function(classConstructor, className, classProto){
+    var _inherit = classProto._inherit;
+
+    classProto.construct = function(params){
+        var that = this;
+        _inherit.prototype.construct.apply(that, arguments);
+        return that;
+    };
+
+    classProto.render = function(){
+        var that = this;
+        _inherit.prototype.render.apply(that, arguments);
+        // Process holder nodes
+        that.myNodes = cm.merge(that.myNodes, that.getDataNodesObject(that.params['node']));
+        cm.addEvent(that.myNodes['button'], 'click', that.openHandler);
+        return that;
+    };
+
+    classProto.open = function(){
+        var that = this;
+        if(!that.isOpen){
+            that.setContent(that.myNodes['content']);
+        }
+        _inherit.prototype.open.apply(that, arguments);
+        return that;
+    };
+
+    classProto.transitionClose = function(){
+        var that = this;
+        cm.appendChild(that.myNodes['content'], that.myNodes['holder']);
+        _inherit.prototype.transitionClose.apply(that, arguments);
+        return that;
+    };
+});
+cm.define('App.PanelRequest', {
+    'extend' : 'App.Panel',
+    'modules' : [
+        'DataNodes'
+    ],
+    'params' : {
+        'autoOpen' : false
+    }
+},
+function(params){
+    var that = this;
+    App.Panel.apply(that, arguments);
+});
+
+cm.getConstructor('App.PanelRequest', function(classConstructor, className, classProto){
+    var _inherit = classProto._inherit;
+
+    classProto.construct = function(params){
+        var that = this;
+        _inherit.prototype.construct.apply(that, arguments);
+        return that;
+    };
+
+    classProto.render = function(){
+        var that = this;
+        _inherit.prototype.render.apply(that, arguments);
+        cm.addEvent(that.params['node'], 'click', that.openHandler);
+        return that;
+    };
+});
 cm.define('App.SearchBox', {
     'modules' : [
         'Params',
@@ -2610,10 +3271,7 @@ cm.define('App.Sidebar', {
     }
 },
 function(params){
-    var that = this,
-        scrollBarSize = 0,
-        menuWidth = 0,
-        contentWidth;
+    var that = this;
 
     that.nodes = {
         'container' : cm.Node('div'),
@@ -2629,7 +3287,7 @@ function(params){
     /* *** CLASS FUNCTIONS *** */
 
     var init = function(){
-        getCSSHelpers();
+        getLESSVariables();
         that.setParams(params);
         that.convertEvents(that.params['events']);
         that.getDataNodes(that.params['node']);
@@ -2641,8 +3299,8 @@ function(params){
         that.triggerEvent('onRender');
     };
 
-    var getCSSHelpers = function(){
-        that.params['duration'] = cm.getTransitionDurationFromRule('.app__sidebar-helper__duration');
+    var getLESSVariables = function(){
+        that.params['duration'] = cm.getTransitionDurationFromLESS('AppSidebar-Duration', that.params['duration']);
     };
 
     var validateParams = function(){
@@ -2652,23 +3310,13 @@ function(params){
     };
 
     var render = function(){
-        var isExpanded, helperMenuRule, helperContentRule;
+        var isExpanded;
         // Init tabset
         processTabset();
-        // Get sidebar dimensions from CSS
-        scrollBarSize = cm._scrollSize;
-        if(helperMenuRule = cm.getCSSRule('.app__sidebar-helper__menu-width')[0]){
-            menuWidth = cm.styleToNumber(helperMenuRule.style.width);
-        }
-        if(helperContentRule = cm.getCSSRule('.app__sidebar-helper__content-width')[0]){
-            contentWidth = cm.styleToNumber(helperContentRule.style.width);
-        }
         // Add events on collapse buttons
         cm.forEach(that.nodes['collapseButtons'], function(item){
             cm.addEvent(item['container'], 'click', that.toggle);
         });
-        // Resize sidebar relative to scroll bar size
-        resize();
         // Check toggle class
         isExpanded = cm.isClass(that.nodes['container'], 'is-expanded');
         // Check storage
@@ -2708,40 +3356,8 @@ function(params){
         });
     };
 
-    var resize = function(){
-        var rule,
-            params = {
-                'innerWidth' : contentWidth + scrollBarSize,
-                'width' : menuWidth + contentWidth + scrollBarSize,
-                'contentWidth' : contentWidth,
-                'menuWidth' : menuWidth,
-                'scrollBarSize' : scrollBarSize
-            };
-        cm.addClass(that.nodes['container'], 'is-immediately');
-        if(rule = cm.getCSSRule('.app__sidebar .sidebar__content')[0]){
-            rule.style.width = [params['innerWidth'], 'px'].join('');
-        }
-        if(rule = cm.getCSSRule('.app__sidebar .sidebar__remove-zone')[0]){
-            rule.style.width = [params['innerWidth'], 'px'].join('');
-        }
-        if((rule = cm.getCSSRule('.app__sidebar.is-expanded')[0]) || (rule = cm.getCSSRule('.is-expanded.app__sidebar')[0])){
-            rule.style.width = [params['width'], 'px'].join('');
-        }
-        if(rule = cm.getCSSRule('.app__sidebar-helper__width-expanded')[0]){
-            rule.style.width = [params['width'], 'px'].join('');
-        }
-        that.triggerEvent('onResize', params);
-        setTimeout(function(){
-            cm.removeClass(that.nodes['container'], 'is-immediately');
-        }, 5);
-    };
-
     var resizeAction = function(){
         animFrame(function(){
-            if(cm._scrollSize != scrollBarSize){
-                scrollBarSize = cm._scrollSize;
-                resize();
-            }
             if(cm._pageSize['winWidth'] <= cm._config['adaptiveFrom']){
                 if(that.isExpanded){
                     that.collapse(true);
@@ -2856,11 +3472,6 @@ function(params){
             return that.components['tabset'].get();
         }
         return null;
-    };
-
-    that.resize = function(){
-        resize();
-        return that;
     };
 
     that.getDimensions = function(key){
@@ -3367,6 +3978,9 @@ cm.define('App.Template', {
             'fixed' : false,
             'overlapping' : false
         },
+        'content' : {
+            'editableIndent' : 0
+        },
         'footer' : {
             'sticky' : true
         }
@@ -3392,6 +4006,7 @@ function(params){
     that.offsets = {};
 
     var init = function(){
+        getLESSVariables();
         that.setParams(params);
         that.convertEvents(that.params['events']);
         that.getDataNodes(that.params['node']);
@@ -3402,6 +4017,10 @@ function(params){
         setState();
         redraw(true);
         that.triggerEvent('onRender');
+    };
+
+    var getLESSVariables = function(){
+        that.params['content']['editableIndent'] = cm.getLESSVariable('AppTpl-Content-EditableIndent', that.params['content']['editableIndent'], true);
     };
 
     var render = function(){
@@ -3416,8 +4035,7 @@ function(params){
             that.components['sidebar'] = classObject;
         });
         new cm.Finder('App.Editor', that.params['editorName'], null, function(classObject){
-            that.components['editor'] = classObject
-                .addEvent('onResize', resize);
+            that.components['editor'] = classObject;
         }, {'event' : 'onProcessStart'});
         // Scroll Controllers
         that.anim['scroll'] = new cm.Animation(that.params['scrollNode']);
@@ -3448,16 +4066,6 @@ function(params){
         cm.removeClass(that.nodes['headerFake'], 'is-show');
     };
 
-    var resize = function(editor, params){
-        var rule;
-        if(rule = cm.getCSSRule('html.is-sidebar--expanded .tpl__container')[0]){
-            rule.style.marginLeft = [params['sidebar']['width'], 'px'].join('');
-        }
-        if(rule = cm.getCSSRule('html.is-sidebar--expanded .tpl__header__container.is-fixed')[0]){
-            rule.style.left = [params['sidebar']['width'], 'px'].join('');
-        }
-    };
-
     var redraw = function(triggerEvents){
         // Fixed Header
         that.offsets['top'] = that.components['topMenu'] ? that.components['topMenu'].getDimensions('height') : 0;
@@ -3469,7 +4077,12 @@ function(params){
         that.nodes['inner'].style.minHeight = that.offsets['height'] + 'px';
         if(that.isEditing){
             if(that.params['footer']['sticky']){
-                that.nodes['content'].style.minHeight = Math.max((that.offsets['height'] - that.offsets['header'] - that.offsets['footer']), 0) + 'px';
+                that.nodes['content'].style.minHeight = Math.max((
+                        that.offsets['height']
+                        - that.offsets['header']
+                        - that.offsets['footer']
+                        - (that.params['content']['editableIndent'] * 2)
+                    ), 0) + 'px';
             }
         }else{
             if(that.params['header']['fixed'] && !that.params['header']['overlapping']){
@@ -3895,20 +4508,90 @@ function(params){
     init();
 });
 
+/* ******* MODULES: MENU ******* */
+
+cm.define('Module.Menu', {
+    'modules' : [
+        'Params',
+        'Events',
+        'DataConfig',
+        'DataNodes',
+        'Stack'
+    ],
+    'events' : [
+        'onRenderStart',
+        'onRender'
+    ],
+    'params' : {
+        'node' : cm.node('div'),
+        'name' : '',
+        'type' : 'horizontal'           // horizontal | vertical
+    }
+},
+function(params){
+    var that = this;
+    that.nodes = {
+        'select' : {
+            'select' : cm.node('select')
+        }
+    };
+    that.construct(params);
+});
+
+cm.getConstructor('Module.Menu', function(classConstructor, className, classProto){
+    classProto.construct = function(params){
+        var that = this;
+        that.processSelectHandler = that.processSelect.bind(that);
+        that.setParams(params);
+        that.convertEvents(that.params['events']);
+        that.getDataNodes(that.params['node']);
+        that.getDataConfig(that.params['node']);
+        that.validateParams();
+        that.addToStack(that.params['node']);
+        that.triggerEvent('onRenderStart');
+        that.render();
+        that.addToStack(that.nodes['container']);
+        that.triggerEvent('onRender');
+        return that;
+    };
+
+    classProto.validateParams = function(){
+        var that = this;
+        return that;
+    };
+
+    classProto.render = function(){
+        var that = this;
+        // Events
+        cm.addEvent(that.nodes['select']['select'], 'change', that.processSelectHandler);
+        return that;
+    };
+
+    classProto.processSelect = function(){
+        var that = this;
+        var value = that.nodes['select']['select'].value;
+        if(!cm.isEmpty(value)){
+            window.location.href = value;
+        }
+        return that;
+    };
+});
+/* ******* MODULES: MENU ******* */
+
 cm.define('App.ModuleMenu', {
     'modules' : [
         'Params',
         'DataNodes'
     ],
     'params' : {
-        'node' : cm.Node('div')
+        'node' : cm.node('div')
     }
 },
 function(params){
     var that = this;
 
     that.nodes = {
-        'select' : cm.Node('select')
+        'select' : cm.node('select')
     };
 
     /* *** CLASS FUNCTIONS *** */
@@ -3987,7 +4670,7 @@ function(params){
     that.changeInterval = null;
 
     var init = function(){
-        getCSSHelpers();
+        getLESSVariables();
         that.setParams(params);
         that.convertEvents(that.params['events']);
         that.getDataNodes(that.params['node']);
@@ -3999,8 +4682,8 @@ function(params){
         that.triggerEvent('onRender');
     };
 
-    var getCSSHelpers = function(){
-        that.params['duration'] = cm.getTransitionDurationFromRule('.app-mod__rollover-tabs-helper__duration') || that.params['duration'];
+    var getLESSVariables = function(){
+        that.params['duration'] = cm.getTransitionDurationFromLESS('AppMod-RolloverTabs-Duration', that.params['duration']);
     };
 
     var validateParams = function(){

@@ -1,8 +1,10 @@
-/*! ************ QuickSilk-Application v3.7.0 (2016-04-06 20:01) ************ */
+/*! ************ QuickSilk-Application v3.8.0 (2016-05-11 20:46) ************ */
 
 // /* ************************************************ */
-// /* ******* FONT GLYPH ******* */
+// /* ******* QUICKSILK: VARIABLES: ICONS ******* */
 // /* ************************************************ */
+
+// /* ******* FONT GLYPH ******* */
 
 @AppIconVars-Family: 'QuickSilk-Glyphs';
 @AppIconVars-Color: @CmIconVars-Color;
@@ -26,11 +28,9 @@
 @AppIcon-CircleFlash: '\e706';
 @AppIcon-CircleActions: '\e706';
 
-// /* ************************************************ */
 // /* ******* COMPONENTS ******* */
-// /* ************************************************ */
 
-// /* ******* BLOCK ******* */
+// /* *** BLOCK *** */
 
 @AppIcon-Block-Size: 90px;
 @AppIcon-Block-Names: default anchor button column menu divider spacer zone workingarea content logo googlemap tabs search blogcontent blogcategories blogroll blogblock blogarchive blogcalendar image imagegallery slider videogallery forum forum_build comment twitter socialmedia socialmedia_rating socialmedia_share login registration memberdirectory memberwidget filegridlist filegridlistwidget webexmeetings events eventscalendar latestevents flickr languageswitcher d3 rss breadcrumb breadcrumbs form_builder;
@@ -114,6 +114,11 @@
 
 @AppPath-Images: '../img';
 @AppPath-Fonts: '../fonts';
+
+// /* ******* UI ******* */
+
+@AppUI-SidebarWidth: 360px;
+@AppUI-TitleHeight: @CmSize-XLarge;
 
 // /* ************************************************ */
 // /* ******* FONT ******* */
@@ -235,12 +240,13 @@
 
 // /* ******* SIDEBAR ******* */
 
+@AppSidebar-Width: @AppUI-SidebarWidth;
 @AppSidebar-Menu-Width: @CmSize-XLarge;
 @AppSidebar-Menu-Background: #000000;
-@AppSidebar-Content-Width: (@AppBlock-Dummy-Width * 3) - (@AppBlock-Dummy-Padding * 2) + (@AppSidebar-Content-Indent * 2);
+@AppSidebar-Content-Width: @AppSidebar-Width - @AppSidebar-Menu-Width;
 @AppSidebar-Content-Indent: @CmIndent-XSmall;
-@AppSidebar-Title-Height: @AppSidebar-Menu-Width;
-@AppSidebar-WidthExpanded: @AppSidebar-Menu-Width + @AppSidebar-Content-Width;
+@AppSidebar-Title-Height: @AppUI-TitleHeight;
+@AppSidebar-WidthExpanded: @AppSidebar-Width;
 @AppSidebar-WidthCollapsed: @AppSidebar-Menu-Width;
 @AppSidebar-Duration: @CmUI-Overlay-Duration;
 @AppSidebar-Overlay: @CmUI-Overlay;
@@ -310,11 +316,25 @@
 
 // /* ******* HELP TOUR ******* */
 
-@AppHelpTour-Duration: @CmUI-Overlay-Duration;
+@AppHelpTour-Duration: @CmUI-Transition-DurationLong;
 @AppHelpTour-AdaptiveFrom: @CmUI-AdaptiveFrom;
 @AppHelpTour-Popup-Width: 360px;
 @AppHelpTour-Popup-Background: @CmColor-Background;
 @AppHelpTour-Popup-ArrowSize: @CmSize-Medium;
+
+// /* ******* PANEL ******* */
+
+@AppPanel-Duration: @CmUI-Transition-DurationLong;
+
+@AppPanel-Dialog-Width: @AppUI-SidebarWidth;
+@AppPanel-Dialog-Background: @CmColor-Primary-DarkDefault;
+@AppPanel-Dialog-TitleHeight: @AppUI-TitleHeight;
+@AppPanel-Dialog-Indent: @CmIndent-XSmall;
+@AppPanel-Dialog-ContentBackground: @CmColor-Background;
+@AppPanel-Dialog-ButtonHeight: @CmForm-FieldHeight;
+@AppPanel-Dialog-ButtonsHeight: @AppPanel-Dialog-ButtonHeight + (@AppPanel-Dialog-Indent * 2);
+
+@AppPanel-Box-Indent: @CmIndent-Medium @AppPanel-Dialog-Indent;
 
 // /* ************************************************ */
 // /* ******* MODULES ******* */
@@ -415,6 +435,14 @@
 @AppTpl-Container-BackgroundParallax: scroll;
 @AppTpl-Container-Background: @AppTpl-Container-BackgroundColor @AppTpl-Container-BackgroundImage @AppTpl-Container-BackgroundRepeat @AppTpl-Container-BackgroundPosition @AppTpl-Container-BackgroundParallax;
 
+@AppTpl-Content-EditableIndent: @CmIndent-XSmall;
+
+// /* ************************************************ */
+// /* ******* ADDITIONAL STUFF ******* */
+// /* ************************************************ */
+
+@Stuff-CKE-Color: #474747;
+
 // /* ************************************************ */
 // /* ******* MAGPIE UI ******* */
 // /* ************************************************ */
@@ -431,7 +459,10 @@
 @CmFont-Base-Size: @AppFont-P-Size;
 @CmFont-Base-Weight: @AppFont-P-Weight;
 
-/* ************ APPLICATION: STYLES ************ */
+
+// /* ************************************************ */
+// /* ******* QUICKSILK: COMMON ******* */
+// /* ************************************************ */
 
 @font-face {
     font-family: @AppIconVars-Family;
@@ -527,20 +558,37 @@ body {
 /* *** CKE EDITOR *** */
 
 .cke_dialog {
-    color: #000;
+    color: @Stuff-CKE-Color;
 
     .cm__tags {
-        color: #000;
+        color: @Stuff-CKE-Color;
     }
 
     .input {
-        color: #000;
+        color: @Stuff-CKE-Color;
         background: #fff;
 
         &:hover,
         &:active {
-            color: #000;
+            color: @Stuff-CKE-Color;
             background: #fff;
+        }
+    }
+}
+
+.cke_panel_listItem {
+    color: @Stuff-CKE-Color;
+
+    .cm__tags {
+        color: @Stuff-CKE-Color;
+    }
+
+    a {
+        color: @Stuff-CKE-Color;
+
+        &:hover,
+        &:active {
+            color: @Stuff-CKE-Color;
         }
     }
 }
@@ -1013,6 +1061,10 @@ html {
             top: @AppTopMenu-Height;
         }
 
+        .app__panel {
+            top: @AppTopMenu-Height;
+        }
+
         .tpl__container {
             margin-top: @AppTopMenu-Height;
         }
@@ -1045,6 +1097,10 @@ html {
             &.is-fixed {
                 left: @AppSidebar-WidthExpanded;
             }
+        }
+
+        .tpl__content {
+            margin: @AppTpl-Content-EditableIndent 0;
         }
 
         .tpl__header__container,
@@ -1100,6 +1156,10 @@ html {
                     left: 0;
                 }
             }
+
+            .tpl__content {
+                margin: 0;
+            }
         }
     }
 }
@@ -1117,6 +1177,10 @@ html {
         &.is-overlapping {
             left: 0 !important;
         }
+    }
+
+    .tpl__content {
+        margin: 0 !important;
     }
 
     .app__module__controls--edit,
@@ -1818,16 +1882,15 @@ html {
     }
 
     > dd {
-        width: @AppBlock-Dummy-Width * 3;
         margin: 0 -@AppBlock-Dummy-Padding;
         font-size: 0;
     }
 
     .app__block-container {
-        width: @AppBlock-Dummy-Width;
-        margin: 0 !important;
+        width: 33.33%;
         display: inline-block;
         vertical-align: top;
+        margin: 0 !important;
     }
 }
 
@@ -1984,16 +2047,6 @@ html {
         .cm__transition-none;
     }
 }
-
-/* *** HELPERS *** */
-
-.app__dashboard__drop-duration {
-    transition-duration: @AppDashboard-DropDuration;
-}
-
-.app__dashboard__move-duration {
-    transition-duration: @AppDashboard-MoveDuration;
-}
 /* ******* COMPONENTS: HELP TOUR ******* */
 
 .app__helptour__popup {
@@ -2110,16 +2163,6 @@ html {
     }
 }
 
-/* *** HELPERS *** */
-
-.app__helptour-helper__duration {
-    transition-duration: @AppHelpTour-Duration;
-}
-
-.app__helptour-helper__adaptive-from {
-    width: @AppHelpTour-AdaptiveFrom;
-}
-
 /* *** FONT *** */
 
 .app__helptour-font {
@@ -2174,13 +2217,198 @@ html {
     }
 
 }
+/* ******* COMPONENTS: PANEL ******* */
+
+.app__panel {
+    visibility: hidden;
+    position: fixed;
+    z-index: 210;
+    .mx__transition(all, @AppPanel-Duration);
+
+    &.is-open {
+        visibility: visible;
+    }
+}
+
+.app__panel--sidebar,
+.app__panel--story {
+    .mx__position(0, 0, 0, 0);
+
+    .app__panel__dialog {
+        .mx__transform(translateX(-100%));
+        .mx__transition(all, @AppPanel-Duration, @CmUI-MotionAsymmetric);
+
+        > .inner {
+            opacity: 0;
+            .mx__transition(all, @AppPanel-Duration, @CmUI-MotionAsymmetric);
+        }
+    }
+
+    &.is-open {
+        .app__panel__dialog {
+            .mx__transform(translateX(0));
+
+            > .inner {
+                opacity: 1;
+            }
+        }
+    }
+}
+
+.app__panel--sidebar {
+    .app__panel__dialog {
+        box-shadow: @CmUI-Shadow-Right;
+    }
+}
+
+.app__panel--story {
+    .mx__position(0, auto, 0, 0);
+}
+
+/* *** DIALOG *** */
+
+.app__panel__dialog {
+    width: @AppPanel-Dialog-Width;
+    position: absolute;
+    background-color: @AppPanel-Dialog-Background;
+    .mx__position(0, auto, 0, 0);
+
+    > .inner {
+        position: absolute;
+        background-color: @AppPanel-Dialog-ContentBackground;
+        .mx__position(0, 0, 0, 0);
+
+        > .title {
+            height: @AppPanel-Dialog-TitleHeight;
+            position: absolute;
+            z-index: 3;
+            background-color: @CmColor-Primary-DarkDefault;
+            .mx__position(0, 0, auto, 0);
+            .mx__user-select(none);
+
+            > .label {
+                .cm__font--ui-h1;
+                .cm__text-nowrap;
+                line-height: @AppPanel-Dialog-TitleHeight;
+                color: @CmColor-Font-Opposite;
+
+                &:first-child {
+                    margin-left: @AppPanel-Dialog-Indent;
+                }
+
+                &:last-child {
+                    margin-right: @AppPanel-Dialog-Indent;
+                }
+
+                &:not(:first-child) {
+                    margin-left: @AppPanel-Dialog-TitleHeight;
+                }
+
+                &:not(:last-child) {
+                    margin-right: @AppPanel-Dialog-TitleHeight;
+                }
+            }
+
+            > .icon {
+                .icon.linked;
+                position: absolute;
+                cursor: pointer;
+                color: @CmColor-Font-Opposite;
+                .cm-i__size(@CmSize-Medium);
+                .cm-i__b-size(@AppSidebar-Title-Height);
+
+                &:first-child {
+                    .mx__position(0, auto, 0, 0);
+                }
+
+                &:last-child {
+                    .mx__position(0, 0, 0, auto);
+                }
+            }
+        }
+
+        > .content {
+            position: absolute;
+            z-index: 1;
+            background-color: @AppPanel-Dialog-ContentBackground;
+            .mx__position(0, 0, 0, 0);
+
+            > .inner {
+                .cm__scroll-y;
+                position: absolute;
+                .mx__position(0, 0, 0, 0);
+            }
+
+            &:not(:first-child) {
+                top: @AppPanel-Dialog-TitleHeight;
+            }
+
+            &:not(:last-child) {
+                bottom: @AppPanel-Dialog-ButtonsHeight
+            }
+        }
+
+        > .buttons {
+            position: absolute;
+            z-index: 2;
+            padding: @AppPanel-Dialog-Indent;
+            background-color: @CmColor-Secondary-LightActive;
+            .mx__position(auto, 0, 0, 0);
+
+            > .inner {
+                opacity: 0;
+                visibility: hidden;
+                .mx__transition(all, @CmUI-Transition-Duration);
+            }
+
+            &.is-show {
+                > .inner {
+                    opacity: 1;
+                    visibility: visible;
+                }
+            }
+
+            &.is-immediately {
+                > .inner {
+                    .cm__transition-none;
+                }
+            }
+        }
+    }
+}
+
+/* *** COMPONENTS *** */
+
+.app__panel__togglebox {
+    margin: 0;
+
+    &.has-title-bg {
+        border-bottom: 0 solid @AppPanel-Dialog-ContentBackground;
+
+        > dt {
+            border-radius: 0;
+        }
+
+        &.is-hide {
+            border-bottom-width: 1px;
+        }
+    }
+}
+
+.app__panel__box {
+    padding: @AppPanel-Box-Indent;
+}
+
+.app__panel__field {
+    .cm__box;
+}
 /* ******* COMPONENTS: SIDEBAR ******* */
 
 .app__sidebar {
     .app__sidebar-font;
     width: @AppSidebar-WidthCollapsed;
     position: fixed;
-    z-index: 102;
+    z-index: 200;
     overflow: hidden;
     box-shadow: @CmUI-Shadow-Right;
     .mx__position(0, auto, 0, 0);
@@ -2371,24 +2599,12 @@ html {
                 }
             }
         }
-
-        .app__dashboard__body & {
-            visibility: visible;
-            opacity: 1;
-            background: fadeout(@CmColor-Danger-DarkDefault, 75%);
-
-            &.is-active {
-                visibility: visible;
-                opacity: 1;
-                background: fadeout(@CmColor-Danger-DarkDefault, 50%);
-            }
-        }
     }
 
     .sidebar__content__title {
         .cm__text-nowrap;
         .cm__font--ui-h1;
-        padding: 0 (@AppSidebar-Title-Height + @AppSidebar-Content-Indent) 0 @AppSidebar-Content-Indent;
+        padding: 0 @AppSidebar-Title-Height 0 @AppSidebar-Content-Indent;
         position: absolute;
         z-index: 2;
         text-align: left;
@@ -2450,28 +2666,6 @@ html {
     }
 
     .app__sidebar__theme(@AppSidebar-Theme);
-}
-
-/* *** HELPERS *** */
-
-.app__sidebar-helper__menu-width {
-    width: @AppSidebar-Menu-Width;
-}
-
-.app__sidebar-helper__content-width {
-    width: @AppSidebar-Content-Width;
-}
-
-.app__sidebar-helper__width-collapsed {
-    width: @AppSidebar-WidthCollapsed;
-}
-
-.app__sidebar-helper__width-expanded {
-    width: @AppSidebar-WidthExpanded;
-}
-
-.app__sidebar-helper__duration {
-    transition-duration: @AppSidebar-Duration;
 }
 
 /* *** FONT *** */
@@ -2662,7 +2856,7 @@ html {
 .app__topmenu {
     height: @AppTopMenu-Height;
     position: fixed;
-    z-index: 104;
+    z-index: 300;
     background-color: @AppTopMenu-Background;
     box-shadow: @CmUI-Shadow-Bottom;
     .mx__position(0, 0, auto, 0);
@@ -2750,12 +2944,6 @@ html {
             }
         }
     }
-}
-
-/* *** HELPERS *** */
-
-.app__topmenu-helper__height {
-    height: @AppTopMenu-Height;
 }
 
 /* *** FONT *** */
@@ -3472,6 +3660,229 @@ html {
 }
 /* ******* MODULES: MENU ******* */
 
+.mod__menu {
+    .menu__menu,
+    .menu__sub {
+        .mx__transition(all, @CmUI-Transition-Duration);
+
+        ul {
+            .cm__list-clear;
+        }
+
+        li {
+            display: block;
+            position: relative;
+            z-index: 1;
+            .mx__transition(all, @CmUI-Transition-Duration);
+
+            &:hover {
+                z-index: 2;
+                .mx__transition(all, @CmUI-Transition-DurationReverse);
+            }
+        }
+
+        a {
+            display: block;
+            position: relative;
+            .mx__transition(all, @CmUI-Transition-Duration);
+
+            &:hover {
+                .mx__transition(all, @CmUI-Transition-DurationReverse);
+            }
+        }
+    }
+
+    .menu__select {
+        display: none;
+        position: relative;
+
+        .select__select {
+            min-height: 0;
+            height: auto;
+            position: relative;
+            z-index: 2;
+            padding: 0;
+            border: none;
+            border-radius: 0;
+            box-shadow: none;
+            background: transparent;
+            text-shadow: none;
+            text-decoration: none;
+            cursor: pointer;
+            .mx__appearance(none);
+
+            &::-ms-expand {
+                display: none;
+            }
+        }
+
+        .select__button {
+            .icon.initial;
+            .icon.linked;
+            .icon.medium.menu;
+            width: @CmSize-Large;
+            position: absolute;
+            z-index: 1;
+            .mx__position(0, 0, 0, auto);
+        }
+    }
+
+    &.is-horizontal {
+        .menu__menu {
+            > ul {
+                .cm__list-inline--base;
+
+                > li {
+                    > a {
+                        .cm__text-nowrap;
+                        white-space: nowrap;
+                    }
+
+                    &:hover {
+                        > .menu__sub {
+                            .mod__menu__sub--dropdown-active;
+                        }
+                    }
+                }
+            }
+        }
+
+        .menu__sub {
+            .mod__menu__sub--dropdown;
+        }
+    }
+
+    &.is-vertical {
+    }
+
+    // /* *** ALIGN *** */
+
+    &.pull-left {
+        .menu__menu {
+            ul, a {
+                text-align: left;
+            }
+        }
+    }
+
+    &.pull-center,
+    &.pull-justify {
+        .menu__menu {
+            ul, a {
+                text-align: center;
+            }
+        }
+    }
+
+    &.pull-right {
+        .menu__menu {
+            ul, a {
+                text-align: right;
+            }
+        }
+    }
+
+    &.pull-justify {
+        &.is-horizontal {
+            .menu__menu {
+                > ul {
+                    .display-flex;
+                    .mx__flex-flow(row nowrap);
+
+                    > li {
+                        max-width: 100%;
+                        .mx__flex(1 1 0);
+
+                        > a {
+                            .cm__text-nowrap;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+.mod__menu--adaptive {
+    .menu__menu {
+        display: none;
+    }
+
+    .menu__select {
+        display: block;
+    }
+}
+
+.mod__menu__sub--dropdown {
+    min-width: 100%;
+    visibility: hidden;
+    position: absolute;
+    opacity: 0;
+    .mx__position(100%, auto, auto, 0);
+    .mx__transition(all, @CmUI-Transition-Duration);
+
+    &.pull-left {
+        .mx__position(100%, auto, auto, 0);
+    }
+
+    &.pull-right {
+        .mx__position(100%, 0, auto, auto);
+    }
+
+    .menu__sub {
+        .mx__position(0, auto, auto, 100%);
+
+        &.pull-left {
+            .mx__position(0, auto, auto, 100%);
+        }
+
+        &.pull-right {
+            .mx__position(0, 100%, auto, auto);
+        }
+    }
+
+    li {
+        &:hover {
+            > .menu__sub {
+                .mod__menu__sub--dropdown-active;
+            }
+        }
+    }
+}
+
+.mod__menu__sub--dropdown-active {
+    visibility: visible;
+    opacity: 1;
+    .mx__transition(all, @CmUI-Transition-DurationReverse);
+}
+
+/* ******* MODULES: MENU: ADAPTIVE ******* */
+
+@media only screen and (max-width : @CmUI-AdaptiveFrom) {
+
+    html.is-adaptive {
+        .mod__menu {
+            &.is-adaptive {
+                &.is-horizontal {
+                    .mod__menu--adaptive;
+                }
+            }
+        }
+    }
+
+}
+
+/* ******* MODULES: MENU: PRINT ******* */
+
+@media print {
+
+    .mod__menu {
+        display: none !important;
+    }
+
+}
+/* ******* MODULES: MENU ******* */
+
 .app-mod__menu {
     > ul {
         .cm__list-clear;
@@ -3843,7 +4254,7 @@ html {
 
 }
 
-/* *******  MODULES: MENU: PRINT ******* */
+/* ******* MODULES: MENU: PRINT ******* */
 
 @media print {
 
@@ -4411,12 +4822,6 @@ html {
     }
 }
 
-// /* *** HELPERS *** */
-
-.app-mod__rollover-tabs-helper__duration {
-    transition-duration: @AppMod-RolloverTabs-Duration;
-}
-
 /* ******* COMPONENTS: TABSET: ADAPTIVE ******* */
 
 @media only screen and (max-width : @AppMod-RolloverTabs-AdaptiveFrom) {
@@ -4482,8 +4887,8 @@ html {
 // /* *** MIXINS *** */
 
 .app-mod__search--size (@height: @CmForm-FieldHeight, @paddingX: @CmInput-Padding, @borderWidth: @CmBorder-Width, @lineHeight: @CmFont-Base-LineHeight){
-    .form-field {
-        .cm__form-field--size(@height, @paddingX, @borderWidth, @lineHeight);
+    .pt__input {
+        .pt__input--size(@height, @paddingX, @borderWidth, @lineHeight);
     }
 }
 
@@ -4783,6 +5188,330 @@ html {
         }
     }
 
+}
+// /* ************ MODULES: TEMPLATES: MENU DEFAULT ************ */
+
+// /* ******* VARIABLES ******* /
+
+@ID: default;
+
+// /* *** PRIMARY ITEM *** */
+
+@Primary-Item-Indent: 4px;
+@Primary-Item-Padding: 2px 4px;
+
+@Primary-Default-BackgroundColor: transparent;
+@Primary-Default-BackgroundImage: none;
+@Primary-Default-BackgroundRepeat: no-repeat;           // no-repeat | repeat | repeat-x | repeat-y
+@Primary-Default-BackgroundPosition: top left;
+@Primary-Default-BackgroundScaling: auto;               // auto | contain | cover | 100% 100%
+@Primary-Default-BorderSize: 0;
+@Primary-Default-BorderStyle: solid;                    // solid | dotted | dashed | double | groove | ridge | inset | outset
+@Primary-Default-BorderColor: transparent;
+@Primary-Default-BorderRadius: 0;
+@Primary-Default-FontLineHeight: inherit;
+@Primary-Default-FontWeight: 400;                       // 100 | 300 | 400 | 600 | 700 | 800
+@Primary-Default-FontStyle: normal;                     // normal | italic
+@Primary-Default-FontDecoration: none;                  // none | underline
+@Primary-Default-FontFamily: inherit;
+@Primary-Default-FontSize: inherit;
+@Primary-Default-FontColor: inherit;
+
+@Primary-Hover-BackgroundColor: transparent;
+@Primary-Hover-BackgroundImage: none;
+@Primary-Hover-BackgroundRepeat: no-repeat;             // no-repeat | repeat | repeat-x | repeat-y
+@Primary-Hover-BackgroundPosition: top left;
+@Primary-Hover-BackgroundScaling: auto;                 // auto | contain | cover | 100% 100%
+@Primary-Hover-BorderSize: 0;
+@Primary-Hover-BorderStyle: solid;
+@Primary-Hover-BorderColor: transparent;
+@Primary-Hover-BorderRadius: 0;
+@Primary-Hover-FontLineHeight: inherit;
+@Primary-Hover-FontWeight: 400;                         // 100 | 300 | 400 | 600 | 700 | 800
+@Primary-Hover-FontStyle: normal;                       // normal | italic
+@Primary-Hover-FontDecoration: underline;               // none | underline
+@Primary-Hover-FontFamily: inherit;
+@Primary-Hover-FontSize: inherit;
+@Primary-Hover-FontColor: inherit;
+
+@Primary-Active-BackgroundColor: transparent;
+@Primary-Active-BackgroundImage: none;
+@Primary-Active-BackgroundRepeat: no-repeat;            // no-repeat | repeat | repeat-x | repeat-y
+@Primary-Active-BackgroundPosition: top left;
+@Primary-Active-BackgroundScaling: auto;                // auto | contain | cover | 100% 100%
+@Primary-Active-BorderSize: 0;
+@Primary-Active-BorderStyle: solid;
+@Primary-Active-BorderColor: transparent;
+@Primary-Active-BorderRadius: 0;
+@Primary-Active-FontLineHeight: inherit;
+@Primary-Active-FontWeight: 400;                        // 100 | 300 | 400 | 600 | 700 | 800
+@Primary-Active-FontStyle: normal;                      // normal | italic
+@Primary-Active-FontDecoration: none;                   // none | underline
+@Primary-Active-FontFamily: inherit;
+@Primary-Active-FontSize: inherit;
+@Primary-Active-FontColor: inherit;
+
+// /* *** PRIMARY CONTAINER *** */
+
+@Primary-Container-Padding: 0;
+@Primary-Container-BackgroundColor: transparent;
+@Primary-Container-BackgroundImage: none;
+@Primary-Container-BackgroundRepeat: no-repeat;         // no-repeat | repeat | repeat-x | repeat-y
+@Primary-Container-BackgroundPosition: top left;
+@Primary-Container-BackgroundScaling: auto;             // auto | contain | cover | 100% 100%
+@Primary-Container-BorderSize: 0;
+@Primary-Container-BorderStyle: solid;
+@Primary-Container-BorderColor: transparent;
+@Primary-Container-BorderRadius: 0;
+
+// /* *** SECONDARY ITEM *** */
+
+@Secondary-Item-Indent: 4px;
+@Secondary-Item-Padding: 2px 4px;
+
+@Secondary-Default-BackgroundColor: transparent;
+@Secondary-Default-BackgroundImage: none;
+@Secondary-Default-BackgroundRepeat: no-repeat;           // no-repeat | repeat | repeat-x | repeat-y
+@Secondary-Default-BackgroundPosition: top left;
+@Secondary-Default-BackgroundScaling: auto;               // auto | contain | cover | 100% 100%
+@Secondary-Default-BorderSize: 0;
+@Secondary-Default-BorderStyle: solid;
+@Secondary-Default-BorderColor: transparent;
+@Secondary-Default-BorderRadius: 0;
+@Secondary-Default-FontLineHeight: inherit;
+@Secondary-Default-FontWeight: 400;                       // 100 | 300 | 400 | 600 | 700 | 800
+@Secondary-Default-FontStyle: normal;                     // normal | italic
+@Secondary-Default-FontDecoration: none;                  // none | underline
+@Secondary-Default-FontFamily: inherit;
+@Secondary-Default-FontSize: inherit;
+@Secondary-Default-FontColor: inherit;
+
+@Secondary-Hover-BackgroundColor: transparent;
+@Secondary-Hover-BackgroundImage: none;
+@Secondary-Hover-BackgroundRepeat: no-repeat;            // no-repeat | repeat | repeat-x | repeat-y
+@Secondary-Hover-BackgroundPosition: top left;
+@Secondary-Hover-BackgroundScaling: auto;                // auto | contain | cover | 100% 100%
+@Secondary-Hover-BorderSize: 0;
+@Secondary-Hover-BorderStyle: solid;
+@Secondary-Hover-BorderColor: transparent;
+@Secondary-Hover-BorderRadius: 0;
+@Secondary-Hover-FontLineHeight: inherit;
+@Secondary-Hover-FontWeight: 400;                        // 100 | 300 | 400 | 600 | 700 | 800
+@Secondary-Hover-FontStyle: normal;                      // normal | italic
+@Secondary-Hover-FontDecoration: underline;              // none | underline
+@Secondary-Hover-FontFamily: inherit;
+@Secondary-Hover-FontSize: inherit;
+@Secondary-Hover-FontColor: inherit;
+
+@Secondary-Active-BackgroundColor: transparent;
+@Secondary-Active-BackgroundImage: none;
+@Secondary-Active-BackgroundRepeat: no-repeat;           // no-repeat | repeat | repeat-x | repeat-y
+@Secondary-Active-BackgroundPosition: top left;
+@Secondary-Active-BackgroundScaling: auto;               // auto | contain | cover | 100% 100%
+@Secondary-Active-BorderSize: 0;
+@Secondary-Active-BorderStyle: solid;
+@Secondary-Active-BorderColor: transparent;
+@Secondary-Active-BorderRadius: 0;
+@Secondary-Active-FontLineHeight: inherit;
+@Secondary-Active-FontWeight: 400;                       // 100 | 300 | 400 | 600 | 700 | 800
+@Secondary-Active-FontStyle: normal;                     // normal | italic
+@Secondary-Active-FontDecoration: none;                  // none | underline
+@Secondary-Active-FontFamily: inherit;
+@Secondary-Active-FontSize: inherit;
+@Secondary-Active-FontColor: inherit;
+
+@Secondary-Container-Padding: 4px;
+@Secondary-Container-BackgroundColor: #ffffff;
+@Secondary-Container-BackgroundImage: none;
+@Secondary-Container-BackgroundRepeat: no-repeat;         // no-repeat | repeat | repeat-x | repeat-y
+@Secondary-Container-BackgroundScaling: auto;             // auto | contain | cover | 100% 100%
+@Secondary-Container-BackgroundPosition: top left;
+@Secondary-Container-BorderSize: 1px;
+@Secondary-Container-BorderStyle: solid;
+@Secondary-Container-BorderColor: #cccccc;
+@Secondary-Container-BorderRadius: 3px;
+
+// /* *** MOBILE *** */
+
+@Mobile-Padding: 4px;
+@Mobile-BackgroundColor: transparent;
+@Mobile-BackgroundImage: none;
+@Mobile-BorderSize: 1px;
+@Mobile-BorderStyle: solid;
+@Mobile-BorderColor: #cccccc;
+@Mobile-BorderRadius: 3px;
+@Mobile-FontLineHeight: inherit;
+@Mobile-FontWeight: 400;                                    // 100 | 300 | 400 | 600 | 700 | 800
+@Mobile-FontStyle: normal;                                  // normal | italic
+@Mobile-FontDecoration: none;                               // none | underline
+@Mobile-FontFamily: inherit;
+@Mobile-FontSize: inherit;
+@Mobile-FontColor: inherit;
+
+// /* ******* STRUCTURE ******* /
+
+.mod__menu--@{ID} {
+    .menu__menu {
+        > ul {
+            padding: @Primary-Container-Padding;
+            background: @Primary-Container-BackgroundColor @Primary-Container-BackgroundImage @Primary-Container-BackgroundPosition @Primary-Container-BackgroundRepeat;
+            border: @Primary-Container-BorderSize @Primary-Container-BorderStyle @Primary-Container-BorderColor;
+            border-radius: @Primary-Container-BorderRadius;
+
+            > li {
+                > a {
+                    padding: @Primary-Item-Padding;
+                    background: @Primary-Default-BackgroundColor @Primary-Default-BackgroundImage @Primary-Default-BackgroundPosition @Primary-Default-BackgroundRepeat;
+                    border: @Primary-Default-BorderSize @Primary-Default-BorderStyle @Primary-Default-BorderColor;
+                    border-radius: @Primary-Default-BorderRadius;
+                    font: @Primary-Default-FontWeight ~'@{Primary-Default-FontSize}/@{Primary-Default-FontLineHeight}' @Primary-Default-FontFamily;
+                    font-style: @Primary-Default-FontStyle;
+                    text-decoration: @Primary-Default-FontDecoration;
+                    color: @Primary-Default-FontColor;
+
+                    &:hover,
+                    &.hover {
+                        background: @Primary-Hover-BackgroundColor @Primary-Hover-BackgroundImage @Primary-Hover-BackgroundPosition @Primary-Hover-BackgroundRepeat;
+                        border: @Primary-Hover-BorderSize @Primary-Hover-BorderStyle @Primary-Hover-BorderColor;
+                        border-radius: @Primary-Hover-BorderRadius;
+                        font: @Primary-Hover-FontWeight ~'@{Primary-Hover-FontSize}/@{Primary-Hover-FontLineHeight}' @Primary-Hover-FontFamily;
+                        font-style: @Primary-Hover-FontStyle;
+                        text-decoration: @Primary-Hover-FontDecoration;
+                        color: @Primary-Hover-FontColor;
+                    }
+
+                    &:active,
+                    &.active {
+                        background: @Primary-Active-BackgroundColor @Primary-Active-BackgroundImage @Primary-Active-BackgroundPosition @Primary-Active-BackgroundRepeat;
+                        border: @Primary-Active-BorderSize @Primary-Active-BorderStyle @Primary-Active-BorderColor;
+                        border-radius: @Primary-Active-BorderRadius;
+                        font: @Primary-Active-FontWeight ~'@{Primary-Active-FontSize}/@{Primary-Active-FontLineHeight}' @Primary-Active-FontFamily;
+                        font-style: @Primary-Active-FontStyle;
+                        text-decoration: @Primary-Active-FontDecoration;
+                        color: @Primary-Active-FontColor;
+                    }
+                }
+            }
+        }
+    }
+
+    .menu__sub {
+        > ul {
+            padding: @Secondary-Container-Padding;
+            background: @Secondary-Container-BackgroundColor @Secondary-Container-BackgroundImage @Secondary-Container-BackgroundPosition @Secondary-Container-BackgroundRepeat;
+            border: @Secondary-Container-BorderSize @Secondary-Container-BorderStyle @Secondary-Container-BorderColor;
+            border-radius: @Secondary-Container-BorderRadius;
+
+            > li {
+                margin-top: @Secondary-Item-Indent;
+
+                &:first-child {
+                    margin-top: 0;
+                }
+
+                > a {
+                    padding: @Secondary-Item-Padding;
+                    background: @Secondary-Default-BackgroundColor @Secondary-Default-BackgroundImage @Secondary-Default-BackgroundPosition @Secondary-Default-BackgroundRepeat;
+                    border: @Secondary-Default-BorderSize @Secondary-Default-BorderStyle @Secondary-Default-BorderColor;
+                    border-radius: @Secondary-Default-BorderRadius;
+                    font: @Secondary-Default-FontWeight ~'@{Secondary-Default-FontSize}/@{Secondary-Default-FontLineHeight}' @Secondary-Default-FontFamily;
+                    font-style: @Secondary-Default-FontStyle;
+                    text-decoration: @Secondary-Default-FontDecoration;
+                    color: @Secondary-Default-FontColor;
+
+                    &:hover,
+                    &.hover {
+                        background: @Secondary-Hover-BackgroundColor @Secondary-Hover-BackgroundImage @Secondary-Hover-BackgroundPosition @Secondary-Hover-BackgroundRepeat;
+                        border: @Secondary-Hover-BorderSize @Secondary-Hover-BorderStyle @Secondary-Hover-BorderColor;
+                        border-radius: @Secondary-Hover-BorderRadius;
+                        font: @Secondary-Hover-FontWeight ~'@{Secondary-Hover-FontSize}/@{Secondary-Hover-FontLineHeight}' @Secondary-Hover-FontFamily;
+                        font-style: @Secondary-Hover-FontStyle;
+                        text-decoration: @Secondary-Hover-FontDecoration;
+                        color: @Secondary-Hover-FontColor;
+                    }
+
+                    &:active,
+                    &.active {
+                        background: @Secondary-Active-BackgroundColor @Secondary-Active-BackgroundImage @Secondary-Active-BackgroundPosition @Secondary-Active-BackgroundRepeat;
+                        border: @Secondary-Active-BorderSize @Secondary-Active-BorderStyle @Secondary-Active-BorderColor;
+                        border-radius: @Secondary-Active-BorderRadius;
+                        font: @Secondary-Active-FontWeight ~'@{Secondary-Active-FontSize}/@{Secondary-Active-FontLineHeight}' @Secondary-Active-FontFamily;
+                        font-style: @Secondary-Active-FontStyle;
+                        text-decoration: @Secondary-Active-FontDecoration;
+                        color: @Secondary-Active-FontColor;
+                    }
+                }
+            }
+        }
+    }
+
+    .menu__select {
+        background: @Mobile-BackgroundColor;
+        border: @Mobile-BorderSize @Mobile-BorderStyle @Mobile-BorderColor;
+        border-radius: @Mobile-BorderRadius;
+
+        .select__button {
+            background-image: @Mobile-BackgroundImage;
+        }
+
+        .select__select {
+            padding: @Mobile-Padding;
+            font: @Mobile-FontWeight ~'@{Mobile-FontSize}/@{Mobile-FontLineHeight}' @Mobile-FontFamily;
+            font-style: @Mobile-FontStyle;
+            text-decoration: @Mobile-FontDecoration;
+            color: @Mobile-FontColor;
+        }
+    }
+
+    &.is-horizontal {
+        &.pull-left,
+        &.pull-center,
+        &.pull-justify {
+            .menu__menu {
+                > ul {
+                    > li {
+                        margin-right: @Primary-Item-Indent;
+
+                        &:last-child {
+                            margin-right: 0;
+                        }
+                    }
+                }
+            }
+        }
+
+        &.pull-right {
+            .menu__menu {
+                > ul {
+                    > li {
+                        margin-left: @Primary-Item-Indent;
+
+                        &:first-child {
+                            margin-left: 0;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    &.is-vertical {
+        .menu__menu {
+            > ul {
+                > li {
+                    margin-top: @Primary-Item-Indent;
+
+                    &:first-child {
+                        margin-top: 0;
+                    }
+                }
+            }
+        }
+
+        .menu__sub {
+            margin-top: @Primary-Item-Indent;
+        }
+    }
 }
 /* ******* PAGES: GROUP PROFILE ******* */
 

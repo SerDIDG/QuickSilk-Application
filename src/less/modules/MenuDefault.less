@@ -1,0 +1,382 @@
+/* ******* MODULES: MENU ******* */
+
+.app-mod__menu {
+    > ul {
+        .cm__list-clear;
+        .cm__list-inline--base;
+
+        > li {
+            position: relative;
+            z-index: 1;
+
+            > a {
+                display: block;
+                white-space: nowrap;
+                .mx__transition(color, @CmUI-Transition-Duration);
+
+                &:hover {
+                    .mx__transition(color, @CmUI-Transition-DurationReverse);
+                }
+            }
+
+            &:first-child {
+                margin: 0;
+            }
+
+            &:last-child {
+                margin: 0;
+            }
+
+            &.sep {
+                display: none;
+            }
+
+            &.is-mobile {
+                display: none;
+            }
+
+            &:hover {
+                z-index: 2;
+            }
+        }
+    }
+
+    .pt__menu-dropdown {
+        text-align: left;
+        .pt__menu-dropdown--base;
+    }
+
+    .menu-select {
+        display: none;
+        border-radius: @CmBorder-Radius;
+        position: relative;
+
+        .select {
+            position: relative;
+            z-index: 2;
+            border: none;
+            border-radius: 0;
+            background: transparent;
+            cursor: pointer;
+            .mx__appearance(none);
+
+            // Hide select arrow in IE
+            &::-ms-expand {
+                display: none;
+            }
+        }
+    }
+
+    .menu-button {
+        .icon.linked;
+        .icon.medium.menu;
+        position: absolute;
+        z-index: 1;
+        background-position: 50% 50%;
+        background-repeat: no-repeat;
+        .mx__position(0, 0, 0, auto);
+    }
+
+    &:not(.vertical).pull-justify {
+        > ul {
+            .display-flex;
+            .mx__flex-flow(row wrap);
+
+            > li {
+                max-width: 100%;
+                .mx__flex(1 1 auto);
+
+                > a {
+                    .cm__text-overflow;
+                    text-align: center;
+                }
+            }
+        }
+    }
+
+    &.default {
+        .app-mod__menu__indent(@AppMod-Menu-Default-Indent);
+        .app-mod__menu__select-size(@AppMod-Menu-Default-SelectSize);
+        .app-mod__menu__select-color(@AppMod-Menu-Default-SelectColor);
+        .app-mod__menu__select-background(@AppMod-Menu-Default-SelectBackground);
+
+        &.has-separator {
+            .app-mod__menu--has-separator(@AppMod-Menu-Default-SeparatorWidth, @AppMod-Menu-Default-SeparatorHeight, @AppMod-Menu-Default-SeparatorBackground, @AppMod-Menu-Default-Indent);
+        }
+    }
+
+    &.primary {
+        .app-mod__menu__indent(@AppMod-Menu-Primary-Indent);
+        .app-mod__menu__select-size(@AppMod-Menu-Primary-SelectSize);
+        .app-mod__menu__select-color(@AppMod-Menu-Primary-SelectColor);
+        .app-mod__menu__select-background(@AppMod-Menu-Primary-SelectBackground);
+
+        &.has-separator {
+            .app-mod__menu--has-separator(@AppMod-Menu-Primary-SeparatorWidth, @AppMod-Menu-Primary-SeparatorHeight, @AppMod-Menu-Primary-SeparatorBackground, @AppMod-Menu-Primary-Indent);
+        }
+    }
+
+    &.secondary {
+        .app-mod__menu__indent(@AppMod-Menu-Secondary-Indent);
+        .app-mod__menu__select-size(@AppMod-Menu-Secondary-SelectSize);
+        .app-mod__menu__select-color(@AppMod-Menu-Secondary-SelectColor);
+        .app-mod__menu__select-background(@AppMod-Menu-Secondary-SelectBackground);
+
+        &.has-separator {
+            .app-mod__menu--has-separator(@AppMod-Menu-Secondary-SeparatorWidth, @AppMod-Menu-Secondary-SeparatorHeight, @AppMod-Menu-Secondary-SeparatorBackground, @AppMod-Menu-Secondary-Indent);
+        }
+    }
+
+    &.vertical {
+        ul {
+            .cm__list-clear;
+        }
+
+        li {
+            display: block;
+        }
+
+        a {
+            display: inline-block;
+            vertical-align: top;
+            white-space: normal;
+
+            .mx__transition(color, @CmUI-Transition-Duration);
+
+            &:hover {
+                .mx__transition(color, @CmUI-Transition-DurationReverse);
+            }
+        }
+
+        .app-mod__menu__indent--vertical(@AppMod-Menu-Vertical-Indent, @AppMod-Menu-Vertical-ChildIndent);
+    }
+}
+
+// /* *** MIXINS *** */
+
+.app-mod__menu__select-size (@size: @CmForm-FieldHeight) {
+    .menu-select {
+        .select {
+            height: @size;
+            padding-right: @size;
+        }
+    }
+
+    .menu-button {
+        width: @size;
+        height: @size;
+    }
+}
+
+.app-mod__menu__select-color (@color: @AppMod-Menu-Default-SelectColor) {
+    .menu-select {
+        .select {
+            color: @color;
+
+            option,
+            optgroup {
+                color: @color;
+            }
+        }
+    }
+}
+
+.app-mod__menu__select-background (@background: @AppMod-Menu-Default-SelectBackground) {
+    .menu-select {
+        background: @background;
+
+        .select {
+            option,
+            optgroup {
+                background: @background;
+            }
+        }
+    }
+}
+
+.app-mod__menu__indent (@indent: @AppMod-Menu-Default-Indent) {
+    &.pull-left {
+        > ul {
+            text-align: left;
+
+            > li {
+                margin-right: @indent;
+
+                &:last-child {
+                    margin-right: 0;
+                }
+            }
+        }
+    }
+
+    &.pull-center {
+        > ul {
+            text-align: center;
+
+            > li {
+                margin-right: @indent;
+
+                &:last-child {
+                    margin-right: 0;
+                }
+            }
+        }
+    }
+
+    &.pull-right {
+        > ul {
+            text-align: right;
+
+            > li {
+                margin-left: @indent;
+
+                &:first-child {
+                    margin-left: 0;
+                }
+            }
+        }
+    }
+
+    &.pull-justify {
+        >  ul {
+            text-align: center;
+
+            > li {
+                margin-right: @indent;
+
+                &:last-child {
+                    margin-right: 0;
+                }
+            }
+        }
+    }
+}
+
+.app-mod__menu__indent--vertical (@indent: @AppMod-Menu-Default-Indent, @indentX: @AppMod-Menu-Default-Indent) {
+    ul,
+    ul li {
+        margin-top: @indent;
+
+        &:first-child {
+            margin-top: 0;
+        }
+    }
+
+    &.pull-left {
+        ul {
+            text-align: left;
+
+            ul {
+                margin-left: @indentX;
+            }
+        }
+    }
+
+    &.pull-center {
+        ul {
+            text-align: center;
+        }
+    }
+
+    &.pull-right {
+        ul {
+            text-align: right;
+
+            ul {
+                margin-right: @indentX;
+            }
+        }
+    }
+}
+
+.app-mod__menu--has-separator (@separator-width, @separator-height, @separator-background, @item-indent) {
+    > ul {
+        > li {
+            &:after {
+                width: @separator-width;
+                height: @separator-height;
+                margin: auto;
+                display: block;
+                position: absolute;
+                content: '';
+                .mx__position(0, auto, 0, auto);
+            }
+        }
+    }
+
+    &.pull-left,
+    &.pull-center,
+    &.pull-justify {
+        > ul {
+            > li {
+                &:last-child {
+                    &:after {
+                        display: none;
+                    }
+                }
+
+                &:after {
+                    right: floor(-(@item-indent + @separator-width) / 2);
+                }
+            }
+        }
+    }
+
+    &.pull-right {
+        > ul {
+            > li {
+                &:first-child {
+                    &:after {
+                        display: none;
+                    }
+                }
+
+                &:after {
+                    left: floor(-(@item-indent + @separator-width) / 2);
+                }
+            }
+        }
+    }
+
+    .app-mod__menu__separator-background(@separator-background);
+}
+
+.app-mod__menu__separator-background (@background) {
+    > ul {
+        > li {
+            &:after {
+                background: @background;
+            }
+        }
+    }
+}
+
+/* ******* MODULES: MENU: ADAPTIVE ******* */
+
+@media only screen and (max-width : @CmUI-AdaptiveFrom) {
+
+    html.is-adaptive {
+        .app-mod__menu {
+            &:not(.vertical) {
+                > ul {
+                    display: none;
+                }
+
+                .menu-select {
+                    display: block;
+                }
+            }
+        }
+    }
+
+}
+
+/* ******* MODULES: MENU: PRINT ******* */
+
+@media print {
+
+    .app-mod__menu {
+        display: none !important;
+    }
+
+}

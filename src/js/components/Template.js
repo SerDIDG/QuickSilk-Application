@@ -32,6 +32,9 @@ cm.define('App.Template', {
             'fixed' : false,
             'overlapping' : false
         },
+        'content' : {
+            'editableIndent' : 0
+        },
         'footer' : {
             'sticky' : true
         }
@@ -57,6 +60,7 @@ function(params){
     that.offsets = {};
 
     var init = function(){
+        getLESSVariables();
         that.setParams(params);
         that.convertEvents(that.params['events']);
         that.getDataNodes(that.params['node']);
@@ -67,6 +71,10 @@ function(params){
         setState();
         redraw(true);
         that.triggerEvent('onRender');
+    };
+
+    var getLESSVariables = function(){
+        that.params['content']['editableIndent'] = cm.getLESSVariable('AppTpl-Content-EditableIndent', that.params['content']['editableIndent'], true);
     };
 
     var render = function(){
@@ -81,8 +89,7 @@ function(params){
             that.components['sidebar'] = classObject;
         });
         new cm.Finder('App.Editor', that.params['editorName'], null, function(classObject){
-            that.components['editor'] = classObject
-                .addEvent('onResize', resize);
+            that.components['editor'] = classObject;
         }, {'event' : 'onProcessStart'});
         // Scroll Controllers
         that.anim['scroll'] = new cm.Animation(that.params['scrollNode']);
@@ -113,16 +120,6 @@ function(params){
         cm.removeClass(that.nodes['headerFake'], 'is-show');
     };
 
-    var resize = function(editor, params){
-        var rule;
-        if(rule = cm.getCSSRule('html.is-sidebar--expanded .tpl__container')[0]){
-            rule.style.marginLeft = [params['sidebar']['width'], 'px'].join('');
-        }
-        if(rule = cm.getCSSRule('html.is-sidebar--expanded .tpl__header__container.is-fixed')[0]){
-            rule.style.left = [params['sidebar']['width'], 'px'].join('');
-        }
-    };
-
     var redraw = function(triggerEvents){
         // Fixed Header
         that.offsets['top'] = that.components['topMenu'] ? that.components['topMenu'].getDimensions('height') : 0;
@@ -134,7 +131,12 @@ function(params){
         that.nodes['inner'].style.minHeight = that.offsets['height'] + 'px';
         if(that.isEditing){
             if(that.params['footer']['sticky']){
-                that.nodes['content'].style.minHeight = Math.max((that.offsets['height'] - that.offsets['header'] - that.offsets['footer']), 0) + 'px';
+                that.nodes['content'].style.minHeight = Math.max((
+                        that.offsets['height']
+                        - that.offsets['header']
+                        - that.offsets['footer']
+                        - (that.params['content']['editableIndent'] * 2)
+                    ), 0) + 'px';
             }
         }else{
             if(that.params['header']['fixed'] && !that.params['header']['overlapping']){

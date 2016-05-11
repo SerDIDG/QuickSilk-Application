@@ -4,7 +4,7 @@
     .app__sidebar-font;
     width: @AppSidebar-WidthCollapsed;
     position: fixed;
-    z-index: 102;
+    z-index: 200;
     overflow: hidden;
     box-shadow: @CmUI-Shadow-Right;
     .mx__position(0, auto, 0, 0);
@@ -195,24 +195,12 @@
                 }
             }
         }
-
-        .app__dashboard__body & {
-            visibility: visible;
-            opacity: 1;
-            background: fadeout(@CmColor-Danger-DarkDefault, 75%);
-
-            &.is-active {
-                visibility: visible;
-                opacity: 1;
-                background: fadeout(@CmColor-Danger-DarkDefault, 50%);
-            }
-        }
     }
 
     .sidebar__content__title {
         .cm__text-nowrap;
         .cm__font--ui-h1;
-        padding: 0 (@AppSidebar-Title-Height + @AppSidebar-Content-Indent) 0 @AppSidebar-Content-Indent;
+        padding: 0 @AppSidebar-Title-Height 0 @AppSidebar-Content-Indent;
         position: absolute;
         z-index: 2;
         text-align: left;
@@ -274,28 +262,6 @@
     }
 
     .app__sidebar__theme(@AppSidebar-Theme);
-}
-
-/* *** HELPERS *** */
-
-.app__sidebar-helper__menu-width {
-    width: @AppSidebar-Menu-Width;
-}
-
-.app__sidebar-helper__content-width {
-    width: @AppSidebar-Content-Width;
-}
-
-.app__sidebar-helper__width-collapsed {
-    width: @AppSidebar-WidthCollapsed;
-}
-
-.app__sidebar-helper__width-expanded {
-    width: @AppSidebar-WidthExpanded;
-}
-
-.app__sidebar-helper__duration {
-    transition-duration: @AppSidebar-Duration;
 }
 
 /* *** FONT *** */

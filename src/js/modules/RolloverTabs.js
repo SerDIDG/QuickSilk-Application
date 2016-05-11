@@ -51,7 +51,7 @@ function(params){
     that.changeInterval = null;
 
     var init = function(){
-        getCSSHelpers();
+        getLESSVariables();
         that.setParams(params);
         that.convertEvents(that.params['events']);
         that.getDataNodes(that.params['node']);
@@ -63,8 +63,8 @@ function(params){
         that.triggerEvent('onRender');
     };
 
-    var getCSSHelpers = function(){
-        that.params['duration'] = cm.getTransitionDurationFromRule('.app-mod__rollover-tabs-helper__duration') || that.params['duration'];
+    var getLESSVariables = function(){
+        that.params['duration'] = cm.getTransitionDurationFromLESS('AppMod-RolloverTabs-Duration', that.params['duration']);
     };
 
     var validateParams = function(){

@@ -68,7 +68,7 @@ function(params){
     that.sceneIntervals = {};
 
     var init = function(){
-        getCSSHelpers();
+        getLESSVariables();
         that.setParams(params);
         that.convertEvents(that.params['events']);
         that.getDataNodes(that.params['node']);
@@ -80,12 +80,9 @@ function(params){
         that.params['autoStart'] && prepare();
     };
 
-    var getCSSHelpers = function(){
-        var rule;
-        that.params['duration'] = cm.getTransitionDurationFromRule('.app__helptour-helper__duration');
-        if(rule = cm.getCSSRule('.app__helptour-helper__adaptive-from')[0]){
-            that.params['adaptiveFrom'] = cm.styleToNumber(rule.style.width);
-        }
+    var getLESSVariables = function(){
+        that.params['duration'] = cm.getTransitionDurationFromLESS('AppHelpTour-Duration', that.params['duration']);
+        that.params['adaptiveFrom'] = cm.getLESSVariable('AppHelpTour-AdaptiveFrom', that.params['adaptiveFrom'], true);
     };
 
     var validateParams = function(){
@@ -109,16 +106,9 @@ function(params){
     };
 
     var getDimensions = function(){
-        var rule;
-        if(rule = cm.getCSSRule('.app__sidebar-helper__width-collapsed')[0]){
-            dimensions['sidebarCollapsed'] = cm.styleToNumber(rule.style.width);
-        }
-        if(rule = cm.getCSSRule('.app__sidebar-helper__width-expanded')[0]){
-            dimensions['sidebarExpanded'] = cm.styleToNumber(rule.style.width);
-        }
-        if(rule = cm.getCSSRule('.app__topmenu-helper__height')[0]){
-            dimensions['topMenu'] = cm.styleToNumber(rule.style.height);
-        }
+        dimensions['sidebarCollapsed'] = cm.getLESSVariable('AppSidebar-WidthCollapsed', 0, true);
+        dimensions['sidebarExpanded'] = cm.getLESSVariable('AppSidebar-WidthExpanded', 0, true);
+        dimensions['topMenu'] = cm.getLESSVariable('AppTopMenu-Height', 0, true);
         if(!dimensions['popupSelfHeight']){
             dimensions['popupSelfHeight'] = that.nodes['popup'].offsetHeight;
         }
@@ -159,6 +149,10 @@ function(params){
     var start = function(){
         // Render Popup
         renderPopup();
+        // Close Panels
+        cm.find('App.Panel', null, null, function(classObject){
+            classObject.close();
+        });
         // Save Sidebar State
         startOptions['sidebarExpanded'] = that.components['sidebar'].isExpanded;
         if(that.components['sidebar'].isExpanded){

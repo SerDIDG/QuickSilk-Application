@@ -1,39 +1,68 @@
-cm.define('App.ModuleMenu', {
+/* ******* MODULES: MENU ******* */
+
+cm.define('Module.Menu', {
     'modules' : [
         'Params',
-        'DataNodes'
+        'Events',
+        'DataConfig',
+        'DataNodes',
+        'Stack'
+    ],
+    'events' : [
+        'onRenderStart',
+        'onRender'
     ],
     'params' : {
-        'node' : cm.Node('div')
+        'node' : cm.node('div'),
+        'name' : '',
+        'type' : 'horizontal'           // horizontal | vertical
     }
 },
 function(params){
     var that = this;
-
     that.nodes = {
-        'select' : cm.Node('select')
+        'select' : {
+            'select' : cm.node('select')
+        }
     };
+    that.construct(params);
+});
 
-    /* *** CLASS FUNCTIONS *** */
-
-    var init = function(){
+cm.getConstructor('Module.Menu', function(classConstructor, className, classProto){
+    classProto.construct = function(params){
+        var that = this;
+        that.processSelectHandler = that.processSelect.bind(that);
         that.setParams(params);
+        that.convertEvents(that.params['events']);
         that.getDataNodes(that.params['node']);
-        render();
+        that.getDataConfig(that.params['node']);
+        that.validateParams();
+        that.addToStack(that.params['node']);
+        that.triggerEvent('onRenderStart');
+        that.render();
+        that.addToStack(that.nodes['container']);
+        that.triggerEvent('onRender');
+        return that;
     };
 
-    var render = function(){
-        cm.addEvent(that.nodes['select'], 'change', toggle);
+    classProto.validateParams = function(){
+        var that = this;
+        return that;
     };
 
-    var toggle = function(){
-        var value = that.nodes['select'].value;
+    classProto.render = function(){
+        var that = this;
+        // Events
+        cm.addEvent(that.nodes['select']['select'], 'change', that.processSelectHandler);
+        return that;
+    };
+
+    classProto.processSelect = function(){
+        var that = this;
+        var value = that.nodes['select']['select'].value;
         if(!cm.isEmpty(value)){
             window.location.href = value;
         }
+        return that;
     };
-
-    /* *** MAIN *** */
-
-    init();
 });

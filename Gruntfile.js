@@ -8,25 +8,47 @@ module.exports = function(grunt) {
         pkg: grunt.file.readJSON('package.json'),
         banner : '/*! ************ <%= pkg.name %> v<%= pkg.version %> (<%= grunt.template.today("yyyy-mm-dd HH:MM") %>) ************ */\n',
 
+        packages : {
+            common : grunt.file.readJSON('../common/package.json')
+        },
+
         paths : {
             src : 'src',
             build : 'build',
             temp : 'temp'
         },
 
+        components : {
+            common : {
+                path : '../common',
+                styles : [
+                    '<%= components.common.path %>/build/less/<%= packages.common.name %>.less'
+                ],
+                scripts : [
+                    '<%= components.common.path %>/build/js/<%= packages.common.name %>.js'
+                ],
+                images : [
+                    '<%= components.common.path %>/build/img'
+                ],
+                fonts : [
+                    '<%= components.common.path %>/build/fonts'
+                ]
+            }
+        },
+
         clean: {
             scripts : [
-                '<%= paths.build %>/js'
+                '<%= paths.build %>/js/*'
             ],
             styles : [
-                '<%= paths.build %>/less',
-                '<%= paths.build %>/css'
+                '<%= paths.build %>/less/*',
+                '<%= paths.build %>/css/*'
             ],
             images : [
-                '<%= paths.build %>/img'
+                '<%= paths.build %>/img/*'
             ],
             fonts : [
-                '<%= paths.build %>/fonts'
+                '<%= paths.build %>/fonts/*'
             ],
             temp : [
                 '<%= paths.temp %>'
@@ -52,8 +74,7 @@ module.exports = function(grunt) {
                     banner: '<%= banner %>'
                 },
                 src : [
-                    '<%= paths.src %>/less/variables/**/*.less',
-                    '<%= paths.src %>/less/variables.less',
+                    '<%= paths.src %>/less/variables/*.less',
                     '<%= paths.src %>/less/mixins.less',
                     '<%= paths.src %>/less/application.less',
                     '<%= paths.src %>/less/common/Font.less',
@@ -66,9 +87,29 @@ module.exports = function(grunt) {
                     '<%= paths.src %>/less/components/**/*.less',
                     '<%= paths.src %>/less/modules/**/*.less',
                     '<%= paths.src %>/less/pages/**/*.less',
+                    '!<%= paths.src %>/less/modules/templates/**/*.less',
                     '!<%= paths.src %>/less/components/old/**/*.less'
                 ],
                 dest : '<%= paths.build %>/less/<%= pkg.name %>.less'
+            },
+            variables : {
+                src : [
+                    '<%= components.common.path %>/build/less/<%= packages.common.name %>.variables.less',
+                    '<%= paths.src %>/less/variables/**/*.less'
+                ],
+                dest : '<%= paths.build %>/less/<%= pkg.name %>.variables.less'
+            }
+        },
+
+        lessvars: {
+            options: {
+                format : function(vars){
+                    return 'window.LESS = cm.merge(window.LESS, '+ JSON.stringify(vars) +');';
+                }
+            },
+            build : {
+                src : ['<%= paths.build %>/less/<%= pkg.name %>.variables.less'],
+                dest : '<%= paths.build %>/js/<%= pkg.name %>.variables.js'
             }
         },
 
@@ -94,6 +135,14 @@ module.exports = function(grunt) {
         },
 
         copy: {
+            styles : {
+                src : ['<%= paths.src %>/less/extra/variables.less'],
+                dest : '<%= paths.build %>/less/<%= pkg.name %>.variables.less'
+            },
+            scripts : {
+                src : ['<%= paths.src %>/js/extra/variables.js'],
+                dest : '<%= paths.build %>/js/<%= pkg.name %>.variables.js'
+            },
             images : {
                 files : [{
                     expand : true,
@@ -149,11 +198,13 @@ module.exports = function(grunt) {
         }
     });
     // Custom Tasks
-    grunt.registerTask('default', ['scripts', 'styles', 'images', 'fonts']);
+    grunt.registerTask('default', ['clean', 'pre', 'scripts', 'styles', 'images', 'fonts']);
     grunt.registerTask('optimize', ['clean:temp', 'default', 'uglify', 'imagemin', 'copy:image_optimize', 'clean:temp']);
 
-    grunt.registerTask('scripts', ['clean:scripts', 'concat:scripts']);
-    grunt.registerTask('styles', ['clean:styles', 'concat:styles']);
-    grunt.registerTask('images', ['clean:images', 'copy:images']);
-    grunt.registerTask('fonts', ['clean:fonts', 'copy:fonts']);
+    grunt.registerTask('scripts', ['concat:scripts', 'copy:scripts']);
+    grunt.registerTask('styles', ['variables', 'concat:styles', 'copy:styles']);
+    grunt.registerTask('images', ['copy:images']);
+    grunt.registerTask('fonts', ['copy:fonts']);
+    grunt.registerTask('variables', ['concat:variables', 'lessvars']);
+    grunt.registerTask('pre', ['variables']);
 };

@@ -8,6 +8,11 @@
 @AppPath-Images: '../img';
 @AppPath-Fonts: '../fonts';
 
+// /* ******* UI ******* */
+
+@AppUI-SidebarWidth: 360px;
+@AppUI-TitleHeight: @CmSize-XLarge;
+
 // /* ************************************************ */
 // /* ******* FONT ******* */
 // /* ************************************************ */
@@ -128,12 +133,13 @@
 
 // /* ******* SIDEBAR ******* */
 
+@AppSidebar-Width: @AppUI-SidebarWidth;
 @AppSidebar-Menu-Width: @CmSize-XLarge;
 @AppSidebar-Menu-Background: #000000;
-@AppSidebar-Content-Width: (@AppBlock-Dummy-Width * 3) - (@AppBlock-Dummy-Padding * 2) + (@AppSidebar-Content-Indent * 2);
+@AppSidebar-Content-Width: @AppSidebar-Width - @AppSidebar-Menu-Width;
 @AppSidebar-Content-Indent: @CmIndent-XSmall;
-@AppSidebar-Title-Height: @AppSidebar-Menu-Width;
-@AppSidebar-WidthExpanded: @AppSidebar-Menu-Width + @AppSidebar-Content-Width;
+@AppSidebar-Title-Height: @AppUI-TitleHeight;
+@AppSidebar-WidthExpanded: @AppSidebar-Width;
 @AppSidebar-WidthCollapsed: @AppSidebar-Menu-Width;
 @AppSidebar-Duration: @CmUI-Overlay-Duration;
 @AppSidebar-Overlay: @CmUI-Overlay;
@@ -203,11 +209,25 @@
 
 // /* ******* HELP TOUR ******* */
 
-@AppHelpTour-Duration: @CmUI-Overlay-Duration;
+@AppHelpTour-Duration: @CmUI-Transition-DurationLong;
 @AppHelpTour-AdaptiveFrom: @CmUI-AdaptiveFrom;
 @AppHelpTour-Popup-Width: 360px;
 @AppHelpTour-Popup-Background: @CmColor-Background;
 @AppHelpTour-Popup-ArrowSize: @CmSize-Medium;
+
+// /* ******* PANEL ******* */
+
+@AppPanel-Duration: @CmUI-Transition-DurationLong;
+
+@AppPanel-Dialog-Width: @AppUI-SidebarWidth;
+@AppPanel-Dialog-Background: @CmColor-Primary-DarkDefault;
+@AppPanel-Dialog-TitleHeight: @AppUI-TitleHeight;
+@AppPanel-Dialog-Indent: @CmIndent-XSmall;
+@AppPanel-Dialog-ContentBackground: @CmColor-Background;
+@AppPanel-Dialog-ButtonHeight: @CmForm-FieldHeight;
+@AppPanel-Dialog-ButtonsHeight: @AppPanel-Dialog-ButtonHeight + (@AppPanel-Dialog-Indent * 2);
+
+@AppPanel-Box-Indent: @CmIndent-Medium @AppPanel-Dialog-Indent;
 
 // /* ************************************************ */
 // /* ******* MODULES ******* */
@@ -307,6 +327,14 @@
 @AppTpl-Container-BackgroundSize: auto;
 @AppTpl-Container-BackgroundParallax: scroll;
 @AppTpl-Container-Background: @AppTpl-Container-BackgroundColor @AppTpl-Container-BackgroundImage @AppTpl-Container-BackgroundRepeat @AppTpl-Container-BackgroundPosition @AppTpl-Container-BackgroundParallax;
+
+@AppTpl-Content-EditableIndent: @CmIndent-XSmall;
+
+// /* ************************************************ */
+// /* ******* ADDITIONAL STUFF ******* */
+// /* ************************************************ */
+
+@Stuff-CKE-Color: #474747;
 
 // /* ************************************************ */
 // /* ******* MAGPIE UI ******* */
