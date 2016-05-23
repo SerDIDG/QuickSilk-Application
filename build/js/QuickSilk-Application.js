@@ -1,11 +1,11 @@
-/*! ************ QuickSilk-Application v3.8.1 (2016-05-23 18:44) ************ */
+/*! ************ QuickSilk-Application v3.8.2 (2016-05-23 21:00) ************ */
 
 // /* ************************************************ */
 // /* ******* QUICKSILK: COMMON ******* */
 // /* ************************************************ */
 
 var App = {
-    '_version' : '3.8.1',
+    '_version' : '3.8.2',
     'Elements': {},
     'Nodes' : {},
     'Test' : []
@@ -1959,7 +1959,11 @@ function(params){
             );
             that.components['overlays']['sidebar'] = new classConstructor(that.params['Com.Overlay']);
             that.components['overlays']['topMenu'] = new classConstructor(that.params['Com.Overlay']);
-            that.components['overlays']['template'] = new classConstructor(that.params['Com.Overlay']);
+            that.components['overlays']['template'] = new classConstructor(
+                cm.merge(that.params['Com.Overlay'], {
+                    'position' : 'fixed'
+                })
+            );
             // Start tour on click
             cm.addEvent(that.params['node'], 'click', prepare);
         });
@@ -2172,7 +2176,7 @@ function(params){
     };
 
     var popupClickEvents = function(e){
-        e = cm.getEvent(e);
+        cm.preventDefault(e);
         switch(e.keyCode){
             case 27:
                 stop();
@@ -2613,6 +2617,7 @@ function(params){
     that.nodes = {};
     that.components = {};
     that.isOpen = false;
+    that.isHide = false;
     that.isLoaded = false;
     that.isDestructed = false;
     that.isProccesing = false;
@@ -2674,6 +2679,11 @@ cm.getConstructor('App.Panel', function(classConstructor, className, classProto)
 
     classProto.open = function(){
         var that = this;
+        if(that.isDestructed){
+            that.embedStructure(that.nodes['container']);
+            that.setEvents();
+            that.addToStack(that.nodes['container']);
+        }
         if(!that.isOpen){
             that.embedStructure(that.nodes['container']);
             that.triggerEvent('onOpenStart');
@@ -2706,6 +2716,24 @@ cm.getConstructor('App.Panel', function(classConstructor, className, classProto)
             that.triggerEvent('onCloseStart');
             cm.removeClass(that.nodes['container'], 'is-open', true);
             that.transitionInterval = setTimeout(that.transitionCloseHandler, that.params['duration']);
+        }
+        return that;
+    };
+
+    classProto.hide = function(){
+        var that = this;
+        if(!that.isHide){
+            that.isHide = true;
+            cm.replaceClass(that.nodes['container'], 'is-show', 'is-hide');
+        }
+        return that;
+    };
+
+    classProto.show = function(){
+        var that = this;
+        if(that.isHide){
+            that.isHide = false;
+            cm.replaceClass(that.nodes['container'], 'is-hide', 'is-show');
         }
         return that;
     };
@@ -2896,13 +2924,15 @@ cm.getConstructor('App.Panel', function(classConstructor, className, classProto)
         var that = this;
         // Structure
         that.nodes['container'] = cm.node('div', {'class' : 'app__panel'},
-            that.nodes['dialog'] = cm.node('div', {'class' : 'app__panel__dialog'},
-                that.nodes['inner'] = cm.node('div', {'class' : 'inner'},
-                    that.nodes['title'] = cm.node('div', {'class' : 'title'},
-                        that.nodes['label'] = cm.node('div', {'class' : 'label'})
-                    ),
-                    that.nodes['content'] = cm.node('div', {'class' : 'content'},
-                        that.nodes['contentHolder'] = cm.node('div', {'class' : 'inner'})
+            that.nodes['dialogHolder'] = cm.node('div', {'class' : 'app__panel__holder'},
+                that.nodes['dialog'] = cm.node('div', {'class' : 'app__panel__dialog'},
+                    that.nodes['inner'] = cm.node('div', {'class' : 'inner'},
+                        that.nodes['title'] = cm.node('div', {'class' : 'title'},
+                            that.nodes['label'] = cm.node('div', {'class' : 'label'})
+                        ),
+                        that.nodes['content'] = cm.node('div', {'class' : 'content'},
+                            that.nodes['contentHolder'] = cm.node('div', {'class' : 'inner'})
+                        )
                     )
                 )
             )
@@ -3007,8 +3037,7 @@ cm.getConstructor('App.Panel', function(classConstructor, className, classProto)
     };
 
     classProto.windowKeydown = function(e){
-        var that = this,
-            target = cm.getEventTarget(e);
+        var that = this;
         if(cm.isKeyCode(e.keyCode, 'escape')){
             that.close();
         }
@@ -3113,6 +3142,7 @@ function(params){
         'holder' : cm.node('div'),
         'content' : cm.node('div')
     };
+    that.myComponents = {};
     App.Panel.apply(that, arguments);
 });
 
@@ -3129,6 +3159,9 @@ cm.getConstructor('App.PanelHolder', function(classConstructor, className, class
         var that = this;
         _inherit.prototype.render.apply(that, arguments);
         // Process holder nodes
+        cm.find('App.PanelRequest', null, null, function(classObject){
+            that.myComponents['panel'] = classObject;
+        });
         that.myNodes = cm.merge(that.myNodes, that.getDataNodesObject(that.params['node']));
         cm.addEvent(that.myNodes['button'], 'click', that.openHandler);
         return that;
@@ -3136,10 +3169,20 @@ cm.getConstructor('App.PanelHolder', function(classConstructor, className, class
 
     classProto.open = function(){
         var that = this;
+        _inherit.prototype.open.apply(that, arguments);
         if(!that.isOpen){
+            that.myComponents['panel'] && that.myComponents['panel'].hide();
             that.setContent(that.myNodes['content']);
         }
-        _inherit.prototype.open.apply(that, arguments);
+        return that;
+    };
+
+    classProto.close = function(){
+        var that = this;
+        _inherit.prototype.close.apply(that, arguments);
+        if(that.isOpen){
+            that.myComponents['panel'] && that.myComponents['panel'].show();
+        }
         return that;
     };
 

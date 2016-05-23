@@ -99,7 +99,11 @@ function(params){
             );
             that.components['overlays']['sidebar'] = new classConstructor(that.params['Com.Overlay']);
             that.components['overlays']['topMenu'] = new classConstructor(that.params['Com.Overlay']);
-            that.components['overlays']['template'] = new classConstructor(that.params['Com.Overlay']);
+            that.components['overlays']['template'] = new classConstructor(
+                cm.merge(that.params['Com.Overlay'], {
+                    'position' : 'fixed'
+                })
+            );
             // Start tour on click
             cm.addEvent(that.params['node'], 'click', prepare);
         });
@@ -312,7 +316,7 @@ function(params){
     };
 
     var popupClickEvents = function(e){
-        e = cm.getEvent(e);
+        cm.preventDefault(e);
         switch(e.keyCode){
             case 27:
                 stop();

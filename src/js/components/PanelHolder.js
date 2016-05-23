@@ -19,6 +19,7 @@ function(params){
         'holder' : cm.node('div'),
         'content' : cm.node('div')
     };
+    that.myComponents = {};
     App.Panel.apply(that, arguments);
 });
 
@@ -35,6 +36,9 @@ cm.getConstructor('App.PanelHolder', function(classConstructor, className, class
         var that = this;
         _inherit.prototype.render.apply(that, arguments);
         // Process holder nodes
+        cm.find('App.PanelRequest', null, null, function(classObject){
+            that.myComponents['panel'] = classObject;
+        });
         that.myNodes = cm.merge(that.myNodes, that.getDataNodesObject(that.params['node']));
         cm.addEvent(that.myNodes['button'], 'click', that.openHandler);
         return that;
@@ -42,10 +46,20 @@ cm.getConstructor('App.PanelHolder', function(classConstructor, className, class
 
     classProto.open = function(){
         var that = this;
+        _inherit.prototype.open.apply(that, arguments);
         if(!that.isOpen){
+            that.myComponents['panel'] && that.myComponents['panel'].hide();
             that.setContent(that.myNodes['content']);
         }
-        _inherit.prototype.open.apply(that, arguments);
+        return that;
+    };
+
+    classProto.close = function(){
+        var that = this;
+        _inherit.prototype.close.apply(that, arguments);
+        if(that.isOpen){
+            that.myComponents['panel'] && that.myComponents['panel'].show();
+        }
         return that;
     };
 

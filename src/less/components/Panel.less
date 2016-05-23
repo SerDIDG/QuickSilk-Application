@@ -11,9 +11,12 @@
     }
 }
 
-.app__panel--sidebar,
-.app__panel--story {
+.app__panel--sidebar {
     .mx__position(0, 0, 0, 0);
+
+    .app__panel__holder {
+        box-shadow: @CmUI-Shadow-Right;
+    }
 
     .app__panel__dialog {
         .mx__transform(translateX(-100%));
@@ -34,25 +37,44 @@
             }
         }
     }
-}
 
-.app__panel--sidebar {
-    .app__panel__dialog {
-        box-shadow: @CmUI-Shadow-Right;
+    &.is-hide {
+        .app__panel__dialog {
+            .mx__transform(translateX(-100%));
+            .mx__transition(all, @AppPanel-DurationHide, @CmUI-MotionAsymmetric);
+        }
     }
 }
 
 .app__panel--story {
     .mx__position(0, auto, 0, 0);
+
+    .app__panel__dialog {
+        box-shadow: @CmUI-Shadow-Left;
+        .mx__transform(translateX(100%));
+        .mx__transition(all, @AppPanel-Duration, @CmUI-MotionAsymmetric);
+    }
+
+    &.is-open {
+        .app__panel__dialog {
+            .mx__transform(translateX(0));
+        }
+    }
 }
 
 /* *** DIALOG *** */
 
-.app__panel__dialog {
+.app__panel__holder {
     width: @AppPanel-Dialog-Width;
+    overflow: hidden;
+    position: absolute;
+    .mx__position(0, auto, 0, 0);
+}
+
+.app__panel__dialog {
     position: absolute;
     background-color: @AppPanel-Dialog-Background;
-    .mx__position(0, auto, 0, 0);
+    .mx__position(0, 0, 0, 0);
 
     > .inner {
         position: absolute;

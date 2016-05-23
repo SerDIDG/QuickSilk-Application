@@ -97,6 +97,7 @@ function(params){
     that.nodes = {};
     that.components = {};
     that.isOpen = false;
+    that.isHide = false;
     that.isLoaded = false;
     that.isDestructed = false;
     that.isProccesing = false;
@@ -158,6 +159,11 @@ cm.getConstructor('App.Panel', function(classConstructor, className, classProto)
 
     classProto.open = function(){
         var that = this;
+        if(that.isDestructed){
+            that.embedStructure(that.nodes['container']);
+            that.setEvents();
+            that.addToStack(that.nodes['container']);
+        }
         if(!that.isOpen){
             that.embedStructure(that.nodes['container']);
             that.triggerEvent('onOpenStart');
@@ -190,6 +196,24 @@ cm.getConstructor('App.Panel', function(classConstructor, className, classProto)
             that.triggerEvent('onCloseStart');
             cm.removeClass(that.nodes['container'], 'is-open', true);
             that.transitionInterval = setTimeout(that.transitionCloseHandler, that.params['duration']);
+        }
+        return that;
+    };
+
+    classProto.hide = function(){
+        var that = this;
+        if(!that.isHide){
+            that.isHide = true;
+            cm.replaceClass(that.nodes['container'], 'is-show', 'is-hide');
+        }
+        return that;
+    };
+
+    classProto.show = function(){
+        var that = this;
+        if(that.isHide){
+            that.isHide = false;
+            cm.replaceClass(that.nodes['container'], 'is-hide', 'is-show');
         }
         return that;
     };
@@ -380,13 +404,15 @@ cm.getConstructor('App.Panel', function(classConstructor, className, classProto)
         var that = this;
         // Structure
         that.nodes['container'] = cm.node('div', {'class' : 'app__panel'},
-            that.nodes['dialog'] = cm.node('div', {'class' : 'app__panel__dialog'},
-                that.nodes['inner'] = cm.node('div', {'class' : 'inner'},
-                    that.nodes['title'] = cm.node('div', {'class' : 'title'},
-                        that.nodes['label'] = cm.node('div', {'class' : 'label'})
-                    ),
-                    that.nodes['content'] = cm.node('div', {'class' : 'content'},
-                        that.nodes['contentHolder'] = cm.node('div', {'class' : 'inner'})
+            that.nodes['dialogHolder'] = cm.node('div', {'class' : 'app__panel__holder'},
+                that.nodes['dialog'] = cm.node('div', {'class' : 'app__panel__dialog'},
+                    that.nodes['inner'] = cm.node('div', {'class' : 'inner'},
+                        that.nodes['title'] = cm.node('div', {'class' : 'title'},
+                            that.nodes['label'] = cm.node('div', {'class' : 'label'})
+                        ),
+                        that.nodes['content'] = cm.node('div', {'class' : 'content'},
+                            that.nodes['contentHolder'] = cm.node('div', {'class' : 'inner'})
+                        )
                     )
                 )
             )
@@ -491,8 +517,7 @@ cm.getConstructor('App.Panel', function(classConstructor, className, classProto)
     };
 
     classProto.windowKeydown = function(e){
-        var that = this,
-            target = cm.getEventTarget(e);
+        var that = this;
         if(cm.isKeyCode(e.keyCode, 'escape')){
             that.close();
         }
