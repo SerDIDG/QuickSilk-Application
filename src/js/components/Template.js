@@ -165,8 +165,9 @@ function(params){
     };
 
     that.enableEditing = function(){
-        if(typeof that.isEditing !== 'boolean' || !that.isEditing){
+        if(!cm.isBoolean(that.isEditing) || !that.isEditing){
             that.isEditing = true;
+            cm.addClass(that.nodes['container'], 'is-editing');
             unsetState();
             that.redraw();
             that.triggerEvent('enableEditing');
@@ -175,8 +176,9 @@ function(params){
     };
 
     that.disableEditing = function(){
-        if(typeof that.isEditing !== 'boolean' || that.isEditing){
+        if(!cm.isBoolean(that.isEditing) || that.isEditing){
             that.isEditing = false;
+            cm.removeClass(that.nodes['container'], 'is-editing');
             setState();
             that.redraw();
             that.triggerEvent('disableEditing');

@@ -1,11 +1,11 @@
-/*! ************ QuickSilk-Application v3.8.0 (2016-05-12 20:13) ************ */
+/*! ************ QuickSilk-Application v3.8.1 (2016-05-23 18:44) ************ */
 
 // /* ************************************************ */
 // /* ******* QUICKSILK: COMMON ******* */
 // /* ************************************************ */
 
 var App = {
-    '_version' : '3.8.0',
+    '_version' : '3.8.1',
     'Elements': {},
     'Nodes' : {},
     'Test' : []
@@ -306,7 +306,7 @@ cm.define('App.Dashboard', {
         'moveDuration' : 200,
         'highlightZones' : true,                     // highlight zones on drag start
         'highlightPlaceholders' : true,
-        'placeholderHeight' : 64,
+        'placeholderHeight' : 48,
         'Com.Overlay' : {
             'container' : 'document.body',
             'duration' : 0,
@@ -1578,8 +1578,8 @@ function(params){
         });
         cm.find('App.Sidebar', that.params['sidebarName'], null, function(classObject){
             that.components['sidebar'] = classObject
-                .addEvent('onExpandEnd', sidebarExpandAction)
-                .addEvent('onCollapseEnd', sidebarCollapseAction)
+                .addEvent('onExpand', sidebarExpandAction)
+                .addEvent('onCollapse', sidebarCollapseAction)
                 .addEvent('onTabShow', function(sidebar, data){
                     setEditorType(data.item['id']);
                 });
@@ -1719,6 +1719,7 @@ function(params){
                 'onEnd' : function(){
                     that.triggerEvent('create', node);
                     that.triggerEvent('onProcessEnd', node);
+                    that.components['template'].redraw();
                 }
             });
         }
@@ -1732,6 +1733,7 @@ function(params){
                 'onEnd' : function(){
                     that.triggerEvent('place', node);
                     that.triggerEvent('onProcessEnd', node);
+                    that.components['template'].redraw();
                 }
             });
         }
@@ -1748,6 +1750,7 @@ function(params){
                 'onEnd' : function(){
                     that.triggerEvent('replace', node);
                     that.triggerEvent('onProcessEnd', node);
+                    that.components['template'].redraw();
                 }
             });
         }
@@ -1761,6 +1764,7 @@ function(params){
                 'onEnd' : function(){
                     that.triggerEvent('delete', block.node);
                     that.triggerEvent('onProcessEnd', block.node);
+                    that.components['template'].redraw();
                 }
             });
         }
@@ -1777,6 +1781,7 @@ function(params){
                 'onEnd' : function(){
                     that.triggerEvent('duplicate', node);
                     that.triggerEvent('onProcessEnd', node);
+                    that.components['template'].redraw();
                 }
             });
         }
@@ -1790,6 +1795,7 @@ function(params){
             cm.appendChild(node, block.getInnerNode());
             that.triggerEvent('update', node);
             that.triggerEvent('onProcessEnd', node);
+            that.components['template'].redraw();
         }
         return that;
     };
@@ -2770,6 +2776,10 @@ cm.getConstructor('App.Panel', function(classConstructor, className, classProto)
 
     classProto.setTitle = function(value){
         var that = this;
+        cm.customEvent.trigger(that.nodes['label'], 'destruct', {
+            'type' : 'child',
+            'self' : false
+        });
         cm.clearNode(that.nodes['label']);
         if(cm.isNode(value)){
             cm.appendChild(value, that.nodes['label']);
@@ -2781,6 +2791,10 @@ cm.getConstructor('App.Panel', function(classConstructor, className, classProto)
 
     classProto.setContent = function(node){
         var that = this;
+        cm.customEvent.trigger(that.nodes['contentHolder'], 'destruct', {
+            'type' : 'child',
+            'self' : false
+        });
         cm.clearNode(that.nodes['contentHolder']);
         if(cm.isNode(node)){
             cm.appendChild(node, that.nodes['contentHolder']);
@@ -3253,7 +3267,7 @@ cm.define('App.Sidebar', {
     'params' : {
         'node' : cm.Node('div'),
         'name' : 'app-sidebar',
-        'duration' : 300,
+        'duration' : 'cm._config.animDurationLong',
         'active' : 'template-manager',
         'target' : 'document.html',
         'remember' : true,
@@ -3383,6 +3397,8 @@ function(params){
             }
             cm.replaceClass(that.nodes['container'], 'is-expanded', 'is-collapsed', true);
             cm.replaceClass(that.params['target'], 'is-sidebar--expanded', 'is-sidebar--collapsed', true);
+            // Trigger collapse event after change classes
+            that.triggerEvent('onCollapse');
             // Unset active class to collapse buttons
             cm.forEach(that.nodes['collapseButtons'], function(item){
                 cm.removeClass(item['container'], 'active');
@@ -3390,7 +3406,6 @@ function(params){
             // Remove immediately animation hack
             that.openInterval && clearTimeout(that.openInterval);
             if(isImmediately){
-                that.triggerEvent('onCollapse');
                 that.triggerEvent('onCollapseEnd');
                 that.openInterval = setTimeout(function(){
                     cm.removeClass(that.nodes['container'], 'is-immediately');
@@ -3398,7 +3413,6 @@ function(params){
                 }, 5);
             }else{
                 that.openInterval = setTimeout(function(){
-                    that.triggerEvent('onCollapse');
                     that.triggerEvent('onCollapseEnd');
                 }, that.params['duration'] + 5);
             }
@@ -3421,6 +3435,8 @@ function(params){
             }
             cm.replaceClass(that.nodes['container'], 'is-collapsed', 'is-expanded', true);
             cm.replaceClass(that.params['target'], 'is-sidebar--collapsed', 'is-sidebar--expanded', true);
+            // Trigger expand event after change classes
+            that.triggerEvent('onExpand');
             // Set active class to collapse buttons
             cm.forEach(that.nodes['collapseButtons'], function(item){
                 cm.addClass(item['container'], 'active');
@@ -3428,7 +3444,6 @@ function(params){
             // Remove immediately animation hack
             that.openInterval && clearTimeout(that.openInterval);
             if(isImmediately){
-                that.triggerEvent('onExpand');
                 that.triggerEvent('onExpandEnd');
                 that.openInterval = setTimeout(function(){
                     cm.removeClass(that.nodes['container'], 'is-immediately');
@@ -3436,7 +3451,6 @@ function(params){
                 }, 5);
             }else{
                 that.openInterval = setTimeout(function(){
-                    that.triggerEvent('onExpand');
                     that.triggerEvent('onExpandEnd');
                 }, that.params['duration'] + 5);
             }
@@ -3502,6 +3516,7 @@ cm.define('App.Stylizer', {
     'params' : {
         'node' : cm.Node('div'),
         'name' : '',
+        'customEvents' : true,
         'active' : {},
         'default' : {},
         'styles' : {
@@ -3577,8 +3592,10 @@ function(params){
     that.components = {};
     that.value = null;
     that.previousValue = null;
+    that.isDestructed = null;
 
     var init = function(){
+        that.destructHandler = that.destruct.bind(that);
         that.setParams(params);
         that.convertEvents(that.params['events']);
         that.getDataNodes(that.params['node']);
@@ -3586,6 +3603,7 @@ function(params){
         validateParams();
         // Render editor toolbar
         renderTooltip();
+        setEvents();
         // Add to stack
         that.addToStack(that.nodes['container']);
         // Set
@@ -3872,6 +3890,20 @@ function(params){
         );
     };
 
+    var setEvents = function(){
+        // Add custom event
+        if(that.params['customEvents']){
+            cm.customEvent.add(that.nodes['container'], 'destruct', that.destructHandler);
+        }
+    };
+
+    var unsetEvents = function(){
+        // Add custom event
+        if(that.params['customEvents']){
+            cm.customEvent.remove(that.nodes['container'], 'destruct', that.destructHandler);
+        }
+    };
+
     var set = function(styles, triggerEvents){
         var prepared = cm.clone(styles);
         that.previousValue = cm.clone(that.value);
@@ -3930,6 +3962,20 @@ function(params){
     };
 
     /* ******* MAIN ******* */
+
+    that.destruct = function(){
+        var that = this;
+        if(!that.isDestructed){
+            that.isDestructed = true;
+            cm.customEvent.trigger(that.nodes['tooltip']['container'], 'destruct', {
+                'type' : 'child',
+                'self' : false
+            });
+            unsetEvents();
+            that.removeFromStack();
+        }
+        return that;
+    };
 
     that.set = function(styles, triggerEvents){
         triggerEvents = typeof triggerEvents != 'undefined'? triggerEvents : true;
@@ -4111,8 +4157,9 @@ function(params){
     };
 
     that.enableEditing = function(){
-        if(typeof that.isEditing !== 'boolean' || !that.isEditing){
+        if(!cm.isBoolean(that.isEditing) || !that.isEditing){
             that.isEditing = true;
+            cm.addClass(that.nodes['container'], 'is-editing');
             unsetState();
             that.redraw();
             that.triggerEvent('enableEditing');
@@ -4121,8 +4168,9 @@ function(params){
     };
 
     that.disableEditing = function(){
-        if(typeof that.isEditing !== 'boolean' || that.isEditing){
+        if(!cm.isBoolean(that.isEditing) || that.isEditing){
             that.isEditing = false;
+            cm.removeClass(that.nodes['container'], 'is-editing');
             setState();
             that.redraw();
             that.triggerEvent('disableEditing');
@@ -5006,4 +5054,283 @@ function(params){
     };
 
     init();
+});
+cm.define('Dev.Parallax', {
+    'modules' : [
+        'Params',
+        'Events',
+        'Langs',
+        'Structure',
+        'DataConfig',
+        'DataNodes',
+        'Storage',
+        'Stack'
+    ],
+    'events' : [
+        'onRenderStart',
+        'onRender'
+    ],
+    'params' : {
+        'node' : cm.node('div'),
+        'name' : '',
+        'speed' : 1
+    }
+},
+function(params){
+    var that = this;
+    that.nodes = {};
+    that.components = {};
+    that.construct(params);
+});
+
+cm.getConstructor('Dev.Parallax', function(classConstructor, className, classProto){
+    classProto.construct = function(params){
+        var that = this;
+        that.setHandler = that.set.bind(that);
+        that.refreshHandler = that.refresh.bind(that);
+        that.setParams(params);
+        that.convertEvents(that.params['events']);
+        that.getDataNodes(that.params['node']);
+        that.getDataConfig(that.params['node']);
+        that.validateParams();
+        that.addToStack(that.params['node']);
+        that.triggerEvent('onRenderStart');
+        that.render();
+        that.addToStack(that.nodes['container']);
+        that.triggerEvent('onRender');
+        return that;
+    };
+
+    classProto.validateParams = function(){
+        var that = this;
+        return that;
+    };
+
+    classProto.render = function(){
+        var that = this;
+        // Refresh Layout
+        that.refresh();
+        // Set Events
+        cm.addEvent(window, 'scroll', that.setHandler);
+        cm.addEvent(window, 'resize', that.refreshHandler);
+        return that;
+    };
+
+    classProto.refresh = function(){
+        var that = this;
+        that.posY = cm.getY(that.nodes['container']);
+        that.selfHeight = that.nodes['container'].offsetHeight;
+        that.posY2 = that.posY + that.selfHeight;
+        that.winHeight = cm.getPageSize('winHeight');
+        that.halfY = (that.winHeight - that.selfHeight) / 2;
+        that.set();
+        return that;
+    };
+
+    classProto.set = function(){
+        var that = this;
+        var scrollTop = cm.getBodyScrollTop();
+        if(cm.inRange(scrollTop, scrollTop + that.winHeight, that.posY, that.posY2)){
+            var posY = scrollTop + that.halfY - that.posY;
+            var transY = posY - (posY * that.params['speed']);
+            cm.setCSSTranslate(that.nodes['backgroundInner'], '0px', (transY + 'px'))
+        }
+    };
+});
+cm.define('Dev.TBSC', {
+    'modules' : [
+        'Params',
+        'Events',
+        'Langs',
+        'Structure',
+        'DataConfig',
+        'DataNodes',
+        'Storage',
+        'Stack'
+    ],
+    'events' : [
+        'onRenderStart',
+        'onRender'
+    ],
+    'params' : {
+        'node' : cm.node('div'),
+        'name' : '',
+        'customEvents' : true,
+        'ipadSpeed' : 0.12,
+        'characterSpeed' : 0.4,
+        'character2Speed' : 0.288,
+        'raysSpeed' : 0.342
+    }
+},
+function(params){
+    var that = this;
+    that.nodes = {};
+    that.components = {};
+    that.isEditing = null;
+    that.isDestructed = false;
+    that.construct(params);
+});
+
+cm.getConstructor('Dev.TBSC', function(classConstructor, className, classProto){
+    classProto.construct = function(params){
+        var that = this;
+        that.resizeHandler = that.resize.bind(that);
+        that.scrollHandler = that.scroll.bind(that);
+        that.setHandler = that.set.bind(that);
+        that.redrawHandler = that.redraw.bind(that);
+        that.enableEditingHandler = that.enableEditing.bind(that);
+        that.disableEditingHandler = that.disableEditing.bind(that);
+        that.setParams(params);
+        that.convertEvents(that.params['events']);
+        that.getDataNodes(that.params['node']);
+        that.getDataConfig(that.params['node']);
+        that.addToStack(that.params['node']);
+        that.triggerEvent('onRenderStart');
+        that.render();
+        that.addToStack(that.nodes['container']);
+        that.triggerEvent('onRender');
+        return that;
+    };
+
+    classProto.destruct = function(){
+        var that = this;
+        if(!that.isDestructed){
+            that.isDestructed = true;
+            cm.removeEvent(window, 'scroll', that.scrollHandler);
+            cm.removeEvent(window, 'resize', that.resizeHandler);
+            that.removeFromStack();
+        }
+        return that;
+    };
+
+    classProto.render = function(){
+        var that = this;
+        // Refresh Layout
+        that.redraw();
+        // Set Events
+        cm.addEvent(window, 'scroll', that.scrollHandler);
+        cm.addEvent(window, 'resize', that.resizeHandler);
+        // Add custom event
+        if(that.params['customEvents']){
+            cm.customEvent.add(that.params['node'], 'destruct', function(){
+                that.destruct();
+            });
+            cm.customEvent.add(that.params['node'], 'redraw', function(){
+                that.redraw();
+            });
+            cm.customEvent.add(that.params['node'], 'enableEditable', function(){
+                that.enableEditing();
+            });
+            cm.customEvent.add(that.params['node'], 'disableEditable', function(){
+                that.disableEditing();
+            });
+        }
+        return that;
+    };
+
+    classProto.resize = function(){
+        var that = this;
+        that.redraw();
+        return that;
+    };
+
+    classProto.scroll = function(){
+        var that = this;
+        if(!that.isEditing){
+            that.set();
+        }
+        return that;
+    };
+
+    classProto.redraw = function(){
+        var that = this;
+        if(!that.isEditing){
+            cm.addClass(that.nodes['line']['container'], 'is-start');
+            cm.removeClass(that.nodes['height'], 'is-hidden');
+            // Position
+            that.winWidth = cm.getPageSize('winWidth');
+            that.posX = cm.getX(that.nodes['container']);
+            that.posY = cm.getY(that.nodes['container']);
+            // iPad
+            that.ipadStartY = 70;
+            that.ipadEndY = 0;
+            // Character
+            that.characterStartY = -210;
+            that.characterEndY = 0;
+            // Character 2
+            that.character2StartY = -150;
+            that.character2EndY = 0;
+            // Rays
+            that.raysStartY = -180;
+            that.raysEndY = 0;
+            // Set
+            that.set();
+        }else {
+            cm.setCSSTranslate(that.nodes['line']['ipad'], '0px', '0px');
+            cm.setCSSTranslate(that.nodes['line']['character'], '0px', '0px');
+            cm.setCSSTranslate(that.nodes['line']['character2'], '0px', '0px');
+            cm.setCSSTranslate(that.nodes['line']['rays'], '0px', '0px');
+        }
+        return that;
+    };
+
+    classProto.set = function(){
+        var that = this,
+            scrollTop = cm.getBodyScrollTop(),
+            scrollOffset = scrollTop,
+            ipadTrans = that.ipadStartY - (scrollOffset * that.params['ipadSpeed']),
+            characterTrans = that.characterStartY + (scrollOffset * that.params['characterSpeed']),
+            character2Trans = that.character2StartY + (scrollOffset * that.params['character2Speed']),
+            raysTransTrans = that.raysStartY + (scrollOffset * that.params['raysSpeed']);
+        // Ipad
+        if(ipadTrans >= that.ipadStartY){
+            cm.setCSSTranslate(that.nodes['line']['ipad'], '0px', (that.ipadStartY + 'px'));
+        }else if(ipadTrans >= that.ipadEndY){
+            cm.setCSSTranslate(that.nodes['line']['ipad'], '0px', (ipadTrans + 'px'));
+        }else{
+            cm.setCSSTranslate(that.nodes['line']['ipad'], '0px', (that.ipadEndY + 'px'));
+        }
+        // Character
+        if(characterTrans <= that.characterStartY){
+            cm.setCSSTranslate(that.nodes['line']['character'], (that.characterStartY + 'px'), '0px');
+        }else if(characterTrans <= that.characterEndY){
+            cm.setCSSTranslate(that.nodes['line']['character'], (characterTrans + 'px'), '0px');
+        }else{
+            cm.setCSSTranslate(that.nodes['line']['character'], (that.characterEndY + 'px'), '0px');
+        }
+        // Character 2
+        if(character2Trans <= that.character2StartY){
+            cm.setCSSTranslate(that.nodes['line']['character2'], (that.character2StartY + 'px'), '0px');
+        }else if(character2Trans <= that.character2EndY){
+            cm.setCSSTranslate(that.nodes['line']['character2'], (character2Trans + 'px'), '0px');
+        }else{
+            cm.setCSSTranslate(that.nodes['line']['character2'], (that.character2EndY + 'px'), '0px');
+        }
+        // Rays
+        if(raysTransTrans <= that.raysStartY){
+            cm.setCSSTranslate(that.nodes['line']['rays'], (that.raysStartY + 'px'), '0px');
+        }else if(raysTransTrans <= that.raysEndY){
+            cm.setCSSTranslate(that.nodes['line']['rays'], (raysTransTrans + 'px'), '0px');
+        }else{
+            cm.setCSSTranslate(that.nodes['line']['rays'], (that.raysEndY + 'px'), '0px');
+        }
+    };
+
+    classProto.enableEditing = function(){
+        var that = this;
+        if(!cm.isBoolean(that.isEditing) || !that.isEditing){
+            that.isEditing = true;
+            that.redraw();
+        }
+        return that;
+    };
+
+    classProto.disableEditing = function(){
+        var that = this;
+        if(!cm.isBoolean(that.isEditing) || that.isEditing){
+            that.isEditing = false;
+            that.redraw();
+        }
+        return that;
+    };
 });

@@ -15,6 +15,7 @@ cm.define('App.Stylizer', {
     'params' : {
         'node' : cm.Node('div'),
         'name' : '',
+        'customEvents' : true,
         'active' : {},
         'default' : {},
         'styles' : {
@@ -90,8 +91,10 @@ function(params){
     that.components = {};
     that.value = null;
     that.previousValue = null;
+    that.isDestructed = null;
 
     var init = function(){
+        that.destructHandler = that.destruct.bind(that);
         that.setParams(params);
         that.convertEvents(that.params['events']);
         that.getDataNodes(that.params['node']);
@@ -99,6 +102,7 @@ function(params){
         validateParams();
         // Render editor toolbar
         renderTooltip();
+        setEvents();
         // Add to stack
         that.addToStack(that.nodes['container']);
         // Set
@@ -385,6 +389,20 @@ function(params){
         );
     };
 
+    var setEvents = function(){
+        // Add custom event
+        if(that.params['customEvents']){
+            cm.customEvent.add(that.nodes['container'], 'destruct', that.destructHandler);
+        }
+    };
+
+    var unsetEvents = function(){
+        // Add custom event
+        if(that.params['customEvents']){
+            cm.customEvent.remove(that.nodes['container'], 'destruct', that.destructHandler);
+        }
+    };
+
     var set = function(styles, triggerEvents){
         var prepared = cm.clone(styles);
         that.previousValue = cm.clone(that.value);
@@ -443,6 +461,20 @@ function(params){
     };
 
     /* ******* MAIN ******* */
+
+    that.destruct = function(){
+        var that = this;
+        if(!that.isDestructed){
+            that.isDestructed = true;
+            cm.customEvent.trigger(that.nodes['tooltip']['container'], 'destruct', {
+                'type' : 'child',
+                'self' : false
+            });
+            unsetEvents();
+            that.removeFromStack();
+        }
+        return that;
+    };
 
     that.set = function(styles, triggerEvents){
         triggerEvents = typeof triggerEvents != 'undefined'? triggerEvents : true;

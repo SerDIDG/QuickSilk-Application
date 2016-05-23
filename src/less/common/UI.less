@@ -1,127 +1,6 @@
 /* ******* COMMON: UI ******* */
 
-/* *** TEMPLATE *** */
-
-.tpl__container {
-    position: relative;
-    z-index: 1;
-    background: @AppTpl-Container-Background;
-    background-size: @AppTpl-Container-BackgroundSize;
-}
-
-.tpl__header,
-.tpl__content,
-.tpl__footer {
-    position: relative;
-}
-
-.tpl__header__container {
-    z-index: 3;
-
-    &.is-fixed,
-    &.is-overlapping {
-        position: absolute;
-        left: 0;
-        right: 0;
-    }
-
-    &.is-fixed {
-        position: fixed;
-    }
-}
-
-.tpl__header__fake {
-    display: none;
-
-    &.is-show {
-        display: block;
-    }
-}
-
-.tpl__header {
-    z-index: 3;
-}
-
-.tpl__content {
-    z-index: 1;
-}
-
-.tpl__footer {
-    z-index: 2;
-}
-
-.tpl__container__inner,
-.tpl__header__inner,
-.tpl__content__inner,
-.tpl__footer__inner {
-    width: 100%;
-    max-width: 100%;
-    position: relative;
-}
-
-.tpl__container__size (@value) when (@value = wide) {
-}
-
-.tpl__container__size (@value) when (@value = box) {
-    .tpl__container {
-        padding: 0 @AppTpl-Container-Indent;
-    }
-
-    .tpl__container__inner {
-        max-width: @AppTpl-Container-Width;
-        .mx__align(@AppTpl-Container-Align);
-    }
-
-    .tpl__header__container {
-        &.is-fixed {
-            padding: 0 @AppTpl-Container-Indent;
-
-            .tpl__header {
-                width: 100%;
-                max-width: @AppTpl-Container-Width;
-                .mx__align(@AppTpl-Container-Align);
-            }
-        }
-    }
-}
-
-.tpl__container__size(@AppTpl-Container-Size);
-
-// /* *** TEMPLATE MIXINS *** */
-
-.tpl__content__flex-area () {
-    .display-flex;
-    .mx__flex-direction(row);
-    .mx__justify-content(flex-start);
-
-    .tpl__content__inner {
-        .display-flex;
-        .mx__flex(1 1 auto);
-        .mx__flex-direction(row);
-        .mx__justify-content(flex-start);
-
-        .app__zone-main {
-            width: 100%;
-            max-width: 100%;
-            .mx__flex(1 1 auto);
-        }
-    }
-
-    @media print {
-        display: block;
-
-        .tpl__content__inner {
-            display: block;
-            .mx__flex(none);
-
-            .app__zone-main {
-                .mx__flex(none);
-            }
-        }
-    }
-}
-
-/* *** WRAPPERS *** */
+/* *** STATES *** */
 
 html {
     &.is-topmenu {
@@ -145,13 +24,11 @@ html {
     &.is-sidebar {
         .tpl__container {
             margin-left: @AppSidebar-WidthCollapsed;
-            .mx__transition(margin, @AppSidebar-Duration);
         }
 
         .tpl__header__container {
             &.is-fixed {
                 left: @AppSidebar-WidthCollapsed;
-                .mx__transition(left, @AppSidebar-Duration);
             }
         }
     }
@@ -192,64 +69,11 @@ html {
             }
         }
     }
-
-    &.is-immediately {
-        .tpl__container,
-        .tpl__header__container {
-            .cm__transition-none;
-        }
-    }
 }
 
-/* ******* PART: UI: ADAPTIVE ******* */
-
-@media only screen and (max-width : @CmUI-AdaptiveFrom) {
-
-    html.is-adaptive {
-        .tpl__container__inner
-        .tpl__header__inner,
-        .tpl__content__inner,
-        .tpl__footer__inner {
-            max-width: 100%;
-        }
-
-        &.is-sidebar,
-        &.is-sidebar--collapsed {
-            .tpl__container {
-                margin-left: 0;
-            }
-
-            .tpl__header__container {
-                &.is-fixed {
-                    left: 0;
-                }
-            }
-
-            .tpl__content {
-                margin: 0;
-            }
-        }
-    }
-}
-
-/* *** PARTS: UI: PRINT *** */
+/* *** COMMON: UI: PRINT *** */
 
 @media print {
-
-    .tpl__container {
-        margin: 0 !important;
-    }
-
-    .tpl__header__container {
-        &.is-fixed,
-        &.is-overlapping {
-            left: 0 !important;
-        }
-    }
-
-    .tpl__content {
-        margin: 0 !important;
-    }
 
     .app__module__controls--edit,
     .app__module__controls {

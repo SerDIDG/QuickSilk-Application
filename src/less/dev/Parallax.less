@@ -1,0 +1,182 @@
+
+.dev__body {
+    padding: 0;
+}
+
+.dev__strip {
+    height: 384px;
+    position: relative;
+
+    h1 {
+        position: absolute;
+        .mx__position(auto, 24px, 24px, 24px);
+    }
+
+    > .background {
+        position: absolute;
+        z-index: 1;
+        overflow: hidden;
+        .mx__position(0, 0, 0, 0);
+
+        > .inner {
+            position: absolute;
+            background-position: 50% 50%;
+            background-repeat: no-repeat;
+            .mx__position(0, 0, 0, 0);
+        }
+    }
+
+    > .inner {
+        position: relative;
+        z-index: 2;
+    }
+}
+
+.dev__strip--1 {
+    > .background {
+        > .inner {
+            background-image: url("@{TplPath-Images}/dev/parallax--1.png");
+        }
+    }
+}
+
+.dev__strip--2 {
+    > .background {
+        > .inner {
+            background-image: url("@{TplPath-Images}/dev/parallax--2.png");
+        }
+    }
+}
+
+.dev__strip--3 {
+    > .background {
+        > .inner {
+            background-image: url("@{TplPath-Images}/dev/parallax--3.png");
+        }
+    }
+}
+
+.dev__strip--sample {
+    background-color: @CmColor-Secondary-LightActive;
+}
+
+/* *** TBSC *** */
+
+.dev__tbsc__header {
+    height: 120px;
+    padding: 0 12px;
+    position: relative;
+    background: url("@{TplPath-Images}/dev/tbsc/header.png") 0 0 repeat-x;
+
+    > .inner {
+        max-width: 1140px;
+        margin: 0 auto;
+        position: relative;
+
+        .logo {
+            width: 165px;
+            height: 84px;
+            position: absolute;
+            background: url("@{TplPath-Images}/dev/tbsc/logo.png");
+            .mx__position(32px, auto, auto, 0);
+        }
+    }
+}
+
+.dev__tbsc__content {
+    padding: 0 12px;
+
+    > .inner {
+        max-width: 1060px;
+        margin: 0 auto;
+        position: relative;
+    }
+}
+
+.dev__tbsc {
+    position: relative;
+}
+
+.dev__tbsc__line {
+    position: relative;
+    z-index: 2;
+    overflow: hidden;
+
+    > .inner {
+        position: relative;
+        padding: 48px 12px;
+    }
+}
+
+.dev__tbsc__inside {
+    max-width: 1060px;
+    min-height: 690px;
+    position: relative;
+    margin: 0 auto;
+}
+
+.dev__tbsc__text {
+    min-height: 390px;
+    padding: 48px 60px 60px;
+    background-color: #e8e8e9;
+    border-radius: 8px;
+
+    > .inner {
+        width: 60%;
+    }
+}
+
+.dev__tbsc__ipad {
+    width: 366px;
+    height: 602px;
+    position: absolute;
+    background: url("@{TplPath-Images}/dev/tbsc/ipad.png");
+    top: 21px;
+    right: 48px;
+    bottom: auto;
+    left: auto;
+}
+
+.dev__tbsc__ipad-shadow {
+    width: 366px;
+    height: 602px;
+    position: absolute;
+    background: url("@{TplPath-Images}/dev/tbsc/ipad-shadow.png");
+    top: 21px;
+    right: 48px;
+    bottom: auto;
+    left: auto;
+}
+
+.dev__tbsc__character {
+    width: 420px;
+    height: 371px;
+    position: absolute;
+    background: url("@{TplPath-Images}/dev/tbsc/character.png");
+    top: 315px;
+    right: auto;
+    bottom: auto;
+    left: 200px;
+}
+
+.dev__tbsc__character2 {
+    width: 420px;
+    height: 371px;
+    position: absolute;
+    background: url("@{TplPath-Images}/dev/tbsc/character2.png");
+    top: 315px;
+    right: auto;
+    bottom: auto;
+    left: 200px;
+}
+
+.dev__tbsc__rays {
+    width: 420px;
+    height: 371px;
+    position: absolute;
+    background: url("@{TplPath-Images}/dev/tbsc/rays.png");
+    top: 315px;
+    right: auto;
+    bottom: auto;
+    left: 200px;
+}

@@ -95,8 +95,8 @@ function(params){
         });
         cm.find('App.Sidebar', that.params['sidebarName'], null, function(classObject){
             that.components['sidebar'] = classObject
-                .addEvent('onExpandEnd', sidebarExpandAction)
-                .addEvent('onCollapseEnd', sidebarCollapseAction)
+                .addEvent('onExpand', sidebarExpandAction)
+                .addEvent('onCollapse', sidebarCollapseAction)
                 .addEvent('onTabShow', function(sidebar, data){
                     setEditorType(data.item['id']);
                 });
@@ -236,6 +236,7 @@ function(params){
                 'onEnd' : function(){
                     that.triggerEvent('create', node);
                     that.triggerEvent('onProcessEnd', node);
+                    that.components['template'].redraw();
                 }
             });
         }
@@ -249,6 +250,7 @@ function(params){
                 'onEnd' : function(){
                     that.triggerEvent('place', node);
                     that.triggerEvent('onProcessEnd', node);
+                    that.components['template'].redraw();
                 }
             });
         }
@@ -265,6 +267,7 @@ function(params){
                 'onEnd' : function(){
                     that.triggerEvent('replace', node);
                     that.triggerEvent('onProcessEnd', node);
+                    that.components['template'].redraw();
                 }
             });
         }
@@ -278,6 +281,7 @@ function(params){
                 'onEnd' : function(){
                     that.triggerEvent('delete', block.node);
                     that.triggerEvent('onProcessEnd', block.node);
+                    that.components['template'].redraw();
                 }
             });
         }
@@ -294,6 +298,7 @@ function(params){
                 'onEnd' : function(){
                     that.triggerEvent('duplicate', node);
                     that.triggerEvent('onProcessEnd', node);
+                    that.components['template'].redraw();
                 }
             });
         }
@@ -307,6 +312,7 @@ function(params){
             cm.appendChild(node, block.getInnerNode());
             that.triggerEvent('update', node);
             that.triggerEvent('onProcessEnd', node);
+            that.components['template'].redraw();
         }
         return that;
     };

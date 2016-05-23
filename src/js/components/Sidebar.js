@@ -23,7 +23,7 @@ cm.define('App.Sidebar', {
     'params' : {
         'node' : cm.Node('div'),
         'name' : 'app-sidebar',
-        'duration' : 300,
+        'duration' : 'cm._config.animDurationLong',
         'active' : 'template-manager',
         'target' : 'document.html',
         'remember' : true,
@@ -153,6 +153,8 @@ function(params){
             }
             cm.replaceClass(that.nodes['container'], 'is-expanded', 'is-collapsed', true);
             cm.replaceClass(that.params['target'], 'is-sidebar--expanded', 'is-sidebar--collapsed', true);
+            // Trigger collapse event after change classes
+            that.triggerEvent('onCollapse');
             // Unset active class to collapse buttons
             cm.forEach(that.nodes['collapseButtons'], function(item){
                 cm.removeClass(item['container'], 'active');
@@ -160,7 +162,6 @@ function(params){
             // Remove immediately animation hack
             that.openInterval && clearTimeout(that.openInterval);
             if(isImmediately){
-                that.triggerEvent('onCollapse');
                 that.triggerEvent('onCollapseEnd');
                 that.openInterval = setTimeout(function(){
                     cm.removeClass(that.nodes['container'], 'is-immediately');
@@ -168,7 +169,6 @@ function(params){
                 }, 5);
             }else{
                 that.openInterval = setTimeout(function(){
-                    that.triggerEvent('onCollapse');
                     that.triggerEvent('onCollapseEnd');
                 }, that.params['duration'] + 5);
             }
@@ -191,6 +191,8 @@ function(params){
             }
             cm.replaceClass(that.nodes['container'], 'is-collapsed', 'is-expanded', true);
             cm.replaceClass(that.params['target'], 'is-sidebar--collapsed', 'is-sidebar--expanded', true);
+            // Trigger expand event after change classes
+            that.triggerEvent('onExpand');
             // Set active class to collapse buttons
             cm.forEach(that.nodes['collapseButtons'], function(item){
                 cm.addClass(item['container'], 'active');
@@ -198,7 +200,6 @@ function(params){
             // Remove immediately animation hack
             that.openInterval && clearTimeout(that.openInterval);
             if(isImmediately){
-                that.triggerEvent('onExpand');
                 that.triggerEvent('onExpandEnd');
                 that.openInterval = setTimeout(function(){
                     cm.removeClass(that.nodes['container'], 'is-immediately');
@@ -206,7 +207,6 @@ function(params){
                 }, 5);
             }else{
                 that.openInterval = setTimeout(function(){
-                    that.triggerEvent('onExpand');
                     that.triggerEvent('onExpandEnd');
                 }, that.params['duration'] + 5);
             }

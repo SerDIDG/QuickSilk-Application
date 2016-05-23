@@ -260,6 +260,10 @@ cm.getConstructor('App.Panel', function(classConstructor, className, classProto)
 
     classProto.setTitle = function(value){
         var that = this;
+        cm.customEvent.trigger(that.nodes['label'], 'destruct', {
+            'type' : 'child',
+            'self' : false
+        });
         cm.clearNode(that.nodes['label']);
         if(cm.isNode(value)){
             cm.appendChild(value, that.nodes['label']);
@@ -271,6 +275,10 @@ cm.getConstructor('App.Panel', function(classConstructor, className, classProto)
 
     classProto.setContent = function(node){
         var that = this;
+        cm.customEvent.trigger(that.nodes['contentHolder'], 'destruct', {
+            'type' : 'child',
+            'self' : false
+        });
         cm.clearNode(that.nodes['contentHolder']);
         if(cm.isNode(node)){
             cm.appendChild(node, that.nodes['contentHolder']);

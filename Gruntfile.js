@@ -64,6 +64,7 @@ module.exports = function(grunt) {
                     '<%= paths.src %>/js/Application.js',
                     '<%= paths.src %>/js/components/**/*.js',
                     '<%= paths.src %>/js/modules/**/*.js',
+                    '<%= paths.src %>/js/dev/**/*.js',
                     '!<%= paths.src %>/js/components/dev/**/*.js',
                     '!<%= paths.src %>/js/components/old/**/*.js'
                 ],
@@ -87,6 +88,7 @@ module.exports = function(grunt) {
                     '<%= paths.src %>/less/components/**/*.less',
                     '<%= paths.src %>/less/modules/**/*.less',
                     '<%= paths.src %>/less/pages/**/*.less',
+                    '<%= paths.src %>/less/dev/**/*.less',
                     '!<%= paths.src %>/less/modules/templates/**/*.less',
                     '!<%= paths.src %>/less/components/old/**/*.less'
                 ],

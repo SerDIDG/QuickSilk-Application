@@ -29,7 +29,7 @@ cm.define('App.Dashboard', {
         'moveDuration' : 200,
         'highlightZones' : true,                     // highlight zones on drag start
         'highlightPlaceholders' : true,
-        'placeholderHeight' : 64,
+        'placeholderHeight' : 48,
         'Com.Overlay' : {
             'container' : 'document.body',
             'duration' : 0,

@@ -1,4 +1,4 @@
-/*! ************ QuickSilk-Application v3.8.0 (2016-05-12 20:13) ************ */
+/*! ************ QuickSilk-Application v3.8.1 (2016-05-23 18:44) ************ */
 
 // /* ************************************************ */
 // /* ******* QUICKSILK: VARIABLES: ICONS ******* */
@@ -248,7 +248,7 @@
 @AppSidebar-Title-Height: @AppUI-TitleHeight;
 @AppSidebar-WidthExpanded: @AppSidebar-Width;
 @AppSidebar-WidthCollapsed: @AppSidebar-Menu-Width;
-@AppSidebar-Duration: @CmUI-Overlay-Duration;
+@AppSidebar-Duration: @CmUI-Transition-DurationLong;
 @AppSidebar-Overlay: @CmUI-Overlay;
 
 @AppSidebar-Theme: 'Dark';
@@ -435,7 +435,7 @@
 @AppTpl-Container-BackgroundParallax: scroll;
 @AppTpl-Container-Background: @AppTpl-Container-BackgroundColor @AppTpl-Container-BackgroundImage @AppTpl-Container-BackgroundRepeat @AppTpl-Container-BackgroundPosition @AppTpl-Container-BackgroundParallax;
 
-@AppTpl-Content-EditableIndent: @CmIndent-XSmall;
+@AppTpl-Content-EditableIndent: @CmIndent-Medium;
 
 // /* ************************************************ */
 // /* ******* ADDITIONAL STUFF ******* */
@@ -932,128 +932,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 /* ******* COMMON: UI ******* */
 
-/* *** TEMPLATE *** */
-
-.tpl__container {
-    position: relative;
-    z-index: 1;
-    background: @AppTpl-Container-Background;
-    background-size: @AppTpl-Container-BackgroundSize;
-}
-
-.tpl__header,
-.tpl__content,
-.tpl__footer {
-    position: relative;
-}
-
-.tpl__header__container {
-    z-index: 3;
-
-    &.is-fixed,
-    &.is-overlapping {
-        position: absolute;
-        left: 0;
-        right: 0;
-    }
-
-    &.is-fixed {
-        position: fixed;
-    }
-}
-
-.tpl__header__fake {
-    display: none;
-
-    &.is-show {
-        display: block;
-    }
-}
-
-.tpl__header {
-    z-index: 3;
-}
-
-.tpl__content {
-    z-index: 1;
-}
-
-.tpl__footer {
-    z-index: 2;
-}
-
-.tpl__container__inner,
-.tpl__header__inner,
-.tpl__content__inner,
-.tpl__footer__inner {
-    width: 100%;
-    max-width: 100%;
-    position: relative;
-}
-
-.tpl__container__size (@value) when (@value = wide) {
-}
-
-.tpl__container__size (@value) when (@value = box) {
-    .tpl__container {
-        padding: 0 @AppTpl-Container-Indent;
-    }
-
-    .tpl__container__inner {
-        max-width: @AppTpl-Container-Width;
-        .mx__align(@AppTpl-Container-Align);
-    }
-
-    .tpl__header__container {
-        &.is-fixed {
-            padding: 0 @AppTpl-Container-Indent;
-
-            .tpl__header {
-                width: 100%;
-                max-width: @AppTpl-Container-Width;
-                .mx__align(@AppTpl-Container-Align);
-            }
-        }
-    }
-}
-
-.tpl__container__size(@AppTpl-Container-Size);
-
-// /* *** TEMPLATE MIXINS *** */
-
-.tpl__content__flex-area () {
-    .display-flex;
-    .mx__flex-direction(row);
-    .mx__justify-content(flex-start);
-
-    .tpl__content__inner {
-        .display-flex;
-        .mx__flex(1 1 auto);
-        .mx__flex-direction(row);
-        .mx__justify-content(flex-start);
-
-        .app__zone-main {
-            width: 100%;
-            max-width: 100%;
-            .mx__flex(1 1 auto);
-        }
-    }
-
-    @media print {
-        display: block;
-
-        .tpl__content__inner {
-            display: block;
-            .mx__flex(none);
-
-            .app__zone-main {
-                .mx__flex(none);
-            }
-        }
-    }
-}
-
-/* *** WRAPPERS *** */
+/* *** STATES *** */
 
 html {
     &.is-topmenu {
@@ -1077,13 +956,11 @@ html {
     &.is-sidebar {
         .tpl__container {
             margin-left: @AppSidebar-WidthCollapsed;
-            .mx__transition(margin, @AppSidebar-Duration);
         }
 
         .tpl__header__container {
             &.is-fixed {
                 left: @AppSidebar-WidthCollapsed;
-                .mx__transition(left, @AppSidebar-Duration);
             }
         }
     }
@@ -1124,64 +1001,11 @@ html {
             }
         }
     }
-
-    &.is-immediately {
-        .tpl__container,
-        .tpl__header__container {
-            .cm__transition-none;
-        }
-    }
 }
 
-/* ******* PART: UI: ADAPTIVE ******* */
-
-@media only screen and (max-width : @CmUI-AdaptiveFrom) {
-
-    html.is-adaptive {
-        .tpl__container__inner
-        .tpl__header__inner,
-        .tpl__content__inner,
-        .tpl__footer__inner {
-            max-width: 100%;
-        }
-
-        &.is-sidebar,
-        &.is-sidebar--collapsed {
-            .tpl__container {
-                margin-left: 0;
-            }
-
-            .tpl__header__container {
-                &.is-fixed {
-                    left: 0;
-                }
-            }
-
-            .tpl__content {
-                margin: 0;
-            }
-        }
-    }
-}
-
-/* *** PARTS: UI: PRINT *** */
+/* *** COMMON: UI: PRINT *** */
 
 @media print {
-
-    .tpl__container {
-        margin: 0 !important;
-    }
-
-    .tpl__header__container {
-        &.is-fixed,
-        &.is-overlapping {
-            left: 0 !important;
-        }
-    }
-
-    .tpl__content {
-        margin: 0 !important;
-    }
 
     .app__module__controls--edit,
     .app__module__controls {
@@ -2413,7 +2237,7 @@ html {
     box-shadow: @CmUI-Shadow-Right;
     .mx__position(0, auto, 0, 0);
     .mx__backface-visibility(hidden);
-    .mx__transition(width, @AppSidebar-Duration);
+    .mx__transition(width, @AppSidebar-Duration, @CmUI-MotionAsymmetric);
 
     > .inner {
         position: absolute;
@@ -2850,6 +2674,177 @@ html {
 
 .app__support__inner {
     height: 100%;
+}
+/* ******* COMPONENTS: TEMPLATE ******** */
+
+.tpl__container {
+    position: relative;
+    z-index: 1;
+    background: @AppTpl-Container-Background;
+    background-size: @AppTpl-Container-BackgroundSize;
+}
+
+.tpl__header,
+.tpl__content,
+.tpl__footer {
+    position: relative;
+}
+
+.tpl__header__container {
+    z-index: 3;
+
+    &.is-fixed,
+    &.is-overlapping {
+        position: absolute;
+        left: 0;
+        right: 0;
+    }
+
+    &.is-fixed {
+        position: fixed;
+    }
+}
+
+.tpl__header__fake {
+    display: none;
+
+    &.is-show {
+        display: block;
+    }
+}
+
+.tpl__header {
+    z-index: 3;
+}
+
+.tpl__content {
+    z-index: 1;
+}
+
+.tpl__footer {
+    z-index: 2;
+}
+
+.tpl__container__inner,
+.tpl__header__inner,
+.tpl__content__inner,
+.tpl__footer__inner {
+    width: 100%;
+    max-width: 100%;
+    position: relative;
+}
+
+.tpl__container__size (@value) when (@value = wide) {
+}
+
+.tpl__container__size (@value) when (@value = box) {
+    .tpl__container {
+        padding: 0 @AppTpl-Container-Indent;
+    }
+
+    .tpl__container__inner {
+        max-width: @AppTpl-Container-Width;
+        .mx__align(@AppTpl-Container-Align);
+    }
+
+    .tpl__header__container {
+        &.is-fixed {
+            padding: 0 @AppTpl-Container-Indent;
+
+            .tpl__header {
+                width: 100%;
+                max-width: @AppTpl-Container-Width;
+                .mx__align(@AppTpl-Container-Align);
+            }
+        }
+    }
+}
+
+.tpl__container__size(@AppTpl-Container-Size);
+
+// /* *** TEMPLATE MIXINS *** */
+
+.tpl__content__flex-area () {
+    .display-flex;
+    .mx__flex-direction(row);
+    .mx__justify-content(flex-start);
+
+    .tpl__content__inner {
+        .display-flex;
+        .mx__flex(1 1 auto);
+        .mx__flex-direction(row);
+        .mx__justify-content(flex-start);
+
+        .app__zone-main {
+            width: 100%;
+            max-width: 100%;
+            .mx__flex(1 1 auto);
+        }
+    }
+
+    @media print {
+        display: block;
+
+        .tpl__content__inner {
+            display: block;
+            .mx__flex(none);
+
+            .app__zone-main {
+                .mx__flex(none);
+            }
+        }
+    }
+}
+
+/* ******* COMPONENTS: TEMPLATE: ADAPTIVE ******* */
+
+@media only screen and (max-width : @CmUI-AdaptiveFrom) {
+
+    html.is-adaptive {
+        .tpl__container__inner
+        .tpl__header__inner,
+        .tpl__content__inner,
+        .tpl__footer__inner {
+            max-width: 100% !important;
+        }
+
+        .tpl__container {
+            margin: 0 !important;
+        }
+
+        .tpl__header__container {
+            &.is-fixed,
+            &.is-overlapping {
+                left: 0 !important;
+            }
+        }
+
+        .tpl__content {
+            margin: 0 !important;
+        }
+    }
+
+}
+
+/* ******* COMPONENTS: TEMPLATE: PRINT ******** */
+
+@media print {
+
+    .tpl__container {
+        margin: 0 !important;
+    }
+
+    .tpl__header__container {
+        &.is-fixed,
+        &.is-overlapping {
+            left: 0 !important;
+        }
+    }
+
+    .tpl__content {
+        margin: 0 !important;
+    }
+
 }
 /* ******* LAYOUTS: TOP MENU ******* */
 
@@ -5320,6 +5315,8 @@ html {
 @Secondary-Active-FontSize: inherit;
 @Secondary-Active-FontColor: inherit;
 
+// /* *** SECONDARY CONTAINER *** */
+
 @Secondary-Container-Padding: 4px;
 @Secondary-Container-BackgroundColor: #ffffff;
 @Secondary-Container-BackgroundImage: none;
@@ -5578,4 +5575,186 @@ html {
 
 .app-page__user-groups {
 
+}
+
+.dev__body {
+    padding: 0;
+}
+
+.dev__strip {
+    height: 384px;
+    position: relative;
+
+    h1 {
+        position: absolute;
+        .mx__position(auto, 24px, 24px, 24px);
+    }
+
+    > .background {
+        position: absolute;
+        z-index: 1;
+        overflow: hidden;
+        .mx__position(0, 0, 0, 0);
+
+        > .inner {
+            position: absolute;
+            background-position: 50% 50%;
+            background-repeat: no-repeat;
+            .mx__position(0, 0, 0, 0);
+        }
+    }
+
+    > .inner {
+        position: relative;
+        z-index: 2;
+    }
+}
+
+.dev__strip--1 {
+    > .background {
+        > .inner {
+            background-image: url("@{TplPath-Images}/dev/parallax--1.png");
+        }
+    }
+}
+
+.dev__strip--2 {
+    > .background {
+        > .inner {
+            background-image: url("@{TplPath-Images}/dev/parallax--2.png");
+        }
+    }
+}
+
+.dev__strip--3 {
+    > .background {
+        > .inner {
+            background-image: url("@{TplPath-Images}/dev/parallax--3.png");
+        }
+    }
+}
+
+.dev__strip--sample {
+    background-color: @CmColor-Secondary-LightActive;
+}
+
+/* *** TBSC *** */
+
+.dev__tbsc__header {
+    height: 120px;
+    padding: 0 12px;
+    position: relative;
+    background: url("@{TplPath-Images}/dev/tbsc/header.png") 0 0 repeat-x;
+
+    > .inner {
+        max-width: 1140px;
+        margin: 0 auto;
+        position: relative;
+
+        .logo {
+            width: 165px;
+            height: 84px;
+            position: absolute;
+            background: url("@{TplPath-Images}/dev/tbsc/logo.png");
+            .mx__position(32px, auto, auto, 0);
+        }
+    }
+}
+
+.dev__tbsc__content {
+    padding: 0 12px;
+
+    > .inner {
+        max-width: 1060px;
+        margin: 0 auto;
+        position: relative;
+    }
+}
+
+.dev__tbsc {
+    position: relative;
+}
+
+.dev__tbsc__line {
+    position: relative;
+    z-index: 2;
+    overflow: hidden;
+
+    > .inner {
+        position: relative;
+        padding: 48px 12px;
+    }
+}
+
+.dev__tbsc__inside {
+    max-width: 1060px;
+    min-height: 690px;
+    position: relative;
+    margin: 0 auto;
+}
+
+.dev__tbsc__text {
+    min-height: 390px;
+    padding: 48px 60px 60px;
+    background-color: #e8e8e9;
+    border-radius: 8px;
+
+    > .inner {
+        width: 60%;
+    }
+}
+
+.dev__tbsc__ipad {
+    width: 366px;
+    height: 602px;
+    position: absolute;
+    background: url("@{TplPath-Images}/dev/tbsc/ipad.png");
+    top: 21px;
+    right: 48px;
+    bottom: auto;
+    left: auto;
+}
+
+.dev__tbsc__ipad-shadow {
+    width: 366px;
+    height: 602px;
+    position: absolute;
+    background: url("@{TplPath-Images}/dev/tbsc/ipad-shadow.png");
+    top: 21px;
+    right: 48px;
+    bottom: auto;
+    left: auto;
+}
+
+.dev__tbsc__character {
+    width: 420px;
+    height: 371px;
+    position: absolute;
+    background: url("@{TplPath-Images}/dev/tbsc/character.png");
+    top: 315px;
+    right: auto;
+    bottom: auto;
+    left: 200px;
+}
+
+.dev__tbsc__character2 {
+    width: 420px;
+    height: 371px;
+    position: absolute;
+    background: url("@{TplPath-Images}/dev/tbsc/character2.png");
+    top: 315px;
+    right: auto;
+    bottom: auto;
+    left: 200px;
+}
+
+.dev__tbsc__rays {
+    width: 420px;
+    height: 371px;
+    position: absolute;
+    background: url("@{TplPath-Images}/dev/tbsc/rays.png");
+    top: 315px;
+    right: auto;
+    bottom: auto;
+    left: 200px;
 }
