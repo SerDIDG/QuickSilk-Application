@@ -105,8 +105,9 @@ module.exports = function(grunt) {
 
         lessvars: {
             options: {
+                units : true,
                 format : function(vars){
-                    return 'window.LESS = cm.merge(window.LESS, '+ JSON.stringify(vars) +');';
+                    return 'window.LESS = ' + JSON.stringify(vars) + ';';
                 }
             },
             build : {

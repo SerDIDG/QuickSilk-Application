@@ -34,6 +34,7 @@ cm.define('App.Panel', {
         'container' : 'document.body',
         'name' : '',
         'embedStructure' : 'append',
+        'customEvents' : true,
         'type' : 'sidebar',                             // sidebar | story | fullscreen
         'duration' : 'cm._config.animDurationLong',
         'autoOpen' : true,
@@ -116,6 +117,7 @@ cm.getConstructor('App.Panel', function(classConstructor, className, classProto)
 
     classProto.construct = function(params){
         var that = this;
+        that.destructHandler = that.destruct.bind(that);
         that.openHandler = that.open.bind(that);
         that.closeHandler = that.close.bind(that);
         that.saveHandler = that.save.bind(that);
@@ -133,7 +135,7 @@ cm.getConstructor('App.Panel', function(classConstructor, className, classProto)
         that.triggerEvent('onRenderStart');
         that.render();
         that.setEvents();
-        that.addToStack(that.nodes['container']);
+        that.addToStack(that.params['node']);
         that.triggerEvent('onRender');
         that.params['autoOpen'] && that.open();
         return that;
@@ -146,6 +148,7 @@ cm.getConstructor('App.Panel', function(classConstructor, className, classProto)
             that.close();
         }else if(!that.isDestructed){
             that.isDestructed = true;
+            that.destructOnClose = that.params['destructOnClose'];
             cm.customEvent.trigger(that.nodes['contentHolder'], 'destruct', {
                 'type' : 'child',
                 'self' : false
@@ -160,12 +163,12 @@ cm.getConstructor('App.Panel', function(classConstructor, className, classProto)
     classProto.open = function(){
         var that = this;
         if(that.isDestructed){
-            that.embedStructure(that.nodes['container']);
             that.setEvents();
-            that.addToStack(that.nodes['container']);
+            that.isDestructed = false;
         }
         if(!that.isOpen){
             that.embedStructure(that.nodes['container']);
+            that.addToStack(that.nodes['container']);
             that.triggerEvent('onOpenStart');
             // Get
             if(that.hasGetRequest){
@@ -507,12 +510,22 @@ cm.getConstructor('App.Panel', function(classConstructor, className, classProto)
     classProto.setEvents = function(){
         var that = this;
         cm.addEvent(window, 'keydown', that.windowKeydownHandler);
+        // Add custom events
+        if(that.params['customEvents']){
+            cm.customEvent.add(that.params['node'], 'destruct', that.destructHandler);
+            cm.customEvent.add(that.nodes['container'], 'destruct', that.destructHandler);
+        }
         return that;
     };
 
     classProto.unsetEvents = function(){
         var that = this;
         cm.removeEvent(window, 'keydown', that.windowKeydownHandler);
+        // Remove custom events
+        if(that.params['customEvents']){
+            cm.customEvent.remove(that.params['node'], 'destruct', that.destructHandler);
+            cm.customEvent.remove(that.nodes['container'], 'destruct', that.destructHandler);
+        }
         return that;
     };
 
@@ -547,9 +560,9 @@ cm.getConstructor('App.Panel', function(classConstructor, className, classProto)
 
     classProto.transitionClose = function(){
         var that = this;
+        that.isOpen = false;
         that.destructOnClose && that.destruct();
         cm.remove(that.nodes['container']);
-        that.isOpen = false;
         that.triggerEvent('onClose');
         return that;
     };

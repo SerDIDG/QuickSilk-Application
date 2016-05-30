@@ -40,8 +40,8 @@
 
     &.is-hide {
         .app__panel__dialog {
-            .mx__transform(translateX(-100%));
-            .mx__transition(all, @AppPanel-DurationHide, @CmUI-MotionAsymmetric);
+            .mx__transform(translateX(-50%));
+            .mx__transition(all, @AppPanel-Duration);
         }
     }
 }
@@ -58,6 +58,13 @@
     &.is-open {
         .app__panel__dialog {
             .mx__transform(translateX(0));
+        }
+    }
+
+    &.is-hide {
+        .app__panel__dialog {
+            .mx__transform(translateX(-50%));
+            .mx__transition(all, @AppPanel-Duration);
         }
     }
 }

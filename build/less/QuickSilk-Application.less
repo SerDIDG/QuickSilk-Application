@@ -1,4 +1,4 @@
-/*! ************ QuickSilk-Application v3.8.2 (2016-05-23 21:00) ************ */
+/*! ************ QuickSilk-Application v3.8.3 (2016-05-30 20:45) ************ */
 
 // /* ************************************************ */
 // /* ******* QUICKSILK: VARIABLES: ICONS ******* */
@@ -325,7 +325,6 @@
 // /* ******* PANEL ******* */
 
 @AppPanel-Duration: @CmUI-Transition-DurationLong;
-@AppPanel-DurationHide: @CmUI-Transition-DurationXLong;
 
 @AppPanel-Dialog-Width: @AppUI-SidebarWidth;
 @AppPanel-Dialog-Background: @CmColor-Primary-DarkDefault;
@@ -2084,8 +2083,8 @@ html {
 
     &.is-hide {
         .app__panel__dialog {
-            .mx__transform(translateX(-100%));
-            .mx__transition(all, @AppPanel-DurationHide, @CmUI-MotionAsymmetric);
+            .mx__transform(translateX(-50%));
+            .mx__transition(all, @AppPanel-Duration);
         }
     }
 }
@@ -2102,6 +2101,13 @@ html {
     &.is-open {
         .app__panel__dialog {
             .mx__transform(translateX(0));
+        }
+    }
+
+    &.is-hide {
+        .app__panel__dialog {
+            .mx__transform(translateX(-50%));
+            .mx__transition(all, @AppPanel-Duration);
         }
     }
 }
