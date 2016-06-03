@@ -1,11 +1,11 @@
-/*! ************ QuickSilk-Application v3.8.3 (2016-05-30 20:45) ************ */
+/*! ************ QuickSilk-Application v3.9.0 (2016-06-03 19:28) ************ */
 
 // /* ************************************************ */
 // /* ******* QUICKSILK: COMMON ******* */
 // /* ************************************************ */
 
 var App = {
-    '_version' : '3.8.3',
+    '_version' : '3.9.0',
     'Elements': {},
     'Nodes' : {},
     'Test' : []
@@ -1858,6 +1858,18 @@ function(params){
 
     init();
 });
+cm.define('App.FileInput', {
+    'extend' : 'Com.FileInput',
+    'params' : {
+        'fileManager' : true,
+        'fileManagerConstructor' : 'Com.elFinderFileManagerContainer'
+    }
+},
+function(params){
+    var that = this;
+    // Call parent class construct
+    Com.FileInput.apply(that, arguments);
+});
 cm.define('App.HelpTour', {
     'modules' : [
         'Params',
@@ -2517,6 +2529,19 @@ function(params){
     /* ******* MAIN ******* */
 
     init();
+});
+cm.define('App.MultipleFileInput', {
+    'extend' : 'Com.MultipleFileInput',
+    'params' : {
+        'inputConstructor' : 'App.FileInput',
+        'fileManager' : true,
+        'fileManagerConstructor' : 'Com.elFinderFileManagerContainer'
+    }
+},
+function(params){
+    var that = this;
+    // Call parent class construct
+    Com.MultipleFileInput.apply(that, arguments);
 });
 cm.define('App.Panel', {
     'modules' : [
