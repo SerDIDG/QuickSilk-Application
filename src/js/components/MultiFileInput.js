@@ -3,7 +3,7 @@ cm.define('App.MultipleFileInput', {
     'params' : {
         'inputConstructor' : 'App.FileInput',
         'fileManager' : true,
-        'fileManagerConstructor' : 'Com.elFinderFileManagerContainer'
+        'fileManagerConstructor' : 'App.elFinderFileManagerContainer'
     }
 },
 function(params){

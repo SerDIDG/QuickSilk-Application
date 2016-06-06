@@ -1,4 +1,4 @@
-/*! ************ QuickSilk-Application v3.9.0 (2016-06-03 19:28) ************ */
+/*! ************ QuickSilk-Application v3.9.0 (2016-06-06 18:03) ************ */
 
 // /* ************************************************ */
 // /* ******* QUICKSILK: COMMON ******* */
@@ -1862,7 +1862,7 @@ cm.define('App.FileInput', {
     'extend' : 'Com.FileInput',
     'params' : {
         'fileManager' : true,
-        'fileManagerConstructor' : 'Com.elFinderFileManagerContainer'
+        'fileManagerConstructor' : 'App.elFinderFileManagerContainer'
     }
 },
 function(params){
@@ -2535,7 +2535,7 @@ cm.define('App.MultipleFileInput', {
     'params' : {
         'inputConstructor' : 'App.FileInput',
         'fileManager' : true,
-        'fileManagerConstructor' : 'Com.elFinderFileManagerContainer'
+        'fileManagerConstructor' : 'App.elFinderFileManagerContainer'
     }
 },
 function(params){
@@ -4635,6 +4635,26 @@ function(params){
     };
 
     init();
+});
+cm.define('App.elFinderFileManager', {
+    'extend' : 'Com.elFinderFileManager',
+    'params' : {}
+},
+function(params){
+    var that = this;
+    // Call parent class construct
+    Com.elFinderFileManager.apply(that, arguments);
+});
+cm.define('App.elFinderFileManagerContainer', {
+    'extend' : 'Com.elFinderFileManagerContainer',
+    'params' : {
+        'constructor' : 'App.elFinderFileManager'
+    }
+},
+function(params){
+    var that = this;
+    // Call parent class construct
+    Com.elFinderFileManagerContainer.apply(that, arguments);
 });
 
 /* ******* MODULES: MENU ******* */
