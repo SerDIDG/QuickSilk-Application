@@ -1,4 +1,4 @@
-/*! ************ QuickSilk-Application v3.9.0 (2016-06-06 18:03) ************ */
+/*! ************ QuickSilk-Application v3.9.0 (2016-06-13 18:27) ************ */
 
 // /* ************************************************ */
 // /* ******* QUICKSILK: COMMON ******* */
@@ -1862,13 +1862,38 @@ cm.define('App.FileInput', {
     'extend' : 'Com.FileInput',
     'params' : {
         'fileManager' : true,
-        'fileManagerConstructor' : 'App.elFinderFileManagerContainer'
+        'fileManagerConstructor' : 'App.elFinderFileManagerContainer',
+        'fileUploader' : true,
+        'fileUploaderConstructor' : 'App.FileUploaderContainer'
     }
 },
 function(params){
     var that = this;
     // Call parent class construct
     Com.FileInput.apply(that, arguments);
+});
+cm.define('App.FileUploader', {
+    'extend' : 'Com.FileUploader',
+    'params' : {
+        'inputConstructor' : 'App.MultipleFileInput',
+        'fileManagerConstructor' : 'App.elFinderFileManager'
+    }
+},
+function(params){
+    var that = this;
+    // Call parent class construct
+    Com.FileUploader.apply(that, arguments);
+});
+cm.define('App.FileUploaderContainer', {
+    'extend' : 'Com.FileUploaderContainer',
+    'params' : {
+        'constructor' : 'App.FileUploader'
+    }
+},
+function(params){
+    var that = this;
+    // Call parent class construct
+    Com.FileUploaderContainer.apply(that, arguments);
 });
 cm.define('App.HelpTour', {
     'modules' : [
@@ -2535,7 +2560,9 @@ cm.define('App.MultipleFileInput', {
     'params' : {
         'inputConstructor' : 'App.FileInput',
         'fileManager' : true,
-        'fileManagerConstructor' : 'App.elFinderFileManagerContainer'
+        'fileManagerConstructor' : 'App.elFinderFileManagerContainer',
+        'fileUploader' : true,
+        'fileUploaderConstructor' : 'App.FileUploaderContainer'
     }
 },
 function(params){

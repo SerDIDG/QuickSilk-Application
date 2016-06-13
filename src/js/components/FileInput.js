@@ -2,7 +2,9 @@ cm.define('App.FileInput', {
     'extend' : 'Com.FileInput',
     'params' : {
         'fileManager' : true,
-        'fileManagerConstructor' : 'App.elFinderFileManagerContainer'
+        'fileManagerConstructor' : 'App.elFinderFileManagerContainer',
+        'fileUploader' : true,
+        'fileUploaderConstructor' : 'App.FileUploaderContainer'
     }
 },
 function(params){
