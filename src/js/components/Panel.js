@@ -35,7 +35,7 @@ cm.define('App.Panel', {
         'name' : '',
         'embedStructure' : 'append',
         'customEvents' : true,
-        'type' : 'sidebar',                             // sidebar | story | fullscreen
+        'type' : 'full',                                // sidebar | story | full
         'duration' : 'cm._config.animDurationLong',
         'autoOpen' : true,
         'destructOnClose' : true,
@@ -53,6 +53,7 @@ cm.define('App.Panel', {
         'responseContentKey' : 'data.content',
         'responseTitleKey' : 'data.title',
         'responseStatusKey' : 'data.success',
+        'responsePreviewKey' : 'data.preview',
         'renderContentOnSuccess' : false,
         'closeOnSuccess' : true,
         'get' : {                                       // Get dialog content ajax
@@ -285,17 +286,17 @@ cm.getConstructor('App.Panel', function(classConstructor, className, classProto)
 
     /* *** CONTENT *** */
 
-    classProto.setTitle = function(value){
+    classProto.setTitle = function(node){
         var that = this;
         cm.customEvent.trigger(that.nodes['label'], 'destruct', {
             'type' : 'child',
             'self' : false
         });
         cm.clearNode(that.nodes['label']);
-        if(cm.isNode(value)){
-            cm.appendChild(value, that.nodes['label']);
-        }else if(!cm.isEmpty(value)){
-            that.nodes['label'].innerHTML = value;
+        node = cm.strToHTML(node);
+        if(!cm.isEmpty(node)){
+            cm.appendNodes(node, that.nodes['label']);
+            that.constructCollector(that.nodes['label']);
         }
         return that;
     };
@@ -307,8 +308,26 @@ cm.getConstructor('App.Panel', function(classConstructor, className, classProto)
             'self' : false
         });
         cm.clearNode(that.nodes['contentHolder']);
-        if(cm.isNode(node)){
-            cm.appendChild(node, that.nodes['contentHolder']);
+        node = cm.strToHTML(node);
+        if(!cm.isEmpty(node)){
+            cm.appendNodes(node, that.nodes['contentHolder']);
+            that.constructCollector(that.nodes['contentHolder']);
+        }
+        return that;
+    };
+
+    classProto.setPreview = function(node){
+        var that = this;
+        cm.customEvent.trigger(that.nodes['previewHolder'], 'destruct', {
+            'type' : 'child',
+            'self' : false
+        });
+        cm.clearNode(that.nodes['previewHolder']);
+        node = cm.strToHTML(node);
+        if(!cm.isEmpty(node)){
+            cm.addClass(that.nodes['previewHolder'], 'is-show');
+            cm.appendNodes(node, that.nodes['previewHolder']);
+            that.constructCollector(that.nodes['previewHolder']);
         }
         return that;
     };
@@ -391,7 +410,7 @@ cm.getConstructor('App.Panel', function(classConstructor, className, classProto)
                     }
                 })
                 .addEvent('onContentRender', function(){
-                    that.constructCollector();
+                    that.constructCollector(that.nodes['contentHolder']);
                 })
                 .addEvent('onContentRenderEnd', function(){
                     cm.customEvent.trigger(that.nodes['contentHolder'], 'redraw', {
@@ -407,7 +426,7 @@ cm.getConstructor('App.Panel', function(classConstructor, className, classProto)
         var that = this;
         // Structure
         that.nodes['container'] = cm.node('div', {'class' : 'app__panel'},
-            that.nodes['dialogHolder'] = cm.node('div', {'class' : 'app__panel__holder'},
+            that.nodes['dialogHolder'] = cm.node('div', {'class' : 'app__panel__dialog-holder'},
                 that.nodes['dialog'] = cm.node('div', {'class' : 'app__panel__dialog'},
                     that.nodes['inner'] = cm.node('div', {'class' : 'inner'},
                         that.nodes['title'] = cm.node('div', {'class' : 'title'},
@@ -416,6 +435,14 @@ cm.getConstructor('App.Panel', function(classConstructor, className, classProto)
                         that.nodes['content'] = cm.node('div', {'class' : 'content'},
                             that.nodes['contentHolder'] = cm.node('div', {'class' : 'inner'})
                         )
+                    )
+                )
+            ),
+            that.nodes['previewHolder'] = cm.node('div', {'class' : 'app__panel__preview-holder'},
+                that.nodes['preview'] = cm.node('div', {'class' : 'app__panel__preview'},
+                    cm.node('div', {'class' : 'inner'},
+                        cm.node('div', {'class' : 'title'}),
+                        cm.node('div', {'class' : 'content'})
                     )
                 )
             )
@@ -537,14 +564,14 @@ cm.getConstructor('App.Panel', function(classConstructor, className, classProto)
         return that;
     };
 
-    classProto.constructCollector = function(){
+    classProto.constructCollector = function(node){
         var that = this;
         if(that.params['constructCollector']){
             if(that.params['collector']){
-                that.params['collector'].construct(that.nodes['contentHolder']);
+                that.params['collector'].construct(node);
             }else{
                 cm.find('Com.Collector', null, null, function(classObject){
-                    classObject.construct(that.nodes['contentHolder']);
+                    classObject.construct(node);
                 });
             }
         }
@@ -571,6 +598,7 @@ cm.getConstructor('App.Panel', function(classConstructor, className, classProto)
         var that = this;
         that.isLoaded = true;
         that.setTitle(cm.objectSelector(that.params['responseTitleKey'], data['response']));
+        that.setPreview(cm.objectSelector(that.params['responsePreviewKey'], data['response']));
         that.showButton(['close', 'save']);
         that.triggerEvent('onLoad');
         return that;
@@ -592,6 +620,7 @@ cm.getConstructor('App.Panel', function(classConstructor, className, classProto)
         var that = this;
         if(!data['status'] || (data['status'] && that.params['renderContentOnSuccess'])){
             that.setTitle(cm.objectSelector(that.params['responseTitleKey'], data['response']));
+            that.setPreview(cm.objectSelector(that.params['responsePreviewKey'], data['response']));
             that.showButton(['close', 'save']);
         }
         if(data['status']){

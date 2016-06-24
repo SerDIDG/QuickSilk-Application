@@ -1,7 +1,14 @@
 cm.define('App.FileUploader', {
     'extend' : 'Com.FileUploader',
     'params' : {
-        'inputConstructor' : 'App.MultipleFileInput',
+        'completeOnSelect' : true,
+        'local' : true,
+        'localConstructor' : 'App.FileUploaderLocal',
+        'localParams' : {
+            'fileList' : false
+        },
+        'fileManagerLazy' : true,
+        'fileManager' : true,
         'fileManagerConstructor' : 'App.elFinderFileManager'
     }
 },

@@ -1,11 +1,11 @@
-/*! ************ QuickSilk-Application v3.9.0 (2016-06-13 18:27) ************ */
+/*! ************ QuickSilk-Application v3.9.1 (2016-06-24 19:52) ************ */
 
 // /* ************************************************ */
 // /* ******* QUICKSILK: COMMON ******* */
 // /* ************************************************ */
 
 var App = {
-    '_version' : '3.9.0',
+    '_version' : '3.9.1',
     'Elements': {},
     'Nodes' : {},
     'Test' : []
@@ -1875,7 +1875,14 @@ function(params){
 cm.define('App.FileUploader', {
     'extend' : 'Com.FileUploader',
     'params' : {
-        'inputConstructor' : 'App.MultipleFileInput',
+        'completeOnSelect' : true,
+        'local' : true,
+        'localConstructor' : 'App.FileUploaderLocal',
+        'localParams' : {
+            'fileList' : false
+        },
+        'fileManagerLazy' : true,
+        'fileManager' : true,
         'fileManagerConstructor' : 'App.elFinderFileManager'
     }
 },
@@ -1894,6 +1901,17 @@ function(params){
     var that = this;
     // Call parent class construct
     Com.FileUploaderContainer.apply(that, arguments);
+});
+cm.define('App.FileUploaderLocal', {
+    'extend' : 'Com.FileUploaderLocal',
+    'params' : {
+        'fileListConstructor' : 'App.MultipleFileInput'
+    }
+},
+function(params){
+    var that = this;
+    // Call parent class construct
+    Com.FileUploaderLocal.apply(that, arguments);
 });
 cm.define('App.HelpTour', {
     'modules' : [
@@ -2048,12 +2066,12 @@ function(params){
     };
 
     var start = function(){
+        // Close Containers
+        cm.find('Com.AbstractContainer', null, null, function(classObject){
+            classObject.close();
+        }, {'childs' : true});
         // Render Popup
         renderPopup();
-        // Close Panels
-        cm.find('App.Panel', null, null, function(classObject){
-            classObject.close();
-        });
         // Save Sidebar State
         startOptions['sidebarExpanded'] = that.components['sidebar'].isExpanded;
         if(that.components['sidebar'].isExpanded){
@@ -2555,10 +2573,359 @@ function(params){
 
     init();
 });
+cm.define('App.MenuConstructor', {
+    'extend' : 'Com.AbstractController',
+    'params' : {
+        'node' : cm.node('div'),
+        'embedStructure' : 'none',
+        'collectorPriority' : 100,
+        'namePrefix' : 'params'
+    }
+},
+function(params){
+    var that = this;
+    that.items = {};
+    // Call parent class construct
+    Com.AbstractController.apply(that, arguments);
+});
+
+cm.getConstructor('App.MenuConstructor', function(classConstructor, className, classProto){
+    var _inherit = classProto._inherit;
+
+    classProto.construct = function(){
+        var that = this;
+        // Bind context to methods
+        // Add events
+        // Call parent method
+        _inherit.prototype.construct.apply(that, arguments);
+        return that;
+    };
+
+    classProto.renderView = function(){
+        var that = this;
+        return that;
+    };
+
+    classProto.renderViewModel = function(){
+        var that = this;
+        // Call parent method - render
+        _inherit.prototype.renderViewModel.apply(that, arguments);
+        // Find Components
+        cm.forEach(App.MenuConstructorNames, function(name, variable){
+            var item = {
+                'variable' : variable,
+                'name' : that.renameTableName(name)
+            };
+            cm.find('*', item['name'], that.nodes['container'], function(classObject){
+                item['controller'] = classObject;
+                item['controller'].addEvent('onChange', function(my, data){
+                    cm.log(data);
+                    item['value'] = data;
+                    that.processPreview();
+                });
+                item['value'] = item['controller'].get();
+            });
+            that.items[item['variable']] = item;
+        });
+        // Find Preview
+        new cm.Finder('App.MenuConstructorPreview', null, null, function(classObject){
+            that.components['preview'] = classObject;
+            that.processPreview();
+        });
+        return that;
+    };
+
+    classProto.renameTableName = function(name){
+        var that = this;
+        return that.params['namePrefix']
+            + name
+                .split('.')
+                .map(function(value){
+                    return '[' + value + ']';
+                })
+                .join('');
+    };
+
+    classProto.processPreview = function(){
+        var that = this,
+            data = {};
+        cm.forEach(that.items, function(item){
+            if(item['value'] !== undefined){
+                switch(item['value']['_type']){
+                    case 'file':
+                        data[item['variable']] = !cm.isEmpty(item['value']['url']) ? 'url("' + item['value']['url'] + '")' : 'none';
+                        break;
+                    case 'font':
+                        cm.forEach(App.MenuConstructorNamesFont, function(rule, name){
+                            data[item['variable'] + name] = item['value'][rule];
+                        });
+                        break;
+                    default:
+                        data[item['variable']] = item['value'];
+                        break;
+                }
+            }
+        });
+        that.components['preview'] && that.components['preview'].set(data);
+    };
+});
+
+/* ******* NAMES ******* */
+
+App.MenuConstructorNamesFont = {
+    'LineHeight' : 'line-height',
+    'Weight' : 'font-weight',
+    'Style' : 'font-style',
+    'Decoration' : 'text-decoration',
+    'Family' : 'font-family',
+    'Size' : 'font-size',
+    'Color' : 'color'
+};
+
+App.MenuConstructorNames = {
+
+    /* *** PRIMARY ITEM *** */
+
+    'Primary-Item-Padding' : 'primary_items.inner-padding',
+    'Primary-Item-Indent' : 'primary_items.inner-between',
+
+    'Primary-Default-BackgroundColor' : 'primary_items.default.background-color',
+    'Primary-Default-BackgroundImage' : 'primary_items.default.background-image',
+    'Primary-Default-BackgroundRepeat' : 'primary_items.default.background-repeat',
+    'Primary-Default-BackgroundPosition' : 'primary_items.default.background-position',
+    'Primary-Default-BackgroundScaling' : 'primary_items.default.background-scaling',
+    'Primary-Default-BorderSize' : 'primary_items.default.border-size',
+    'Primary-Default-BorderStyle' : 'primary_items.default.border-style',
+    'Primary-Default-BorderColor' : 'primary_items.default.border-color',
+    'Primary-Default-BorderRadius' : 'primary_items.default.border-radius',
+    'Primary-Default-FontLineHeight' : 'primary_items.default.font.line-height',
+    'Primary-Default-FontWeight' : 'primary_items.default.font.font-weight',
+    'Primary-Default-FontStyle' : 'primary_items.default.font.font-style',
+    'Primary-Default-FontDecoration' : 'primary_items.default.font.text-decoration',
+    'Primary-Default-FontFamily' : 'primary_items.default.font.font-family',
+    'Primary-Default-FontSize' : 'primary_items.default.font.font-size',
+    'Primary-Default-FontColor' : 'primary_items.default.font.color',
+    'Primary-Default-Font' : 'primary_items.default.font',
+
+    'Primary-Hover-BackgroundColor' : 'primary_items.hover.background-color',
+    'Primary-Hover-BackgroundImage' : 'primary_items.hover.background-image',
+    'Primary-Hover-BackgroundRepeat' : 'primary_items.hover.background-repeat',
+    'Primary-Hover-BackgroundPosition' : 'primary_items.hover.background-position',
+    'Primary-Hover-BackgroundScaling' : 'primary_items.hover.background-scaling',
+    'Primary-Hover-BorderSize' : 'primary_items.hover.border-size',
+    'Primary-Hover-BorderStyle' : 'primary_items.hover.border-style',
+    'Primary-Hover-BorderColor' : 'primary_items.hover.border-color',
+    'Primary-Hover-BorderRadius' : 'primary_items.hover.border-radius',
+    'Primary-Hover-FontLineHeight' : 'primary_items.hover.font.line-height',
+    'Primary-Hover-FontWeight' : 'primary_items.hover.font.font-weight',
+    'Primary-Hover-FontStyle' : 'primary_items.hover.font.font-style',
+    'Primary-Hover-FontDecoration' : 'primary_items.hover.font.text-decoration',
+    'Primary-Hover-FontFamily' : 'primary_items.hover.font.font-family',
+    'Primary-Hover-FontSize' : 'primary_items.hover.font.font-size',
+    'Primary-Hover-FontColor' : 'primary_items.hover.font.color',
+    'Primary-Hover-Font' : 'primary_items.hover.font',
+
+    'Primary-Active-BackgroundColor' : 'primary_items.active.background-color',
+    'Primary-Active-BackgroundImage' : 'primary_items.active.background-image',
+    'Primary-Active-BackgroundRepeat' : 'primary_items.active.background-repeat',
+    'Primary-Active-BackgroundPosition' : 'primary_items.active.background-position',
+    'Primary-Active-BackgroundScaling' : 'primary_items.active.background-scaling',
+    'Primary-Active-BorderSize' : 'primary_items.active.border-size',
+    'Primary-Active-BorderStyle' : 'primary_items.active.border-style',
+    'Primary-Active-BorderColor' : 'primary_items.active.border-color',
+    'Primary-Active-BorderRadius' : 'primary_items.active.border-radius',
+    'Primary-Active-FontLineHeight' : 'primary_items.active.font.line-height',
+    'Primary-Active-FontWeight' : 'primary_items.active.font.font-weight',
+    'Primary-Active-FontStyle' : 'primary_items.active.font.font-style',
+    'Primary-Active-FontDecoration' : 'primary_items.active.font.text-decoration',
+    'Primary-Active-FontFamily' : 'primary_items.active.font.font-family',
+    'Primary-Active-FontSize' : 'primary_items.active.font.font-size',
+    'Primary-Active-FontColor' : 'primary_items.active.font.color',
+    'Primary-Active-Font' : 'primary_items.active.font',
+
+    /* *** PRIMARY CONTAINER *** */
+
+    'Primary-Container-Padding' : 'primary_container.inner-padding',
+    'Primary-Container-BackgroundColor' : 'primary_container.background-color',
+    'Primary-Container-BackgroundImage' : 'primary_container.background-image',
+    'Primary-Container-BackgroundRepeat' : 'primary_container.background-repeat',
+    'Primary-Container-BackgroundPosition' : 'primary_container.background-position',
+    'Primary-Container-BackgroundScaling' : 'primary_container.background-scaling',
+    'Primary-Container-BorderSize' : 'primary_container.border-size',
+    'Primary-Container-BorderStyle' : 'primary_container.border-style',
+    'Primary-Container-BorderColor' : 'primary_container.border-color',
+    'Primary-Container-BorderRadius' : 'primary_container.border-radius',
+
+    /* *** SECONDARY ITEM *** */
+
+    'Secondary-Item-Padding' : 'secondary_items.inner-padding',
+    'Secondary-Item-Indent' : 'secondary_items.inner-between',
+
+    'Secondary-Default-BackgroundColor' : 'secondary_items.default.background-color',
+    'Secondary-Default-BackgroundImage' : 'secondary_items.default.background-image',
+    'Secondary-Default-BackgroundRepeat' : 'secondary_items.default.background-repeat',
+    'Secondary-Default-BackgroundPosition' : 'secondary_items.default.background-position',
+    'Secondary-Default-BackgroundScaling' : 'secondary_items.default.background-scaling',
+    'Secondary-Default-BorderSize' : 'secondary_items.default.border-size',
+    'Secondary-Default-BorderStyle' : 'secondary_items.default.border-style',
+    'Secondary-Default-BorderColor' : 'secondary_items.default.border-color',
+    'Secondary-Default-BorderRadius' : 'secondary_items.default.border-radius',
+    'Secondary-Default-FontLineHeight' : 'secondary_items.default.font.line-height',
+    'Secondary-Default-FontWeight' : 'secondary_items.default.font.font-weight',
+    'Secondary-Default-FontStyle' : 'secondary_items.default.font.font-style',
+    'Secondary-Default-FontDecoration' : 'secondary_items.default.font.text-decoration',
+    'Secondary-Default-FontFamily' : 'secondary_items.default.font.font-family',
+    'Secondary-Default-FontSize' : 'secondary_items.default.font.font-size',
+    'Secondary-Default-FontColor' : 'secondary_items.default.font.color',
+    'Secondary-Default-Font' : 'secondary_items.default.font',
+
+    'Secondary-Hover-BackgroundColor' : 'secondary_items.hover.background-color',
+    'Secondary-Hover-BackgroundImage' : 'secondary_items.hover.background-image',
+    'Secondary-Hover-BackgroundRepeat' : 'secondary_items.hover.background-repeat',
+    'Secondary-Hover-BackgroundPosition' : 'secondary_items.hover.background-position',
+    'Secondary-Hover-BackgroundScaling' : 'secondary_items.hover.background-scaling',
+    'Secondary-Hover-BorderSize' : 'secondary_items.hover.border-size',
+    'Secondary-Hover-BorderStyle' : 'secondary_items.hover.border-style',
+    'Secondary-Hover-BorderColor' : 'secondary_items.hover.border-color',
+    'Secondary-Hover-BorderRadius' : 'secondary_items.hover.border-radius',
+    'Secondary-Hover-FontLineHeight' : 'secondary_items.hover.font.line-height',
+    'Secondary-Hover-FontWeight' : 'secondary_items.hover.font.font-weight',
+    'Secondary-Hover-FontStyle' : 'secondary_items.hover.font.font-style',
+    'Secondary-Hover-FontDecoration' : 'secondary_items.hover.font.text-decoration',
+    'Secondary-Hover-FontFamily' : 'secondary_items.hover.font.font-family',
+    'Secondary-Hover-FontSize' : 'secondary_items.hover.font.font-size',
+    'Secondary-Hover-FontColor' : 'secondary_items.hover.font.color',
+    'Secondary-Hover-Font' : 'secondary_items.hover.font',
+
+    'Secondary-Active-BackgroundColor' : 'secondary_items.active.background-color',
+    'Secondary-Active-BackgroundImage' : 'secondary_items.active.background-image',
+    'Secondary-Active-BackgroundRepeat' : 'secondary_items.active.background-repeat',
+    'Secondary-Active-BackgroundPosition' : 'secondary_items.active.background-position',
+    'Secondary-Active-BackgroundScaling' : 'secondary_items.active.background-scaling',
+    'Secondary-Active-BorderSize' : 'secondary_items.active.border-size',
+    'Secondary-Active-BorderStyle' : 'secondary_items.active.border-style',
+    'Secondary-Active-BorderColor' : 'secondary_items.active.border-color',
+    'Secondary-Active-BorderRadius' : 'secondary_items.active.border-radius',
+    'Secondary-Active-FontLineHeight' : 'secondary_items.active.font.line-height',
+    'Secondary-Active-FontWeight' : 'secondary_items.active.font.font-weight',
+    'Secondary-Active-FontStyle' : 'secondary_items.active.font.font-style',
+    'Secondary-Active-FontDecoration' : 'secondary_items.active.font.text-decoration',
+    'Secondary-Active-FontFamily' : 'secondary_items.active.font.font-family',
+    'Secondary-Active-FontSize' : 'secondary_items.active.font.font-size',
+    'Secondary-Active-FontColor' : 'secondary_items.active.font.color',
+    'Secondary-Active-Font' : 'secondary_items.active.font',
+
+    'Secondary-Container-Padding' : 'secondary_container.inner-padding',
+    'Secondary-Container-BackgroundColor' : 'secondary_container.background-color',
+    'Secondary-Container-BackgroundImage' : 'secondary_container.background-image',
+    'Secondary-Container-BackgroundRepeat' : 'secondary_container.background-repeat',
+    'Secondary-Container-BackgroundScaling' : 'secondary_container.background-scaling',
+    'Secondary-Container-BackgroundPosition' : 'secondary_container.background-position',
+    'Secondary-Container-BorderSize' : 'secondary_container.border-size',
+    'Secondary-Container-BorderStyle' : 'secondary_container.border-style',
+    'Secondary-Container-BorderColor' : 'secondary_container.border-color',
+    'Secondary-Container-BorderRadius' : 'secondary_container.border-radius',
+
+    /* *** MOBILE *** */
+
+    'Mobile-Padding' : 'mobile.inner-padding',
+    'Mobile-BackgroundColor' : 'mobile.background-color',
+    'Mobile-BackgroundImage' : 'mobile.menu-icon',
+    'Mobile-BorderSize' : 'mobile.border-size',
+    'Mobile-BorderStyle' : 'mobile.border-style',
+    'Mobile-BorderColor' : 'mobile.border-color',
+    'Mobile-BorderRadius' : 'mobile.border-radius',
+    'Mobile-FontLineHeight' : 'mobile.font.line-height',
+    'Mobile-FontWeight' : 'mobile.font.font-weight',
+    'Mobile-FontStyle' : 'mobile.font.font-style',
+    'Mobile-FontDecoration' : 'mobile.font.font-style',
+    'Mobile-FontFamily' : 'mobile.font.font-family',
+    'Mobile-FontSize' : 'mobile.font.font-size',
+    'Mobile-FontColor' : 'mobile.font.font-color',
+    'Mobile-Font' : 'mobile.font'
+};
+cm.define('App.MenuConstructorPreview', {
+    'extend' : 'Com.AbstractController',
+    'params' : {
+        'node' : cm.node('div'),
+        'embedStructure' : 'none',
+        'collectorPriority' : 100
+    }
+},
+function(params){
+    var that = this;
+    that.lessDefault = null;
+    that.lessDefaultVariables = {};
+    that.lessVariables = {};
+    // Call parent class construct
+    Com.AbstractController.apply(that, arguments);
+});
+
+cm.getConstructor('App.MenuConstructorPreview', function(classConstructor, className, classProto){
+    var _inherit = classProto._inherit;
+
+    classProto.set = function(o){
+        var that = this;
+        that.lessVariables = o || {};
+        cm.log(o);
+        that.components['less'] && that.parseLess();
+        return that;
+    };
+
+    classProto.renderView = function(){
+        var that = this;
+        return that;
+    };
+
+    classProto.renderViewModel = function(){
+        var that = this;
+        // Call parent method - render
+        _inherit.prototype.renderViewModel.apply(that, arguments);
+        // Default Less Styles
+        that.lessDefault = that.nodes['less'].innerHTML;
+        // Less Parser
+        if(typeof window.less != 'undefined'){
+            that.components['less'] = window.less;
+            that.parseDefaultLessVariables();
+        }
+        return that; 
+    };
+
+    classProto.parseLess = function(){
+        var that = this;
+        that.components['less'].render(that.lessDefault, {'modifyVars' : that.lessVariables}, function(e, data){
+            if(data && !cm.isEmpty(data['css'])){
+                that.nodes['css'].innerHTML = data['css'];
+            }
+        });
+        return that;
+    };
+
+    classProto.parseDefaultLessVariables = function(){
+        var that = this,
+            o = {},
+            variables,
+            name,
+            value;
+        that.components['less'].parse(that.lessDefault, {}, function (e, tree) {
+            if(tree){
+                variables = tree.variables();
+                cm.forEach(variables, function(item){
+                    name = item['name'].substring(1);
+                    value = item['value'].toCSS();
+                    o[name] = value;
+                });
+            }
+        });
+        that.lessDefaultVariables = o;
+        return that;
+    };
+});
 cm.define('App.MultipleFileInput', {
     'extend' : 'Com.MultipleFileInput',
     'params' : {
         'inputConstructor' : 'App.FileInput',
+        'local' : true,
         'fileManager' : true,
         'fileManagerConstructor' : 'App.elFinderFileManagerContainer',
         'fileUploader' : true,
@@ -2607,7 +2974,7 @@ cm.define('App.Panel', {
         'name' : '',
         'embedStructure' : 'append',
         'customEvents' : true,
-        'type' : 'sidebar',                             // sidebar | story | fullscreen
+        'type' : 'full',                                // sidebar | story | full
         'duration' : 'cm._config.animDurationLong',
         'autoOpen' : true,
         'destructOnClose' : true,
@@ -2625,6 +2992,7 @@ cm.define('App.Panel', {
         'responseContentKey' : 'data.content',
         'responseTitleKey' : 'data.title',
         'responseStatusKey' : 'data.success',
+        'responsePreviewKey' : 'data.preview',
         'renderContentOnSuccess' : false,
         'closeOnSuccess' : true,
         'get' : {                                       // Get dialog content ajax
@@ -2857,17 +3225,17 @@ cm.getConstructor('App.Panel', function(classConstructor, className, classProto)
 
     /* *** CONTENT *** */
 
-    classProto.setTitle = function(value){
+    classProto.setTitle = function(node){
         var that = this;
         cm.customEvent.trigger(that.nodes['label'], 'destruct', {
             'type' : 'child',
             'self' : false
         });
         cm.clearNode(that.nodes['label']);
-        if(cm.isNode(value)){
-            cm.appendChild(value, that.nodes['label']);
-        }else if(!cm.isEmpty(value)){
-            that.nodes['label'].innerHTML = value;
+        node = cm.strToHTML(node);
+        if(!cm.isEmpty(node)){
+            cm.appendNodes(node, that.nodes['label']);
+            that.constructCollector(that.nodes['label']);
         }
         return that;
     };
@@ -2879,8 +3247,26 @@ cm.getConstructor('App.Panel', function(classConstructor, className, classProto)
             'self' : false
         });
         cm.clearNode(that.nodes['contentHolder']);
-        if(cm.isNode(node)){
-            cm.appendChild(node, that.nodes['contentHolder']);
+        node = cm.strToHTML(node);
+        if(!cm.isEmpty(node)){
+            cm.appendNodes(node, that.nodes['contentHolder']);
+            that.constructCollector(that.nodes['contentHolder']);
+        }
+        return that;
+    };
+
+    classProto.setPreview = function(node){
+        var that = this;
+        cm.customEvent.trigger(that.nodes['previewHolder'], 'destruct', {
+            'type' : 'child',
+            'self' : false
+        });
+        cm.clearNode(that.nodes['previewHolder']);
+        node = cm.strToHTML(node);
+        if(!cm.isEmpty(node)){
+            cm.addClass(that.nodes['previewHolder'], 'is-show');
+            cm.appendNodes(node, that.nodes['previewHolder']);
+            that.constructCollector(that.nodes['previewHolder']);
         }
         return that;
     };
@@ -2963,7 +3349,7 @@ cm.getConstructor('App.Panel', function(classConstructor, className, classProto)
                     }
                 })
                 .addEvent('onContentRender', function(){
-                    that.constructCollector();
+                    that.constructCollector(that.nodes['contentHolder']);
                 })
                 .addEvent('onContentRenderEnd', function(){
                     cm.customEvent.trigger(that.nodes['contentHolder'], 'redraw', {
@@ -2979,7 +3365,7 @@ cm.getConstructor('App.Panel', function(classConstructor, className, classProto)
         var that = this;
         // Structure
         that.nodes['container'] = cm.node('div', {'class' : 'app__panel'},
-            that.nodes['dialogHolder'] = cm.node('div', {'class' : 'app__panel__holder'},
+            that.nodes['dialogHolder'] = cm.node('div', {'class' : 'app__panel__dialog-holder'},
                 that.nodes['dialog'] = cm.node('div', {'class' : 'app__panel__dialog'},
                     that.nodes['inner'] = cm.node('div', {'class' : 'inner'},
                         that.nodes['title'] = cm.node('div', {'class' : 'title'},
@@ -2988,6 +3374,14 @@ cm.getConstructor('App.Panel', function(classConstructor, className, classProto)
                         that.nodes['content'] = cm.node('div', {'class' : 'content'},
                             that.nodes['contentHolder'] = cm.node('div', {'class' : 'inner'})
                         )
+                    )
+                )
+            ),
+            that.nodes['previewHolder'] = cm.node('div', {'class' : 'app__panel__preview-holder'},
+                that.nodes['preview'] = cm.node('div', {'class' : 'app__panel__preview'},
+                    cm.node('div', {'class' : 'inner'},
+                        cm.node('div', {'class' : 'title'}),
+                        cm.node('div', {'class' : 'content'})
                     )
                 )
             )
@@ -3109,14 +3503,14 @@ cm.getConstructor('App.Panel', function(classConstructor, className, classProto)
         return that;
     };
 
-    classProto.constructCollector = function(){
+    classProto.constructCollector = function(node){
         var that = this;
         if(that.params['constructCollector']){
             if(that.params['collector']){
-                that.params['collector'].construct(that.nodes['contentHolder']);
+                that.params['collector'].construct(node);
             }else{
                 cm.find('Com.Collector', null, null, function(classObject){
-                    classObject.construct(that.nodes['contentHolder']);
+                    classObject.construct(node);
                 });
             }
         }
@@ -3143,6 +3537,7 @@ cm.getConstructor('App.Panel', function(classConstructor, className, classProto)
         var that = this;
         that.isLoaded = true;
         that.setTitle(cm.objectSelector(that.params['responseTitleKey'], data['response']));
+        that.setPreview(cm.objectSelector(that.params['responsePreviewKey'], data['response']));
         that.showButton(['close', 'save']);
         that.triggerEvent('onLoad');
         return that;
@@ -3164,6 +3559,7 @@ cm.getConstructor('App.Panel', function(classConstructor, className, classProto)
         var that = this;
         if(!data['status'] || (data['status'] && that.params['renderContentOnSuccess'])){
             that.setTitle(cm.objectSelector(that.params['responseTitleKey'], data['response']));
+            that.setPreview(cm.objectSelector(that.params['responsePreviewKey'], data['response']));
             that.showButton(['close', 'save']);
         }
         if(data['status']){
@@ -3432,7 +3828,8 @@ function(params){
     };
 
     var render = function(){
-        var isExpanded;
+        var isExpanded,
+            storageExpanded;
         // Init tabset
         processTabset();
         // Add events on collapse buttons
@@ -3443,7 +3840,8 @@ function(params){
         isExpanded = cm.isClass(that.nodes['container'], 'is-expanded');
         // Check storage
         if(that.params['remember']){
-            isExpanded = that.storageRead('isExpanded');
+            storageExpanded = that.storageRead('isExpanded');
+            isExpanded = storageExpanded !== null ? storageExpanded : isExpanded;
         }
         // Trigger events
         if(isExpanded){
@@ -3622,7 +4020,7 @@ cm.define('App.Stylizer', {
         'onChange'
     ],
     'params' : {
-        'node' : cm.Node('div'),
+        'node' : cm.node('div'),
         'name' : '',
         'customEvents' : true,
         'active' : {},
@@ -3692,14 +4090,15 @@ function(params){
     var that = this;
 
     that.nodes = {
-        'container' : cm.Node('div'),
-        'input' : cm.Node('input', {'type' : 'hidden'}),
-        'preview' : cm.Node('div'),
+        'container' : cm.node('div'),
+        'input' : cm.node('input', {'type' : 'hidden'}),
+        'preview' : cm.node('div'),
         'tooltip' : {}
     };
     that.components = {};
     that.value = null;
     that.previousValue = null;
+    that.safeValue = null;
     that.isDestructed = null;
 
     var init = function(){
@@ -3806,24 +4205,24 @@ function(params){
 
     var renderTooltip = function(){
         // Structure
-        that.nodes['tooltip']['container'] = cm.Node('div', {'class' : 'pt__toolbar'},
-            cm.Node('div', {'class' : 'inner'},
-                that.nodes['tooltip']['group1'] = cm.Node('ul', {'class' : 'group'}),
-                that.nodes['tooltip']['group2'] = cm.Node('ul', {'class' : 'group'}),
-                that.nodes['tooltip']['group3'] = cm.Node('ul', {'class' : 'group'}),
-                that.nodes['tooltip']['group4'] = cm.Node('ul', {'class' : 'group'})
+        that.nodes['tooltip']['container'] = cm.node('div', {'class' : 'pt__toolbar'},
+            cm.node('div', {'class' : 'inner'},
+                that.nodes['tooltip']['group1'] = cm.node('ul', {'class' : 'group'}),
+                that.nodes['tooltip']['group2'] = cm.node('ul', {'class' : 'group'}),
+                that.nodes['tooltip']['group3'] = cm.node('ul', {'class' : 'group'}),
+                that.nodes['tooltip']['group4'] = cm.node('ul', {'class' : 'group'})
             )
         );
         // Font-Family
         if(that.params['controls']['font-family']){
             that.nodes['tooltip']['group2'].appendChild(
-                cm.Node('li', {'class' : 'is-select medium'},
-                    that.nodes['tooltip']['font-family'] = cm.Node('select', {'title' : that.lang('Font')})
+                cm.node('li', {'class' : 'is-select medium'},
+                    that.nodes['tooltip']['font-family'] = cm.node('select', {'title' : that.lang('Font')})
                 )
             );
             cm.forEach(that.params['styles']['font-family'], function(item){
                 that.nodes['tooltip']['font-family'].appendChild(
-                    cm.Node('option', {'value' : item, 'style' : {'font-family' : item}}, item.replace(/["']/g, '').split(',')[0])
+                    cm.node('option', {'value' : item, 'style' : {'font-family' : item}}, item.replace(/["']/g, '').split(',')[0])
                 );
             });
             that.components['font-family'] = new Com.Select(
@@ -3841,8 +4240,8 @@ function(params){
         if(that.params['controls']['font-weight']){
             // Button
             that.nodes['tooltip']['group1'].appendChild(
-                that.nodes['tooltip']['font-weight-button'] = cm.Node('li', {'class' : 'button button-secondary is-icon'},
-                    cm.Node('span', {'class' : 'icon toolbar bold'})
+                that.nodes['tooltip']['font-weight-button'] = cm.node('li', {'class' : 'button button-secondary is-icon'},
+                    cm.node('span', {'class' : 'icon toolbar bold'})
                 )
             );
             cm.addEvent(that.nodes['tooltip']['font-weight-button'], 'click', function(){
@@ -3850,13 +4249,13 @@ function(params){
             });
             // Select
             that.nodes['tooltip']['group2'].appendChild(
-                cm.Node('li', {'class' : 'is-select medium'},
-                    that.nodes['tooltip']['font-weight'] = cm.Node('select', {'title' : that.lang('Weight')})
+                cm.node('li', {'class' : 'is-select medium'},
+                    that.nodes['tooltip']['font-weight'] = cm.node('select', {'title' : that.lang('Weight')})
                 )
             );
             cm.forEach(that.params['styles']['font-weight'], function(item){
                 that.nodes['tooltip']['font-weight'].appendChild(
-                    cm.Node('option', {'value' : item}, that.lang(item))
+                    cm.node('option', {'value' : item}, that.lang(item))
                 );
             });
             that.components['font-weight'] = new Com.Select(
@@ -3874,8 +4273,8 @@ function(params){
         if(that.params['controls']['font-style']){
             // Button
             that.nodes['tooltip']['group1'].appendChild(
-                that.nodes['tooltip']['font-style-button'] = cm.Node('li', {'class' : 'button button-secondary is-icon'},
-                    cm.Node('span', {'class' : 'icon toolbar italic'})
+                that.nodes['tooltip']['font-style-button'] = cm.node('li', {'class' : 'button button-secondary is-icon'},
+                    cm.node('span', {'class' : 'icon toolbar italic'})
                 )
             );
             cm.addEvent(that.nodes['tooltip']['font-style-button'], 'click', function(){
@@ -3886,8 +4285,8 @@ function(params){
         if(that.params['controls']['text-decoration']){
             // Button
             that.nodes['tooltip']['group1'].appendChild(
-                that.nodes['tooltip']['text-decoration-button'] = cm.Node('li', {'class' : 'button button-secondary is-icon'},
-                    cm.Node('span', {'class' : 'icon toolbar underline'})
+                that.nodes['tooltip']['text-decoration-button'] = cm.node('li', {'class' : 'button button-secondary is-icon'},
+                    cm.node('span', {'class' : 'icon toolbar underline'})
                 )
             );
             cm.addEvent(that.nodes['tooltip']['text-decoration-button'], 'click', function(){
@@ -3898,13 +4297,13 @@ function(params){
         if(that.params['controls']['font-size']){
             // Select
             that.nodes['tooltip']['group2'].appendChild(
-                cm.Node('li', {'class' : 'is-select x-small'},
-                    that.nodes['tooltip']['font-size'] = cm.Node('select', {'title' : that.lang('Size')})
+                cm.node('li', {'class' : 'is-select x-small'},
+                    that.nodes['tooltip']['font-size'] = cm.node('select', {'title' : that.lang('Size')})
                 )
             );
             cm.forEach(that.params['styles']['font-size'], function(item){
                 that.nodes['tooltip']['font-size'].appendChild(
-                    cm.Node('option', {'value' : item}, item)
+                    cm.node('option', {'value' : item}, item)
                 );
             });
             that.components['font-size'] = new Com.Select(
@@ -3922,13 +4321,13 @@ function(params){
         if(that.params['controls']['line-height']){
             // Select
             that.nodes['tooltip']['group2'].appendChild(
-                cm.Node('li', {'class' : 'is-select x-small'},
-                    that.nodes['tooltip']['line-height'] = cm.Node('select', {'title' : that.lang('Leading')})
+                cm.node('li', {'class' : 'is-select x-small'},
+                    that.nodes['tooltip']['line-height'] = cm.node('select', {'title' : that.lang('Leading')})
                 )
             );
             cm.forEach(that.params['styles']['line-height'], function(item){
                 that.nodes['tooltip']['line-height'].appendChild(
-                    cm.Node('option', {'value' : item}, (item == 'normal'? that.lang('auto') : item))
+                    cm.node('option', {'value' : item}, (item == 'normal'? that.lang('auto') : item))
                 );
             });
             that.components['line-height'] = new Com.Select(
@@ -3945,8 +4344,8 @@ function(params){
         // Color
         if(that.params['controls']['color']){
             that.nodes['tooltip']['group3'].appendChild(
-                cm.Node('li', {'class' : 'is-select medium'},
-                    that.nodes['tooltip']['color'] = cm.Node('input', {'type' : 'text', 'title' : that.lang('Color')})
+                cm.node('li', {'class' : 'is-select medium'},
+                    that.nodes['tooltip']['color'] = cm.node('input', {'type' : 'text', 'title' : that.lang('Color')})
                 )
             );
             that.components['color'] = new Com.ColorPicker(
@@ -3965,13 +4364,13 @@ function(params){
         if(that.params['showResetButtons']){
             // Button
             that.nodes['tooltip']['group4'].appendChild(
-                cm.Node('li',
-                    that.nodes['tooltip']['reset-default-button'] = cm.Node('div', {'class' : 'button button-primary'}, that.lang('Reset to default'))
+                cm.node('li',
+                    that.nodes['tooltip']['reset-default-button'] = cm.node('div', {'class' : 'button button-primary'}, that.lang('Reset to default'))
                 )
             );
             that.nodes['tooltip']['group4'].appendChild(
-                cm.Node('li',
-                    that.nodes['tooltip']['reset-current-button'] = cm.Node('div', {'class' : 'button button-primary'}, that.lang('Reset to current'))
+                cm.node('li',
+                    that.nodes['tooltip']['reset-current-button'] = cm.node('div', {'class' : 'button button-primary'}, that.lang('Reset to current'))
                 )
             );
             cm.addEvent(that.nodes['tooltip']['reset-default-button'], 'click', function(){
@@ -4013,9 +4412,10 @@ function(params){
     };
 
     var set = function(styles, triggerEvents){
-        var prepared = cm.clone(styles);
         that.previousValue = cm.clone(that.value);
-        that.value = styles;
+        that.value = cm.clone(styles);
+        that.value['_type'] = 'font';
+        that.safeValue = cm.clone(that.value);
         // Set components
         cm.forEach(styles, function(value, key){
             if(that.components[key]){
@@ -4045,27 +4445,27 @@ function(params){
                     }
                     break;
                 case 'font-size':
-                    prepared[key] = [value, 'px'].join('');
+                    that.safeValue[key] = cm.isNumber(value) || /^\d+$/.test(value) ? (value + 'px') : value;
                     break;
                 case 'line-height':
-                    prepared[key] = value == 'normal'? value :[value, 'px'].join('');
+                    that.safeValue[key] = cm.isNumber(value) || /^\d+$/.test(value) ? (value + 'px') : value;
                     break;
             }
             // Set preview
-            that.nodes['preview'].style[cm.styleStrToKey(key)] = prepared[key];
+            that.nodes['preview'].style[cm.styleStrToKey(key)] = that.safeValue[key];
         });
         // Set hidden input data
-        that.nodes['input'].value = JSON.stringify(prepared);
+        that.nodes['input'].value = JSON.stringify(that.safeValue);
         // Trigger events
         if(triggerEvents){
-            that.triggerEvent('onSelect', that.value);
+            that.triggerEvent('onSelect', that.safeValue);
             eventOnChange();
         }
     };
 
     var eventOnChange = function(){
         if(JSON.stringify(that.value) != JSON.stringify(that.previousValue)){
-            that.triggerEvent('onChange', that.value);
+            that.triggerEvent('onChange', that.safeValue);
         }
     };
 
@@ -4093,7 +4493,7 @@ function(params){
     };
 
     that.get = function(){
-        return that.value;
+        return that.safeValue;
     };
 
     init();

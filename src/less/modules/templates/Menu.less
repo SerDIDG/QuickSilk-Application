@@ -166,14 +166,18 @@
         > ul {
             padding: @Primary-Container-Padding;
             background: @Primary-Container-BackgroundColor @Primary-Container-BackgroundImage @Primary-Container-BackgroundPosition @Primary-Container-BackgroundRepeat;
-            border: @Primary-Container-BorderSize @Primary-Container-BorderStyle @Primary-Container-BorderColor;
+            background-size: @Primary-Container-BackgroundScaling;
+            border: @Primary-Container-BorderStyle @Primary-Container-BorderColor;
+            border-width: @Primary-Container-BorderSize;
             border-radius: @Primary-Container-BorderRadius;
 
             > li {
                 > a {
                     padding: @Primary-Item-Padding;
                     background: @Primary-Default-BackgroundColor @Primary-Default-BackgroundImage @Primary-Default-BackgroundPosition @Primary-Default-BackgroundRepeat;
-                    border: @Primary-Default-BorderSize @Primary-Default-BorderStyle @Primary-Default-BorderColor;
+                    background-size: @Primary-Default-BackgroundScaling;
+                    border: @Primary-Default-BorderStyle @Primary-Default-BorderColor;
+                    border-width: @Primary-Default-BorderSize;
                     border-radius: @Primary-Default-BorderRadius;
                     font: @Primary-Default-FontWeight ~'@{Primary-Default-FontSize}/@{Primary-Default-FontLineHeight}' @Primary-Default-FontFamily;
                     font-style: @Primary-Default-FontStyle;
@@ -183,7 +187,9 @@
                     &:hover,
                     &.hover {
                         background: @Primary-Hover-BackgroundColor @Primary-Hover-BackgroundImage @Primary-Hover-BackgroundPosition @Primary-Hover-BackgroundRepeat;
-                        border: @Primary-Hover-BorderSize @Primary-Hover-BorderStyle @Primary-Hover-BorderColor;
+                        background-size: @Primary-Hover-BackgroundScaling;
+                        border: @Primary-Hover-BorderStyle @Primary-Hover-BorderColor;
+                        border-width: @Primary-Hover-BorderSize;
                         border-radius: @Primary-Hover-BorderRadius;
                         font: @Primary-Hover-FontWeight ~'@{Primary-Hover-FontSize}/@{Primary-Hover-FontLineHeight}' @Primary-Hover-FontFamily;
                         font-style: @Primary-Hover-FontStyle;
@@ -194,7 +200,9 @@
                     &:active,
                     &.active {
                         background: @Primary-Active-BackgroundColor @Primary-Active-BackgroundImage @Primary-Active-BackgroundPosition @Primary-Active-BackgroundRepeat;
-                        border: @Primary-Active-BorderSize @Primary-Active-BorderStyle @Primary-Active-BorderColor;
+                        background-size: @Primary-Active-BackgroundScaling;
+                        border: @Primary-Active-BorderStyle @Primary-Active-BorderColor;
+                        border-width: @Primary-Active-BorderSize;
                         border-radius: @Primary-Active-BorderRadius;
                         font: @Primary-Active-FontWeight ~'@{Primary-Active-FontSize}/@{Primary-Active-FontLineHeight}' @Primary-Active-FontFamily;
                         font-style: @Primary-Active-FontStyle;
@@ -210,7 +218,9 @@
         > ul {
             padding: @Secondary-Container-Padding;
             background: @Secondary-Container-BackgroundColor @Secondary-Container-BackgroundImage @Secondary-Container-BackgroundPosition @Secondary-Container-BackgroundRepeat;
-            border: @Secondary-Container-BorderSize @Secondary-Container-BorderStyle @Secondary-Container-BorderColor;
+            background-size: @Secondary-Container-BackgroundScaling;
+            border: @Secondary-Container-BorderStyle @Secondary-Container-BorderColor;
+            border-width: @Secondary-Container-BorderSize;
             border-radius: @Secondary-Container-BorderRadius;
 
             > li {
@@ -223,7 +233,9 @@
                 > a {
                     padding: @Secondary-Item-Padding;
                     background: @Secondary-Default-BackgroundColor @Secondary-Default-BackgroundImage @Secondary-Default-BackgroundPosition @Secondary-Default-BackgroundRepeat;
-                    border: @Secondary-Default-BorderSize @Secondary-Default-BorderStyle @Secondary-Default-BorderColor;
+                    background-size: @Secondary-Default-BackgroundScaling;
+                    border: @Secondary-Default-BorderStyle @Secondary-Default-BorderColor;
+                    border-width: @Secondary-Default-BorderSize;
                     border-radius: @Secondary-Default-BorderRadius;
                     font: @Secondary-Default-FontWeight ~'@{Secondary-Default-FontSize}/@{Secondary-Default-FontLineHeight}' @Secondary-Default-FontFamily;
                     font-style: @Secondary-Default-FontStyle;
@@ -233,7 +245,9 @@
                     &:hover,
                     &.hover {
                         background: @Secondary-Hover-BackgroundColor @Secondary-Hover-BackgroundImage @Secondary-Hover-BackgroundPosition @Secondary-Hover-BackgroundRepeat;
-                        border: @Secondary-Hover-BorderSize @Secondary-Hover-BorderStyle @Secondary-Hover-BorderColor;
+                        background-size: @Secondary-Hover-BackgroundScaling;
+                        border: @Secondary-Hover-BorderStyle @Secondary-Hover-BorderColor;
+                        border-width: @Secondary-Hover-BorderSize;
                         border-radius: @Secondary-Hover-BorderRadius;
                         font: @Secondary-Hover-FontWeight ~'@{Secondary-Hover-FontSize}/@{Secondary-Hover-FontLineHeight}' @Secondary-Hover-FontFamily;
                         font-style: @Secondary-Hover-FontStyle;
@@ -244,7 +258,9 @@
                     &:active,
                     &.active {
                         background: @Secondary-Active-BackgroundColor @Secondary-Active-BackgroundImage @Secondary-Active-BackgroundPosition @Secondary-Active-BackgroundRepeat;
-                        border: @Secondary-Active-BorderSize @Secondary-Active-BorderStyle @Secondary-Active-BorderColor;
+                        background-size: @Secondary-Active-BackgroundScaling;
+                        border: @Secondary-Active-BorderStyle @Secondary-Active-BorderColor;
+                        border-width: @Secondary-Active-BorderSize;
                         border-radius: @Secondary-Active-BorderRadius;
                         font: @Secondary-Active-FontWeight ~'@{Secondary-Active-FontSize}/@{Secondary-Active-FontLineHeight}' @Secondary-Active-FontFamily;
                         font-style: @Secondary-Active-FontStyle;
@@ -258,7 +274,8 @@
 
     .menu__select {
         background: @Mobile-BackgroundColor;
-        border: @Mobile-BorderSize @Mobile-BorderStyle @Mobile-BorderColor;
+        border: @Mobile-BorderStyle @Mobile-BorderColor;
+        border-width: @Mobile-BorderSize;
         border-radius: @Mobile-BorderRadius;
 
         .select__button {

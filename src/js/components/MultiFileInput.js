@@ -2,6 +2,7 @@ cm.define('App.MultipleFileInput', {
     'extend' : 'Com.MultipleFileInput',
     'params' : {
         'inputConstructor' : 'App.FileInput',
+        'local' : true,
         'fileManager' : true,
         'fileManagerConstructor' : 'App.elFinderFileManagerContainer',
         'fileUploader' : true,

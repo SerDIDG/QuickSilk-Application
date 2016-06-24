@@ -151,12 +151,12 @@ function(params){
     };
 
     var start = function(){
+        // Close Containers
+        cm.find('Com.AbstractContainer', null, null, function(classObject){
+            classObject.close();
+        }, {'childs' : true});
         // Render Popup
         renderPopup();
-        // Close Panels
-        cm.find('App.Panel', null, null, function(classObject){
-            classObject.close();
-        });
         // Save Sidebar State
         startOptions['sidebarExpanded'] = that.components['sidebar'].isExpanded;
         if(that.components['sidebar'].isExpanded){

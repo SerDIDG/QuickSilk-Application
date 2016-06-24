@@ -80,7 +80,8 @@ function(params){
     };
 
     var render = function(){
-        var isExpanded;
+        var isExpanded,
+            storageExpanded;
         // Init tabset
         processTabset();
         // Add events on collapse buttons
@@ -91,7 +92,8 @@ function(params){
         isExpanded = cm.isClass(that.nodes['container'], 'is-expanded');
         // Check storage
         if(that.params['remember']){
-            isExpanded = that.storageRead('isExpanded');
+            storageExpanded = that.storageRead('isExpanded');
+            isExpanded = storageExpanded !== null ? storageExpanded : isExpanded;
         }
         // Trigger events
         if(isExpanded){
