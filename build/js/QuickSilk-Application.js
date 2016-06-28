@@ -1,11 +1,11 @@
-/*! ************ QuickSilk-Application v3.9.1 (2016-06-24 19:52) ************ */
+/*! ************ QuickSilk-Application v3.10.0 (2016-06-28 20:34) ************ */
 
 // /* ************************************************ */
 // /* ******* QUICKSILK: COMMON ******* */
 // /* ************************************************ */
 
 var App = {
-    '_version' : '3.9.1',
+    '_version' : '3.10.0',
     'Elements': {},
     'Nodes' : {},
     'Test' : []
@@ -2595,9 +2595,17 @@ cm.getConstructor('App.MenuConstructor', function(classConstructor, className, c
     classProto.construct = function(){
         var that = this;
         // Bind context to methods
+        that.destructProcessHander = that.destructProcess.bind(that);
         // Add events
+        that.addEvent('onDestructProcess', that.destructProcessHander);
         // Call parent method
         _inherit.prototype.construct.apply(that, arguments);
+        return that;
+    };
+
+    classProto.destructProcess = function(){
+        var that = this;
+        that.components['finder'] && that.components['finder'].remove();
         return that;
     };
 
@@ -2628,10 +2636,10 @@ cm.getConstructor('App.MenuConstructor', function(classConstructor, className, c
             that.items[item['variable']] = item;
         });
         // Find Preview
-        new cm.Finder('App.MenuConstructorPreview', null, null, function(classObject){
+        that.components['finder'] = new cm.Finder('App.MenuConstructorPreview', null, null, function(classObject){
             that.components['preview'] = classObject;
             that.processPreview();
-        });
+        }, {'multiple' : true});
         return that;
     };
 
@@ -2886,9 +2894,8 @@ cm.getConstructor('App.MenuConstructorPreview', function(classConstructor, class
         // Less Parser
         if(typeof window.less != 'undefined'){
             that.components['less'] = window.less;
-            that.parseDefaultLessVariables();
         }
-        return that; 
+        return that;
     };
 
     classProto.parseLess = function(){
@@ -2898,26 +2905,6 @@ cm.getConstructor('App.MenuConstructorPreview', function(classConstructor, class
                 that.nodes['css'].innerHTML = data['css'];
             }
         });
-        return that;
-    };
-
-    classProto.parseDefaultLessVariables = function(){
-        var that = this,
-            o = {},
-            variables,
-            name,
-            value;
-        that.components['less'].parse(that.lessDefault, {}, function (e, tree) {
-            if(tree){
-                variables = tree.variables();
-                cm.forEach(variables, function(item){
-                    name = item['name'].substring(1);
-                    value = item['value'].toCSS();
-                    o[name] = value;
-                });
-            }
-        });
-        that.lessDefaultVariables = o;
         return that;
     };
 });

@@ -40,9 +40,8 @@ cm.getConstructor('App.MenuConstructorPreview', function(classConstructor, class
         // Less Parser
         if(typeof window.less != 'undefined'){
             that.components['less'] = window.less;
-            that.parseDefaultLessVariables();
         }
-        return that; 
+        return that;
     };
 
     classProto.parseLess = function(){
@@ -52,26 +51,6 @@ cm.getConstructor('App.MenuConstructorPreview', function(classConstructor, class
                 that.nodes['css'].innerHTML = data['css'];
             }
         });
-        return that;
-    };
-
-    classProto.parseDefaultLessVariables = function(){
-        var that = this,
-            o = {},
-            variables,
-            name,
-            value;
-        that.components['less'].parse(that.lessDefault, {}, function (e, tree) {
-            if(tree){
-                variables = tree.variables();
-                cm.forEach(variables, function(item){
-                    name = item['name'].substring(1);
-                    value = item['value'].toCSS();
-                    o[name] = value;
-                });
-            }
-        });
-        that.lessDefaultVariables = o;
         return that;
     };
 });

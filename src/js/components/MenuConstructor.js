@@ -20,9 +20,17 @@ cm.getConstructor('App.MenuConstructor', function(classConstructor, className, c
     classProto.construct = function(){
         var that = this;
         // Bind context to methods
+        that.destructProcessHander = that.destructProcess.bind(that);
         // Add events
+        that.addEvent('onDestructProcess', that.destructProcessHander);
         // Call parent method
         _inherit.prototype.construct.apply(that, arguments);
+        return that;
+    };
+
+    classProto.destructProcess = function(){
+        var that = this;
+        that.components['finder'] && that.components['finder'].remove();
         return that;
     };
 
@@ -53,10 +61,10 @@ cm.getConstructor('App.MenuConstructor', function(classConstructor, className, c
             that.items[item['variable']] = item;
         });
         // Find Preview
-        new cm.Finder('App.MenuConstructorPreview', null, null, function(classObject){
+        that.components['finder'] = new cm.Finder('App.MenuConstructorPreview', null, null, function(classObject){
             that.components['preview'] = classObject;
             that.processPreview();
-        });
+        }, {'multiple' : true});
         return that;
     };
 
