@@ -1,8 +1,8 @@
-// /* ************ MODULES: TEMPLATES: MENU ************ */
+// /* ************ MODULES: TEMPLATES: MENU DEFAULT ************ */
 
 // /* ******* VARIABLES ******* /
 
-@ID: default;
+@ID: preview;
 
 // /* *** PRIMARY ITEM *** */
 
@@ -11,9 +11,10 @@
 
 @Primary-Default-BackgroundColor: transparent;
 @Primary-Default-BackgroundImage: none;
-@Primary-Default-BackgroundRepeat: no-repeat;           // no-repeat | repeat | repeat-x | repeat-y 
+@Primary-Default-BackgroundRepeat: no-repeat;           // no-repeat | repeat | repeat-x | repeat-y
 @Primary-Default-BackgroundPosition: top left;
 @Primary-Default-BackgroundScaling: auto;               // auto | contain | cover | 100% 100%
+@Primary-Default-BackgroundAttachment: scroll;          // scroll | fixed
 @Primary-Default-BorderSize: 0;
 @Primary-Default-BorderStyle: solid;                    // solid | dotted | dashed | double | groove | ridge | inset | outset
 @Primary-Default-BorderColor: transparent;
@@ -31,6 +32,7 @@
 @Primary-Hover-BackgroundRepeat: no-repeat;             // no-repeat | repeat | repeat-x | repeat-y
 @Primary-Hover-BackgroundPosition: top left;
 @Primary-Hover-BackgroundScaling: auto;                 // auto | contain | cover | 100% 100%
+@Primary-Hover-BackgroundAttachment: scroll;            // scroll | fixed
 @Primary-Hover-BorderSize: 0;
 @Primary-Hover-BorderStyle: solid;
 @Primary-Hover-BorderColor: transparent;
@@ -48,6 +50,7 @@
 @Primary-Active-BackgroundRepeat: no-repeat;            // no-repeat | repeat | repeat-x | repeat-y
 @Primary-Active-BackgroundPosition: top left;
 @Primary-Active-BackgroundScaling: auto;                // auto | contain | cover | 100% 100%
+@Primary-Active-BackgroundAttachment: scroll;           // scroll | fixed
 @Primary-Active-BorderSize: 0;
 @Primary-Active-BorderStyle: solid;
 @Primary-Active-BorderColor: transparent;
@@ -65,9 +68,10 @@
 @Primary-Container-Padding: 0;
 @Primary-Container-BackgroundColor: transparent;
 @Primary-Container-BackgroundImage: none;
-@Primary-Container-BackgroundRepeat: no-repeat;         // no-repeat | repeat | repeat-x | repeat-y 
+@Primary-Container-BackgroundRepeat: no-repeat;         // no-repeat | repeat | repeat-x | repeat-y
 @Primary-Container-BackgroundPosition: top left;
 @Primary-Container-BackgroundScaling: auto;             // auto | contain | cover | 100% 100%
+@Primary-Container-BackgroundAttachment: scroll;        // scroll | fixed
 @Primary-Container-BorderSize: 0;
 @Primary-Container-BorderStyle: solid;
 @Primary-Container-BorderColor: transparent;
@@ -80,9 +84,10 @@
 
 @Secondary-Default-BackgroundColor: transparent;
 @Secondary-Default-BackgroundImage: none;
-@Secondary-Default-BackgroundRepeat: no-repeat;           // no-repeat | repeat | repeat-x | repeat-y 
+@Secondary-Default-BackgroundRepeat: no-repeat;           // no-repeat | repeat | repeat-x | repeat-y
 @Secondary-Default-BackgroundPosition: top left;
 @Secondary-Default-BackgroundScaling: auto;               // auto | contain | cover | 100% 100%
+@Secondary-Default-BackgroundAttachment: scroll;          // scroll | fixed
 @Secondary-Default-BorderSize: 0;
 @Secondary-Default-BorderStyle: solid;
 @Secondary-Default-BorderColor: transparent;
@@ -100,6 +105,7 @@
 @Secondary-Hover-BackgroundRepeat: no-repeat;            // no-repeat | repeat | repeat-x | repeat-y
 @Secondary-Hover-BackgroundPosition: top left;
 @Secondary-Hover-BackgroundScaling: auto;                // auto | contain | cover | 100% 100%
+@Secondary-Hover-BackgroundAttachment: scroll;           // scroll | fixed
 @Secondary-Hover-BorderSize: 0;
 @Secondary-Hover-BorderStyle: solid;
 @Secondary-Hover-BorderColor: transparent;
@@ -114,9 +120,10 @@
 
 @Secondary-Active-BackgroundColor: transparent;
 @Secondary-Active-BackgroundImage: none;
-@Secondary-Active-BackgroundRepeat: no-repeat;           // no-repeat | repeat | repeat-x | repeat-y 
+@Secondary-Active-BackgroundRepeat: no-repeat;           // no-repeat | repeat | repeat-x | repeat-y
 @Secondary-Active-BackgroundPosition: top left;
 @Secondary-Active-BackgroundScaling: auto;               // auto | contain | cover | 100% 100%
+@Secondary-Active-BackgroundAttachment: scroll;          // scroll | fixed
 @Secondary-Active-BorderSize: 0;
 @Secondary-Active-BorderStyle: solid;
 @Secondary-Active-BorderColor: transparent;
@@ -135,8 +142,9 @@
 @Secondary-Container-BackgroundColor: transparent;
 @Secondary-Container-BackgroundImage: none;
 @Secondary-Container-BackgroundRepeat: no-repeat;         // no-repeat | repeat | repeat-x | repeat-y
-@Secondary-Container-BackgroundScaling: auto;             // auto | contain | cover | 100% 100%
 @Secondary-Container-BackgroundPosition: top left;
+@Secondary-Container-BackgroundScaling: auto;             // auto | contain | cover | 100% 100%
+@Secondary-Container-BackgroundAttachment: scroll;        // scroll | fixed
 @Secondary-Container-BorderSize: 0;
 @Secondary-Container-BorderStyle: solid;
 @Secondary-Container-BorderColor: transparent;
@@ -165,7 +173,7 @@
     .menu__menu {
         > ul {
             padding: @Primary-Container-Padding;
-            background: @Primary-Container-BackgroundColor @Primary-Container-BackgroundImage @Primary-Container-BackgroundPosition @Primary-Container-BackgroundRepeat;
+            background: @Primary-Container-BackgroundColor @Primary-Container-BackgroundImage @Primary-Container-BackgroundPosition @Primary-Container-BackgroundRepeat @Primary-Container-BackgroundAttachment;
             background-size: @Primary-Container-BackgroundScaling;
             border: @Primary-Container-BorderStyle @Primary-Container-BorderColor;
             border-width: @Primary-Container-BorderSize;
@@ -174,7 +182,7 @@
             > li {
                 > a {
                     padding: @Primary-Item-Padding;
-                    background: @Primary-Default-BackgroundColor @Primary-Default-BackgroundImage @Primary-Default-BackgroundPosition @Primary-Default-BackgroundRepeat;
+                    background: @Primary-Default-BackgroundColor @Primary-Default-BackgroundImage @Primary-Default-BackgroundPosition @Primary-Default-BackgroundRepeat @Primary-Default-BackgroundAttachment;
                     background-size: @Primary-Default-BackgroundScaling;
                     border: @Primary-Default-BorderStyle @Primary-Default-BorderColor;
                     border-width: @Primary-Default-BorderSize;
@@ -186,7 +194,7 @@
 
                     &:hover,
                     &.hover {
-                        background: @Primary-Hover-BackgroundColor @Primary-Hover-BackgroundImage @Primary-Hover-BackgroundPosition @Primary-Hover-BackgroundRepeat;
+                        background: @Primary-Hover-BackgroundColor @Primary-Hover-BackgroundImage @Primary-Hover-BackgroundPosition @Primary-Hover-BackgroundRepeat @Primary-Hover-BackgroundAttachment;
                         background-size: @Primary-Hover-BackgroundScaling;
                         border: @Primary-Hover-BorderStyle @Primary-Hover-BorderColor;
                         border-width: @Primary-Hover-BorderSize;
@@ -199,7 +207,7 @@
 
                     &:active,
                     &.active {
-                        background: @Primary-Active-BackgroundColor @Primary-Active-BackgroundImage @Primary-Active-BackgroundPosition @Primary-Active-BackgroundRepeat;
+                        background: @Primary-Active-BackgroundColor @Primary-Active-BackgroundImage @Primary-Active-BackgroundPosition @Primary-Active-BackgroundRepeat @Primary-Active-BackgroundAttachment;
                         background-size: @Primary-Active-BackgroundScaling;
                         border: @Primary-Active-BorderStyle @Primary-Active-BorderColor;
                         border-width: @Primary-Active-BorderSize;
@@ -217,7 +225,7 @@
     .menu__sub {
         > ul {
             padding: @Secondary-Container-Padding;
-            background: @Secondary-Container-BackgroundColor @Secondary-Container-BackgroundImage @Secondary-Container-BackgroundPosition @Secondary-Container-BackgroundRepeat;
+            background: @Secondary-Container-BackgroundColor @Secondary-Container-BackgroundImage @Secondary-Container-BackgroundPosition @Secondary-Container-BackgroundRepeat @Secondary-Container-BackgroundAttachment;
             background-size: @Secondary-Container-BackgroundScaling;
             border: @Secondary-Container-BorderStyle @Secondary-Container-BorderColor;
             border-width: @Secondary-Container-BorderSize;
@@ -232,7 +240,7 @@
 
                 > a {
                     padding: @Secondary-Item-Padding;
-                    background: @Secondary-Default-BackgroundColor @Secondary-Default-BackgroundImage @Secondary-Default-BackgroundPosition @Secondary-Default-BackgroundRepeat;
+                    background: @Secondary-Default-BackgroundColor @Secondary-Default-BackgroundImage @Secondary-Default-BackgroundPosition @Secondary-Default-BackgroundRepeat @Secondary-Default-BackgroundAttachment;
                     background-size: @Secondary-Default-BackgroundScaling;
                     border: @Secondary-Default-BorderStyle @Secondary-Default-BorderColor;
                     border-width: @Secondary-Default-BorderSize;
@@ -244,7 +252,7 @@
 
                     &:hover,
                     &.hover {
-                        background: @Secondary-Hover-BackgroundColor @Secondary-Hover-BackgroundImage @Secondary-Hover-BackgroundPosition @Secondary-Hover-BackgroundRepeat;
+                        background: @Secondary-Hover-BackgroundColor @Secondary-Hover-BackgroundImage @Secondary-Hover-BackgroundPosition @Secondary-Hover-BackgroundRepeat @Secondary-Hover-BackgroundAttachment;
                         background-size: @Secondary-Hover-BackgroundScaling;
                         border: @Secondary-Hover-BorderStyle @Secondary-Hover-BorderColor;
                         border-width: @Secondary-Hover-BorderSize;
@@ -257,7 +265,7 @@
 
                     &:active,
                     &.active {
-                        background: @Secondary-Active-BackgroundColor @Secondary-Active-BackgroundImage @Secondary-Active-BackgroundPosition @Secondary-Active-BackgroundRepeat;
+                        background: @Secondary-Active-BackgroundColor @Secondary-Active-BackgroundImage @Secondary-Active-BackgroundPosition @Secondary-Active-BackgroundRepeat @Secondary-Active-BackgroundAttachment;
                         background-size: @Secondary-Active-BackgroundScaling;
                         border: @Secondary-Active-BorderStyle @Secondary-Active-BorderColor;
                         border-width: @Secondary-Active-BorderSize;

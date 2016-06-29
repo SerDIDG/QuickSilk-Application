@@ -62,6 +62,8 @@ module.exports = function(grunt) {
                 },
                 src : [
                     '<%= paths.src %>/js/Application.js',
+                    '<%= paths.src %>/js/abstracts/AbstractModule.js',
+                    '<%= paths.src %>/js/abstracts/**/*.js',
                     '<%= paths.src %>/js/components/**/*.js',
                     '<%= paths.src %>/js/modules/**/*.js',
                     '<%= paths.src %>/js/dev/**/*.js',

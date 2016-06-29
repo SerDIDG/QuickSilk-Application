@@ -1,20 +1,12 @@
 cm.define('App.Panel', {
-    'modules' : [
-        'Params',
-        'Events',
-        'Langs',
-        'Structure',
-        'DataConfig',
-        'Storage',
-        'Stack'
-    ],
+    'extend' : 'Com.AbstractController',
     'events' : [
-        'onRenderStart',
-        'onRender',
         'onOpenStart',
         'onOpen',
+        'onOpenEnd',
         'onCloseStart',
         'onClose',
+        'onCloseEnd',
         'onError',
         'onSaveStart',
         'onSave',
@@ -35,10 +27,14 @@ cm.define('App.Panel', {
         'name' : '',
         'embedStructure' : 'append',
         'customEvents' : true,
+        'constructCollector' : true,
+        'removeOnDestruct' : true,
+
         'type' : 'full',                                // sidebar | story | full
         'duration' : 'cm._config.animDurationLong',
         'autoOpen' : true,
         'destructOnClose' : true,
+        'removeOnClose' : true,
         'showCloseButton' : true,
         'showBackButton' : false,
         'showButtons' : true,
@@ -47,8 +43,6 @@ cm.define('App.Panel', {
         'overlayPosition' : 'content',                  // dialog | content
         'title' : null,
         'content' : null,
-        'collector' : null,
-        'constructCollector' : true,
         'responseKey' : 'data',
         'responseContentKey' : 'data.content',
         'responseTitleKey' : 'data.title',
@@ -109,16 +103,18 @@ function(params){
     that.isGetRequest = false;
     that.isPostRequest = false;
     that.transitionInterval = null;
-    that.construct(params);
+    // Call parent class construct
+    Com.AbstractController.apply(that, arguments);
 });
 
 cm.getConstructor('App.Panel', function(classConstructor, className, classProto){
+    var _inherit = classProto._inherit;
 
-    /* *** PUBLIC *** */
+    /* *** INIT *** */
 
     classProto.construct = function(params){
         var that = this;
-        that.destructHandler = that.destruct.bind(that);
+        // Bind context to methods
         that.openHandler = that.open.bind(that);
         that.closeHandler = that.close.bind(that);
         that.saveHandler = that.save.bind(that);
@@ -127,18 +123,15 @@ cm.getConstructor('App.Panel', function(classConstructor, className, classProto)
         that.transitionOpenHandler = that.transitionOpen.bind(that);
         that.transitionCloseHandler = that.transitionClose.bind(that);
         that.windowKeydownHandler = that.windowKeydown.bind(that);
-        that.getLESSVariables();
-        that.setParams(params);
-        that.convertEvents(that.params['events']);
-        that.getDataConfig(that.params['node']);
-        that.validateParams();
-        that.addToStack(that.params['node']);
-        that.triggerEvent('onRenderStart');
-        that.render();
-        that.setEvents();
-        that.addToStack(that.params['node']);
-        that.triggerEvent('onRender');
-        that.params['autoOpen'] && that.open();
+        that.constructEndHandler = that.constructEnd.bind(that);
+        that.setEventsProcessHandler = that.setEventsProcess.bind(that);
+        that.unsetEventsProcessHandler = that.unsetEventsProcess.bind(that);
+        // Add events
+        that.addEvent('onConstructEnd', that.constructEndHandler);
+        that.addEvent('onSetEventsProcess', that.setEventsProcessHandler);
+        that.addEvent('onUnsetEventsProcess', that.unsetEventsProcessHandler);
+        // Call parent method
+        _inherit.prototype.construct.apply(that, arguments);
         return that;
     };
 
@@ -148,18 +141,59 @@ cm.getConstructor('App.Panel', function(classConstructor, className, classProto)
             that.destructOnClose = true;
             that.close();
         }else if(!that.isDestructed){
-            that.isDestructed = true;
             that.destructOnClose = that.params['destructOnClose'];
-            cm.customEvent.trigger(that.nodes['contentHolder'], 'destruct', {
-                'type' : 'child',
-                'self' : false
-            });
-            that.unsetEvents();
-            that.removeFromStack();
-            cm.remove(that.nodes['container']);
+            // Call parent method
+            _inherit.prototype.destruct.apply(that, arguments);
         }
         return that;
     };
+
+    classProto.constructEnd = function(){
+        var that = this;
+        that.params['autoOpen'] && that.open();
+        return that;
+    };
+
+    classProto.getLESSVariables = function(){
+        var that = this;
+        that.triggerEvent('onGetLESSVariablesStart');
+        that.triggerEvent('onGetLESSVariablesProcess');
+        that.params['duration'] = cm.getTransitionDurationFromLESS('AppPanel-Duration', that.params['duration']);
+        that.triggerEvent('onGetLESSVariablesEnd');
+        return that;
+    };
+
+    classProto.validateParams = function(){
+        var that = this;
+        that.triggerEvent('onValidateParamsStart');
+        that.triggerEvent('onValidateParamsProcess');
+        that.params['Com.Request']['Com.Overlay'] = that.params['Com.Overlay'];
+        that.params['Com.Request']['showOverlay'] = that.params['showOverlay'];
+        that.params['Com.Request']['overlayDelay'] = that.params['overlayDelay'];
+        that.params['Com.Request']['responseKey'] = that.params['responseKey'];
+        that.params['Com.Request']['responseHTMLKey'] = that.params['responseContentKey'];
+        that.params['Com.Request']['responseStatusKey'] = that.params['responseStatusKey'];
+        that.params['Com.Request']['renderContentOnSuccess'] = that.params['renderContentOnSuccess'];
+        that.destructOnClose = that.params['destructOnClose'];
+        that.hasGetRequest = !cm.isEmpty(that.params['get']['url']);
+        that.hasPostRequest = !cm.isEmpty(that.params['post']['url']);
+        that.triggerEvent('onValidateParamsEnd');
+        return that;
+    };
+
+    classProto.setEventsProcess = function(){
+        var that = this;
+        cm.addEvent(window, 'keydown', that.windowKeydownHandler);
+        return that;
+    };
+
+    classProto.unsetEventsProcess = function(){
+        var that = this;
+        cm.removeEvent(window, 'keydown', that.windowKeydownHandler);
+        return that;
+    };
+
+    /* *** PUBLIC *** */
 
     classProto.open = function(){
         var that = this;
@@ -334,36 +368,58 @@ cm.getConstructor('App.Panel', function(classConstructor, className, classProto)
 
     /* *** SYSTEM *** */
 
-    classProto.getLESSVariables = function(){
-        var that = this;
-        that.params['duration'] = cm.getTransitionDurationFromLESS('AppPanel-Duration', that.params['duration']);
-        return that;
-    };
-
-    classProto.validateParams = function(){
-        var that = this;
-        that.params['Com.Request']['Com.Overlay'] = that.params['Com.Overlay'];
-        that.params['Com.Request']['showOverlay'] = that.params['showOverlay'];
-        that.params['Com.Request']['overlayDelay'] = that.params['overlayDelay'];
-        that.params['Com.Request']['responseKey'] = that.params['responseKey'];
-        that.params['Com.Request']['responseHTMLKey'] = that.params['responseContentKey'];
-        that.params['Com.Request']['responseStatusKey'] = that.params['responseStatusKey'];
-        that.params['Com.Request']['renderContentOnSuccess'] = that.params['renderContentOnSuccess'];
-        that.destructOnClose = that.params['destructOnClose'];
-        that.hasGetRequest = !cm.isEmpty(that.params['get']['url']);
-        that.hasPostRequest = !cm.isEmpty(that.params['post']['url']);
-        return that;
-    };
-
-    classProto.render = function(){
+    classProto.renderView = function(){
         var that = this;
         // Structure
-        that.renderView();
-        // Attributes
-        that.setAttributes();
+        that.nodes['container'] = cm.node('div', {'class' : 'app__panel'},
+            that.nodes['dialogHolder'] = cm.node('div', {'class' : 'app__panel__dialog-holder'},
+                that.nodes['dialog'] = cm.node('div', {'class' : 'app__panel__dialog'},
+                    that.nodes['inner'] = cm.node('div', {'class' : 'inner'},
+                        that.nodes['title'] = cm.node('div', {'class' : 'title'},
+                            that.nodes['label'] = cm.node('div', {'class' : 'label'})
+                        ),
+                        that.nodes['content'] = cm.node('div', {'class' : 'content'},
+                            that.nodes['contentHolder'] = cm.node('div', {'class' : 'inner'})
+                        )
+                    )
+                )
+            ),
+            that.nodes['previewHolder'] = cm.node('div', {'class' : 'app__panel__preview-holder'},
+                that.nodes['preview'] = cm.node('div', {'class' : 'app__panel__preview'},
+                    cm.node('div', {'class' : 'inner'},
+                        cm.node('div', {'class' : 'title'}),
+                        cm.node('div', {'class' : 'content'})
+                    )
+                )
+            )
+        );
+        // Close Buttons
+        that.nodes['close'] = cm.node('div', {'class' : 'icon cm-i cm-i__circle-close'});
+        if(that.params['showCloseButton']){
+            cm.insertLast(that.nodes['close'], that.nodes['title']);
+        }
+        that.nodes['back'] = cm.node('div', {'class' : 'icon cm-i cm-i__circle-arrow-left'});
+        if(that.params['showBackButton']){
+            cm.insertFirst(that.nodes['back'], that.nodes['title']);
+        }
+        // Buttons
+        that.nodes['buttons'] = that.renderButtons();
+        if(that.params['showButtons']){
+            cm.appendChild(that.nodes['buttons'], that.nodes['inner']);
+        }
+        // Events
+        cm.addEvent(that.nodes['back'], 'click', that.closeHandler);
+        cm.addEvent(that.nodes['close'], 'click', that.closeHandler);
         // Content
         that.setTitle(that.params['title']);
         that.setContent(that.params['content']);
+        return that;
+    };
+
+    classProto.renderViewModel = function(){
+        var that = this;
+        // Call parent method - render
+        _inherit.prototype.renderViewModel.apply(that, arguments);
         // Overlay
         switch(that.params['overlayPosition']){
             case 'content':
@@ -422,45 +478,14 @@ cm.getConstructor('App.Panel', function(classConstructor, className, classProto)
         return that;
     };
 
-    classProto.renderView = function(){
+    classProto.setAttributes = function(){
         var that = this;
-        // Structure
-        that.nodes['container'] = cm.node('div', {'class' : 'app__panel'},
-            that.nodes['dialogHolder'] = cm.node('div', {'class' : 'app__panel__dialog-holder'},
-                that.nodes['dialog'] = cm.node('div', {'class' : 'app__panel__dialog'},
-                    that.nodes['inner'] = cm.node('div', {'class' : 'inner'},
-                        that.nodes['title'] = cm.node('div', {'class' : 'title'},
-                            that.nodes['label'] = cm.node('div', {'class' : 'label'})
-                        ),
-                        that.nodes['content'] = cm.node('div', {'class' : 'content'},
-                            that.nodes['contentHolder'] = cm.node('div', {'class' : 'inner'})
-                        )
-                    )
-                )
-            ),
-            that.nodes['previewHolder'] = cm.node('div', {'class' : 'app__panel__preview-holder'},
-                that.nodes['preview'] = cm.node('div', {'class' : 'app__panel__preview'},
-                    cm.node('div', {'class' : 'inner'},
-                        cm.node('div', {'class' : 'title'}),
-                        cm.node('div', {'class' : 'content'})
-                    )
-                )
-            )
-        );
-        // Close Buttons
-        that.nodes['close'] = cm.node('div', {'class' : 'icon cm-i cm-i__circle-close'});
-        if(that.params['showCloseButton']){
-            cm.insertLast(that.nodes['close'], that.nodes['title']);
-        }
-        that.nodes['back'] = cm.node('div', {'class' : 'icon cm-i cm-i__circle-arrow-left'});
-        if(that.params['showBackButton']){
-            cm.insertFirst(that.nodes['back'], that.nodes['title']);
-        }
-        // Buttons
-        that.nodes['buttons'] = that.renderButtons();
-        if(that.params['showButtons']){
-            cm.appendChild(that.nodes['buttons'], that.nodes['inner']);
-        }
+        that.triggerEvent('onSetAttributesStart');
+        that.triggerEvent('onSetAttributesProcess');
+        cm.addClass(that.nodes['container'], ['app__panel', that.params['type']].join('--'));
+        that.nodes['back'].setAttribute('title', that.lang('close'));
+        that.nodes['close'].setAttribute('title', that.lang('close'));
+        that.triggerEvent('onSetAttributesEnd');
         return that;
     };
 
@@ -522,40 +547,6 @@ cm.getConstructor('App.Panel', function(classConstructor, className, classProto)
         return that.nodes['buttons'];
     };
 
-    classProto.setAttributes = function(){
-        var that = this;
-        // Attributes
-        cm.addClass(that.nodes['container'], ['app__panel', that.params['type']].join('--'));
-        that.nodes['back'].setAttribute('title', that.lang('close'));
-        that.nodes['close'].setAttribute('title', that.lang('close'));
-        // Events
-        cm.addEvent(that.nodes['back'], 'click', that.closeHandler);
-        cm.addEvent(that.nodes['close'], 'click', that.closeHandler);
-        return that;
-    };
-
-    classProto.setEvents = function(){
-        var that = this;
-        cm.addEvent(window, 'keydown', that.windowKeydownHandler);
-        // Add custom events
-        if(that.params['customEvents']){
-            cm.customEvent.add(that.params['node'], 'destruct', that.destructHandler);
-            cm.customEvent.add(that.nodes['container'], 'destruct', that.destructHandler);
-        }
-        return that;
-    };
-
-    classProto.unsetEvents = function(){
-        var that = this;
-        cm.removeEvent(window, 'keydown', that.windowKeydownHandler);
-        // Remove custom events
-        if(that.params['customEvents']){
-            cm.customEvent.remove(that.params['node'], 'destruct', that.destructHandler);
-            cm.customEvent.remove(that.nodes['container'], 'destruct', that.destructHandler);
-        }
-        return that;
-    };
-
     classProto.windowKeydown = function(e){
         var that = this;
         if(cm.isKeyCode(e.keyCode, 'escape')){
@@ -564,24 +555,11 @@ cm.getConstructor('App.Panel', function(classConstructor, className, classProto)
         return that;
     };
 
-    classProto.constructCollector = function(node){
-        var that = this;
-        if(that.params['constructCollector']){
-            if(that.params['collector']){
-                that.params['collector'].construct(node);
-            }else{
-                cm.find('Com.Collector', null, null, function(classObject){
-                    classObject.construct(node);
-                });
-            }
-        }
-        return that;
-    };
-
     classProto.transitionOpen = function(){
         var that = this;
         that.isOpen = true;
         that.triggerEvent('onOpen');
+        that.triggerEvent('onOpenEnd');
         return that;
     };
 
@@ -589,8 +567,9 @@ cm.getConstructor('App.Panel', function(classConstructor, className, classProto)
         var that = this;
         that.isOpen = false;
         that.destructOnClose && that.destruct();
-        cm.remove(that.nodes['container']);
+        that.params['removeOnClose'] && cm.remove(that.nodes['container']);
         that.triggerEvent('onClose');
+        that.triggerEvent('onCloseEnd');
         return that;
     };
 

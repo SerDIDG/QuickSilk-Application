@@ -3,13 +3,13 @@ cm.define('App.MenuConstructorPreview', {
     'params' : {
         'node' : cm.node('div'),
         'embedStructure' : 'none',
+        'renderStructure' : false,
         'collectorPriority' : 100
     }
 },
 function(params){
     var that = this;
     that.lessDefault = null;
-    that.lessDefaultVariables = {};
     that.lessVariables = {};
     // Call parent class construct
     Com.AbstractController.apply(that, arguments);
@@ -21,13 +21,7 @@ cm.getConstructor('App.MenuConstructorPreview', function(classConstructor, class
     classProto.set = function(o){
         var that = this;
         that.lessVariables = o || {};
-        cm.log(o);
         that.components['less'] && that.parseLess();
-        return that;
-    };
-
-    classProto.renderView = function(){
-        var that = this;
         return that;
     };
 
@@ -41,6 +35,31 @@ cm.getConstructor('App.MenuConstructorPreview', function(classConstructor, class
         if(typeof window.less != 'undefined'){
             that.components['less'] = window.less;
         }
+        // Menu Module
+        cm.find('Module.Menu', null, that.nodes['contentInner'], function(classObject){
+            that.components['menu'] = classObject;
+        });
+        // Toolbar - Background Switcher
+        cm.find('Com.ColorPicker', 'background', that.nodes['title'], function(classObject){
+            that.components['background'] = classObject;
+            that.components['background'].addEvent('onChange', function(my, data){
+                that.nodes['contentInner'].style.backgroundColor = data;
+            });
+        });
+        // Toolbar - View Switcher
+        cm.find('Com.Select', 'view', that.nodes['title'], function(classObject){
+            that.components['view'] = classObject;
+            that.components['view'].addEvent('onChange', function(my, data){
+                that.components['menu'] && that.components['menu'].setView(data);
+            });
+        });
+        // Toolbar - Align Switcher
+        cm.find('Com.Select', 'align', that.nodes['title'], function(classObject){
+            that.components['align'] = classObject;
+            that.components['align'].addEvent('onChange', function(my, data){
+                that.components['menu'] && that.components['menu'].setAlign(data);
+            });
+        });
         return that;
     };
 

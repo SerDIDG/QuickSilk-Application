@@ -1,8 +1,9 @@
 cm.define('App.MenuConstructor', {
-    'extend' : 'Com.AbstractController',
+    'extend' : 'App.AbstractForm',
     'params' : {
         'node' : cm.node('div'),
         'embedStructure' : 'none',
+        'renderStructure' : false,
         'collectorPriority' : 100,
         'namePrefix' : 'params'
     }
@@ -11,7 +12,7 @@ function(params){
     var that = this;
     that.items = {};
     // Call parent class construct
-    Com.AbstractController.apply(that, arguments);
+    App.AbstractForm.apply(that, arguments);
 });
 
 cm.getConstructor('App.MenuConstructor', function(classConstructor, className, classProto){
@@ -34,11 +35,6 @@ cm.getConstructor('App.MenuConstructor', function(classConstructor, className, c
         return that;
     };
 
-    classProto.renderView = function(){
-        var that = this;
-        return that;
-    };
-
     classProto.renderViewModel = function(){
         var that = this;
         // Call parent method - render
@@ -52,7 +48,6 @@ cm.getConstructor('App.MenuConstructor', function(classConstructor, className, c
             cm.find('*', item['name'], that.nodes['container'], function(classObject){
                 item['controller'] = classObject;
                 item['controller'].addEvent('onChange', function(my, data){
-                    cm.log(data);
                     item['value'] = data;
                     that.processPreview();
                 });
@@ -89,8 +84,8 @@ cm.getConstructor('App.MenuConstructor', function(classConstructor, className, c
                         data[item['variable']] = !cm.isEmpty(item['value']['url']) ? 'url("' + item['value']['url'] + '")' : 'none';
                         break;
                     case 'font':
-                        cm.forEach(App.MenuConstructorNamesFont, function(rule, name){
-                            data[item['variable'] + name] = item['value'][rule];
+                        cm.forEach(item['value'], function(value, name){
+                            data[item['variable'] + App.MenuConstructorNamesFont[name]] = value;
                         });
                         break;
                     default:
@@ -106,13 +101,13 @@ cm.getConstructor('App.MenuConstructor', function(classConstructor, className, c
 /* ******* NAMES ******* */
 
 App.MenuConstructorNamesFont = {
-    'LineHeight' : 'line-height',
-    'Weight' : 'font-weight',
-    'Style' : 'font-style',
-    'Decoration' : 'text-decoration',
-    'Family' : 'font-family',
-    'Size' : 'font-size',
-    'Color' : 'color'
+    'line-height' : 'LineHeight',
+    'font-weight' : 'Weight',
+    'font-style' : 'Style',
+    'text-decoration' : 'Decoration',
+    'font-family' : 'Family',
+    'font-size' : 'Size',
+    'color' : 'Color'
 };
 
 App.MenuConstructorNames = {
@@ -127,6 +122,7 @@ App.MenuConstructorNames = {
     'Primary-Default-BackgroundRepeat' : 'primary_items.default.background-repeat',
     'Primary-Default-BackgroundPosition' : 'primary_items.default.background-position',
     'Primary-Default-BackgroundScaling' : 'primary_items.default.background-scaling',
+    'Primary-Default-BackgroundAttachment' : 'primary_items.default.background-attachment',
     'Primary-Default-BorderSize' : 'primary_items.default.border-size',
     'Primary-Default-BorderStyle' : 'primary_items.default.border-style',
     'Primary-Default-BorderColor' : 'primary_items.default.border-color',
@@ -145,6 +141,7 @@ App.MenuConstructorNames = {
     'Primary-Hover-BackgroundRepeat' : 'primary_items.hover.background-repeat',
     'Primary-Hover-BackgroundPosition' : 'primary_items.hover.background-position',
     'Primary-Hover-BackgroundScaling' : 'primary_items.hover.background-scaling',
+    'Primary-Hover-BackgroundAttachment' : 'primary_items.hover.background-attachment',
     'Primary-Hover-BorderSize' : 'primary_items.hover.border-size',
     'Primary-Hover-BorderStyle' : 'primary_items.hover.border-style',
     'Primary-Hover-BorderColor' : 'primary_items.hover.border-color',
@@ -163,6 +160,7 @@ App.MenuConstructorNames = {
     'Primary-Active-BackgroundRepeat' : 'primary_items.active.background-repeat',
     'Primary-Active-BackgroundPosition' : 'primary_items.active.background-position',
     'Primary-Active-BackgroundScaling' : 'primary_items.active.background-scaling',
+    'Primary-Active-BackgroundAttachment' : 'primary_items.active.background-attachment',
     'Primary-Active-BorderSize' : 'primary_items.active.border-size',
     'Primary-Active-BorderStyle' : 'primary_items.active.border-style',
     'Primary-Active-BorderColor' : 'primary_items.active.border-color',
@@ -184,6 +182,7 @@ App.MenuConstructorNames = {
     'Primary-Container-BackgroundRepeat' : 'primary_container.background-repeat',
     'Primary-Container-BackgroundPosition' : 'primary_container.background-position',
     'Primary-Container-BackgroundScaling' : 'primary_container.background-scaling',
+    'Primary-Container-BackgroundAttachment' : 'primary_container.background-attachment',
     'Primary-Container-BorderSize' : 'primary_container.border-size',
     'Primary-Container-BorderStyle' : 'primary_container.border-style',
     'Primary-Container-BorderColor' : 'primary_container.border-color',
@@ -199,6 +198,7 @@ App.MenuConstructorNames = {
     'Secondary-Default-BackgroundRepeat' : 'secondary_items.default.background-repeat',
     'Secondary-Default-BackgroundPosition' : 'secondary_items.default.background-position',
     'Secondary-Default-BackgroundScaling' : 'secondary_items.default.background-scaling',
+    'Secondary-Default-BackgroundAttachment' : 'secondary_items.default.background-attachment',
     'Secondary-Default-BorderSize' : 'secondary_items.default.border-size',
     'Secondary-Default-BorderStyle' : 'secondary_items.default.border-style',
     'Secondary-Default-BorderColor' : 'secondary_items.default.border-color',
@@ -217,6 +217,7 @@ App.MenuConstructorNames = {
     'Secondary-Hover-BackgroundRepeat' : 'secondary_items.hover.background-repeat',
     'Secondary-Hover-BackgroundPosition' : 'secondary_items.hover.background-position',
     'Secondary-Hover-BackgroundScaling' : 'secondary_items.hover.background-scaling',
+    'Secondary-Hover-BackgroundAttachment' : 'secondary_items.hover.background-attachment',
     'Secondary-Hover-BorderSize' : 'secondary_items.hover.border-size',
     'Secondary-Hover-BorderStyle' : 'secondary_items.hover.border-style',
     'Secondary-Hover-BorderColor' : 'secondary_items.hover.border-color',
@@ -235,6 +236,7 @@ App.MenuConstructorNames = {
     'Secondary-Active-BackgroundRepeat' : 'secondary_items.active.background-repeat',
     'Secondary-Active-BackgroundPosition' : 'secondary_items.active.background-position',
     'Secondary-Active-BackgroundScaling' : 'secondary_items.active.background-scaling',
+    'Secondary-Active-BackgroundAttachment' : 'secondary_items.active.background-attachment',
     'Secondary-Active-BorderSize' : 'secondary_items.active.border-size',
     'Secondary-Active-BorderStyle' : 'secondary_items.active.border-style',
     'Secondary-Active-BorderColor' : 'secondary_items.active.border-color',
@@ -254,6 +256,7 @@ App.MenuConstructorNames = {
     'Secondary-Container-BackgroundRepeat' : 'secondary_container.background-repeat',
     'Secondary-Container-BackgroundScaling' : 'secondary_container.background-scaling',
     'Secondary-Container-BackgroundPosition' : 'secondary_container.background-position',
+    'Secondary-Container-BackgroundAttachment' : 'secondary_container.background-attachment',
     'Secondary-Container-BorderSize' : 'secondary_container.border-size',
     'Secondary-Container-BorderStyle' : 'secondary_container.border-style',
     'Secondary-Container-BorderColor' : 'secondary_container.border-color',

@@ -1,17 +1,33 @@
-/*! ************ QuickSilk-Application v3.10.0 (2016-06-28 20:34) ************ */
+/*! ************ QuickSilk-Application v3.10.1 (2016-06-29 21:23) ************ */
 
 // /* ************************************************ */
 // /* ******* QUICKSILK: COMMON ******* */
 // /* ************************************************ */
 
 var App = {
-    '_version' : '3.10.0',
+    '_version' : '3.10.1',
     'Elements': {},
     'Nodes' : {},
     'Test' : []
 };
 
 var Module = {};
+cm.define('App.AbstractModule', {
+    'extend' : 'Com.AbstractController'
+},
+function(params){
+    var that = this;
+    // Call parent class construct
+    Com.AbstractController.apply(that, arguments);
+});
+cm.define('App.AbstractForm', {
+    'extend' : 'Com.AbstractController'
+},
+function(params){
+    var that = this;
+    // Call parent class construct
+    Com.AbstractController.apply(that, arguments);
+});
 
 cm.define('App.Block', {
     'modules' : [
@@ -2574,10 +2590,11 @@ function(params){
     init();
 });
 cm.define('App.MenuConstructor', {
-    'extend' : 'Com.AbstractController',
+    'extend' : 'App.AbstractForm',
     'params' : {
         'node' : cm.node('div'),
         'embedStructure' : 'none',
+        'renderStructure' : false,
         'collectorPriority' : 100,
         'namePrefix' : 'params'
     }
@@ -2586,7 +2603,7 @@ function(params){
     var that = this;
     that.items = {};
     // Call parent class construct
-    Com.AbstractController.apply(that, arguments);
+    App.AbstractForm.apply(that, arguments);
 });
 
 cm.getConstructor('App.MenuConstructor', function(classConstructor, className, classProto){
@@ -2609,11 +2626,6 @@ cm.getConstructor('App.MenuConstructor', function(classConstructor, className, c
         return that;
     };
 
-    classProto.renderView = function(){
-        var that = this;
-        return that;
-    };
-
     classProto.renderViewModel = function(){
         var that = this;
         // Call parent method - render
@@ -2627,7 +2639,6 @@ cm.getConstructor('App.MenuConstructor', function(classConstructor, className, c
             cm.find('*', item['name'], that.nodes['container'], function(classObject){
                 item['controller'] = classObject;
                 item['controller'].addEvent('onChange', function(my, data){
-                    cm.log(data);
                     item['value'] = data;
                     that.processPreview();
                 });
@@ -2664,8 +2675,8 @@ cm.getConstructor('App.MenuConstructor', function(classConstructor, className, c
                         data[item['variable']] = !cm.isEmpty(item['value']['url']) ? 'url("' + item['value']['url'] + '")' : 'none';
                         break;
                     case 'font':
-                        cm.forEach(App.MenuConstructorNamesFont, function(rule, name){
-                            data[item['variable'] + name] = item['value'][rule];
+                        cm.forEach(item['value'], function(value, name){
+                            data[item['variable'] + App.MenuConstructorNamesFont[name]] = value;
                         });
                         break;
                     default:
@@ -2681,13 +2692,13 @@ cm.getConstructor('App.MenuConstructor', function(classConstructor, className, c
 /* ******* NAMES ******* */
 
 App.MenuConstructorNamesFont = {
-    'LineHeight' : 'line-height',
-    'Weight' : 'font-weight',
-    'Style' : 'font-style',
-    'Decoration' : 'text-decoration',
-    'Family' : 'font-family',
-    'Size' : 'font-size',
-    'Color' : 'color'
+    'line-height' : 'LineHeight',
+    'font-weight' : 'Weight',
+    'font-style' : 'Style',
+    'text-decoration' : 'Decoration',
+    'font-family' : 'Family',
+    'font-size' : 'Size',
+    'color' : 'Color'
 };
 
 App.MenuConstructorNames = {
@@ -2702,6 +2713,7 @@ App.MenuConstructorNames = {
     'Primary-Default-BackgroundRepeat' : 'primary_items.default.background-repeat',
     'Primary-Default-BackgroundPosition' : 'primary_items.default.background-position',
     'Primary-Default-BackgroundScaling' : 'primary_items.default.background-scaling',
+    'Primary-Default-BackgroundAttachment' : 'primary_items.default.background-attachment',
     'Primary-Default-BorderSize' : 'primary_items.default.border-size',
     'Primary-Default-BorderStyle' : 'primary_items.default.border-style',
     'Primary-Default-BorderColor' : 'primary_items.default.border-color',
@@ -2720,6 +2732,7 @@ App.MenuConstructorNames = {
     'Primary-Hover-BackgroundRepeat' : 'primary_items.hover.background-repeat',
     'Primary-Hover-BackgroundPosition' : 'primary_items.hover.background-position',
     'Primary-Hover-BackgroundScaling' : 'primary_items.hover.background-scaling',
+    'Primary-Hover-BackgroundAttachment' : 'primary_items.hover.background-attachment',
     'Primary-Hover-BorderSize' : 'primary_items.hover.border-size',
     'Primary-Hover-BorderStyle' : 'primary_items.hover.border-style',
     'Primary-Hover-BorderColor' : 'primary_items.hover.border-color',
@@ -2738,6 +2751,7 @@ App.MenuConstructorNames = {
     'Primary-Active-BackgroundRepeat' : 'primary_items.active.background-repeat',
     'Primary-Active-BackgroundPosition' : 'primary_items.active.background-position',
     'Primary-Active-BackgroundScaling' : 'primary_items.active.background-scaling',
+    'Primary-Active-BackgroundAttachment' : 'primary_items.active.background-attachment',
     'Primary-Active-BorderSize' : 'primary_items.active.border-size',
     'Primary-Active-BorderStyle' : 'primary_items.active.border-style',
     'Primary-Active-BorderColor' : 'primary_items.active.border-color',
@@ -2759,6 +2773,7 @@ App.MenuConstructorNames = {
     'Primary-Container-BackgroundRepeat' : 'primary_container.background-repeat',
     'Primary-Container-BackgroundPosition' : 'primary_container.background-position',
     'Primary-Container-BackgroundScaling' : 'primary_container.background-scaling',
+    'Primary-Container-BackgroundAttachment' : 'primary_container.background-attachment',
     'Primary-Container-BorderSize' : 'primary_container.border-size',
     'Primary-Container-BorderStyle' : 'primary_container.border-style',
     'Primary-Container-BorderColor' : 'primary_container.border-color',
@@ -2774,6 +2789,7 @@ App.MenuConstructorNames = {
     'Secondary-Default-BackgroundRepeat' : 'secondary_items.default.background-repeat',
     'Secondary-Default-BackgroundPosition' : 'secondary_items.default.background-position',
     'Secondary-Default-BackgroundScaling' : 'secondary_items.default.background-scaling',
+    'Secondary-Default-BackgroundAttachment' : 'secondary_items.default.background-attachment',
     'Secondary-Default-BorderSize' : 'secondary_items.default.border-size',
     'Secondary-Default-BorderStyle' : 'secondary_items.default.border-style',
     'Secondary-Default-BorderColor' : 'secondary_items.default.border-color',
@@ -2792,6 +2808,7 @@ App.MenuConstructorNames = {
     'Secondary-Hover-BackgroundRepeat' : 'secondary_items.hover.background-repeat',
     'Secondary-Hover-BackgroundPosition' : 'secondary_items.hover.background-position',
     'Secondary-Hover-BackgroundScaling' : 'secondary_items.hover.background-scaling',
+    'Secondary-Hover-BackgroundAttachment' : 'secondary_items.hover.background-attachment',
     'Secondary-Hover-BorderSize' : 'secondary_items.hover.border-size',
     'Secondary-Hover-BorderStyle' : 'secondary_items.hover.border-style',
     'Secondary-Hover-BorderColor' : 'secondary_items.hover.border-color',
@@ -2810,6 +2827,7 @@ App.MenuConstructorNames = {
     'Secondary-Active-BackgroundRepeat' : 'secondary_items.active.background-repeat',
     'Secondary-Active-BackgroundPosition' : 'secondary_items.active.background-position',
     'Secondary-Active-BackgroundScaling' : 'secondary_items.active.background-scaling',
+    'Secondary-Active-BackgroundAttachment' : 'secondary_items.active.background-attachment',
     'Secondary-Active-BorderSize' : 'secondary_items.active.border-size',
     'Secondary-Active-BorderStyle' : 'secondary_items.active.border-style',
     'Secondary-Active-BorderColor' : 'secondary_items.active.border-color',
@@ -2829,6 +2847,7 @@ App.MenuConstructorNames = {
     'Secondary-Container-BackgroundRepeat' : 'secondary_container.background-repeat',
     'Secondary-Container-BackgroundScaling' : 'secondary_container.background-scaling',
     'Secondary-Container-BackgroundPosition' : 'secondary_container.background-position',
+    'Secondary-Container-BackgroundAttachment' : 'secondary_container.background-attachment',
     'Secondary-Container-BorderSize' : 'secondary_container.border-size',
     'Secondary-Container-BorderStyle' : 'secondary_container.border-style',
     'Secondary-Container-BorderColor' : 'secondary_container.border-color',
@@ -2857,13 +2876,13 @@ cm.define('App.MenuConstructorPreview', {
     'params' : {
         'node' : cm.node('div'),
         'embedStructure' : 'none',
+        'renderStructure' : false,
         'collectorPriority' : 100
     }
 },
 function(params){
     var that = this;
     that.lessDefault = null;
-    that.lessDefaultVariables = {};
     that.lessVariables = {};
     // Call parent class construct
     Com.AbstractController.apply(that, arguments);
@@ -2875,13 +2894,7 @@ cm.getConstructor('App.MenuConstructorPreview', function(classConstructor, class
     classProto.set = function(o){
         var that = this;
         that.lessVariables = o || {};
-        cm.log(o);
         that.components['less'] && that.parseLess();
-        return that;
-    };
-
-    classProto.renderView = function(){
-        var that = this;
         return that;
     };
 
@@ -2895,6 +2908,31 @@ cm.getConstructor('App.MenuConstructorPreview', function(classConstructor, class
         if(typeof window.less != 'undefined'){
             that.components['less'] = window.less;
         }
+        // Menu Module
+        cm.find('Module.Menu', null, that.nodes['contentInner'], function(classObject){
+            that.components['menu'] = classObject;
+        });
+        // Toolbar - Background Switcher
+        cm.find('Com.ColorPicker', 'background', that.nodes['title'], function(classObject){
+            that.components['background'] = classObject;
+            that.components['background'].addEvent('onChange', function(my, data){
+                that.nodes['contentInner'].style.backgroundColor = data;
+            });
+        });
+        // Toolbar - View Switcher
+        cm.find('Com.Select', 'view', that.nodes['title'], function(classObject){
+            that.components['view'] = classObject;
+            that.components['view'].addEvent('onChange', function(my, data){
+                that.components['menu'] && that.components['menu'].setView(data);
+            });
+        });
+        // Toolbar - Align Switcher
+        cm.find('Com.Select', 'align', that.nodes['title'], function(classObject){
+            that.components['align'] = classObject;
+            that.components['align'].addEvent('onChange', function(my, data){
+                that.components['menu'] && that.components['menu'].setAlign(data);
+            });
+        });
         return that;
     };
 
@@ -2925,22 +2963,14 @@ function(params){
     Com.MultipleFileInput.apply(that, arguments);
 });
 cm.define('App.Panel', {
-    'modules' : [
-        'Params',
-        'Events',
-        'Langs',
-        'Structure',
-        'DataConfig',
-        'Storage',
-        'Stack'
-    ],
+    'extend' : 'Com.AbstractController',
     'events' : [
-        'onRenderStart',
-        'onRender',
         'onOpenStart',
         'onOpen',
+        'onOpenEnd',
         'onCloseStart',
         'onClose',
+        'onCloseEnd',
         'onError',
         'onSaveStart',
         'onSave',
@@ -2961,10 +2991,14 @@ cm.define('App.Panel', {
         'name' : '',
         'embedStructure' : 'append',
         'customEvents' : true,
+        'constructCollector' : true,
+        'removeOnDestruct' : true,
+
         'type' : 'full',                                // sidebar | story | full
         'duration' : 'cm._config.animDurationLong',
         'autoOpen' : true,
         'destructOnClose' : true,
+        'removeOnClose' : true,
         'showCloseButton' : true,
         'showBackButton' : false,
         'showButtons' : true,
@@ -2973,8 +3007,6 @@ cm.define('App.Panel', {
         'overlayPosition' : 'content',                  // dialog | content
         'title' : null,
         'content' : null,
-        'collector' : null,
-        'constructCollector' : true,
         'responseKey' : 'data',
         'responseContentKey' : 'data.content',
         'responseTitleKey' : 'data.title',
@@ -3035,16 +3067,18 @@ function(params){
     that.isGetRequest = false;
     that.isPostRequest = false;
     that.transitionInterval = null;
-    that.construct(params);
+    // Call parent class construct
+    Com.AbstractController.apply(that, arguments);
 });
 
 cm.getConstructor('App.Panel', function(classConstructor, className, classProto){
+    var _inherit = classProto._inherit;
 
-    /* *** PUBLIC *** */
+    /* *** INIT *** */
 
     classProto.construct = function(params){
         var that = this;
-        that.destructHandler = that.destruct.bind(that);
+        // Bind context to methods
         that.openHandler = that.open.bind(that);
         that.closeHandler = that.close.bind(that);
         that.saveHandler = that.save.bind(that);
@@ -3053,18 +3087,15 @@ cm.getConstructor('App.Panel', function(classConstructor, className, classProto)
         that.transitionOpenHandler = that.transitionOpen.bind(that);
         that.transitionCloseHandler = that.transitionClose.bind(that);
         that.windowKeydownHandler = that.windowKeydown.bind(that);
-        that.getLESSVariables();
-        that.setParams(params);
-        that.convertEvents(that.params['events']);
-        that.getDataConfig(that.params['node']);
-        that.validateParams();
-        that.addToStack(that.params['node']);
-        that.triggerEvent('onRenderStart');
-        that.render();
-        that.setEvents();
-        that.addToStack(that.params['node']);
-        that.triggerEvent('onRender');
-        that.params['autoOpen'] && that.open();
+        that.constructEndHandler = that.constructEnd.bind(that);
+        that.setEventsProcessHandler = that.setEventsProcess.bind(that);
+        that.unsetEventsProcessHandler = that.unsetEventsProcess.bind(that);
+        // Add events
+        that.addEvent('onConstructEnd', that.constructEndHandler);
+        that.addEvent('onSetEventsProcess', that.setEventsProcessHandler);
+        that.addEvent('onUnsetEventsProcess', that.unsetEventsProcessHandler);
+        // Call parent method
+        _inherit.prototype.construct.apply(that, arguments);
         return that;
     };
 
@@ -3074,18 +3105,59 @@ cm.getConstructor('App.Panel', function(classConstructor, className, classProto)
             that.destructOnClose = true;
             that.close();
         }else if(!that.isDestructed){
-            that.isDestructed = true;
             that.destructOnClose = that.params['destructOnClose'];
-            cm.customEvent.trigger(that.nodes['contentHolder'], 'destruct', {
-                'type' : 'child',
-                'self' : false
-            });
-            that.unsetEvents();
-            that.removeFromStack();
-            cm.remove(that.nodes['container']);
+            // Call parent method
+            _inherit.prototype.destruct.apply(that, arguments);
         }
         return that;
     };
+
+    classProto.constructEnd = function(){
+        var that = this;
+        that.params['autoOpen'] && that.open();
+        return that;
+    };
+
+    classProto.getLESSVariables = function(){
+        var that = this;
+        that.triggerEvent('onGetLESSVariablesStart');
+        that.triggerEvent('onGetLESSVariablesProcess');
+        that.params['duration'] = cm.getTransitionDurationFromLESS('AppPanel-Duration', that.params['duration']);
+        that.triggerEvent('onGetLESSVariablesEnd');
+        return that;
+    };
+
+    classProto.validateParams = function(){
+        var that = this;
+        that.triggerEvent('onValidateParamsStart');
+        that.triggerEvent('onValidateParamsProcess');
+        that.params['Com.Request']['Com.Overlay'] = that.params['Com.Overlay'];
+        that.params['Com.Request']['showOverlay'] = that.params['showOverlay'];
+        that.params['Com.Request']['overlayDelay'] = that.params['overlayDelay'];
+        that.params['Com.Request']['responseKey'] = that.params['responseKey'];
+        that.params['Com.Request']['responseHTMLKey'] = that.params['responseContentKey'];
+        that.params['Com.Request']['responseStatusKey'] = that.params['responseStatusKey'];
+        that.params['Com.Request']['renderContentOnSuccess'] = that.params['renderContentOnSuccess'];
+        that.destructOnClose = that.params['destructOnClose'];
+        that.hasGetRequest = !cm.isEmpty(that.params['get']['url']);
+        that.hasPostRequest = !cm.isEmpty(that.params['post']['url']);
+        that.triggerEvent('onValidateParamsEnd');
+        return that;
+    };
+
+    classProto.setEventsProcess = function(){
+        var that = this;
+        cm.addEvent(window, 'keydown', that.windowKeydownHandler);
+        return that;
+    };
+
+    classProto.unsetEventsProcess = function(){
+        var that = this;
+        cm.removeEvent(window, 'keydown', that.windowKeydownHandler);
+        return that;
+    };
+
+    /* *** PUBLIC *** */
 
     classProto.open = function(){
         var that = this;
@@ -3260,36 +3332,58 @@ cm.getConstructor('App.Panel', function(classConstructor, className, classProto)
 
     /* *** SYSTEM *** */
 
-    classProto.getLESSVariables = function(){
-        var that = this;
-        that.params['duration'] = cm.getTransitionDurationFromLESS('AppPanel-Duration', that.params['duration']);
-        return that;
-    };
-
-    classProto.validateParams = function(){
-        var that = this;
-        that.params['Com.Request']['Com.Overlay'] = that.params['Com.Overlay'];
-        that.params['Com.Request']['showOverlay'] = that.params['showOverlay'];
-        that.params['Com.Request']['overlayDelay'] = that.params['overlayDelay'];
-        that.params['Com.Request']['responseKey'] = that.params['responseKey'];
-        that.params['Com.Request']['responseHTMLKey'] = that.params['responseContentKey'];
-        that.params['Com.Request']['responseStatusKey'] = that.params['responseStatusKey'];
-        that.params['Com.Request']['renderContentOnSuccess'] = that.params['renderContentOnSuccess'];
-        that.destructOnClose = that.params['destructOnClose'];
-        that.hasGetRequest = !cm.isEmpty(that.params['get']['url']);
-        that.hasPostRequest = !cm.isEmpty(that.params['post']['url']);
-        return that;
-    };
-
-    classProto.render = function(){
+    classProto.renderView = function(){
         var that = this;
         // Structure
-        that.renderView();
-        // Attributes
-        that.setAttributes();
+        that.nodes['container'] = cm.node('div', {'class' : 'app__panel'},
+            that.nodes['dialogHolder'] = cm.node('div', {'class' : 'app__panel__dialog-holder'},
+                that.nodes['dialog'] = cm.node('div', {'class' : 'app__panel__dialog'},
+                    that.nodes['inner'] = cm.node('div', {'class' : 'inner'},
+                        that.nodes['title'] = cm.node('div', {'class' : 'title'},
+                            that.nodes['label'] = cm.node('div', {'class' : 'label'})
+                        ),
+                        that.nodes['content'] = cm.node('div', {'class' : 'content'},
+                            that.nodes['contentHolder'] = cm.node('div', {'class' : 'inner'})
+                        )
+                    )
+                )
+            ),
+            that.nodes['previewHolder'] = cm.node('div', {'class' : 'app__panel__preview-holder'},
+                that.nodes['preview'] = cm.node('div', {'class' : 'app__panel__preview'},
+                    cm.node('div', {'class' : 'inner'},
+                        cm.node('div', {'class' : 'title'}),
+                        cm.node('div', {'class' : 'content'})
+                    )
+                )
+            )
+        );
+        // Close Buttons
+        that.nodes['close'] = cm.node('div', {'class' : 'icon cm-i cm-i__circle-close'});
+        if(that.params['showCloseButton']){
+            cm.insertLast(that.nodes['close'], that.nodes['title']);
+        }
+        that.nodes['back'] = cm.node('div', {'class' : 'icon cm-i cm-i__circle-arrow-left'});
+        if(that.params['showBackButton']){
+            cm.insertFirst(that.nodes['back'], that.nodes['title']);
+        }
+        // Buttons
+        that.nodes['buttons'] = that.renderButtons();
+        if(that.params['showButtons']){
+            cm.appendChild(that.nodes['buttons'], that.nodes['inner']);
+        }
+        // Events
+        cm.addEvent(that.nodes['back'], 'click', that.closeHandler);
+        cm.addEvent(that.nodes['close'], 'click', that.closeHandler);
         // Content
         that.setTitle(that.params['title']);
         that.setContent(that.params['content']);
+        return that;
+    };
+
+    classProto.renderViewModel = function(){
+        var that = this;
+        // Call parent method - render
+        _inherit.prototype.renderViewModel.apply(that, arguments);
         // Overlay
         switch(that.params['overlayPosition']){
             case 'content':
@@ -3348,45 +3442,14 @@ cm.getConstructor('App.Panel', function(classConstructor, className, classProto)
         return that;
     };
 
-    classProto.renderView = function(){
+    classProto.setAttributes = function(){
         var that = this;
-        // Structure
-        that.nodes['container'] = cm.node('div', {'class' : 'app__panel'},
-            that.nodes['dialogHolder'] = cm.node('div', {'class' : 'app__panel__dialog-holder'},
-                that.nodes['dialog'] = cm.node('div', {'class' : 'app__panel__dialog'},
-                    that.nodes['inner'] = cm.node('div', {'class' : 'inner'},
-                        that.nodes['title'] = cm.node('div', {'class' : 'title'},
-                            that.nodes['label'] = cm.node('div', {'class' : 'label'})
-                        ),
-                        that.nodes['content'] = cm.node('div', {'class' : 'content'},
-                            that.nodes['contentHolder'] = cm.node('div', {'class' : 'inner'})
-                        )
-                    )
-                )
-            ),
-            that.nodes['previewHolder'] = cm.node('div', {'class' : 'app__panel__preview-holder'},
-                that.nodes['preview'] = cm.node('div', {'class' : 'app__panel__preview'},
-                    cm.node('div', {'class' : 'inner'},
-                        cm.node('div', {'class' : 'title'}),
-                        cm.node('div', {'class' : 'content'})
-                    )
-                )
-            )
-        );
-        // Close Buttons
-        that.nodes['close'] = cm.node('div', {'class' : 'icon cm-i cm-i__circle-close'});
-        if(that.params['showCloseButton']){
-            cm.insertLast(that.nodes['close'], that.nodes['title']);
-        }
-        that.nodes['back'] = cm.node('div', {'class' : 'icon cm-i cm-i__circle-arrow-left'});
-        if(that.params['showBackButton']){
-            cm.insertFirst(that.nodes['back'], that.nodes['title']);
-        }
-        // Buttons
-        that.nodes['buttons'] = that.renderButtons();
-        if(that.params['showButtons']){
-            cm.appendChild(that.nodes['buttons'], that.nodes['inner']);
-        }
+        that.triggerEvent('onSetAttributesStart');
+        that.triggerEvent('onSetAttributesProcess');
+        cm.addClass(that.nodes['container'], ['app__panel', that.params['type']].join('--'));
+        that.nodes['back'].setAttribute('title', that.lang('close'));
+        that.nodes['close'].setAttribute('title', that.lang('close'));
+        that.triggerEvent('onSetAttributesEnd');
         return that;
     };
 
@@ -3448,40 +3511,6 @@ cm.getConstructor('App.Panel', function(classConstructor, className, classProto)
         return that.nodes['buttons'];
     };
 
-    classProto.setAttributes = function(){
-        var that = this;
-        // Attributes
-        cm.addClass(that.nodes['container'], ['app__panel', that.params['type']].join('--'));
-        that.nodes['back'].setAttribute('title', that.lang('close'));
-        that.nodes['close'].setAttribute('title', that.lang('close'));
-        // Events
-        cm.addEvent(that.nodes['back'], 'click', that.closeHandler);
-        cm.addEvent(that.nodes['close'], 'click', that.closeHandler);
-        return that;
-    };
-
-    classProto.setEvents = function(){
-        var that = this;
-        cm.addEvent(window, 'keydown', that.windowKeydownHandler);
-        // Add custom events
-        if(that.params['customEvents']){
-            cm.customEvent.add(that.params['node'], 'destruct', that.destructHandler);
-            cm.customEvent.add(that.nodes['container'], 'destruct', that.destructHandler);
-        }
-        return that;
-    };
-
-    classProto.unsetEvents = function(){
-        var that = this;
-        cm.removeEvent(window, 'keydown', that.windowKeydownHandler);
-        // Remove custom events
-        if(that.params['customEvents']){
-            cm.customEvent.remove(that.params['node'], 'destruct', that.destructHandler);
-            cm.customEvent.remove(that.nodes['container'], 'destruct', that.destructHandler);
-        }
-        return that;
-    };
-
     classProto.windowKeydown = function(e){
         var that = this;
         if(cm.isKeyCode(e.keyCode, 'escape')){
@@ -3490,24 +3519,11 @@ cm.getConstructor('App.Panel', function(classConstructor, className, classProto)
         return that;
     };
 
-    classProto.constructCollector = function(node){
-        var that = this;
-        if(that.params['constructCollector']){
-            if(that.params['collector']){
-                that.params['collector'].construct(node);
-            }else{
-                cm.find('Com.Collector', null, null, function(classObject){
-                    classObject.construct(node);
-                });
-            }
-        }
-        return that;
-    };
-
     classProto.transitionOpen = function(){
         var that = this;
         that.isOpen = true;
         that.triggerEvent('onOpen');
+        that.triggerEvent('onOpenEnd');
         return that;
     };
 
@@ -3515,8 +3531,9 @@ cm.getConstructor('App.Panel', function(classConstructor, className, classProto)
         var that = this;
         that.isOpen = false;
         that.destructOnClose && that.destruct();
-        cm.remove(that.nodes['container']);
+        that.params['removeOnClose'] && cm.remove(that.nodes['container']);
         that.triggerEvent('onClose');
+        that.triggerEvent('onCloseEnd');
         return that;
     };
 
@@ -3569,17 +3586,68 @@ cm.getConstructor('App.Panel', function(classConstructor, className, classProto)
         return that;
     };
 });
+cm.define('App.PanelContainer', {
+    'extend' : 'Com.AbstractContainer',
+    'params' : {
+        'constructor' : 'App.Panel',
+        'container' : 'document.body',
+        'destructOnClose' : true,
+        'params' : {
+            'destructOnClose' : false,
+            'autoOpen' : false
+        }
+    }
+},
+function(params){
+    var that = this;
+    // Call parent class construct
+    Com.AbstractContainer.apply(that, arguments);
+});
+
+cm.getConstructor('App.PanelContainer', function(classConstructor, className, classProto){
+    var _inherit = classProto._inherit;
+
+    classProto.construct = function(){
+        var that = this;
+        // Bind context to methods
+        that.showHandler = that.show.bind(that);
+        that.hideHandler = that.hide.bind(that);
+        // Call parent method
+        _inherit.prototype.construct.apply(that, arguments);
+        return that;
+    };
+
+    classProto.show = function(e){
+        var that = this;
+        e && cm.preventDefault(e);
+        that.components['controller'] && that.components['controller'].show();
+        return that;
+    };
+
+    classProto.hide = function(e){
+        var that = this;
+        e && cm.preventDefault(e);
+        that.components['controller'] && that.components['controller'].hide();
+        return that;
+    };
+
+    classProto.renderControllerEvents = function(){
+        var that = this;
+        that.components['controller'].addEvent('onOpenStart', that.afterOpenControllerHandler);
+        that.components['controller'].addEvent('onCloseEnd', that.afterCloseControllerHandler);
+        return that;
+    };
+});
 cm.define('App.PanelHolder', {
     'extend' : 'App.Panel',
-    'modules' : [
-        'DataNodes'
-    ],
     'params' : {
         'type' : 'story',
         'autoOpen' : false,
         'showButtons' : false,
         'showBackButton' : true,
-        'showCloseButton' : false
+        'showCloseButton' : false,
+        'embedStructureOnRender' : false,
+        'destructOnClose' : false
     }
 },
 function(params){
@@ -3591,25 +3659,29 @@ function(params){
         'content' : cm.node('div')
     };
     that.myComponents = {};
+    // Call parent class construct
     App.Panel.apply(that, arguments);
 });
 
 cm.getConstructor('App.PanelHolder', function(classConstructor, className, classProto){
     var _inherit = classProto._inherit;
 
-    classProto.construct = function(params){
+    classProto.constructEnd = function(){
         var that = this;
-        _inherit.prototype.construct.apply(that, arguments);
+        that.addToStack(that.params['node']);
+        // Call parent method
+        _inherit.prototype.constructEnd.apply(that, arguments);
         return that;
     };
 
-    classProto.render = function(){
+    classProto.renderViewModel = function(){
         var that = this;
-        _inherit.prototype.render.apply(that, arguments);
+        // Call parent method
+        _inherit.prototype.renderViewModel.apply(that, arguments);
         // Process holder nodes
-        cm.find('App.PanelRequest', null, null, function(classObject){
+        cm.find('App.PanelContainer', null, null, function(classObject){
             that.myComponents['panel'] = classObject;
-        });
+        }, {'childs' : true});
         that.myNodes = cm.merge(that.myNodes, that.getDataNodesObject(that.params['node']));
         cm.addEvent(that.myNodes['button'], 'click', that.openHandler);
         return that;
@@ -3617,6 +3689,7 @@ cm.getConstructor('App.PanelHolder', function(classConstructor, className, class
 
     classProto.open = function(){
         var that = this;
+        // Call parent method
         _inherit.prototype.open.apply(that, arguments);
         if(!that.isOpen){
             that.myComponents['panel'] && that.myComponents['panel'].hide();
@@ -3627,6 +3700,7 @@ cm.getConstructor('App.PanelHolder', function(classConstructor, className, class
 
     classProto.close = function(){
         var that = this;
+        // Call parent method
         _inherit.prototype.close.apply(that, arguments);
         if(that.isOpen){
             that.myComponents['panel'] && that.myComponents['panel'].show();
@@ -3637,37 +3711,8 @@ cm.getConstructor('App.PanelHolder', function(classConstructor, className, class
     classProto.transitionClose = function(){
         var that = this;
         cm.appendChild(that.myNodes['content'], that.myNodes['holder']);
+        // Call parent method
         _inherit.prototype.transitionClose.apply(that, arguments);
-        return that;
-    };
-});
-cm.define('App.PanelRequest', {
-    'extend' : 'App.Panel',
-    'modules' : [
-        'DataNodes'
-    ],
-    'params' : {
-        'autoOpen' : false
-    }
-},
-function(params){
-    var that = this;
-    App.Panel.apply(that, arguments);
-});
-
-cm.getConstructor('App.PanelRequest', function(classConstructor, className, classProto){
-    var _inherit = classProto._inherit;
-
-    classProto.construct = function(params){
-        var that = this;
-        _inherit.prototype.construct.apply(that, arguments);
-        return that;
-    };
-
-    classProto.render = function(){
-        var that = this;
-        _inherit.prototype.render.apply(that, arguments);
-        cm.addEvent(that.params['node'], 'click', that.openHandler);
         return that;
     };
 });
@@ -4129,7 +4174,7 @@ function(params){
         // Override controls
         if(that.params['overrideControls']){
             cm.forEach(that.params['controls'], function(item, key){
-                that.params['controls'][key] = !!that.params['default'][key];
+                that.params['controls'][key] = !!(that.params['default'][key] || that.params['active'][key]);
             });
         }
     };
@@ -4193,7 +4238,7 @@ function(params){
     var renderTooltip = function(){
         // Structure
         that.nodes['tooltip']['container'] = cm.node('div', {'class' : 'pt__toolbar'},
-            cm.node('div', {'class' : 'inner'},
+            that.nodes['tooltip']['inner'] = cm.node('div', {'class' : 'inner'},
                 that.nodes['tooltip']['group1'] = cm.node('ul', {'class' : 'group'}),
                 that.nodes['tooltip']['group2'] = cm.node('ul', {'class' : 'group'}),
                 that.nodes['tooltip']['group3'] = cm.node('ul', {'class' : 'group'}),
@@ -4366,6 +4411,8 @@ function(params){
             cm.addEvent(that.nodes['tooltip']['reset-current-button'], 'click', function(){
                 set(cm.clone(that.params['active']), true);
             });
+        }else{
+            cm.remove(that.nodes['tooltip']['group4']);
         }
         // Render tooltip
         that.components['tooltip'] = new Com.Tooltip(
@@ -5071,22 +5118,12 @@ function(params){
     Com.elFinderFileManagerContainer.apply(that, arguments);
 });
 
-/* ******* MODULES: MENU ******* */
-
 cm.define('Module.Menu', {
-    'modules' : [
-        'Params',
-        'Events',
-        'DataConfig',
-        'DataNodes',
-        'Stack'
-    ],
-    'events' : [
-        'onRenderStart',
-        'onRender'
-    ],
+    'extend' : 'App.AbstractModule',
     'params' : {
         'node' : cm.node('div'),
+        'embedStructure' : 'none',
+        'renderStructure' : false,
         'name' : '',
         'type' : 'horizontal'           // horizontal | vertical
     }
@@ -5098,33 +5135,27 @@ function(params){
             'select' : cm.node('select')
         }
     };
-    that.construct(params);
+    that.alignValues = ['left', 'center', 'right', 'justify'];
+    // Call parent class construct
+    App.AbstractModule.apply(that, arguments);
 });
 
 cm.getConstructor('Module.Menu', function(classConstructor, className, classProto){
-    classProto.construct = function(params){
+    var _inherit = classProto._inherit;
+
+    classProto.construct = function(){
         var that = this;
+        // Bind context to methods
         that.processSelectHandler = that.processSelect.bind(that);
-        that.setParams(params);
-        that.convertEvents(that.params['events']);
-        that.getDataNodes(that.params['node']);
-        that.getDataConfig(that.params['node']);
-        that.validateParams();
-        that.addToStack(that.params['node']);
-        that.triggerEvent('onRenderStart');
-        that.render();
-        that.addToStack(that.nodes['container']);
-        that.triggerEvent('onRender');
+        // Call parent method
+        _inherit.prototype.construct.apply(that, arguments);
         return that;
     };
 
-    classProto.validateParams = function(){
+    classProto.renderViewModel = function(){
         var that = this;
-        return that;
-    };
-
-    classProto.render = function(){
-        var that = this;
+        // Call parent method - render
+        _inherit.prototype.renderViewModel.apply(that, arguments);
         // Events
         cm.addEvent(that.nodes['select']['select'], 'change', that.processSelectHandler);
         return that;
@@ -5135,6 +5166,37 @@ cm.getConstructor('Module.Menu', function(classConstructor, className, classProt
         var value = that.nodes['select']['select'].value;
         if(!cm.isEmpty(value)){
             window.location.href = value;
+        }
+        return that;
+    };
+
+    classProto.setView = function(view){
+        var that = this;
+        switch(view){
+            case 'horizontal':
+                cm.removeClass(that.nodes['container'], 'is-vertical mod__menu--adaptive');
+                cm.addClass(that.nodes['container'], 'is-horizontal');
+            break;
+            case 'vertical':
+                cm.removeClass(that.nodes['container'], 'is-horizontal mod__menu--adaptive');
+                cm.addClass(that.nodes['container'], 'is-vertical');
+                break;
+            case 'mobile':
+                cm.addClass(that.nodes['container'], 'mod__menu--adaptive');
+                break;
+        }
+        return that;
+    };
+
+    classProto.setAlign = function(align){
+        var that = this;
+        if(cm.inArray(that.alignValues, align)){
+            // Reset
+            cm.forEach(that.alignValues, function(item){
+                cm.removeClass(that.nodes['container'], ['pull', item].join('-'));
+            });
+            // Set
+            cm.addClass(that.nodes['container'], ['pull', align].join('-'));
         }
         return that;
     };

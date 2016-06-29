@@ -1,19 +1,9 @@
-/* ******* MODULES: MENU ******* */
-
 cm.define('Module.Menu', {
-    'modules' : [
-        'Params',
-        'Events',
-        'DataConfig',
-        'DataNodes',
-        'Stack'
-    ],
-    'events' : [
-        'onRenderStart',
-        'onRender'
-    ],
+    'extend' : 'App.AbstractModule',
     'params' : {
         'node' : cm.node('div'),
+        'embedStructure' : 'none',
+        'renderStructure' : false,
         'name' : '',
         'type' : 'horizontal'           // horizontal | vertical
     }
@@ -25,33 +15,27 @@ function(params){
             'select' : cm.node('select')
         }
     };
-    that.construct(params);
+    that.alignValues = ['left', 'center', 'right', 'justify'];
+    // Call parent class construct
+    App.AbstractModule.apply(that, arguments);
 });
 
 cm.getConstructor('Module.Menu', function(classConstructor, className, classProto){
-    classProto.construct = function(params){
+    var _inherit = classProto._inherit;
+
+    classProto.construct = function(){
         var that = this;
+        // Bind context to methods
         that.processSelectHandler = that.processSelect.bind(that);
-        that.setParams(params);
-        that.convertEvents(that.params['events']);
-        that.getDataNodes(that.params['node']);
-        that.getDataConfig(that.params['node']);
-        that.validateParams();
-        that.addToStack(that.params['node']);
-        that.triggerEvent('onRenderStart');
-        that.render();
-        that.addToStack(that.nodes['container']);
-        that.triggerEvent('onRender');
+        // Call parent method
+        _inherit.prototype.construct.apply(that, arguments);
         return that;
     };
 
-    classProto.validateParams = function(){
+    classProto.renderViewModel = function(){
         var that = this;
-        return that;
-    };
-
-    classProto.render = function(){
-        var that = this;
+        // Call parent method - render
+        _inherit.prototype.renderViewModel.apply(that, arguments);
         // Events
         cm.addEvent(that.nodes['select']['select'], 'change', that.processSelectHandler);
         return that;
@@ -62,6 +46,37 @@ cm.getConstructor('Module.Menu', function(classConstructor, className, classProt
         var value = that.nodes['select']['select'].value;
         if(!cm.isEmpty(value)){
             window.location.href = value;
+        }
+        return that;
+    };
+
+    classProto.setView = function(view){
+        var that = this;
+        switch(view){
+            case 'horizontal':
+                cm.removeClass(that.nodes['container'], 'is-vertical mod__menu--adaptive');
+                cm.addClass(that.nodes['container'], 'is-horizontal');
+            break;
+            case 'vertical':
+                cm.removeClass(that.nodes['container'], 'is-horizontal mod__menu--adaptive');
+                cm.addClass(that.nodes['container'], 'is-vertical');
+                break;
+            case 'mobile':
+                cm.addClass(that.nodes['container'], 'mod__menu--adaptive');
+                break;
+        }
+        return that;
+    };
+
+    classProto.setAlign = function(align){
+        var that = this;
+        if(cm.inArray(that.alignValues, align)){
+            // Reset
+            cm.forEach(that.alignValues, function(item){
+                cm.removeClass(that.nodes['container'], ['pull', item].join('-'));
+            });
+            // Set
+            cm.addClass(that.nodes['container'], ['pull', align].join('-'));
         }
         return that;
     };

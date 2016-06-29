@@ -296,6 +296,16 @@
                     .mx__position(0, 0, 0, auto);
                 }
             }
+
+            .pt__toolbar {
+                &:first-child {
+                    margin-left: @AppPanel-Preview-Indent;
+                }
+
+                &:last-child {
+                    margin-right: @AppPanel-Preview-Indent;
+                }
+            }
         }
 
         > .content {
@@ -309,6 +319,7 @@
                 position: absolute;
                 padding: @AppPanel-Preview-ContentIndent;
                 .mx__position(0, 0, 0, 0);
+                .mx__transition(all, @CmUI-Transition-Duration);
             }
 
             &:not(:first-child) {
@@ -319,6 +330,12 @@
 }
 
 /* *** COMPONENTS *** */
+
+.app__panel__label {
+    .cm__font--ui-h1;
+    .cm__text-nowrap;
+    line-height: @AppPanel-Preview-TitleHeight;
+}
 
 .app__panel__togglebox {
     margin: 0;

@@ -135,7 +135,7 @@ function(params){
         // Override controls
         if(that.params['overrideControls']){
             cm.forEach(that.params['controls'], function(item, key){
-                that.params['controls'][key] = !!that.params['default'][key];
+                that.params['controls'][key] = !!(that.params['default'][key] || that.params['active'][key]);
             });
         }
     };
@@ -199,7 +199,7 @@ function(params){
     var renderTooltip = function(){
         // Structure
         that.nodes['tooltip']['container'] = cm.node('div', {'class' : 'pt__toolbar'},
-            cm.node('div', {'class' : 'inner'},
+            that.nodes['tooltip']['inner'] = cm.node('div', {'class' : 'inner'},
                 that.nodes['tooltip']['group1'] = cm.node('ul', {'class' : 'group'}),
                 that.nodes['tooltip']['group2'] = cm.node('ul', {'class' : 'group'}),
                 that.nodes['tooltip']['group3'] = cm.node('ul', {'class' : 'group'}),
@@ -372,6 +372,8 @@ function(params){
             cm.addEvent(that.nodes['tooltip']['reset-current-button'], 'click', function(){
                 set(cm.clone(that.params['active']), true);
             });
+        }else{
+            cm.remove(that.nodes['tooltip']['group4']);
         }
         // Render tooltip
         that.components['tooltip'] = new Com.Tooltip(
