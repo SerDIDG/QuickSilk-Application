@@ -1,4 +1,4 @@
-/*! ************ QuickSilk-Application v3.10.1 (2016-06-29 21:23) ************ */
+/*! ************ QuickSilk-Application v3.10.1 (2016-07-04 20:24) ************ */
 
 // /* ************************************************ */
 // /* ******* QUICKSILK: COMMON ******* */
@@ -2527,6 +2527,20 @@ App.HelpTourScenario = [{
     'topMenu' : 'support',
     'content' : '<h3>Need Help?</h3><p>Are you stuck, experiencing an issue, found a bug or have a suggestion? Simply click on this link and send us a message. FYI, to assist in the troubleshooting process we automatically collect information on the operating system, browser and browser version you are using. Our goal is to respond to your message within 1 business day.</p>'
 }];
+cm.define('App.ImageInput', {
+    'extend' : 'Com.ImageInput',
+    'params' : {
+        'fileManager' : true,
+        'fileManagerConstructor' : 'App.elFinderFileManagerContainer',
+        'fileUploader' : true,
+        'fileUploaderConstructor' : 'App.FileUploaderContainer'
+    }
+},
+function(params){
+    var that = this;
+    // Call parent class construct
+    Com.ImageInput.apply(that, arguments);
+});
 cm.define('App.LoginBox', {
     'modules' : [
         'Params',
@@ -2672,7 +2686,7 @@ cm.getConstructor('App.MenuConstructor', function(classConstructor, className, c
             if(item['value'] !== undefined){
                 switch(item['value']['_type']){
                     case 'file':
-                        data[item['variable']] = !cm.isEmpty(item['value']['url']) ? 'url("' + item['value']['url'] + '")' : 'none';
+                        data[item['variable']] = cm.URLToCSSURL(item['value']['url']);
                         break;
                     case 'font':
                         cm.forEach(item['value'], function(value, name){
@@ -2990,6 +3004,7 @@ cm.define('App.Panel', {
         'container' : 'document.body',
         'name' : '',
         'embedStructure' : 'append',
+        'embedStructureOnRender' : false,
         'customEvents' : true,
         'constructCollector' : true,
         'removeOnDestruct' : true,
@@ -3028,6 +3043,7 @@ cm.define('App.Panel', {
         },
         'langs' : {
             'close' : 'Close',
+            'back' : 'Back',
             'cancel' : 'Cancel',
             'save' : 'Save',
             'saving' : 'Saving...',
@@ -3358,12 +3374,14 @@ cm.getConstructor('App.Panel', function(classConstructor, className, classProto)
             )
         );
         // Close Buttons
-        that.nodes['close'] = cm.node('div', {'class' : 'icon cm-i cm-i__circle-close'});
         if(that.params['showCloseButton']){
+            that.nodes['close'] = cm.node('div', {'class' : 'icon cm-i cm-i__circle-close', 'title' : that.lang('close')});
+            cm.addEvent(that.nodes['close'], 'click', that.closeHandler);
             cm.insertLast(that.nodes['close'], that.nodes['title']);
         }
-        that.nodes['back'] = cm.node('div', {'class' : 'icon cm-i cm-i__circle-arrow-left'});
         if(that.params['showBackButton']){
+            that.nodes['back'] = cm.node('div', {'class' : 'icon cm-i cm-i__circle-arrow-left', 'title' : that.lang('back')});
+            cm.addEvent(that.nodes['back'], 'click', that.closeHandler);
             cm.insertFirst(that.nodes['back'], that.nodes['title']);
         }
         // Buttons
@@ -3371,12 +3389,6 @@ cm.getConstructor('App.Panel', function(classConstructor, className, classProto)
         if(that.params['showButtons']){
             cm.appendChild(that.nodes['buttons'], that.nodes['inner']);
         }
-        // Events
-        cm.addEvent(that.nodes['back'], 'click', that.closeHandler);
-        cm.addEvent(that.nodes['close'], 'click', that.closeHandler);
-        // Content
-        that.setTitle(that.params['title']);
-        that.setContent(that.params['content']);
         return that;
     };
 
@@ -3397,48 +3409,53 @@ cm.getConstructor('App.Panel', function(classConstructor, className, classProto)
                 break;
         }
         // Request
-        that.params['Com.Request']['container'] = that.nodes['contentHolder'];
-        cm.getConstructor('Com.Request', function(classConstructor, className){
-            that.components['request'] = new classConstructor(that.params[className]);
-            that.components['request']
-                .addEvent('onStart', function(){
-                    that.isProccesing = true;
-                })
-                .addEvent('onEnd', function(){
-                    that.isProccesing = false;
-                    that.params['showButtons'] && that.showButtons();
-                    if(that.isGetRequest){
-                        that.triggerEvent('onLoadEnd');
-                    }else if(that.isPostRequest){
-                        that.triggerEvent('onSaveEnd');
-                    }
-                    that.isGetRequest = false;
-                    that.isPostRequest = false;
-                })
-                .addEvent('onSuccess', function(my, data){
-                    if(that.isGetRequest){
-                        that.loadResponse(data);
-                    }else if(that.isPostRequest){
-                        that.saveResponse(data);
-                    }
-                })
-                .addEvent('onError', function(){
-                    if(that.isGetRequest){
-                        that.loadError();
-                    }else if(that.isPostRequest){
-                        that.saveError();
-                    }
-                })
-                .addEvent('onContentRender', function(){
-                    that.constructCollector(that.nodes['contentHolder']);
-                })
-                .addEvent('onContentRenderEnd', function(){
-                    cm.customEvent.trigger(that.nodes['contentHolder'], 'redraw', {
-                        'type' : 'child',
-                        'self' : false
+        if(that.hasGetRequest || that.hasPostRequest){
+            that.params['Com.Request']['container'] = that.nodes['contentHolder'];
+            cm.getConstructor('Com.Request', function(classConstructor, className){
+                that.components['request'] = new classConstructor(that.params[className]);
+                that.components['request']
+                    .addEvent('onStart', function(){
+                        that.isProccesing = true;
+                    })
+                    .addEvent('onEnd', function(){
+                        that.isProccesing = false;
+                        that.params['showButtons'] && that.showButtons();
+                        if(that.isGetRequest){
+                            that.triggerEvent('onLoadEnd');
+                        }else if(that.isPostRequest){
+                            that.triggerEvent('onSaveEnd');
+                        }
+                        that.isGetRequest = false;
+                        that.isPostRequest = false;
+                    })
+                    .addEvent('onSuccess', function(my, data){
+                        if(that.isGetRequest){
+                            that.loadResponse(data);
+                        }else if(that.isPostRequest){
+                            that.saveResponse(data);
+                        }
+                    })
+                    .addEvent('onError', function(){
+                        if(that.isGetRequest){
+                            that.loadError();
+                        }else if(that.isPostRequest){
+                            that.saveError();
+                        }
+                    })
+                    .addEvent('onContentRender', function(){
+                        that.constructCollector(that.nodes['contentHolder']);
+                    })
+                    .addEvent('onContentRenderEnd', function(){
+                        cm.customEvent.trigger(that.nodes['contentHolder'], 'redraw', {
+                            'type' : 'child',
+                            'self' : false
+                        });
                     });
-                });
-        });
+            });
+        }
+        // Set Content
+        !cm.isEmpty(that.params['title']) && that.setTitle(that.params['title']);
+        !cm.isEmpty(that.params['content']) && that.setContent(that.params['content']);
         return that;
     };
 
@@ -3447,8 +3464,6 @@ cm.getConstructor('App.Panel', function(classConstructor, className, classProto)
         that.triggerEvent('onSetAttributesStart');
         that.triggerEvent('onSetAttributesProcess');
         cm.addClass(that.nodes['container'], ['app__panel', that.params['type']].join('--'));
-        that.nodes['back'].setAttribute('title', that.lang('close'));
-        that.nodes['close'].setAttribute('title', that.lang('close'));
         that.triggerEvent('onSetAttributesEnd');
         return that;
     };
@@ -3588,10 +3603,17 @@ cm.getConstructor('App.Panel', function(classConstructor, className, classProto)
 });
 cm.define('App.PanelContainer', {
     'extend' : 'Com.AbstractContainer',
+    'events' : [
+        'onOpenStart',
+        'onOpenEnd',
+        'onCloseStart',
+        'onCloseEnd'
+    ],
     'params' : {
         'constructor' : 'App.Panel',
         'container' : 'document.body',
         'destructOnClose' : true,
+        'restoreHolderContent' : true,
         'params' : {
             'destructOnClose' : false,
             'autoOpen' : false
@@ -3610,10 +3632,19 @@ cm.getConstructor('App.PanelContainer', function(classConstructor, className, cl
     classProto.construct = function(){
         var that = this;
         // Bind context to methods
+        that.destructProcessHander = that.destructProcess.bind(that);
         that.showHandler = that.show.bind(that);
         that.hideHandler = that.hide.bind(that);
+        // Add events
+        that.addEvent('onDestructProcess', that.destructProcessHander);
         // Call parent method
         _inherit.prototype.construct.apply(that, arguments);
+        return that;
+    };
+
+    classProto.destructProcess = function(){
+        var that = this;
+        that.components['finder'] && that.components['finder'].remove();
         return that;
     };
 
@@ -3633,86 +3664,60 @@ cm.getConstructor('App.PanelContainer', function(classConstructor, className, cl
 
     classProto.renderControllerEvents = function(){
         var that = this;
-        that.components['controller'].addEvent('onOpenStart', that.afterOpenControllerHandler);
-        that.components['controller'].addEvent('onCloseEnd', that.afterCloseControllerHandler);
-        return that;
-    };
-});
-cm.define('App.PanelHolder', {
-    'extend' : 'App.Panel',
-    'params' : {
-        'type' : 'story',
-        'autoOpen' : false,
-        'showButtons' : false,
-        'showBackButton' : true,
-        'showCloseButton' : false,
-        'embedStructureOnRender' : false,
-        'destructOnClose' : false
-    }
-},
-function(params){
-    var that = this;
-    that.myNodes = {
-        'container' : cm.node('div'),
-        'button' : cm.node('div'),
-        'holder' : cm.node('div'),
-        'content' : cm.node('div')
-    };
-    that.myComponents = {};
-    // Call parent class construct
-    App.Panel.apply(that, arguments);
-});
-
-cm.getConstructor('App.PanelHolder', function(classConstructor, className, classProto){
-    var _inherit = classProto._inherit;
-
-    classProto.constructEnd = function(){
-        var that = this;
-        that.addToStack(that.params['node']);
-        // Call parent method
-        _inherit.prototype.constructEnd.apply(that, arguments);
+        that.components['controller'].addEvent('onOpenStart', function(){
+            that.triggerEvent('onOpenStart', that.components['controller']);
+            that.setHolderContent();
+            that.afterOpenController();
+        });
+        that.components['controller'].addEvent('onOpenEnd', function(){
+            that.processNestedPanels();
+            that.triggerEvent('onOpenEnd', that.components['controller']);
+        });
+        that.components['controller'].addEvent('onCloseStart', function(){
+            that.triggerEvent('onCloseStart', that.components['controller']);
+        });
+        that.components['controller'].addEvent('onCloseEnd', function(){
+            that.restoreHolderContent();
+            that.afterCloseController();
+            that.triggerEvent('onCloseEnd', that.components['controller']);
+        });
         return that;
     };
 
-    classProto.renderViewModel = function(){
-        var that = this;
-        // Call parent method
-        _inherit.prototype.renderViewModel.apply(that, arguments);
-        // Process holder nodes
-        cm.find('App.PanelContainer', null, null, function(classObject){
-            that.myComponents['panel'] = classObject;
-        }, {'childs' : true});
-        that.myNodes = cm.merge(that.myNodes, that.getDataNodesObject(that.params['node']));
-        cm.addEvent(that.myNodes['button'], 'click', that.openHandler);
+    classProto.processNestedPanels = function(){
+        var that = this,
+            node = that.components['controller'].getStackNode(),
+            config = {
+                'childs' : true,
+                'multiple' : true
+            };
+        // Find Nested Containers
+        that.components['finder'] = new cm.Finder('App.PanelContainer', null, node, function(classObject){
+            classObject.setParams({
+                'params' : {
+                    'type' : 'story',
+                    'showButtons' : false,
+                    'showBackButton' : true,
+                    'showCloseButton' : false
+                }
+            });
+            classObject.addEvent('onOpenStart', that.hideHandler);
+            classObject.addEvent('onCloseStart', that.showHandler);
+        }, config);
         return that;
     };
 
-    classProto.open = function(){
+    classProto.setHolderContent = function(){
         var that = this;
-        // Call parent method
-        _inherit.prototype.open.apply(that, arguments);
-        if(!that.isOpen){
-            that.myComponents['panel'] && that.myComponents['panel'].hide();
-            that.setContent(that.myNodes['content']);
+        if(!cm.isEmpty(that.nodes['content']) && cm.isParent(that.nodes['holder'], that.nodes['content'])){
+            that.components['controller'].setContent(that.nodes['content']);
         }
         return that;
     };
 
-    classProto.close = function(){
+    classProto.restoreHolderContent = function(){
         var that = this;
-        // Call parent method
-        _inherit.prototype.close.apply(that, arguments);
-        if(that.isOpen){
-            that.myComponents['panel'] && that.myComponents['panel'].show();
-        }
-        return that;
-    };
-
-    classProto.transitionClose = function(){
-        var that = this;
-        cm.appendChild(that.myNodes['content'], that.myNodes['holder']);
-        // Call parent method
-        _inherit.prototype.transitionClose.apply(that, arguments);
+        cm.appendChild(that.nodes['content'], that.nodes['holder']);
         return that;
     };
 });

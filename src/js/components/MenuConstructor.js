@@ -81,7 +81,7 @@ cm.getConstructor('App.MenuConstructor', function(classConstructor, className, c
             if(item['value'] !== undefined){
                 switch(item['value']['_type']){
                     case 'file':
-                        data[item['variable']] = !cm.isEmpty(item['value']['url']) ? 'url("' + item['value']['url'] + '")' : 'none';
+                        data[item['variable']] = cm.URLToCSSURL(item['value']['url']);
                         break;
                     case 'font':
                         cm.forEach(item['value'], function(value, name){

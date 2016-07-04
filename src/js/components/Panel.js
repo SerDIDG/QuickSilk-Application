@@ -26,6 +26,7 @@ cm.define('App.Panel', {
         'container' : 'document.body',
         'name' : '',
         'embedStructure' : 'append',
+        'embedStructureOnRender' : false,
         'customEvents' : true,
         'constructCollector' : true,
         'removeOnDestruct' : true,
@@ -64,6 +65,7 @@ cm.define('App.Panel', {
         },
         'langs' : {
             'close' : 'Close',
+            'back' : 'Back',
             'cancel' : 'Cancel',
             'save' : 'Save',
             'saving' : 'Saving...',
@@ -394,12 +396,14 @@ cm.getConstructor('App.Panel', function(classConstructor, className, classProto)
             )
         );
         // Close Buttons
-        that.nodes['close'] = cm.node('div', {'class' : 'icon cm-i cm-i__circle-close'});
         if(that.params['showCloseButton']){
+            that.nodes['close'] = cm.node('div', {'class' : 'icon cm-i cm-i__circle-close', 'title' : that.lang('close')});
+            cm.addEvent(that.nodes['close'], 'click', that.closeHandler);
             cm.insertLast(that.nodes['close'], that.nodes['title']);
         }
-        that.nodes['back'] = cm.node('div', {'class' : 'icon cm-i cm-i__circle-arrow-left'});
         if(that.params['showBackButton']){
+            that.nodes['back'] = cm.node('div', {'class' : 'icon cm-i cm-i__circle-arrow-left', 'title' : that.lang('back')});
+            cm.addEvent(that.nodes['back'], 'click', that.closeHandler);
             cm.insertFirst(that.nodes['back'], that.nodes['title']);
         }
         // Buttons
@@ -407,12 +411,6 @@ cm.getConstructor('App.Panel', function(classConstructor, className, classProto)
         if(that.params['showButtons']){
             cm.appendChild(that.nodes['buttons'], that.nodes['inner']);
         }
-        // Events
-        cm.addEvent(that.nodes['back'], 'click', that.closeHandler);
-        cm.addEvent(that.nodes['close'], 'click', that.closeHandler);
-        // Content
-        that.setTitle(that.params['title']);
-        that.setContent(that.params['content']);
         return that;
     };
 
@@ -433,48 +431,53 @@ cm.getConstructor('App.Panel', function(classConstructor, className, classProto)
                 break;
         }
         // Request
-        that.params['Com.Request']['container'] = that.nodes['contentHolder'];
-        cm.getConstructor('Com.Request', function(classConstructor, className){
-            that.components['request'] = new classConstructor(that.params[className]);
-            that.components['request']
-                .addEvent('onStart', function(){
-                    that.isProccesing = true;
-                })
-                .addEvent('onEnd', function(){
-                    that.isProccesing = false;
-                    that.params['showButtons'] && that.showButtons();
-                    if(that.isGetRequest){
-                        that.triggerEvent('onLoadEnd');
-                    }else if(that.isPostRequest){
-                        that.triggerEvent('onSaveEnd');
-                    }
-                    that.isGetRequest = false;
-                    that.isPostRequest = false;
-                })
-                .addEvent('onSuccess', function(my, data){
-                    if(that.isGetRequest){
-                        that.loadResponse(data);
-                    }else if(that.isPostRequest){
-                        that.saveResponse(data);
-                    }
-                })
-                .addEvent('onError', function(){
-                    if(that.isGetRequest){
-                        that.loadError();
-                    }else if(that.isPostRequest){
-                        that.saveError();
-                    }
-                })
-                .addEvent('onContentRender', function(){
-                    that.constructCollector(that.nodes['contentHolder']);
-                })
-                .addEvent('onContentRenderEnd', function(){
-                    cm.customEvent.trigger(that.nodes['contentHolder'], 'redraw', {
-                        'type' : 'child',
-                        'self' : false
+        if(that.hasGetRequest || that.hasPostRequest){
+            that.params['Com.Request']['container'] = that.nodes['contentHolder'];
+            cm.getConstructor('Com.Request', function(classConstructor, className){
+                that.components['request'] = new classConstructor(that.params[className]);
+                that.components['request']
+                    .addEvent('onStart', function(){
+                        that.isProccesing = true;
+                    })
+                    .addEvent('onEnd', function(){
+                        that.isProccesing = false;
+                        that.params['showButtons'] && that.showButtons();
+                        if(that.isGetRequest){
+                            that.triggerEvent('onLoadEnd');
+                        }else if(that.isPostRequest){
+                            that.triggerEvent('onSaveEnd');
+                        }
+                        that.isGetRequest = false;
+                        that.isPostRequest = false;
+                    })
+                    .addEvent('onSuccess', function(my, data){
+                        if(that.isGetRequest){
+                            that.loadResponse(data);
+                        }else if(that.isPostRequest){
+                            that.saveResponse(data);
+                        }
+                    })
+                    .addEvent('onError', function(){
+                        if(that.isGetRequest){
+                            that.loadError();
+                        }else if(that.isPostRequest){
+                            that.saveError();
+                        }
+                    })
+                    .addEvent('onContentRender', function(){
+                        that.constructCollector(that.nodes['contentHolder']);
+                    })
+                    .addEvent('onContentRenderEnd', function(){
+                        cm.customEvent.trigger(that.nodes['contentHolder'], 'redraw', {
+                            'type' : 'child',
+                            'self' : false
+                        });
                     });
-                });
-        });
+            });
+        }
+        // Set Content
+        !cm.isEmpty(that.params['title']) && that.setTitle(that.params['title']);
+        !cm.isEmpty(that.params['content']) && that.setContent(that.params['content']);
         return that;
     };
 
@@ -483,8 +486,6 @@ cm.getConstructor('App.Panel', function(classConstructor, className, classProto)
         that.triggerEvent('onSetAttributesStart');
         that.triggerEvent('onSetAttributesProcess');
         cm.addClass(that.nodes['container'], ['app__panel', that.params['type']].join('--'));
-        that.nodes['back'].setAttribute('title', that.lang('close'));
-        that.nodes['close'].setAttribute('title', that.lang('close'));
         that.triggerEvent('onSetAttributesEnd');
         return that;
     };
