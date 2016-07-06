@@ -1,11 +1,11 @@
-/*! ************ QuickSilk-Application v3.11.0 (2016-07-04 20:28) ************ */
+/*! ************ QuickSilk-Application v3.11.1 (2016-07-06 19:37) ************ */
 
 // /* ************************************************ */
 // /* ******* QUICKSILK: COMMON ******* */
 // /* ************************************************ */
 
 var App = {
-    '_version' : '3.11.0',
+    '_version' : '3.11.1',
     'Elements': {},
     'Nodes' : {},
     'Test' : []
@@ -2908,7 +2908,7 @@ cm.getConstructor('App.MenuConstructorPreview', function(classConstructor, class
     classProto.set = function(o){
         var that = this;
         that.lessVariables = o || {};
-        that.components['less'] && that.parseLess();
+        that.parseLess();
         return that;
     };
 
@@ -2919,9 +2919,16 @@ cm.getConstructor('App.MenuConstructorPreview', function(classConstructor, class
         // Default Less Styles
         that.lessDefault = that.nodes['less'].innerHTML;
         // Less Parser
-        if(typeof window.less != 'undefined'){
-            that.components['less'] = window.less;
-        }
+        cm.loadScript({
+            'path' : 'less',
+            'src' : '%assetsUrl%/libs/less/less.min.js',
+            'callback' : function(path){
+                if(path){
+                    that.components['less'] = path;
+                    that.parseLess();
+                }
+            }
+        });
         // Menu Module
         cm.find('Module.Menu', null, that.nodes['contentInner'], function(classObject){
             that.components['menu'] = classObject;
@@ -2952,7 +2959,7 @@ cm.getConstructor('App.MenuConstructorPreview', function(classConstructor, class
 
     classProto.parseLess = function(){
         var that = this;
-        that.components['less'].render(that.lessDefault, {'modifyVars' : that.lessVariables}, function(e, data){
+        that.components['less'] && that.components['less'].render(that.lessDefault, {'modifyVars' : that.lessVariables}, function(e, data){
             if(data && !cm.isEmpty(data['css'])){
                 that.nodes['css'].innerHTML = data['css'];
             }
@@ -3032,14 +3039,14 @@ cm.define('App.Panel', {
         'get' : {                                       // Get dialog content ajax
             'type' : 'json',
             'method' : 'GET',
-            'url' : '',                                 // Request URL. Variables: %baseurl%, %callback%.
-            'params' : ''                               // Params object. Variables: %baseurl%, %callback%.
+            'url' : '',                                 // Request URL. Variables: %baseUrl%, %callback%.
+            'params' : ''                               // Params object. Variables: %baseUrl%, %callback%.
         },
         'post' : {                                      // Submit form ajax
             'type' : 'json',
             'method' : 'POST',
-            'url' : '',                                 // Request URL. Variables: %baseurl%, %callback%.
-            'params' : ''                               // Params object. Variables: %baseurl%, %callback%.
+            'url' : '',                                 // Request URL. Variables: %baseUrl%, %callback%.
+            'params' : ''                               // Params object. Variables: %baseUrl%, %callback%.
         },
         'langs' : {
             'close' : 'Close',

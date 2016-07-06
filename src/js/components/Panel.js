@@ -54,14 +54,14 @@ cm.define('App.Panel', {
         'get' : {                                       // Get dialog content ajax
             'type' : 'json',
             'method' : 'GET',
-            'url' : '',                                 // Request URL. Variables: %baseurl%, %callback%.
-            'params' : ''                               // Params object. Variables: %baseurl%, %callback%.
+            'url' : '',                                 // Request URL. Variables: %baseUrl%, %callback%.
+            'params' : ''                               // Params object. Variables: %baseUrl%, %callback%.
         },
         'post' : {                                      // Submit form ajax
             'type' : 'json',
             'method' : 'POST',
-            'url' : '',                                 // Request URL. Variables: %baseurl%, %callback%.
-            'params' : ''                               // Params object. Variables: %baseurl%, %callback%.
+            'url' : '',                                 // Request URL. Variables: %baseUrl%, %callback%.
+            'params' : ''                               // Params object. Variables: %baseUrl%, %callback%.
         },
         'langs' : {
             'close' : 'Close',
