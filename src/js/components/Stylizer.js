@@ -35,7 +35,7 @@ cm.define('App.Stylizer', {
             ],
             'line-height' : [8, 10, 12, 16, 20, 24, 28, 32, 36, 40, 48, 56, 64, 72, 80, 88, 96, 108, 120],
             'font-size' : [8, 9, 10, 11, 12, 13, 14, 18, 20, 22, 24, 28, 32, 36, 42, 48, 54, 60, 72, 96],
-            'font-weight' : [100, 300, 400, 600, 700, 800],
+            'font-weight' : [100, 300, 400, 600, 700, 900],
             'font-style' : ['normal', 'italic'],
             'text-decoration' : ['none', 'underline']
         },
@@ -71,11 +71,14 @@ cm.define('App.Stylizer', {
         },
         'langs' : {
             '100' : 'Thin',
+            '200' : 'Extra Light',
             '300' : 'Light',
             '400' : 'Regular',
-            '600' : 'Semi-Bold',
+            '500' : 'Medium',
+            '600' : 'Semi Bold',
             '700' : 'Bold',
-            '800' : 'Extra-Bold'
+            '800' : 'Extra Bold',
+            '900' : 'Black'
         }
     }
 },

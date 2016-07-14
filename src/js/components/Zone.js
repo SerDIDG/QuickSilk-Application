@@ -51,15 +51,15 @@ function(params){
 
     var validateParams = function(){
         if(that.params['link']){
-            that.params['linkName'] = [that.params['link']['type'], that.params['link']['parentId'], that.params['zone']].join('_');
-            that.params['blockName'] = [that.params['link']['type'], that.params['link']['parentId']].join('_');
+            that.params['linkName'] = [that.params['link']['type'], that.params['link']['positionId'], that.params['zone']].join('_');
+            that.params['blockName'] = [that.params['link']['type'], that.params['link']['positionId']].join('_');
         }else{
-            that.params['blockName'] = [that.params['type'], that.params['parentId']].join('_');
+            that.params['blockName'] = [that.params['type'], that.params['positionId']].join('_');
         }
         if(cm.isNumber(that.params['instanceId']) || cm.isString(that.params['instanceId'])){
-            that.params['name'] = [that.params['type'], that.params['instanceId'], that.params['parentId'], that.params['zone']].join('_');
+            that.params['name'] = [that.params['type'], that.params['instanceId'], that.params['positionId'], that.params['zone']].join('_');
         }else{
-            that.params['name'] = [that.params['type'], that.params['parentId'], that.params['zone']].join('_');
+            that.params['name'] = [that.params['type'], that.params['positionId'], that.params['zone']].join('_');
         }
     };
 

@@ -1,0 +1,17 @@
+/* ******* MODULES: LOGO CAROUSEL ******* */
+
+.mod__logo-carousel {
+    .pt__grid {
+        > ul {
+            .mx__transition(transform, @CmUI-Transition-Duration);
+        }
+    }
+
+    &.is-infinite {
+        .pt__grid {
+            > ul {
+                .mx__transition(transform, @CmUI-Transition-Duration, linear);
+            }
+        }
+    }
+}

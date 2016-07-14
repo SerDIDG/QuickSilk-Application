@@ -1,5 +1,9 @@
 cm.define('App.AbstractModule', {
-    'extend' : 'Com.AbstractController'
+    'extend' : 'Com.AbstractController',
+    'params' : {
+        'renderStructure' : false,
+        'embedStructureOnRender' : false
+    }
 },
 function(params){
     var that = this;

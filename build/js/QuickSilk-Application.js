@@ -1,11 +1,11 @@
-/*! ************ QuickSilk-Application v3.11.1 (2016-07-06 19:37) ************ */
+/*! ************ QuickSilk-Application v3.11.2 (2016-07-14 22:21) ************ */
 
 // /* ************************************************ */
 // /* ******* QUICKSILK: COMMON ******* */
 // /* ************************************************ */
 
 var App = {
-    '_version' : '3.11.1',
+    '_version' : '3.11.2',
     'Elements': {},
     'Nodes' : {},
     'Test' : []
@@ -13,7 +13,11 @@ var App = {
 
 var Module = {};
 cm.define('App.AbstractModule', {
-    'extend' : 'Com.AbstractController'
+    'extend' : 'Com.AbstractController',
+    'params' : {
+        'renderStructure' : false,
+        'embedStructureOnRender' : false
+    }
 },
 function(params){
     var that = this;
@@ -102,10 +106,10 @@ function(params){
         var index;
         if(cm.isNumber(that.params['instanceId']) || cm.isString(that.params['instanceId'])){
             that.params['name'] = [that.params['type'], that.params['instanceId'], that.params['positionId']].join('_');
-            that.params['zoneName'] = [that.params['type'], that.params['instanceId'], that.params['parentId'], that.params['zone']].join('_');
+            that.params['zoneName'] = [that.params['type'], that.params['instanceId'], that.params['positionId'], that.params['zone']].join('_');
         }else{
             that.params['name'] = [that.params['type'], that.params['positionId']].join('_');
-            that.params['zoneName'] = [that.params['type'], that.params['parentId'], that.params['zone']].join('_');
+            that.params['zoneName'] = [that.params['type'], that.params['positionId'], that.params['zone']].join('_');
         }
         if(index = that.params['node'].getAttribute('data-index')){
             that.params['index'] = parseInt(index);
@@ -2921,7 +2925,7 @@ cm.getConstructor('App.MenuConstructorPreview', function(classConstructor, class
         // Less Parser
         cm.loadScript({
             'path' : 'less',
-            'src' : '%assetsUrl%/libs/less/less.min.js',
+            'src' : '%assetsUrl%/libs/less/less.min.js?%version%',
             'callback' : function(path){
                 if(path){
                     that.components['less'] = path;
@@ -4086,7 +4090,7 @@ cm.define('App.Stylizer', {
             ],
             'line-height' : [8, 10, 12, 16, 20, 24, 28, 32, 36, 40, 48, 56, 64, 72, 80, 88, 96, 108, 120],
             'font-size' : [8, 9, 10, 11, 12, 13, 14, 18, 20, 22, 24, 28, 32, 36, 42, 48, 54, 60, 72, 96],
-            'font-weight' : [100, 300, 400, 600, 700, 800],
+            'font-weight' : [100, 300, 400, 600, 700, 900],
             'font-style' : ['normal', 'italic'],
             'text-decoration' : ['none', 'underline']
         },
@@ -4122,11 +4126,14 @@ cm.define('App.Stylizer', {
         },
         'langs' : {
             '100' : 'Thin',
+            '200' : 'Extra Light',
             '300' : 'Light',
             '400' : 'Regular',
-            '600' : 'Semi-Bold',
+            '500' : 'Medium',
+            '600' : 'Semi Bold',
             '700' : 'Bold',
-            '800' : 'Extra-Bold'
+            '800' : 'Extra Bold',
+            '900' : 'Black'
         }
     }
 },
@@ -4929,15 +4936,15 @@ function(params){
 
     var validateParams = function(){
         if(that.params['link']){
-            that.params['linkName'] = [that.params['link']['type'], that.params['link']['parentId'], that.params['zone']].join('_');
-            that.params['blockName'] = [that.params['link']['type'], that.params['link']['parentId']].join('_');
+            that.params['linkName'] = [that.params['link']['type'], that.params['link']['positionId'], that.params['zone']].join('_');
+            that.params['blockName'] = [that.params['link']['type'], that.params['link']['positionId']].join('_');
         }else{
-            that.params['blockName'] = [that.params['type'], that.params['parentId']].join('_');
+            that.params['blockName'] = [that.params['type'], that.params['positionId']].join('_');
         }
         if(cm.isNumber(that.params['instanceId']) || cm.isString(that.params['instanceId'])){
-            that.params['name'] = [that.params['type'], that.params['instanceId'], that.params['parentId'], that.params['zone']].join('_');
+            that.params['name'] = [that.params['type'], that.params['instanceId'], that.params['positionId'], that.params['zone']].join('_');
         }else{
-            that.params['name'] = [that.params['type'], that.params['parentId'], that.params['zone']].join('_');
+            that.params['name'] = [that.params['type'], that.params['positionId'], that.params['zone']].join('_');
         }
     };
 
@@ -5130,6 +5137,91 @@ function(params){
     Com.elFinderFileManagerContainer.apply(that, arguments);
 });
 
+cm.define('Module.LogoCarousel', {
+    'extend' : 'App.AbstractModule',
+    'params' : {
+        'duration' : 500,     // ms per slide
+        'delay' : 1000,
+        'columns' : 0
+    }
+},
+function(params){
+    var that = this;
+    that.isInfinite = false;
+    that.interval = null;
+    that.iteration = -1;
+    that.length = 0;
+    that.width = 0;
+    // Call parent class construct
+    App.AbstractModule.apply(that, arguments);
+});
+
+cm.getConstructor('Module.LogoCarousel', function(classConstructor, className, classProto){
+    var _inherit = classProto._inherit;
+
+    classProto.construct = function(){
+        var that = this;
+        // Bind context to methods
+        that.validateParamsProcessHandler = that.validateParamsProcess.bind(that);
+        // Add events
+        that.addEvent('onValidateParamsProcess', that.validateParamsProcessHandler);
+        // Call parent method
+        _inherit.prototype.construct.apply(that, arguments);
+        return that;
+    };
+
+    classProto.validateParamsProcess = function(){
+        var that = this;
+        that.isInfinite = !that.params['delay'];
+        return that;
+    };
+
+    classProto.render = function(){
+        var that = this;
+        // Call parent method
+        _inherit.prototype.render.apply(that, arguments);
+        // Start
+        that.start();
+        return that;
+    };
+
+    classProto.renderViewModel = function(){
+        var that = this;
+        //
+        that.length = that.nodes['items'].length;
+        // Set animation
+        that.isInfinite && cm.addClass(that.nodes['container'], 'is-infinite');
+        // Init Animation
+        //that.components['animation'] = new cm.Animation(that.nodes['itemsContainer']);
+        return that;
+    };
+
+    classProto.start = function(){
+        var that = this;
+        //that.move();
+        return that;
+    };
+
+    classProto.move = function(){
+        var that = this;
+        that.interval && clearTimeout(that.interval);
+        that.interval = setTimeout(function(){
+            if(that.item){
+                cm.remove(that.item['container']);
+            }
+            //that.nodes['itemsContainer'].style.paddingLeft = that.width + 'px';
+            that.iteration++;
+            that.item = that.nodes['items'][that.iteration];
+            var clone = cm.clone(that.item, true);
+            that.nodes['items'].push(clone);
+            that.width += that.item['container'].offsetWidth;
+            cm.appendChild(clone['container'], that.nodes['itemsContainer']);
+            cm.setCSSTranslate(that.nodes['itemsContainer'], (-that.width + 'px'), '0px');
+            that.move();
+        }, that.params['delay']);
+        return that;
+    };
+});
 cm.define('Module.Menu', {
     'extend' : 'App.AbstractModule',
     'params' : {

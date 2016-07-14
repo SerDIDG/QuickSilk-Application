@@ -34,7 +34,7 @@ cm.getConstructor('App.MenuConstructorPreview', function(classConstructor, class
         // Less Parser
         cm.loadScript({
             'path' : 'less',
-            'src' : '%assetsUrl%/libs/less/less.min.js',
+            'src' : '%assetsUrl%/libs/less/less.min.js?%version%',
             'callback' : function(path){
                 if(path){
                     that.components['less'] = path;
