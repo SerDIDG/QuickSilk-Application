@@ -1,4 +1,4 @@
-/*! ************ QuickSilk-Application v3.11.2 (2016-07-14 22:21) ************ */
+/*! ************ QuickSilk-Application v3.11.2 (2016-07-15 17:35) ************ */
 
 // /* ************************************************ */
 // /* ******* QUICKSILK: COMMON ******* */
@@ -54,7 +54,7 @@ cm.define('App.Block', {
         'instanceId' : false,
         'positionId' : 0,
         'zone' : 0,
-        'parentId' : 0,
+        'parentPositionId' : 0,
         'layerId' : 0,
         'index' : false,
         'locked' : false,
@@ -106,10 +106,10 @@ function(params){
         var index;
         if(cm.isNumber(that.params['instanceId']) || cm.isString(that.params['instanceId'])){
             that.params['name'] = [that.params['type'], that.params['instanceId'], that.params['positionId']].join('_');
-            that.params['zoneName'] = [that.params['type'], that.params['instanceId'], that.params['positionId'], that.params['zone']].join('_');
+            that.params['zoneName'] = [that.params['type'], that.params['instanceId'], that.params['parentPositionId'], that.params['zone']].join('_');
         }else{
             that.params['name'] = [that.params['type'], that.params['positionId']].join('_');
-            that.params['zoneName'] = [that.params['type'], that.params['positionId'], that.params['zone']].join('_');
+            that.params['zoneName'] = [that.params['type'], that.params['parentPositionId'], that.params['zone']].join('_');
         }
         if(index = that.params['node'].getAttribute('data-index')){
             that.params['index'] = parseInt(index);
@@ -4900,9 +4900,8 @@ cm.define('App.Zone', {
         'type' : 'template-manager',            // template-manager | form-manager | mail | remove
         'instanceId' : false,
         'zone' : 0,
-        'parentId' : 0,
         'layerId' : 0,
-        'link' : false,                         // {'parentId' : 0, 'layerId' : 0, type' : ''}
+        'link' : false,                         // {'positionId' : 0, 'layerId' : 0, type' : ''}
         'locked' : false,
         'editorName' : 'app-editor'
     }

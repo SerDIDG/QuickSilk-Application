@@ -15,9 +15,8 @@ cm.define('App.Zone', {
         'type' : 'template-manager',            // template-manager | form-manager | mail | remove
         'instanceId' : false,
         'zone' : 0,
-        'parentId' : 0,
         'layerId' : 0,
-        'link' : false,                         // {'parentId' : 0, 'layerId' : 0, type' : ''}
+        'link' : false,                         // {'positionId' : 0, 'layerId' : 0, type' : ''}
         'locked' : false,
         'editorName' : 'app-editor'
     }
