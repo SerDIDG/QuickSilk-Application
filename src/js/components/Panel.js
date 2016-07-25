@@ -30,7 +30,6 @@ cm.define('App.Panel', {
         'customEvents' : true,
         'constructCollector' : true,
         'removeOnDestruct' : true,
-
         'type' : 'full',                                // sidebar | story | full
         'duration' : 'cm._config.animDurationLong',
         'autoOpen' : true,
@@ -407,7 +406,7 @@ cm.getConstructor('App.Panel', function(classConstructor, className, classProto)
             cm.insertFirst(that.nodes['back'], that.nodes['title']);
         }
         // Buttons
-        that.nodes['buttons'] = that.renderButtons();
+        that.renderButtonsView();
         if(that.params['showButtons']){
             cm.appendChild(that.nodes['buttons'], that.nodes['inner']);
         }
@@ -516,7 +515,7 @@ cm.getConstructor('App.Panel', function(classConstructor, className, classProto)
         return that;
     };
 
-    classProto.renderButtons = function(){
+    classProto.renderButtonsView = function(){
         var that = this;
         that.nodes['button'] = {};
         // Structure
@@ -545,7 +544,7 @@ cm.getConstructor('App.Panel', function(classConstructor, className, classProto)
         cm.addEvent(that.nodes['button']['cancel'], 'click', that.cancelHandler);
         cm.addEvent(that.nodes['button']['saving'], 'click', that.cancelHandler);
         cm.addEvent(that.nodes['button']['reload'], 'click', that.loadHandler);
-        return that.nodes['buttons'];
+        return that;
     };
 
     classProto.windowKeydown = function(e){

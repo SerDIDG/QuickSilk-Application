@@ -43,7 +43,8 @@ cm.getConstructor('App.MenuConstructor', function(classConstructor, className, c
         cm.forEach(App.MenuConstructorNames, function(name, variable){
             var item = {
                 'variable' : variable,
-                'name' : that.renameTableName(name)
+                'name' : that.getName(name),
+                'selfName' : that.getSelfName(name)
             };
             cm.find('*', item['name'], that.nodes['container'], function(classObject){
                 item['controller'] = classObject;
@@ -63,7 +64,7 @@ cm.getConstructor('App.MenuConstructor', function(classConstructor, className, c
         return that;
     };
 
-    classProto.renameTableName = function(name){
+    classProto.getName = function(name){
         var that = this;
         return that.params['namePrefix']
             + name
@@ -72,6 +73,11 @@ cm.getConstructor('App.MenuConstructor', function(classConstructor, className, c
                     return '[' + value + ']';
                 })
                 .join('');
+    };
+
+    classProto.getSelfName = function(name){
+        var that = this;
+        return name.split('.').pop();
     };
 
     classProto.processPreview = function(){

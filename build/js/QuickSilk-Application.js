@@ -1,11 +1,11 @@
-/*! ************ QuickSilk-Application v3.12.0 (2016-07-18 19:53) ************ */
+/*! ************ QuickSilk-Application v3.12.1 (2016-07-25 17:37) ************ */
 
 // /* ************************************************ */
 // /* ******* QUICKSILK: COMMON ******* */
 // /* ************************************************ */
 
 var App = {
-    '_version' : '3.12.0',
+    '_version' : '3.12.1',
     'Elements': {},
     'Nodes' : {},
     'Test' : []
@@ -2652,7 +2652,8 @@ cm.getConstructor('App.MenuConstructor', function(classConstructor, className, c
         cm.forEach(App.MenuConstructorNames, function(name, variable){
             var item = {
                 'variable' : variable,
-                'name' : that.renameTableName(name)
+                'name' : that.getName(name),
+                'selfName' : that.getSelfName(name)
             };
             cm.find('*', item['name'], that.nodes['container'], function(classObject){
                 item['controller'] = classObject;
@@ -2672,7 +2673,7 @@ cm.getConstructor('App.MenuConstructor', function(classConstructor, className, c
         return that;
     };
 
-    classProto.renameTableName = function(name){
+    classProto.getName = function(name){
         var that = this;
         return that.params['namePrefix']
             + name
@@ -2681,6 +2682,11 @@ cm.getConstructor('App.MenuConstructor', function(classConstructor, className, c
                     return '[' + value + ']';
                 })
                 .join('');
+    };
+
+    classProto.getSelfName = function(name){
+        var that = this;
+        return name.split('.').pop();
     };
 
     classProto.processPreview = function(){
@@ -3019,7 +3025,6 @@ cm.define('App.Panel', {
         'customEvents' : true,
         'constructCollector' : true,
         'removeOnDestruct' : true,
-
         'type' : 'full',                                // sidebar | story | full
         'duration' : 'cm._config.animDurationLong',
         'autoOpen' : true,
@@ -3396,7 +3401,7 @@ cm.getConstructor('App.Panel', function(classConstructor, className, classProto)
             cm.insertFirst(that.nodes['back'], that.nodes['title']);
         }
         // Buttons
-        that.nodes['buttons'] = that.renderButtons();
+        that.renderButtonsView();
         if(that.params['showButtons']){
             cm.appendChild(that.nodes['buttons'], that.nodes['inner']);
         }
@@ -3505,7 +3510,7 @@ cm.getConstructor('App.Panel', function(classConstructor, className, classProto)
         return that;
     };
 
-    classProto.renderButtons = function(){
+    classProto.renderButtonsView = function(){
         var that = this;
         that.nodes['button'] = {};
         // Structure
@@ -3534,7 +3539,7 @@ cm.getConstructor('App.Panel', function(classConstructor, className, classProto)
         cm.addEvent(that.nodes['button']['cancel'], 'click', that.cancelHandler);
         cm.addEvent(that.nodes['button']['saving'], 'click', that.cancelHandler);
         cm.addEvent(that.nodes['button']['reload'], 'click', that.loadHandler);
-        return that.nodes['buttons'];
+        return that;
     };
 
     classProto.windowKeydown = function(e){
