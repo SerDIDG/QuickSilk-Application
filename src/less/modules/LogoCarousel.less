@@ -3,14 +3,13 @@
 .mod__logo-carousel {
     .pt__grid {
         > ul {
-            .mx__transition(transform, @CmUI-Transition-Duration);
+            position: relative;
         }
     }
 
     &.is-infinite {
         .pt__grid {
             > ul {
-                .mx__transition(transform, @CmUI-Transition-Duration, linear);
             }
         }
     }
@@ -18,7 +17,6 @@
     &.is-immediately {
         .pt__grid {
             > ul {
-                .cm__transition-none;
             }
         }
     }

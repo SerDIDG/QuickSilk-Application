@@ -1,4 +1,4 @@
-/*! ************ QuickSilk-Application v3.12.2 (2016-07-25 19:50) ************ */
+/*! ************ QuickSilk-Application v3.12.2 (2016-07-26 17:36) ************ */
 
 // /* ************************************************ */
 // /* ******* QUICKSILK: COMMON ******* */
@@ -5232,7 +5232,8 @@ cm.getConstructor('Module.LogoCarousel', function(classConstructor, className, c
         that.itemsLength = that.items.length;
         // Set animation
         that.isInfinite && cm.addClass(that.nodes['container'], 'is-infinite');
-        cm.setCSSTransitionDuration(that.nodes['itemsContainer'], that.params['duration']);
+        //cm.setCSSTransitionDuration(that.nodes['itemsContainer'], that.params['duration']);
+        that.components['animation'] = new cm.Animation(that.nodes['itemsContainer']);
         // Set hover event
         cm.addEvent(that.nodes['container'], 'mouseover', that.mouseOverEventHandler);
         cm.addEvent(that.nodes['container'], 'mouseout', that.mouseOutEventHandler);
@@ -5290,7 +5291,11 @@ cm.getConstructor('Module.LogoCarousel', function(classConstructor, className, c
             that.current = that.items.shift();
             that.items.push(that.current);
             // Move
-            cm.setCSSTranslate(that.nodes['itemsContainer'], (-that.current['container'].offsetWidth + 'px'), '0px');
+            that.components['animation'].go({
+                'style' : {'left' : (-that.current['container'].offsetWidth + 'px')},
+                'duration' : that.params['duration'],
+                'anim' : that.isInfinite ? 'linear' : 'smooth'
+            });
         }
         return that;
     };
@@ -5299,7 +5304,7 @@ cm.getConstructor('Module.LogoCarousel', function(classConstructor, className, c
         var that = this;
         if(that.current){
             cm.addClass(that.nodes['container'], 'is-immediately', true);
-            cm.setCSSTranslate(that.nodes['itemsContainer'], '0px', '0px');
+            that.nodes['itemsContainer'].style.left = '0px';
             cm.insertLast(that.current['container'], that.nodes['itemsContainer']);
             cm.removeClass(that.nodes['container'], 'is-immediately', true);
         }

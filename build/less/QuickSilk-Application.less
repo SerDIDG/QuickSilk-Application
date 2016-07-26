@@ -1,4 +1,4 @@
-/*! ************ QuickSilk-Application v3.12.2 (2016-07-25 19:50) ************ */
+/*! ************ QuickSilk-Application v3.12.2 (2016-07-26 17:36) ************ */
 
 // /* ************************************************ */
 // /* ******* QUICKSILK: VARIABLES: ICONS ******* */
@@ -3840,14 +3840,13 @@ html {
 .mod__logo-carousel {
     .pt__grid {
         > ul {
-            .mx__transition(transform, @CmUI-Transition-Duration);
+            position: relative;
         }
     }
 
     &.is-infinite {
         .pt__grid {
             > ul {
-                .mx__transition(transform, @CmUI-Transition-Duration, linear);
             }
         }
     }
@@ -3855,7 +3854,6 @@ html {
     &.is-immediately {
         .pt__grid {
             > ul {
-                .cm__transition-none;
             }
         }
     }
