@@ -1,11 +1,11 @@
-/*! ************ QuickSilk-Application v3.12.3 (2016-07-26 17:58) ************ */
+/*! ************ QuickSilk-Application v3.12.4 (2016-07-26 22:19) ************ */
 
 // /* ************************************************ */
 // /* ******* QUICKSILK: COMMON ******* */
 // /* ************************************************ */
 
 var App = {
-    '_version' : '3.12.3',
+    '_version' : '3.12.4',
     'Elements': {},
     'Nodes' : {},
     'Test' : []
@@ -345,6 +345,7 @@ function(params){
     that.isGracefulDegradation = false;
     that.isScrollProccess = false;
     that.isProccess = false;
+    that.pointerType = null;
     that.components = {};
     that.anim = {};
 
@@ -465,8 +466,16 @@ function(params){
             getCurrentBelow(params)
         );
         // Add events
-        cm.addEvent(window, 'mousemove', move);
-        cm.addEvent(window, 'mouseup', stop);
+        switch(that.pointerType){
+            case 'mouse' :
+                cm.addEvent(window, 'mousemove', move);
+                cm.addEvent(window, 'mouseup', stop);
+                break;
+            case 'touch' :
+                cm.addEvent(window, 'touchmove', move);
+                cm.addEvent(window, 'touchend', stop);
+                break;
+        }
         cm.addEvent(window, 'scroll', scroll);
     };
 
@@ -512,8 +521,16 @@ function(params){
         that.components['overlays'].close();
         cm.removeClass(document.body, 'app__dashboard__body');
         // Remove events attached on document and template
-        cm.removeEvent(window, 'mousemove', move);
-        cm.removeEvent(window, 'mouseup', stop);
+        switch(that.pointerType){
+            case 'mouse' :
+                cm.removeEvent(window, 'mousemove', move);
+                cm.removeEvent(window, 'mouseup', stop);
+                break;
+            case 'touch' :
+                cm.removeEvent(window, 'touchmove', move);
+                cm.removeEvent(window, 'touchend', stop);
+                break;
+        }
         cm.removeEvent(window, 'scroll', scroll);
     };
 
@@ -536,8 +553,16 @@ function(params){
             'bottom' : null
         };
         cm.forEach(item.getDragNodes(), function(node){
-            cm.addEvent(node, 'mousedown', function(e){
+            cm.addEvent(node, 'touchstart', function(e){
+                that.pointerType = 'touch';
                 start(e, item);
+            });
+            cm.addEvent(node, 'mousedown', function(e){
+                that.pointerType = 'mouse';
+                start(e, item);
+            });
+            cm.addEvent(node, 'contextmenu', function(e){
+                cm.preventDefault(e);
             });
         });
         resetBlock(item);
@@ -612,7 +637,7 @@ function(params){
             that.triggerEvent('onRemoveStart', block);
         }
         // Check if widget exists and placed in DOM
-        if(cm.hasParentNode(block.node)){
+        if(block.node && cm.hasParentNode(block.node)){
             // Update block dimensions
             block.updateDimensions();
             // Init drop state
@@ -1123,7 +1148,12 @@ function(params){
 
     var initDummyBlock = function(item){
         cm.forEach(item.getDragNodes(), function(node){
+            cm.addEvent(node, 'touchstart', function(e){
+                that.pointerType = 'touch';
+                start(e, item);
+            });
             cm.addEvent(node, 'mousedown', function(e){
+                that.pointerType = 'mouse';
                 start(e, item);
             });
         });
