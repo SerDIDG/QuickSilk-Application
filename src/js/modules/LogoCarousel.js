@@ -12,8 +12,9 @@ function(params){
     var that = this;
     that.items = {};
     that.itemsLength = 0;
-    that.isProccess = false;
     that.isInfinite = false;
+    that.isAnimate = true;
+    that.isProccess = false;
     that.moveInterval = null;
     that.current = null;
     that.columns = 0;
@@ -48,6 +49,7 @@ cm.getConstructor('Module.LogoCarousel', function(classConstructor, className, c
         var that = this;
         that.isInfinite = !that.params['delay'];
         that.delay = that.params['duration'] + that.params['delay'];
+        that.isAnimate = !(!that.params['duration'] && !that.params['duration']);
         return that;
     };
 
@@ -89,7 +91,6 @@ cm.getConstructor('Module.LogoCarousel', function(classConstructor, className, c
         that.itemsLength = that.items.length;
         // Set animation
         that.isInfinite && cm.addClass(that.nodes['container'], 'is-infinite');
-        //cm.setCSSTransitionDuration(that.nodes['itemsContainer'], that.params['duration']);
         that.components['animation'] = new cm.Animation(that.nodes['itemsContainer']);
         // Set hover event
         cm.addEvent(that.nodes['container'], 'mouseover', that.mouseOverEventHandler);
@@ -141,7 +142,7 @@ cm.getConstructor('Module.LogoCarousel', function(classConstructor, className, c
 
     classProto.moveProcess = function(){
         var that = this;
-        if(that.isProccess && that.itemsLength > that.columns){
+        if(that.isAnimate && that.isProccess && that.itemsLength > that.columns){
             // Remove previous slide
             that.restore();
             // Get current
