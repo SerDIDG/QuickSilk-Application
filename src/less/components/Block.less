@@ -13,7 +13,8 @@
         margin: 0;
     }
 
-    &:hover {
+    &:hover,
+    &:active {
         z-index: 10;
         .mx__transition(z-index, @CmUI-Transition-DurationReverse);
 
@@ -47,7 +48,8 @@
             .mx__transition(opacity, @CmUI-Transition-Duration);
         }
 
-        &:hover {
+        &:hover,
+        &:active {
             > .app__block {
                 .pt__editable__bundle > .hover;
             }

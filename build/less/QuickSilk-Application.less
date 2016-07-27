@@ -1,4 +1,4 @@
-/*! ************ QuickSilk-Application v3.12.4 (2016-07-26 22:19) ************ */
+/*! ************ QuickSilk-Application v3.12.5 (2016-07-27 20:14) ************ */
 
 // /* ************************************************ */
 // /* ******* QUICKSILK: VARIABLES: ICONS ******* */
@@ -1533,7 +1533,8 @@ html {
         margin: 0;
     }
 
-    &:hover {
+    &:hover,
+    &:active {
         z-index: 10;
         .mx__transition(z-index, @CmUI-Transition-DurationReverse);
 
@@ -1567,7 +1568,8 @@ html {
             .mx__transition(opacity, @CmUI-Transition-Duration);
         }
 
-        &:hover {
+        &:hover,
+        &:active {
             > .app__block {
                 .pt__editable__bundle > .hover;
             }
@@ -3197,6 +3199,7 @@ html {
                     }
 
                     &:hover,
+                    &:active,
                     &.active {
                         > a {
                             background-color: @AppTopMenu-HoverBackground;

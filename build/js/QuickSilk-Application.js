@@ -1,11 +1,11 @@
-/*! ************ QuickSilk-Application v3.12.4 (2016-07-26 22:19) ************ */
+/*! ************ QuickSilk-Application v3.12.5 (2016-07-27 20:14) ************ */
 
 // /* ************************************************ */
 // /* ******* QUICKSILK: COMMON ******* */
 // /* ************************************************ */
 
 var App = {
-    '_version' : '3.12.4',
+    '_version' : '3.12.5',
     'Elements': {},
     'Nodes' : {},
     'Test' : []
@@ -428,15 +428,16 @@ function(params){
 
     var start = function(e, block){
         cm.preventDefault(e);
+        // Prevent drag event not on LMB
+        if(e.button){
+            return;
+        }
         // Prevent multiple drag event
         if(that.isProccess || that.currentBlock){
             return;
         }
-        // Prevent drag event not on LMB
-        if(!cm.isTouch && e.button){
-            return;
-        }
         that.isProccess = true;
+        that.pointerType = e.type;
         // Variables
         var params = getPosition(e);
         cm.addClass(document.body, 'app__dashboard__body');
@@ -467,11 +468,11 @@ function(params){
         );
         // Add events
         switch(that.pointerType){
-            case 'mouse' :
+            case 'mousedown' :
                 cm.addEvent(window, 'mousemove', move);
                 cm.addEvent(window, 'mouseup', stop);
                 break;
-            case 'touch' :
+            case 'touchstart' :
                 cm.addEvent(window, 'touchmove', move);
                 cm.addEvent(window, 'touchend', stop);
                 break;
@@ -522,11 +523,11 @@ function(params){
         cm.removeClass(document.body, 'app__dashboard__body');
         // Remove events attached on document and template
         switch(that.pointerType){
-            case 'mouse' :
+            case 'mousedown' :
                 cm.removeEvent(window, 'mousemove', move);
                 cm.removeEvent(window, 'mouseup', stop);
                 break;
-            case 'touch' :
+            case 'touchstart' :
                 cm.removeEvent(window, 'touchmove', move);
                 cm.removeEvent(window, 'touchend', stop);
                 break;
@@ -554,11 +555,9 @@ function(params){
         };
         cm.forEach(item.getDragNodes(), function(node){
             cm.addEvent(node, 'touchstart', function(e){
-                that.pointerType = 'touch';
                 start(e, item);
             });
             cm.addEvent(node, 'mousedown', function(e){
-                that.pointerType = 'mouse';
                 start(e, item);
             });
             cm.addEvent(node, 'contextmenu', function(e){
@@ -1149,11 +1148,9 @@ function(params){
     var initDummyBlock = function(item){
         cm.forEach(item.getDragNodes(), function(node){
             cm.addEvent(node, 'touchstart', function(e){
-                that.pointerType = 'touch';
                 start(e, item);
             });
             cm.addEvent(node, 'mousedown', function(e){
-                that.pointerType = 'mouse';
                 start(e, item);
             });
         });
