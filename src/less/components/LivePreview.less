@@ -1,0 +1,260 @@
+/* ******* COMPONENTS: LIVE PREVIEW ******* */
+
+.app__live-preview__menu {
+    position: relative;
+}
+
+.app__live-preview__content {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    background: #ffffff;
+    overflow: auto;
+    .mx__justify-content(center);
+    .mx__align-items(center);
+
+    .container {
+        .clearfix;
+        .display-flex;
+        width: 100%;
+        height: 100%;
+        position: relative;
+        .mx__align-items(center);
+        .mx__justify-content(center);
+    }
+
+    .device {
+        position: relative;
+        .mx__box-sizing(content-box);
+        .mx__transition(all, @CmUI-Transition-Duration, @CmUI-MotionAsymmetric);
+
+        .device__power {
+            width: 56px;
+            height: 5px;
+            margin: 0 0 1px;
+            position: absolute;
+            background-color: inherit;
+            border-radius: 3px 3px 0 0;
+            .mx__position(auto, auto, 100%, 0);
+            .mx__transition(all, @CmUI-Transition-Duration, @CmUI-MotionAsymmetric);
+
+            &:active {
+                height: 3px;
+            }
+        }
+
+        .device__camera {
+            width: 16px;
+            height: 16px;
+            position: absolute;
+            margin: auto;
+            background-color: inherit;
+            border: 1px solid #ffffff;
+            border-radius: 100%;
+            .mx__position(16px, 0, auto, 0);
+            .mx__background-clip(border-box);
+            .mx__transition(all, @CmUI-Transition-Duration, @CmUI-MotionAsymmetric);
+        }
+
+        .device__screen {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            position: relative;
+            background-color: #000000;
+
+            iframe {
+                width: 100%;
+                height: 100%;
+                background: #ffffff;
+            }
+        }
+
+        .device__content {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            z-index: 1;
+            .mx__transition(transform, @AppLivePreview-Device-Duration, @CmUI-MotionAsymmetric);
+
+            &.is-hidden {
+                .mx__transform(scaleY(0));
+            }
+
+            &.is-loading {
+                opacity: 0;
+            }
+        }
+
+        .device__loader {
+            .display-flex;
+            position: absolute;
+            z-index: 2;
+            background-color: #000000;
+            .mx__position(0, 0, 0, 0);
+            .mx__align-items(center);
+            .mx__justify-content(center);
+            .mx__transition(all, @AppLivePreview-Device-Duration, @CmUI-MotionAsymmetric);
+
+            .icon {
+                margin: 0 auto;
+                color: @CmColor-Font-Opposite;
+                .cm-i__size(@CmSize-XXLarge);
+                .cm-i__b-size(@CmSize-XXLarge);
+            }
+
+            &.is-hidden {
+                visibility: hidden;
+                .mx__transform(scaleY(0));
+            }
+
+            &.is-loaded {
+                visibility: hidden;
+                opacity: 0;
+            }
+        }
+
+        .device__blues {
+            .cm__scroll-y-a;
+            position: absolute;
+            z-index: 1;
+            background-color: @AppColor-QuickSilk;
+            .mx__position(0, 0, 0, 0);
+            .mx__align-items(center);
+            .mx__justify-content(center);
+            .mx__transition(all, @AppLivePreview-Device-Duration, @CmUI-MotionAsymmetric);
+
+            > .inner {
+                padding: @CmIndent-XXSmall;
+            }
+
+            .cm__tags {
+                .cm__font--ui;
+                color: @CmColor-Font-Opposite;
+                word-wrap: break-word;
+            }
+
+            &.is-hidden {
+                .mx__transform(scaleY(0));
+            }
+
+            &.is-loading {
+                opacity: 0;
+            }
+        }
+    }
+
+    &.is-desktop {
+        .container {
+            min-height: 0;
+        }
+
+        .device {
+            width: 100%;
+            height: 100%;
+
+            .device__screen {
+                border-radius: 0;
+            }
+
+            .device__power,
+            .device__camera {
+                opacity: 0;
+                visibility: hidden;
+            }
+        }
+    }
+
+    &.is-tablet {
+        .container {
+            min-height: @AppLivePreview-Tablet-Height + ((@AppLivePreview-Tablet-Indent + @AppLivePreview-Tablet-BorderY) * 2);
+        }
+
+        .device {
+            width: @AppLivePreview-Tablet-Width;
+            height: @AppLivePreview-Tablet-Height;
+            margin: @AppLivePreview-Tablet-Indent;
+            padding: @AppLivePreview-Tablet-Border;
+            border-radius: @AppLivePreview-Tablet-BorderRadius;
+            background-color: @AppLivePreview-Tablet-BorderColor;
+
+            .device__screen {
+                border-radius: @AppLivePreview-Tablet-ScreenRadius;
+            }
+
+            .device__power,
+            .device__camera {
+                opacity: 1;
+                visibility: visible;
+            }
+
+            .device__power {
+                left: @AppLivePreview-Tablet-BorderX;
+            }
+        }
+    }
+
+    &.is-mobile {
+        .container {
+            min-height: @AppLivePreview-Mobile-Height + ((@AppLivePreview-Mobile-Indent + @AppLivePreview-Mobile-BorderY) * 2);
+        }
+
+        .device {
+            width: @AppLivePreview-Mobile-Width;
+            height: @AppLivePreview-Mobile-Height;
+            margin: @AppLivePreview-Mobile-Indent;
+            padding: @AppLivePreview-Mobile-Border;
+            border-radius: @AppLivePreview-Mobile-BorderRadius;
+            background-color: @AppLivePreview-Mobile-BorderColor;
+
+            .device__screen {
+                border-radius: @AppLivePreview-Mobile-ScreenRadius;
+            }
+
+            .device__power,
+            .device__camera {
+                opacity: 1;
+                visibility: visible;
+            }
+
+            .device__power {
+                left: @AppLivePreview-Mobile-BorderX;
+            }
+        }
+    }
+}
+
+/* *** TABLET VIEW *** */
+
+@media only screen and (max-width: @CmScreen-Tablet) {
+
+    html.is-adaptive {
+        .app__live-preview__menu {
+            .menu__center {
+                display: none;
+            }
+        }
+
+        .app__live-preview__content {
+            overflow: hidden;
+
+            .container {
+                min-height: 0;
+            }
+
+            .device {
+                width: 100%;
+                height: 100%;
+                margin: 0;
+                padding: 0;
+                border-radius: 0;
+
+                .device__power,
+                .device__camera {
+                    visibility: hidden;
+                }
+            }
+        }
+    }
+
+}

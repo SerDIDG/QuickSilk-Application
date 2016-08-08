@@ -1,11 +1,11 @@
-/*! ************ QuickSilk-Application v3.12.5 (2016-07-27 20:14) ************ */
+/*! ************ QuickSilk-Application v3.13.0 (2016-08-08 20:21) ************ */
 
 // /* ************************************************ */
 // /* ******* QUICKSILK: COMMON ******* */
 // /* ************************************************ */
 
 var App = {
-    '_version' : '3.12.5',
+    '_version' : '3.13.0',
     'Elements': {},
     'Nodes' : {},
     'Test' : []
@@ -32,7 +32,6 @@ function(params){
     // Call parent class construct
     Com.AbstractController.apply(that, arguments);
 });
-
 cm.define('App.Block', {
     'modules' : [
         'Params',
@@ -2572,6 +2571,271 @@ function(params){
     // Call parent class construct
     Com.ImageInput.apply(that, arguments);
 });
+cm.define('App.LivePreviewContent', {
+    'extend' : 'Com.AbstractController',
+    'params' : {
+        'name' : 'app-livepreview',
+        'renderStructure' : true,
+        'embedStructureOnRender' : false,
+        'Com.Overlay' : {
+            'removeOnClose' : true,
+            'showSpinner' : true,
+            'showContent' : false,
+            'position' : 'absolute',
+            'theme' : 'light'
+        }
+    }
+},
+function(params){
+    var that = this;
+    that.isPower = true;
+    that.isPowerProcess = false;
+    that.powerCount = 0;
+    // Call parent class construct
+    Com.AbstractController.apply(that, arguments);
+});
+
+cm.getConstructor('App.LivePreviewContent', function(classConstructor, className, classProto){
+    var _inherit = classProto._inherit;
+
+    classProto.construct = function(){
+        var that = this;
+        // Bind context to methods
+        that.devicePowerToggleHandler = that.devicePowerToggle.bind(that);
+        // Call parent method
+        _inherit.prototype.construct.apply(that, arguments);
+        return that;
+    };
+
+    classProto.renderView = function(){
+        var that = this;
+        that.renderLoaderView();
+        return that;
+    };
+
+    classProto.renderViewModel = function(){
+        var that = this;
+        // Call parent method
+        _inherit.prototype.renderViewModel.apply(that, arguments);
+        // Init Overlay
+        cm.getConstructor('Com.Overlay', function(classConstructor, className){
+            that.components['overlay'] = new classConstructor(
+                cm.merge(that.params[className], {
+                    'container' : that.nodes['deviceScreen']
+                })
+            );
+        });
+        // IFrame Load Event
+        cm.addEvent(that.nodes['iframe'], 'load', function(){
+            that.components['overlay'] && that.components['overlay'].close();
+        });
+        // Device
+        cm.addEvent(that.nodes['devicePower'], 'mousedown', that.devicePowerToggleHandler);
+        return that;
+    };
+
+    classProto.setView = function(type){
+        var that = this;
+        cm.removeClass(that.nodes['container'], 'is-desktop is-tablet is-mobile');
+        cm.addClass(that.nodes['container'], ['is', type].join('-'));
+        return that;
+    };
+
+    classProto.setTemplate = function(src){
+        var that = this;
+        that.components['overlay'] && that.components['overlay'].open();
+        that.nodes['iframe'].src = src;
+        return that;
+    };
+
+    classProto.renderLoaderView = function(){
+        var that = this;
+        // Render loader
+        that.nodes['loader'] = {};
+        that.nodes['loader']['container'] = cm.node('div', {'class' : 'device__loader is-hidden'},
+            cm.node('div', {'class' : 'inner'},
+                cm.node('div', {'class' : 'icon app-i__quicksilk'})
+            )
+        );
+        // Render Blues
+        that.nodes['blues'] = {};
+        that.nodes['blues']['container'] = cm.node('div', {'class' : 'device__blues is-hidden'},
+            cm.node('div', {'class' : 'inner'},
+                cm.node('p', 'A problem has been detected and QuickSilk has been shut down to prevent damage to your device.'),
+                cm.node('p', 'The problem seems to be caused by the following file: FAKEPOWERBUTTON.SYS'),
+                cm.node('p', 'POWER_FAULT_IN_NONPOWERED_BUTTON'),
+                cm.node('p', 'If this is the first time you\'ve seen this Stop error screen, restart your device. If this screen appears again, check to make sure you are not pressing power button.'),
+                cm.node('p', 'Technical Information:'),
+                cm.node('p', '*** START'),
+                cm.node('p', '010101000110100001100101011100100110010100100000011000010111001001100101001000000110111001101111001000000100010101100001011100110111010001100101011100100010000001000101011001110110011101110011001000000111010101110000001000000110100001100101011100100110010100101100001000000110011101101111001000000110000101110111011000010111100100100001'),
+                cm.node('p', '*** END')
+            )
+        );
+        // Embed
+        cm.appendChild(that.nodes['blues']['container'], that.nodes['deviceScreen']);
+        cm.appendChild(that.nodes['loader']['container'], that.nodes['deviceScreen']);
+        return that;
+    };
+
+    classProto.devicePowerToggle = function(){
+        var that = this;
+        if(!that.isPowerProcess){
+            if(that.isPower){
+                that.devicePowerOff();
+            }else{
+                that.devicePowerOn();
+            }
+        }
+        return that;
+    };
+
+    classProto.devicePowerOff = function(){
+        var that = this;
+        that.isPower = false;
+        that.isPowerProcess = true;
+        cm.addClass(that.nodes['deviceContent'], 'is-hidden');
+        cm.addClass(that.nodes['blues']['container'], 'is-hidden');
+        setTimeout(function(){
+            that.isPowerProcess = false;
+        }, 500);
+        return that;
+    };
+
+    classProto.devicePowerOn = function(){
+        var that = this;
+        that.powerCount++;
+        that.isPower = true;
+        that.isPowerProcess = true;
+        if(that.powerCount == 1){
+            that.devicePowerOnFailed();
+        }else{
+            that.devicePowerOnNormal();
+        }
+        return that;
+    };
+
+    classProto.devicePowerOnNormal = function(){
+        var that = this;
+        cm.replaceClass(that.nodes['deviceContent'], 'is-hidden', 'is-loading');
+        cm.removeClass(that.nodes['loader']['container'], 'is-hidden');
+        setTimeout(function(){
+            cm.removeClass(that.nodes['deviceContent'], 'is-loading');
+            cm.addClass(that.nodes['loader']['container'], 'is-loaded');
+            setTimeout(function(){
+                cm.replaceClass(that.nodes['loader']['container'] , 'is-loaded', 'is-hidden');
+                setTimeout(function(){
+                    that.isPowerProcess = false;
+                }, 500);
+            }, 500);
+        }, 1500);
+        return that;
+    };
+
+    classProto.devicePowerOnFailed = function(){
+        var that = this;
+        cm.replaceClass(that.nodes['blues']['container'], 'is-hidden', 'is-loading');
+        cm.removeClass(that.nodes['loader']['container'], 'is-hidden');
+        setTimeout(function(){
+            cm.removeClass(that.nodes['blues']['container'], 'is-loading');
+            cm.addClass(that.nodes['loader']['container'], 'is-loaded');
+            setTimeout(function(){
+                cm.replaceClass(that.nodes['loader']['container'] , 'is-loaded', 'is-hidden');
+                setTimeout(function(){
+                    that.isPowerProcess = false;
+                }, 500);
+            }, 500);
+        }, 1500);
+        return that;
+    };
+});
+cm.define('App.LivePreviewMenu', {
+    'extend' : 'Com.AbstractController',
+    'params' : {
+        'name' : 'app-livepreview',
+        'topMenuName' : 'app-topmenu',
+        'contentName' : 'app-livepreview',
+        'renderStructure' : false,
+        'embedStructureOnRender' : false
+    }
+},
+function(params){
+    var that = this;
+    that.template = null;
+    // Call parent class construct
+    Com.AbstractController.apply(that, arguments);
+});
+
+cm.getConstructor('App.LivePreviewMenu', function(classConstructor, className, classProto){
+    var _inherit = classProto._inherit;
+
+    classProto.renderViewModel = function(){
+        var that = this;
+        // Call parent method
+        _inherit.prototype.renderViewModel.apply(that, arguments);
+        // Find Select
+        cm.find('Com.Select', 'templates', that.nodes['container'], function(classInstance){
+            that.components['select'] = classInstance;
+            that.components['select'].addEvent('onChange', function(my, data){
+                that.setTemplate(data);
+            });
+            that.setTemplate(that.components['select'].get());
+        });
+        // Find TopMenu
+        new cm.Finder('App.TopMenu', that.params['topMenuName'], null, function(classInstance){
+            that.components['topMenu'] = classInstance;
+        });
+        // Find Content
+        new cm.Finder('App.LivePreviewContent', that.params['contentName'], null, function(classInstance){
+            that.components['content'] = classInstance;
+        });
+        // Set events
+        cm.addEvent(that.nodes['desktop'], 'click', function(){
+            that.reset();
+            that.setView('desktop');
+        });
+        cm.addEvent(that.nodes['tablet'], 'click', function(){
+            that.reset();
+            that.setView('tablet');
+        });
+        cm.addEvent(that.nodes['mobile'], 'click', function(){
+            that.reset();
+            that.setView('mobile');
+        });
+        cm.addEvent(that.nodes['select'], 'click', function(){
+            that.storageWrite('template', that.template);
+            try{
+                window.close();
+            }catch(e){}
+        });
+        return that;
+    };
+
+    classProto.reset = function(){
+        var that = this;
+        cm.removeClass(that.nodes['desktop'], 'active');
+        cm.removeClass(that.nodes['tablet'], 'active');
+        cm.removeClass(that.nodes['mobile'], 'active');
+        return that;
+    };
+
+    classProto.setView = function(type){
+        var that = this;
+        cm.addClass(that.nodes[type], 'active');
+        that.components['content'] && that.components['content'].setView(type);
+        // Collapse menu (mobile)
+        that.components['topMenu'] && that.components['topMenu'].collapse();
+        return that;
+    };
+
+    classProto.setTemplate = function(src){
+        var that = this;
+        that.template = src;
+        that.components['content'] && that.components['content'].setTemplate(src);
+        // Collapse menu (mobile)
+        that.components['topMenu'] && that.components['topMenu'].collapse();
+        return that;
+    };
+});
 cm.define('App.LoginBox', {
     'modules' : [
         'Params',
@@ -4854,6 +5118,7 @@ function(params){
     that.expand = function(){
         if(!that.isExpanded){
             that.isExpanded = true;
+            cm.addClass(that.nodes['button'], 'active');
             cm.replaceClass(that.nodes['container'], 'is-collapsed', 'is-expanded');
             cm.replaceClass(that.params['target'], 'is-topmenu--collapsed', 'is-topmenu--expanded', true);
             that.triggerEvent('onExpand');
@@ -4864,6 +5129,7 @@ function(params){
     that.collapse = function(){
         if(that.isExpanded){
             that.isExpanded = false;
+            cm.removeClass(that.nodes['button'], 'active');
             cm.replaceClass(that.nodes['container'], 'is-expanded', 'is-collapsed');
             cm.replaceClass(that.params['target'], 'is-topmenu--expanded', 'is-topmenu--collapsed', true);
             that.triggerEvent('onCollapse');
@@ -5256,6 +5522,8 @@ cm.getConstructor('Module.LogoCarousel', function(classConstructor, className, c
 
     classProto.renderViewModel = function(){
         var that = this;
+        // Call parent method
+        _inherit.prototype.renderViewModel.apply(that, arguments);
         // Items
         that.items = cm.clone(that.nodes['items']);
         that.itemsLength = that.items.length;

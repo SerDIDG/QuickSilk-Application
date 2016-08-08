@@ -3,6 +3,10 @@
 /* *** STATES *** */
 
 html {
+    &.is-wrap {
+        overflow: hidden;
+    }
+
     &.is-topmenu {
         .app__sidebar {
             top: @AppTopMenu-Height;
@@ -10,6 +14,10 @@ html {
 
         .app__panel {
             top: @AppTopMenu-Height;
+        }
+
+        .app__content {
+            margin-top: @AppTopMenu-Height;
         }
 
         .tpl__container {
@@ -22,6 +30,10 @@ html {
     }
 
     &.is-sidebar {
+        .app__content {
+            margin-left: @AppSidebar-WidthCollapsed;
+        }
+
         .tpl__container {
             margin-left: @AppSidebar-WidthCollapsed;
         }
@@ -34,6 +46,10 @@ html {
     }
 
     &.is-sidebar--expanded {
+        .app__content {
+            margin-left: @AppSidebar-WidthExpanded;
+        }
+
         .tpl__container {
             margin-left: @AppSidebar-WidthExpanded;
         }

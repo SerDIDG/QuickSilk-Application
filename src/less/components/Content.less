@@ -1,0 +1,35 @@
+/* ******* COMPONENTS: CONTENT ******** */
+
+.app__content {
+    &.is-wrap {
+        position: absolute;
+        .mx__position(0, 0, 0, 0);
+    }
+
+    > iframe {
+        width: 100%;
+        height: 100%;
+    }
+}
+
+/* ******* COMPONENTS: CONTENT: ADAPTIVE ******* */
+
+@media only screen and (max-width : @CmUI-AdaptiveFrom) {
+
+    html.is-adaptive {
+        .app__content {
+            margin-left: 0 !important;
+        }
+    }
+
+}
+
+/* ******* COMPONENTS: TEMPLATE: PRINT ******** */
+
+@media print {
+
+    .app__content {
+        margin: 0 !important;
+    }
+
+}

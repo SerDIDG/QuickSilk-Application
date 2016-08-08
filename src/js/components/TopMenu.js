@@ -60,6 +60,7 @@ function(params){
     that.expand = function(){
         if(!that.isExpanded){
             that.isExpanded = true;
+            cm.addClass(that.nodes['button'], 'active');
             cm.replaceClass(that.nodes['container'], 'is-collapsed', 'is-expanded');
             cm.replaceClass(that.params['target'], 'is-topmenu--collapsed', 'is-topmenu--expanded', true);
             that.triggerEvent('onExpand');
@@ -70,6 +71,7 @@ function(params){
     that.collapse = function(){
         if(that.isExpanded){
             that.isExpanded = false;
+            cm.removeClass(that.nodes['button'], 'active');
             cm.replaceClass(that.nodes['container'], 'is-expanded', 'is-collapsed');
             cm.replaceClass(that.params['target'], 'is-topmenu--expanded', 'is-topmenu--collapsed', true);
             that.triggerEvent('onCollapse');

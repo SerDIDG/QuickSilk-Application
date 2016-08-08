@@ -513,6 +513,7 @@
 
 @PtToolbar-GroupIndent: @CmIndent-Small;
 @PtToolbar-ItemIndent: @CmIndent-XXXSmall;
+@PtToolbar-ItemIndents: @CmUI-ColumnIndent;
 @PtToolbar-XXXSmall: 32px;
 @PtToolbar-XXSmall: 56px;
 @PtToolbar-XSmall: 76px;
@@ -944,7 +945,7 @@
 
 @AppIconVars-Family: 'QuickSilk-Glyphs';
 @AppIconVars-Color: @CmIconVars-Color;
-@AppIconVars-Version: 23;
+@AppIconVars-Version: 26;
 
 @AppIcon-QuickSilk: '\e600';
 @AppIcon-Plus: '\e601';
@@ -963,6 +964,10 @@
 @AppIcon-CircleStar: '\e705';
 @AppIcon-CircleFlash: '\e706';
 @AppIcon-CircleActions: '\e706';
+
+@AppIcon-Desktop: '\e900';
+@AppIcon-Tablet: '\e901';
+@AppIcon-Mobile: '\e902';
 
 // /* ******* COMPONENTS ******* */
 
@@ -1131,6 +1136,12 @@
 // /* ******* COMMON ******* */
 // /* ************************************************ */
 
+// /* ******* COLORS ******* */
+
+@AppColor-QuickSilk: #0060a0;
+@AppColor-UI-Panel: #000;
+@AppColor-UI-PanelBlock: @CmColor-Primary-DarkActiveHover;
+
 // /* ******* AREA ******* */
 
 @AppUI-Zone-Width: @CmIndent-XLarge;
@@ -1166,8 +1177,10 @@
 
 @AppTopMenu-Height: @CmSize-XLarge;
 @AppTopMenu-Duration: 300ms;
-@AppTopMenu-Background: #000000;
+@AppTopMenu-Background: @AppColor-UI-Panel;
 @AppTopMenu-Color: @CmColor-Font-Opposite;
+@AppTopMenu-ColorHover: @CmColor-Font-Opposite;
+@AppTopMenu-ColorActive: @AppTopMenu-Background;
 @AppTopMenu-HoverBackground: @CmColor-Primary-DarkDefault;
 @AppTopMenu-ItemIndent: 1px;
 @AppTopMenu-ItemBorder: @CmBorder-Width solid rgba(255,255,255,0.4);
@@ -1178,7 +1191,7 @@
 
 @AppSidebar-Width: @AppUI-SidebarWidth;
 @AppSidebar-Menu-Width: @CmSize-XLarge;
-@AppSidebar-Menu-Background: #000000;
+@AppSidebar-Menu-Background: @AppColor-UI-Panel;
 @AppSidebar-Content-Width: @AppSidebar-Width - @AppSidebar-Menu-Width;
 @AppSidebar-Content-Indent: @CmIndent-XSmall;
 @AppSidebar-Title-Height: @AppUI-TitleHeight;
@@ -1280,6 +1293,30 @@
 @AppPanel-Preview-ContentIndent: @CmIndent-XLarge;
 
 @AppPanel-Box-Indent: @CmIndent-Medium @AppPanel-Dialog-Indent;
+
+// /* ******* LIVE PREVIEW ******* */
+
+@AppLivePreview-Device-Duration: @CmUI-Transition-DurationLong;
+
+@AppLivePreview-Tablet-Width: 1024px;
+@AppLivePreview-Tablet-Height: 640px;
+@AppLivePreview-Tablet-Indent: @CmIndent-Medium;
+@AppLivePreview-Tablet-BorderY: @CmSize-XLarge;
+@AppLivePreview-Tablet-BorderX: @CmSize-XLarge;
+@AppLivePreview-Tablet-Border: @AppLivePreview-Tablet-BorderY @AppLivePreview-Tablet-BorderX;
+@AppLivePreview-Tablet-BorderRadius: 16px;
+@AppLivePreview-Tablet-BorderColor: #262626;
+@AppLivePreview-Tablet-ScreenRadius: 3px;
+
+@AppLivePreview-Mobile-Width: 320px;
+@AppLivePreview-Mobile-Height: 568px;
+@AppLivePreview-Mobile-Indent: @CmIndent-Medium;
+@AppLivePreview-Mobile-BorderY: @CmSize-XLarge;
+@AppLivePreview-Mobile-BorderX: @CmIndent-XSmall;
+@AppLivePreview-Mobile-Border: @AppLivePreview-Mobile-BorderY @AppLivePreview-Mobile-BorderX;
+@AppLivePreview-Mobile-BorderRadius: 16px;
+@AppLivePreview-Mobile-BorderColor: #262626;
+@AppLivePreview-Mobile-ScreenRadius: 3px;
 
 // /* ************************************************ */
 // /* ******* MODULES ******* */

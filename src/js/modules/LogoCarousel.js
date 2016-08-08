@@ -86,6 +86,8 @@ cm.getConstructor('Module.LogoCarousel', function(classConstructor, className, c
 
     classProto.renderViewModel = function(){
         var that = this;
+        // Call parent method
+        _inherit.prototype.renderViewModel.apply(that, arguments);
         // Items
         that.items = cm.clone(that.nodes['items']);
         that.itemsLength = that.items.length;

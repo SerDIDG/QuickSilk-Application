@@ -14,16 +14,21 @@
         position: relative;
     }
 
-    .icon {
+    // /* Icon */
+
+    .menu__icon {
+        display: inline-block;
+        vertical-align: top;
         color: @AppTopMenu-Color;
         line-height: @AppTopMenu-Height;
         .cm-i__size(@CmSize-Large);
         .cm-i__b-size(@AppTopMenu-Height);
+        .mx__transition(all, @CmUI-Transition-Duration);
     }
 
     // /* QuickSilk Logo */
 
-    .menu-logo {
+    .menu__logo {
         position: relative;
         z-index: 3;
         display: block;
@@ -35,22 +40,45 @@
         }
     }
 
+    // /* Title */
+
+    .menu__title {
+        .cm__font--ui-h1;
+        .cm__text-nowrap;
+        position: relative;
+        z-index: 3;
+        line-height: @AppTopMenu-Height;
+        color: @CmColor-Font-Opposite;
+    }
+
     // /* Menu  */
 
-    .menu-button {
-        .icon.medium.menu-white;
-        .icon.linked;
+    .menu__holder-button {
         width: @AppTopMenu-Height;
         height: @AppTopMenu-Height;
         display: none;
         position: absolute;
         z-index: 3;
-        background-position: 50% 50%;
-        background-repeat: no-repeat;
+        cursor: pointer;
         .mx__position(0, 0, 0, auto);
+
+        > .icon {
+            .cm__size__medium;
+            .icon.linked;
+            .cm-ia__menu;
+            position: absolute;
+            margin: auto;
+            .mx__position(0,0,0,0);
+        }
+
+        &.active {
+            > .icon {
+                .cm-ia__menu--active;
+            }
+        }
     }
 
-    .menu-holder {
+    .menu__holder {
         position: absolute;
         z-index: 1;
         .mx__position(0, 0, 0, 0);
@@ -116,6 +144,31 @@
 @media only screen and (min-width : (@CmUI-AdaptiveFrom + 1px)) {
     html.is-adaptive {
         .app__topmenu {
+            .menu__title {
+                float: left;
+                margin-left: @CmIndent-XSmall;
+            }
+
+            .menu__right {
+                float: right;
+            }
+
+            .menu__left {
+                float: left;
+                margin: 0 0 0 @CmIndent-XLarge;
+            }
+
+            .menu__block {
+                .display-flex;
+                height: @AppTopMenu-Height;
+                .mx__align-items(center);
+            }
+
+            .menu__toolbar {
+                .menu__block;
+                padding: 0 @CmIndent-XSmall;
+            }
+
             .menu {
                 .cm__list-inline;
 
@@ -139,11 +192,6 @@
                         .check-first-level(@AppTopMenu-Dropdown-FirstLevel);
                     }
 
-                    .icon {
-                        display: inline-block;
-                        vertical-align: top;
-                    }
-
                     &.has-icon {
                         > a {
                             padding-left: 0;
@@ -162,15 +210,35 @@
 
                     &:hover,
                     &:active,
-                    &.active {
-                        > a {
-                            background-color: @AppTopMenu-HoverBackground;
-                            color: @AppTopMenu-Color;
-                            .mx__transition(all, @CmUI-Transition-DurationReverse);
-                        }
-
+                    &.active,
+                    &.is-show {
                         > .pt__menu-dropdown {
                             .pt__menu-dropdown--active;
+                        }
+                    }
+
+                    &:hover,
+                    &:active {
+                        > a {
+                            background-color: @AppTopMenu-HoverBackground;
+                            color: @AppTopMenu-ColorHover;
+                            .mx__transition(all, @CmUI-Transition-DurationReverse);
+
+                            .menu__icon {
+                                color: @AppTopMenu-ColorHover;
+                            }
+                        }
+                    }
+
+                    &.active {
+                        > a {
+                            background-color: #ffffff;
+                            color: @AppTopMenu-ColorActive;
+                            .mx__transition(all, @CmUI-Transition-DurationReverse);
+
+                            .menu__icon {
+                                color: @AppTopMenu-ColorActive;
+                            }
                         }
                     }
                 }
@@ -179,24 +247,17 @@
                     .app__topmenu__dropdown--desktop;
                     z-index: 1;
                 }
-
-                &.right {
-                    float: right;
-                }
-
-                &.left {
-                    float: left;
-                    margin: 0 0 0 @CmIndent-XLarge;
-                }
             }
         }
     }
 }
 
+/* *** DESKTOP > 5x4 *** */
+
 @media only screen and (min-width: 1281px) {
     html.is-adaptive {
         .app__topmenu {
-            .menu-centered {
+            .menu__center {
                 position: absolute;
                 margin: 0 50%;
                 .mx__position(0, auto, 0, auto);
@@ -214,9 +275,16 @@
     }
 }
 
+/* *** DESKTOP <= 5x4 *** */
+
 @media only screen and (min-width : (@CmUI-AdaptiveFrom + 1px)) and (max-width: 1280px) {
     html.is-adaptive {
         .app__topmenu {
+            .menu__center {
+                float: right;
+                margin: 0 0 0 @AppTopMenu-ItemIndent;
+            }
+
             .menu {
                 > li {
                     font-size: 12px;
@@ -236,13 +304,24 @@
                     }
                 }
             }
+        }
+    }
+}
 
-            .menu-centered {
-                float: right;
-                margin: 0 0 0 @AppTopMenu-ItemIndent;
+/* *** TABLET VIEW *** */
+
+@media only screen and (min-width : (@CmUI-AdaptiveFrom + 1px)) and (max-width: @CmScreen-Tablet) {
+
+    html.is-adaptive {
+        .app__topmenu {
+            .menu__title {
+                .cm__font--ui-h4;
+                line-height: @AppTopMenu-Height;
+                color: @CmColor-Font-Opposite;
             }
         }
     }
+
 }
 
 /* *** MOBILE VIEW *** */
@@ -262,49 +341,62 @@
                 }
             }
 
-            .menu-button {
+            .menu__title {
+                .cm__font--ui-h4;
+                margin-left: @AppTopMenu-Height;
+                margin-right: @AppTopMenu-Height;
+                line-height: @AppTopMenu-Height;
+                color: @CmColor-Font-Opposite;
+                text-align: center;
+            }
+
+            .menu__holder-button {
                 display: block;
             }
 
-            .menu-holder {
+            .menu__holder {
                 display: block;
                 position: fixed;
                 visibility: hidden;
                 .mx__transform(translate3d(0, -100%, 0));
-                .mx__transition(transform visibility, @AppTopMenu-Duration);
-                .mx__position(0, 0, 0, 0);
+                .mx__transition(transform visibility, @AppTopMenu-Duration, @CmUI-MotionAsymmetric);
+                .mx__position(@AppTopMenu-Height, 0, 0, 0);
 
                 > .inner {
                     .cm__scroll-y-a;
                     position: absolute;
                     padding: 0;
                     background-color: @AppTopMenu-Background;
-                    .mx__position(@AppTopMenu-Height, 0, 0, 0);
+                    .mx__position(0, 0, 0, 0);
                 }
             }
 
-            .menu {
-                margin: 0;
+            .menu__block {
+                margin: @CmIndent-XXSmall;
                 padding: 0;
+                border-radius: @CmBorder-Radius;
+                background-color: @AppColor-UI-PanelBlock;
+                overflow: hidden;
+            }
+
+            .menu__toolbar {
+                .menu__block;
+                padding: @CmIndent-XSmall;
+            }
+
+            .menu {
+                .menu__block;
                 position: relative;
                 float: none;
-                border-top: @AppTopMenu-ItemBorder;
 
                 li {
                     display: block;
-                    margin: 0;
-                    border: none;
                     border-top: @AppTopMenu-ItemBorder;
                     line-height: @AppTopMenu-Height;
                     .mx__background-clip(padding-box);
 
                     &:first-child {
-                        margin: 0;
                         border-top: none;
-                    }
-
-                    &:before {
-                        display: none;
                     }
 
                     &.has-dropdown {
@@ -313,8 +405,10 @@
                         }
                     }
 
-                    .icon {
-                        display: none;
+                    &.has-icon {
+                        > a {
+                            padding-left: 0;
+                        }
                     }
                 }
 
@@ -340,14 +434,14 @@
             }
 
             &.is-collapsed {
-                .menu-holder {
+                .menu__holder {
                     visibility: hidden;
                     .mx__transform(translate3d(0, -100%, 0));
                 }
             }
 
             &.is-expanded {
-                .menu-holder {
+                .menu__holder {
                     visibility: visible;
                     .mx__transform(translate3d(0, 0, 0));
                 }
@@ -357,7 +451,7 @@
 
 }
 
-/* *******  LAYOUTS: TOP MENU: PRINT ******* */
+/* ******* COMPONENTS: TOP MENU: PRINT ******* */
 
 @media print {
 
