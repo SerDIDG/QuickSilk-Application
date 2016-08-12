@@ -1,4 +1,4 @@
-/*! ************ QuickSilk-Application v3.13.0 (2016-08-08 20:21) ************ */
+/*! ************ QuickSilk-Application v3.13.0 (2016-08-12 20:49) ************ */
 
 // /* ************************************************ */
 // /* ******* QUICKSILK: COMMON ******* */
@@ -2982,7 +2982,8 @@ cm.getConstructor('App.MenuConstructor', function(classConstructor, className, c
 
     classProto.processPreview = function(){
         var that = this,
-            data = {};
+            data = {},
+            split;
         cm.forEach(that.items, function(item){
             if(item['value'] !== undefined){
                 switch(item['value']['_type']){
@@ -2995,6 +2996,12 @@ cm.getConstructor('App.MenuConstructor', function(classConstructor, className, c
                         });
                         break;
                     default:
+                        if(/BorderSize|Padding/.test(item['variable'])){
+                            split = item['value'].split(/\s+/);
+                            cm.forEach(App.MenuConstructorNamesBox, function(name, i){
+                                data[[item['variable'], name].join('-')] = split[i];
+                            });
+                        }
                         data[item['variable']] = item['value'];
                         break;
                 }
@@ -3005,6 +3012,8 @@ cm.getConstructor('App.MenuConstructor', function(classConstructor, className, c
 });
 
 /* ******* NAMES ******* */
+
+App.MenuConstructorNamesBox = ['Top', 'Right', 'Bottom', 'Left'];
 
 App.MenuConstructorNamesFont = {
     'line-height' : 'LineHeight',
@@ -3235,21 +3244,41 @@ cm.getConstructor('App.MenuConstructorPreview', function(classConstructor, class
             that.components['menu'] = classObject;
         });
         // Toolbar - Background Switcher
-        cm.find('Com.ColorPicker', 'background', that.nodes['title'], function(classObject){
+        cm.find('Com.ColorPicker', 'background', that.nodes['title']['container'], function(classObject){
             that.components['background'] = classObject;
             that.components['background'].addEvent('onChange', function(my, data){
                 that.nodes['contentInner'].style.backgroundColor = data;
             });
         });
         // Toolbar - View Switcher
-        cm.find('Com.Select', 'view', that.nodes['title'], function(classObject){
+        cm.find('Com.Select', 'view', that.nodes['title']['container'], function(classObject){
             that.components['view'] = classObject;
             that.components['view'].addEvent('onChange', function(my, data){
                 that.components['menu'] && that.components['menu'].setView(data);
+                switch(data){
+                    case 'horizontal':
+                        that.components['submenu'] && that.components['submenu'].set('dropdown');
+                        cm.addClass(that.nodes['title']['toolbar']['submenu'], 'is-hidden');
+                        break;
+                    case 'vertical':
+                        that.components['submenu'] && that.components['submenu'].set('visible');
+                        cm.removeClass(that.nodes['title']['toolbar']['submenu'], 'is-hidden');
+                        break;
+                    case 'mobile':
+                        cm.addClass(that.nodes['title']['toolbar']['submenu'], 'is-hidden');
+                        break;
+                }
+            });
+        });
+        // Toolbar - Submenu View Switcher
+        cm.find('Com.Select', 'submenu', that.nodes['title']['container'], function(classObject){
+            that.components['submenu'] = classObject;
+            that.components['submenu'].addEvent('onChange', function(my, data){
+                that.components['menu'] && that.components['menu'].setSubmenuView(data);
             });
         });
         // Toolbar - Align Switcher
-        cm.find('Com.Select', 'align', that.nodes['title'], function(classObject){
+        cm.find('Com.Select', 'align', that.nodes['title']['container'], function(classObject){
             that.components['align'] = classObject;
             that.components['align'].addEvent('onChange', function(my, data){
                 that.components['menu'] && that.components['menu'].setAlign(data);
@@ -5629,7 +5658,10 @@ cm.define('Module.Menu', {
         'embedStructure' : 'none',
         'renderStructure' : false,
         'name' : '',
-        'type' : 'horizontal'           // horizontal | vertical
+        'view' : 'horizontal',                      // horizontal | vertical
+        'submenu' : 'visible',                      // visible | dropdown | specific | collapsible
+        'duration' : 'cm._config.animDuration',
+        'delay' : 'cm._config.hideDelay'
     }
 },
 function(params){
@@ -5640,6 +5672,7 @@ function(params){
         }
     };
     that.alignValues = ['left', 'center', 'right', 'justify'];
+    that.submeniViewValues = ['visible', 'dropdown', 'specific', 'collapsible'];
     // Call parent class construct
     App.AbstractModule.apply(that, arguments);
 });
@@ -5662,6 +5695,90 @@ cm.getConstructor('Module.Menu', function(classConstructor, className, classProt
         _inherit.prototype.renderViewModel.apply(that, arguments);
         // Events
         cm.addEvent(that.nodes['select']['select'], 'change', that.processSelectHandler);
+        // Submenu
+        that.processSubMenu(that.nodes['menu']['items']);
+        return that;
+    };
+
+    classProto.processSubMenu = function(items){
+        var that = this;
+        cm.forEach(items, function(item){
+            if(item['sub']){
+                that.processSubMenuItem(item);
+                that.processSubMenu(item['sub']['items']);
+            }
+        });
+        return that;
+    };
+
+    classProto.processSubMenuItem = function(item){
+        var that = this;
+        // Init animation
+        item['sub']['_animate'] = new cm.Animation(item['sub']['container']);
+        item['sub']['_visible'] = cm.isClass(item['container'], 'active');
+        // Set events
+        if(!item['sub']['_visible']){
+            cm.addEvent(item['container'], 'mouseover', function(e){
+                if(that.params['view'] == 'vertical' && that.params['submenu'] == 'collapsible'){
+                    that.showSubMenuItemCollapsible(e, item);
+                }
+            });
+            cm.addEvent(item['container'], 'mouseout', function(e){
+                if(that.params['view'] == 'vertical' && that.params['submenu'] == 'collapsible'){
+                    that.hideSubMenuItemCollapsible(e, item);
+                }
+            });
+        }
+        return that;
+    };
+
+    classProto.showSubMenuItemCollapsible = function(e, item){
+        var that = this,
+            originalHeight,
+            height;
+        item['sub']['_delay'] && clearTimeout(item['sub']['_delay']);
+        item['sub']['_delay'] = setTimeout(function(){
+            if(!item['sub']['_show']){
+                item['sub']['_show'] = true;
+                // Calculate real height
+                originalHeight = item['sub']['container'].offsetHeight;
+                item['sub']['container'].style.height = 'auto';
+                height = item['sub']['container'].offsetHeight;
+                item['sub']['container'].style.height = originalHeight + 'px';
+                // Animate
+                item['sub']['_animate'].go({
+                    'style' : {'height' : (height + 'px')},
+                    'duration' : that.params['duration'],
+                    'anim' : 'smooth',
+                    'onStop' : function(){
+                        item['sub']['container'].style.height = 'auto';
+                    }
+                });
+            }
+        }, that.params['delay']);
+        return that;
+    };
+
+    classProto.hideSubMenuItemCollapsible = function(e, item){
+        var that = this,
+            target = cm.getRelatedTarget(e);
+        if(!cm.isParent(item['container'], target, true)){
+            item['sub']['_delay'] && clearTimeout(item['sub']['_delay']);
+            item['sub']['_delay'] = setTimeout(function(){
+                if(item['sub']['_show']){
+                    item['sub']['_show'] = false;
+                    // Animate
+                    item['sub']['_animate'].go({
+                        'style' : {'height' : ('0px')},
+                        'duration' : that.params['duration'],
+                        'anim' : 'smooth',
+                        'onStop' : function(){
+                            item['sub']['container'].style.height = '';
+                        }
+                    });
+                }
+            }, that.params['delay']);
+        }
         return that;
     };
 
@@ -5676,14 +5793,17 @@ cm.getConstructor('Module.Menu', function(classConstructor, className, classProt
 
     classProto.setView = function(view){
         var that = this;
+        that.params['view'] = view;
         switch(view){
             case 'horizontal':
                 cm.removeClass(that.nodes['container'], 'is-vertical mod__menu--adaptive');
                 cm.addClass(that.nodes['container'], 'is-horizontal');
+                that.setSubmenuView('dropdown');
             break;
             case 'vertical':
                 cm.removeClass(that.nodes['container'], 'is-horizontal mod__menu--adaptive');
                 cm.addClass(that.nodes['container'], 'is-vertical');
+                that.setSubmenuView('visible');
                 break;
             case 'mobile':
                 cm.addClass(that.nodes['container'], 'mod__menu--adaptive');
@@ -5701,6 +5821,20 @@ cm.getConstructor('Module.Menu', function(classConstructor, className, classProt
             });
             // Set
             cm.addClass(that.nodes['container'], ['pull', align].join('-'));
+        }
+        return that;
+    };
+
+    classProto.setSubmenuView = function(view){
+        var that = this;
+        if(cm.inArray(that.submeniViewValues, view)){
+            // Reset
+            cm.forEach(that.submeniViewValues, function(item){
+                cm.removeClass(that.nodes['container'], ['is', item].join('-'));
+            });
+            // Set
+            that.params['submenu'] = view;
+            cm.addClass(that.nodes['container'], ['is', view].join('-'));
         }
         return that;
     };

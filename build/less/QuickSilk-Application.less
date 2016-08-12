@@ -1,4 +1,4 @@
-/*! ************ QuickSilk-Application v3.13.0 (2016-08-08 20:21) ************ */
+/*! ************ QuickSilk-Application v3.13.0 (2016-08-12 20:49) ************ */
 
 // /* ************************************************ */
 // /* ******* QUICKSILK: VARIABLES: ICONS ******* */
@@ -2673,12 +2673,14 @@ html {
         .mx__position(0, 0, 0, 0);
 
         > .title {
+            .display-flex;
             height: @AppPanel-Preview-TitleHeight;
             position: absolute;
             z-index: 3;
             background-color: @AppPanel-Preview-TitleBackground;
             .mx__position(0, 0, auto, 0);
             .mx__user-select(none);
+            .mx__justify-content(space-between);
 
             > .label {
                 .cm__font--ui-h1;
@@ -2718,14 +2720,15 @@ html {
                 }
             }
 
-            .pt__toolbar {
-                &:first-child {
-                    margin-left: @AppPanel-Preview-Indent;
-                }
+            .title__block {
+                .display-flex;
+                height: @AppPanel-Preview-TitleHeight;
+                padding: 0 @CmIndent-XSmall;
+                .mx__align-items(center);
+            }
 
-                &:last-child {
-                    margin-right: @AppPanel-Preview-Indent;
-                }
+            .title__toolbar {
+                .title__block;
             }
         }
 
@@ -2780,6 +2783,24 @@ html {
 
 .app__panel__field {
     .cm__box;
+}
+
+/* ******* COMPONENTS: PANEL: ADAPTIVE ******* */
+
+@media only screen and (max-width : @CmUI-AdaptiveFrom) {
+
+    html.is-adaptive {
+        .app__panel__preview {
+            > .inner {
+                > .title {
+                    .title__toolbar {
+                        display: none;
+                    }
+                }
+            }
+        }
+    }
+
 }
 /* ******* COMPONENTS: SIDEBAR ******* */
 
@@ -4400,6 +4421,64 @@ html {
         }
     }
 
+    // /* *** SUBMENU VIEW ***/
+
+    &.is-dropdown {
+        .menu__menu {
+            > ul {
+                > li {
+                    &:hover {
+                        > .menu__sub {
+                            .mod__menu__sub--dropdown--active;
+                        }
+                    }
+                }
+            }
+        }
+
+        .menu__sub {
+            .mod__menu__sub--dropdown;
+        }
+    }
+
+    &.is-specific {
+        .menu__menu,
+        .menu__sub {
+            li {
+                &.active {
+                    > .menu__sub {
+                        display: block;
+                    }
+                }
+            }
+        }
+
+        .menu__sub {
+            display: none;
+        }
+    }
+
+    &.is-collapsible {
+        .menu__menu,
+        .menu__sub {
+            li {
+                &.active {
+                    > .menu__sub {
+                        height: auto;
+                    }
+                }
+            }
+        }
+
+        .menu__sub {
+            height: 0;
+            overflow: hidden;
+            .mx__transition(none);
+        }
+    }
+
+    // /* *** VIEW *** */
+
     &.is-horizontal {
         .menu__menu {
             > ul {
@@ -4411,17 +4490,11 @@ html {
                         white-space: nowrap;
                     }
 
-                    &:hover {
-                        > .menu__sub {
-                            .mod__menu__sub--dropdown-active;
-                        }
+                    > .menu__sub {
+                        min-width: 100%;
                     }
                 }
             }
-        }
-
-        .menu__sub {
-            .mod__menu__sub--dropdown;
         }
     }
 
@@ -4487,37 +4560,15 @@ html {
 }
 
 .mod__menu__sub--dropdown {
-    min-width: 100%;
     visibility: hidden;
     position: absolute;
     opacity: 0;
-    .mx__position(100%, auto, auto, 0);
     .mx__transition(all, @CmUI-Transition-Duration);
-
-    &.pull-left {
-        .mx__position(100%, auto, auto, 0);
-    }
-
-    &.pull-right {
-        .mx__position(100%, 0, auto, auto);
-    }
-
-    .menu__sub {
-        .mx__position(0, auto, auto, 100%);
-
-        &.pull-left {
-            .mx__position(0, auto, auto, 100%);
-        }
-
-        &.pull-right {
-            .mx__position(0, 100%, auto, auto);
-        }
-    }
 
     li {
         &:hover {
             > .menu__sub {
-                .mod__menu__sub--dropdown-active;
+                .mod__menu__sub--dropdown--active;
             }
         }
 
@@ -4528,7 +4579,7 @@ html {
     }
 }
 
-.mod__menu__sub--dropdown-active {
+.mod__menu__sub--dropdown--active {
     visibility: visible;
     opacity: 1;
     .mx__transition(all, @CmUI-Transition-DurationReverse);
@@ -5920,10 +5971,10 @@ html {
 @Primary-Active-BackgroundPosition: top left;
 @Primary-Active-BackgroundScaling: auto;                // auto | contain | cover | 100% 100%
 @Primary-Active-BackgroundAttachment: scroll;           // scroll | fixed
-@Primary-Active-BorderSize: 0;
+@Primary-Active-BorderSize: 0px;
 @Primary-Active-BorderStyle: solid;
 @Primary-Active-BorderColor: transparent;
-@Primary-Active-BorderRadius: 0;
+@Primary-Active-BorderRadius: 0px;
 @Primary-Active-FontLineHeight: inherit;
 @Primary-Active-FontWeight: 400;                        // 100 | 300 | 400 | 600 | 700 | 800
 @Primary-Active-FontStyle: normal;                      // normal | italic
@@ -5934,17 +5985,25 @@ html {
 
 // /* *** PRIMARY CONTAINER *** */
 
-@Primary-Container-Padding: 0;
+@Primary-Container-Padding: 0px;
+@Primary-Container-Padding-Top: 0px;
+@Primary-Container-Padding-Right: 0px;
+@Primary-Container-Padding-Bottom: 0px;
+@Primary-Container-Padding-Left: 0px;
 @Primary-Container-BackgroundColor: transparent;
 @Primary-Container-BackgroundImage: none;
 @Primary-Container-BackgroundRepeat: no-repeat;         // no-repeat | repeat | repeat-x | repeat-y
 @Primary-Container-BackgroundPosition: top left;
 @Primary-Container-BackgroundScaling: auto;             // auto | contain | cover | 100% 100%
 @Primary-Container-BackgroundAttachment: scroll;        // scroll | fixed
-@Primary-Container-BorderSize: 0;
+@Primary-Container-BorderSize: 0px;
+@Primary-Container-BorderSize-Top: 0px;
+@Primary-Container-BorderSize-Right: 0px;
+@Primary-Container-BorderSize-Bottom: 0px;
+@Primary-Container-BorderSize-Left: 0px;
 @Primary-Container-BorderStyle: solid;
 @Primary-Container-BorderColor: transparent;
-@Primary-Container-BorderRadius: 0;
+@Primary-Container-BorderRadius: 0px;
 
 // /* *** SECONDARY ITEM *** */
 
@@ -6008,6 +6067,10 @@ html {
 // /* *** SECONDARY CONTAINER *** */
 
 @Secondary-Container-Padding: 4px;
+@Secondary-Container-Padding-Top: 4px;
+@Secondary-Container-Padding-Right: 4px;
+@Secondary-Container-Padding-Bottom: 4px;
+@Secondary-Container-Padding-Left: 4px;
 @Secondary-Container-BackgroundColor: #ffffff;
 @Secondary-Container-BackgroundImage: none;
 @Secondary-Container-BackgroundRepeat: no-repeat;         // no-repeat | repeat | repeat-x | repeat-y
@@ -6015,6 +6078,10 @@ html {
 @Secondary-Container-BackgroundScaling: auto;             // auto | contain | cover | 100% 100%
 @Secondary-Container-BackgroundAttachment: scroll;        // scroll | fixed
 @Secondary-Container-BorderSize: 1px;
+@Secondary-Container-BorderSize-Top: 1px;
+@Secondary-Container-BorderSize-Right: 1px;
+@Secondary-Container-BorderSize-Bottom: 1px;
+@Secondary-Container-BorderSize-Left: 1px;
 @Secondary-Container-BorderStyle: solid;
 @Secondary-Container-BorderColor: #cccccc;
 @Secondary-Container-BorderRadius: 3px;
@@ -6038,7 +6105,7 @@ html {
 
 // /* ******* STRUCTURE ******* /
 
-.mod__menu--@{ID} {
+.mod__menu.mod__menu--@{ID} {
     .menu__menu {
         > ul {
             padding: @Primary-Container-Padding;
@@ -6198,6 +6265,16 @@ html {
                 }
             }
         }
+
+        &.is-dropdown {
+            .menu__sub {
+                .mod__menu__sub-dropdown--parent-vertical;
+
+                .menu__sub {
+                    .mod__menu__sub-dropdown--horizontal;
+                }
+            }
+        }
     }
 
     &.is-vertical {
@@ -6213,9 +6290,72 @@ html {
             }
         }
 
-        .menu__sub {
-            margin-top: @Primary-Item-Indent;
+        &.is-dropdown {
+            .menu__sub {
+                .mod__menu__sub-dropdown--parent-horizontal;
+
+                .menu__sub {
+                    .mod__menu__sub-dropdown--horizontal;
+                }
+            }
         }
+
+        &:not(.is-dropdown){
+            .menu__sub {
+                > ul {
+                    margin-top: @Primary-Item-Indent;
+                }
+            }
+        }
+    }
+}
+
+// /* ******* MIXINS ******* /
+
+.mx__position (@top: auto, @right: auto, @bottom: auto, @left: auto) {
+    top: @top;
+    right: @right;
+    bottom: @bottom;
+    left: @left;
+}
+
+.mod__menu__sub-dropdown--parent-vertical () {
+    .mx__position(100%, auto, auto, 0);
+
+    &.pull-left {
+        .mx__position(100%, auto, auto, 0);
+    }
+
+    &.pull-right {
+        .mx__position(100%, 0, auto, auto);
+    }
+}
+
+.mod__menu__sub-dropdown--parent-horizontal () {
+    @indent_top: -(@Secondary-Container-Padding-Top + @Secondary-Container-BorderSize-Top);
+
+    .mx__position(@indent_top, auto, auto, ~"calc(100% + @{Primary-Container-Padding-Right} + @{Primary-Container-BorderSize-Right})");
+
+    &.pull-left {
+        .mx__position(@indent_top, auto, auto, ~"calc(100% + @{Primary-Container-Padding-Right} + @{Primary-Container-BorderSize-Right})");
+    }
+
+    &.pull-right {
+        .mx__position(@indent_top, ~"calc(100% + @{Primary-Container-Padding-Left} + @{Primary-Container-BorderSize-Left})", auto, auto);
+    }
+}
+
+.mod__menu__sub-dropdown--horizontal () {
+    @indent_top: -(@Secondary-Container-Padding-Top + @Secondary-Container-BorderSize-Top);
+
+    .mx__position(@indent_top, auto, auto, ~"calc(100% + @{Secondary-Container-Padding-Right} + @{Secondary-Container-BorderSize-Right})");
+
+    &.pull-left {
+        .mx__position(@indent_top, auto, auto, ~"calc(100% + @{Secondary-Container-Padding-Right} + @{Secondary-Container-BorderSize-Right})");
+    }
+
+    &.pull-right {
+        .mx__position(@indent_top, ~"calc(100% + @{Secondary-Container-Padding-Left} + @{Secondary-Container-BorderSize-Left})", auto, auto);
     }
 }
 /* ******* PAGES: GROUP PROFILE ******* */

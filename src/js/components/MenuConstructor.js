@@ -82,7 +82,8 @@ cm.getConstructor('App.MenuConstructor', function(classConstructor, className, c
 
     classProto.processPreview = function(){
         var that = this,
-            data = {};
+            data = {},
+            split;
         cm.forEach(that.items, function(item){
             if(item['value'] !== undefined){
                 switch(item['value']['_type']){
@@ -95,6 +96,12 @@ cm.getConstructor('App.MenuConstructor', function(classConstructor, className, c
                         });
                         break;
                     default:
+                        if(/BorderSize|Padding/.test(item['variable'])){
+                            split = item['value'].split(/\s+/);
+                            cm.forEach(App.MenuConstructorNamesBox, function(name, i){
+                                data[[item['variable'], name].join('-')] = split[i];
+                            });
+                        }
                         data[item['variable']] = item['value'];
                         break;
                 }
@@ -105,6 +112,8 @@ cm.getConstructor('App.MenuConstructor', function(classConstructor, className, c
 });
 
 /* ******* NAMES ******* */
+
+App.MenuConstructorNamesBox = ['Top', 'Right', 'Bottom', 'Left'];
 
 App.MenuConstructorNamesFont = {
     'line-height' : 'LineHeight',

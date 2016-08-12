@@ -65,14 +65,22 @@
 
 // /* *** PRIMARY CONTAINER *** */
 
-@Primary-Container-Padding: 0;
+@Primary-Container-Padding: 0px;
+@Primary-Container-Padding-Top: 0px;
+@Primary-Container-Padding-Right: 0px;
+@Primary-Container-Padding-Bottom: 0px;
+@Primary-Container-Padding-Left: 0px;
 @Primary-Container-BackgroundColor: transparent;
 @Primary-Container-BackgroundImage: none;
 @Primary-Container-BackgroundRepeat: no-repeat;         // no-repeat | repeat | repeat-x | repeat-y
 @Primary-Container-BackgroundPosition: top left;
 @Primary-Container-BackgroundScaling: auto;             // auto | contain | cover | 100% 100%
 @Primary-Container-BackgroundAttachment: scroll;        // scroll | fixed
-@Primary-Container-BorderSize: 0;
+@Primary-Container-BorderSize: 0px;
+@Primary-Container-BorderSize-Top: 0px;
+@Primary-Container-BorderSize-Right: 0px;
+@Primary-Container-BorderSize-Bottom: 0px;
+@Primary-Container-BorderSize-Left: 0px;
 @Primary-Container-BorderStyle: solid;
 @Primary-Container-BorderColor: transparent;
 @Primary-Container-BorderRadius: 0;
@@ -138,14 +146,22 @@
 
 // /* *** SECONDARY CONTAINER *** */
 
-@Secondary-Container-Padding: 0;
+@Secondary-Container-Padding: 0px;
+@Secondary-Container-Padding-Top: 0px;
+@Secondary-Container-Padding-Right: 0px;
+@Secondary-Container-Padding-Bottom: 0px;
+@Secondary-Container-Padding-Left: 0px;
 @Secondary-Container-BackgroundColor: transparent;
 @Secondary-Container-BackgroundImage: none;
 @Secondary-Container-BackgroundRepeat: no-repeat;         // no-repeat | repeat | repeat-x | repeat-y
 @Secondary-Container-BackgroundPosition: top left;
 @Secondary-Container-BackgroundScaling: auto;             // auto | contain | cover | 100% 100%
 @Secondary-Container-BackgroundAttachment: scroll;        // scroll | fixed
-@Secondary-Container-BorderSize: 0;
+@Secondary-Container-BorderSize: 0px;
+@Secondary-Container-BorderSize-Top: 0px;
+@Secondary-Container-BorderSize-Right: 0px;
+@Secondary-Container-BorderSize-Bottom: 0px;
+@Secondary-Container-BorderSize-Left: 0px;
 @Secondary-Container-BorderStyle: solid;
 @Secondary-Container-BorderColor: transparent;
 @Secondary-Container-BorderRadius: 0;
@@ -169,7 +185,7 @@
 
 // /* ******* STRUCTURE ******* /
 
-.mod__menu--@{ID} {
+.mod__menu.mod__menu--@{ID} {
     .menu__menu {
         > ul {
             padding: @Primary-Container-Padding;
@@ -329,6 +345,16 @@
                 }
             }
         }
+
+        &.is-dropdown {
+            .menu__sub {
+                .mod__menu__sub-dropdown--parent-vertical;
+
+                .menu__sub {
+                    .mod__menu__sub-dropdown--horizontal;
+                }
+            }
+        }
     }
 
     &.is-vertical {
@@ -344,8 +370,71 @@
             }
         }
 
-        .menu__sub {
-            margin-top: @Primary-Item-Indent;
+        &.is-dropdown {
+            .menu__sub {
+                .mod__menu__sub-dropdown--parent-horizontal;
+
+                .menu__sub {
+                    .mod__menu__sub-dropdown--horizontal;
+                }
+            }
         }
+
+        &:not(.is-dropdown){
+            .menu__sub {
+                > ul {
+                    margin-top: @Primary-Item-Indent;
+                }
+            }
+        }
+    }
+}
+
+// /* ******* MIXINS ******* /
+
+.mx__position (@top: auto, @right: auto, @bottom: auto, @left: auto) {
+    top: @top;
+    right: @right;
+    bottom: @bottom;
+    left: @left;
+}
+
+.mod__menu__sub-dropdown--parent-vertical () {
+    .mx__position(100%, auto, auto, 0);
+
+    &.pull-left {
+        .mx__position(100%, auto, auto, 0);
+    }
+
+    &.pull-right {
+        .mx__position(100%, 0, auto, auto);
+    }
+}
+
+.mod__menu__sub-dropdown--parent-horizontal () {
+    @indent_top: -(@Secondary-Container-Padding-Top + @Secondary-Container-BorderSize-Top);
+
+    .mx__position(@indent_top, auto, auto, ~"calc(100% + @{Primary-Container-Padding-Right} + @{Primary-Container-BorderSize-Right})");
+
+    &.pull-left {
+        .mx__position(@indent_top, auto, auto, ~"calc(100% + @{Primary-Container-Padding-Right} + @{Primary-Container-BorderSize-Right})");
+    }
+
+    &.pull-right {
+        .mx__position(@indent_top, ~"calc(100% + @{Primary-Container-Padding-Left} + @{Primary-Container-BorderSize-Left})", auto, auto);
+    }
+}
+
+.mod__menu__sub-dropdown--horizontal () {
+    @indent_top: -(@Secondary-Container-Padding-Top + @Secondary-Container-BorderSize-Top);
+
+    .mx__position(@indent_top, auto, auto, ~"calc(100% + @{Secondary-Container-Padding-Right} + @{Secondary-Container-BorderSize-Right})");
+
+    &.pull-left {
+        .mx__position(@indent_top, auto, auto, ~"calc(100% + @{Secondary-Container-Padding-Right} + @{Secondary-Container-BorderSize-Right})");
+    }
+
+    &.pull-right {
+        .mx__position(@indent_top, ~"calc(100% + @{Secondary-Container-Padding-Left} + @{Secondary-Container-BorderSize-Left})", auto, auto);
     }
 }

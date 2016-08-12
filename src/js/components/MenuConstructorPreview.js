@@ -47,21 +47,41 @@ cm.getConstructor('App.MenuConstructorPreview', function(classConstructor, class
             that.components['menu'] = classObject;
         });
         // Toolbar - Background Switcher
-        cm.find('Com.ColorPicker', 'background', that.nodes['title'], function(classObject){
+        cm.find('Com.ColorPicker', 'background', that.nodes['title']['container'], function(classObject){
             that.components['background'] = classObject;
             that.components['background'].addEvent('onChange', function(my, data){
                 that.nodes['contentInner'].style.backgroundColor = data;
             });
         });
         // Toolbar - View Switcher
-        cm.find('Com.Select', 'view', that.nodes['title'], function(classObject){
+        cm.find('Com.Select', 'view', that.nodes['title']['container'], function(classObject){
             that.components['view'] = classObject;
             that.components['view'].addEvent('onChange', function(my, data){
                 that.components['menu'] && that.components['menu'].setView(data);
+                switch(data){
+                    case 'horizontal':
+                        that.components['submenu'] && that.components['submenu'].set('dropdown');
+                        cm.addClass(that.nodes['title']['toolbar']['submenu'], 'is-hidden');
+                        break;
+                    case 'vertical':
+                        that.components['submenu'] && that.components['submenu'].set('visible');
+                        cm.removeClass(that.nodes['title']['toolbar']['submenu'], 'is-hidden');
+                        break;
+                    case 'mobile':
+                        cm.addClass(that.nodes['title']['toolbar']['submenu'], 'is-hidden');
+                        break;
+                }
+            });
+        });
+        // Toolbar - Submenu View Switcher
+        cm.find('Com.Select', 'submenu', that.nodes['title']['container'], function(classObject){
+            that.components['submenu'] = classObject;
+            that.components['submenu'].addEvent('onChange', function(my, data){
+                that.components['menu'] && that.components['menu'].setSubmenuView(data);
             });
         });
         // Toolbar - Align Switcher
-        cm.find('Com.Select', 'align', that.nodes['title'], function(classObject){
+        cm.find('Com.Select', 'align', that.nodes['title']['container'], function(classObject){
             that.components['align'] = classObject;
             that.components['align'].addEvent('onChange', function(my, data){
                 that.components['menu'] && that.components['menu'].setAlign(data);

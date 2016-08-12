@@ -252,12 +252,14 @@
         .mx__position(0, 0, 0, 0);
 
         > .title {
+            .display-flex;
             height: @AppPanel-Preview-TitleHeight;
             position: absolute;
             z-index: 3;
             background-color: @AppPanel-Preview-TitleBackground;
             .mx__position(0, 0, auto, 0);
             .mx__user-select(none);
+            .mx__justify-content(space-between);
 
             > .label {
                 .cm__font--ui-h1;
@@ -297,14 +299,15 @@
                 }
             }
 
-            .pt__toolbar {
-                &:first-child {
-                    margin-left: @AppPanel-Preview-Indent;
-                }
+            .title__block {
+                .display-flex;
+                height: @AppPanel-Preview-TitleHeight;
+                padding: 0 @CmIndent-XSmall;
+                .mx__align-items(center);
+            }
 
-                &:last-child {
-                    margin-right: @AppPanel-Preview-Indent;
-                }
+            .title__toolbar {
+                .title__block;
             }
         }
 
@@ -359,4 +362,22 @@
 
 .app__panel__field {
     .cm__box;
+}
+
+/* ******* COMPONENTS: PANEL: ADAPTIVE ******* */
+
+@media only screen and (max-width : @CmUI-AdaptiveFrom) {
+
+    html.is-adaptive {
+        .app__panel__preview {
+            > .inner {
+                > .title {
+                    .title__toolbar {
+                        display: none;
+                    }
+                }
+            }
+        }
+    }
+
 }

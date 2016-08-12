@@ -68,6 +68,64 @@
         }
     }
 
+    // /* *** SUBMENU VIEW ***/
+
+    &.is-dropdown {
+        .menu__menu {
+            > ul {
+                > li {
+                    &:hover {
+                        > .menu__sub {
+                            .mod__menu__sub--dropdown--active;
+                        }
+                    }
+                }
+            }
+        }
+
+        .menu__sub {
+            .mod__menu__sub--dropdown;
+        }
+    }
+
+    &.is-specific {
+        .menu__menu,
+        .menu__sub {
+            li {
+                &.active {
+                    > .menu__sub {
+                        display: block;
+                    }
+                }
+            }
+        }
+
+        .menu__sub {
+            display: none;
+        }
+    }
+
+    &.is-collapsible {
+        .menu__menu,
+        .menu__sub {
+            li {
+                &.active {
+                    > .menu__sub {
+                        height: auto;
+                    }
+                }
+            }
+        }
+
+        .menu__sub {
+            height: 0;
+            overflow: hidden;
+            .mx__transition(none);
+        }
+    }
+
+    // /* *** VIEW *** */
+
     &.is-horizontal {
         .menu__menu {
             > ul {
@@ -79,17 +137,11 @@
                         white-space: nowrap;
                     }
 
-                    &:hover {
-                        > .menu__sub {
-                            .mod__menu__sub--dropdown-active;
-                        }
+                    > .menu__sub {
+                        min-width: 100%;
                     }
                 }
             }
-        }
-
-        .menu__sub {
-            .mod__menu__sub--dropdown;
         }
     }
 
@@ -155,37 +207,15 @@
 }
 
 .mod__menu__sub--dropdown {
-    min-width: 100%;
     visibility: hidden;
     position: absolute;
     opacity: 0;
-    .mx__position(100%, auto, auto, 0);
     .mx__transition(all, @CmUI-Transition-Duration);
-
-    &.pull-left {
-        .mx__position(100%, auto, auto, 0);
-    }
-
-    &.pull-right {
-        .mx__position(100%, 0, auto, auto);
-    }
-
-    .menu__sub {
-        .mx__position(0, auto, auto, 100%);
-
-        &.pull-left {
-            .mx__position(0, auto, auto, 100%);
-        }
-
-        &.pull-right {
-            .mx__position(0, 100%, auto, auto);
-        }
-    }
 
     li {
         &:hover {
             > .menu__sub {
-                .mod__menu__sub--dropdown-active;
+                .mod__menu__sub--dropdown--active;
             }
         }
 
@@ -196,7 +226,7 @@
     }
 }
 
-.mod__menu__sub--dropdown-active {
+.mod__menu__sub--dropdown--active {
     visibility: visible;
     opacity: 1;
     .mx__transition(all, @CmUI-Transition-DurationReverse);
