@@ -214,6 +214,12 @@ function(params){
                     contentResizeHandler();
                     that.resizeInterval = setInterval(contentResizeHandler, 5);
                     break;
+                case 'container':
+                default:
+                    that.nodes['content'].style.minWidth = 'auto';
+                    that.nodes['content'].style.top = 'auto';
+                    that.nodes['content'].style.bottom = 'auto';
+                    break;
             }
             // Show
             that.hideInterval && clearTimeout(that.hideInterval);
@@ -259,10 +265,12 @@ function(params){
             var pageSize = cm.getPageSize();
             switch(that.params['expand']) {
                 case 'top':
+                    that.nodes['content'].style.top = 'auto';
                     that.nodes['content'].style.bottom = pageSize['winHeight'] - that.currentPosition['top'] + 'px';
                     break;
                 case 'bottom':
                     that.nodes['content'].style.top = that.currentPosition['bottom'] + 'px';
+                    that.nodes['content'].style.bottom = 'auto';
                     break;
             }
         }
