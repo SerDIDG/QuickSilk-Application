@@ -1,11 +1,11 @@
-/*! ************ QuickSilk-Application v3.13.0 (2016-08-12 20:49) ************ */
+/*! ************ QuickSilk-Application v3.14.0 (2016-08-23 20:00) ************ */
 
 // /* ************************************************ */
 // /* ******* QUICKSILK: COMMON ******* */
 // /* ************************************************ */
 
 var App = {
-    '_version' : '3.13.0',
+    '_version' : '3.14.0',
     'Elements': {},
     'Nodes' : {},
     'Test' : []
@@ -5902,11 +5902,14 @@ cm.define('App.ModuleRolloverTabs', {
     'params' : {
         'node' : cm.Node('div'),
         'name' : '',
-        'event' : 'hover',              // hover | click
+        'event' : 'hover',                          // hover | click
         'useMouseOut' : true,
         'showEmptyTab' : false,
         'duration' : 'cm._config.animDuration',
         'delay' : 'cm._config.hideDelay',
+        'width' : 'auto',
+        'attachment' : 'container',                 // container | screen
+        'expand' : 'bottom',                        // top | bottom
         'isEditing' : false,
         'customEvents' : true,
         'Com.TabsetHelper' : {}
@@ -5931,6 +5934,9 @@ function(params){
     that.isProcessing = false;
     that.hideInterval = null;
     that.changeInterval = null;
+    that.resizeInterval = null;
+    that.currentPosition = null;
+    that.previousPosition = null;
 
     var init = function(){
         getLESSVariables();
@@ -5956,6 +5962,10 @@ function(params){
     };
 
     var render = function(){
+        // Classes
+        cm.addClass(that.nodes['container'], ['attachment', that.params['attachment']].join('-'));
+        cm.addClass(that.nodes['container'], ['expand', that.params['expand']].join('-'));
+        that.nodes['content'].style.width = that.params['width'];
         // Process Tabset
         cm.getConstructor('Com.TabsetHelper', function(classConstructor, className){
             that.components['tabset'] = new classConstructor(that.params[className])
@@ -6065,6 +6075,7 @@ function(params){
     };
 
     var hide = function(){
+        that.resizeInterval && clearInterval(that.resizeInterval);
         that.hideInterval && clearTimeout(that.hideInterval);
         that.hideInterval = setTimeout(function(){
             cm.removeClass(that.nodes['content'], 'is-show');
@@ -6078,6 +6089,15 @@ function(params){
     var show = function(){
         var item = that.components['tabset'].getCurrentTab();
         if(item && (that.params['showEmptyTab'] || that.isEditing || item['tab']['inner'].childNodes.length)){
+            // Set position
+            that.resizeInterval && clearInterval(that.resizeInterval);
+            switch(that.params['attachment']) {
+                case 'screen':
+                    contentResizeHandler();
+                    that.resizeInterval = setInterval(contentResizeHandler, 5);
+                    break;
+            }
+            // Show
             that.hideInterval && clearTimeout(that.hideInterval);
             cm.addClass(that.nodes['content'], 'is-show', true);
         }
@@ -6102,6 +6122,31 @@ function(params){
             !that.isEditing && hide();
         }else{
             show();
+        }
+    };
+
+    var contentResizeHandler = function(){
+        that.previousPosition = cm.clone(that.currentPosition);
+        that.currentPosition = cm.getRect(that.nodes['container']);
+        // Variables
+        var isSameTop = that.previousPosition && that.previousPosition['top'] == that.currentPosition['top'];
+        var isSameBottom = that.previousPosition && that.previousPosition['bottom'] == that.currentPosition['bottom'];
+        var isSameWidth = that.previousPosition && that.previousPosition['width'] == that.currentPosition['width'];
+        // Set Content Min Width
+        if(!that.isEditing && !isSameWidth){
+            that.nodes['content'].style.minWidth = that.currentPosition['width'] + 'px';
+        }
+        // Set Content Position
+        if(!that.isEditing && (!isSameTop || !isSameBottom)){
+            var pageSize = cm.getPageSize();
+            switch(that.params['expand']) {
+                case 'top':
+                    that.nodes['content'].style.bottom = pageSize['winHeight'] - that.currentPosition['top'] + 'px';
+                    break;
+                case 'bottom':
+                    that.nodes['content'].style.top = that.currentPosition['bottom'] + 'px';
+                    break;
+            }
         }
     };
 

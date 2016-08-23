@@ -94,7 +94,9 @@
         }
 
         > .tabs__content {
-            position: absolute;
+            max-width: 100%;
+            margin-right: auto;
+            margin-left: auto;
             z-index: 1;
             visibility: hidden;
             opacity: 0;
@@ -135,9 +137,44 @@
         }
     }
 
+    &:not(.is-editing) {
+        &.expand-top {
+            > .inner {
+                > .tabs__content {
+                    bottom: 100%;
+                }
+            }
+        }
+
+        &.expand-bottom {
+            > .inner {
+                > .tabs__content {
+                    top: 100%;
+                }
+            }
+        }
+
+        &.attachment-container {
+            > .inner {
+                > .tabs__content {
+                    position: absolute;
+                }
+            }
+        }
+
+        &.attachment-screen {
+            > .inner {
+                > .tabs__content {
+                    position: fixed;
+                }
+            }
+        }
+    }
+
     &.is-editing {
         > .inner {
             > .tabs__content {
+                width: auto !important;
                 position: relative;
 
                 > .inner {
@@ -157,7 +194,7 @@
         &.expand-top {
             > .inner {
                 > .tabs__content {
-                    bottom: auto;
+                    bottom: auto !important;
                 }
             }
         }
@@ -165,7 +202,7 @@
         &.expand-bottom {
             > .inner {
                 > .tabs__content {
-                    top: auto;
+                    top: auto !important;
                 }
             }
         }
@@ -411,7 +448,7 @@
     &.expand-bottom {
         > .inner {
             > .tabs__content {
-                top: ~'calc(100% + @{indent})';
+                margin-top: @indent;
             }
         }
 
@@ -419,6 +456,7 @@
             > .inner {
                 > .tabs__content {
                     margin-top: @indent;
+                    margin-bottom: 0;
                 }
             }
         }
@@ -427,14 +465,15 @@
     &.expand-top {
         > .inner {
             > .tabs__content {
-                bottom: ~'calc(100% + @{indent})';
+                margin-bottom: @indent;
             }
         }
 
         &.is-editing {
             > .inner {
                 > .tabs__content {
-                    margin-bottom: @indent;
+                    margin-top: @indent;
+                    margin-bottom: 0;
                 }
             }
         }

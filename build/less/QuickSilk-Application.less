@@ -1,4 +1,4 @@
-/*! ************ QuickSilk-Application v3.13.0 (2016-08-12 20:49) ************ */
+/*! ************ QuickSilk-Application v3.14.0 (2016-08-23 20:00) ************ */
 
 // /* ************************************************ */
 // /* ******* QUICKSILK: VARIABLES: ICONS ******* */
@@ -5182,7 +5182,9 @@ html {
         }
 
         > .tabs__content {
-            position: absolute;
+            max-width: 100%;
+            margin-right: auto;
+            margin-left: auto;
             z-index: 1;
             visibility: hidden;
             opacity: 0;
@@ -5223,9 +5225,44 @@ html {
         }
     }
 
+    &:not(.is-editing) {
+        &.expand-top {
+            > .inner {
+                > .tabs__content {
+                    bottom: 100%;
+                }
+            }
+        }
+
+        &.expand-bottom {
+            > .inner {
+                > .tabs__content {
+                    top: 100%;
+                }
+            }
+        }
+
+        &.attachment-container {
+            > .inner {
+                > .tabs__content {
+                    position: absolute;
+                }
+            }
+        }
+
+        &.attachment-screen {
+            > .inner {
+                > .tabs__content {
+                    position: fixed;
+                }
+            }
+        }
+    }
+
     &.is-editing {
         > .inner {
             > .tabs__content {
+                width: auto !important;
                 position: relative;
 
                 > .inner {
@@ -5245,7 +5282,7 @@ html {
         &.expand-top {
             > .inner {
                 > .tabs__content {
-                    bottom: auto;
+                    bottom: auto !important;
                 }
             }
         }
@@ -5253,7 +5290,7 @@ html {
         &.expand-bottom {
             > .inner {
                 > .tabs__content {
-                    top: auto;
+                    top: auto !important;
                 }
             }
         }
@@ -5499,7 +5536,7 @@ html {
     &.expand-bottom {
         > .inner {
             > .tabs__content {
-                top: ~'calc(100% + @{indent})';
+                margin-top: @indent;
             }
         }
 
@@ -5507,6 +5544,7 @@ html {
             > .inner {
                 > .tabs__content {
                     margin-top: @indent;
+                    margin-bottom: 0;
                 }
             }
         }
@@ -5515,14 +5553,15 @@ html {
     &.expand-top {
         > .inner {
             > .tabs__content {
-                bottom: ~'calc(100% + @{indent})';
+                margin-bottom: @indent;
             }
         }
 
         &.is-editing {
             > .inner {
                 > .tabs__content {
-                    margin-bottom: @indent;
+                    margin-top: @indent;
+                    margin-bottom: 0;
                 }
             }
         }
