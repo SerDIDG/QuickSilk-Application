@@ -392,7 +392,7 @@
 
 // /* ******* MIXINS ******* /
 
-.mx__position (@top: auto, @right: auto, @bottom: auto, @left: auto) {
+.mod__menu__position (@top: auto, @right: auto, @bottom: auto, @left: auto) {
     top: @top;
     right: @right;
     bottom: @bottom;
@@ -400,41 +400,41 @@
 }
 
 .mod__menu__sub-dropdown--parent-vertical () {
-    .mx__position(100%, auto, auto, 0);
+    .mod__menu__position(100%, auto, auto, 0);
 
     &.pull-left {
-        .mx__position(100%, auto, auto, 0);
+        .mod__menu__position(100%, auto, auto, 0);
     }
 
     &.pull-right {
-        .mx__position(100%, 0, auto, auto);
+        .mod__menu__position(100%, 0, auto, auto);
     }
 }
 
 .mod__menu__sub-dropdown--parent-horizontal () {
     @indent_top: -(@Secondary-Container-Padding-Top + @Secondary-Container-BorderSize-Top);
 
-    .mx__position(@indent_top, auto, auto, ~"calc(100% + @{Primary-Container-Padding-Right} + @{Primary-Container-BorderSize-Right})");
+    .mod__menu__position(@indent_top, auto, auto, ~"calc(100% + @{Primary-Container-Padding-Right} + @{Primary-Container-BorderSize-Right})");
 
     &.pull-left {
-        .mx__position(@indent_top, auto, auto, ~"calc(100% + @{Primary-Container-Padding-Right} + @{Primary-Container-BorderSize-Right})");
+        .mod__menu__position(@indent_top, auto, auto, ~"calc(100% + @{Primary-Container-Padding-Right} + @{Primary-Container-BorderSize-Right})");
     }
 
     &.pull-right {
-        .mx__position(@indent_top, ~"calc(100% + @{Primary-Container-Padding-Left} + @{Primary-Container-BorderSize-Left})", auto, auto);
+        .mod__menu__position(@indent_top, ~"calc(100% + @{Primary-Container-Padding-Left} + @{Primary-Container-BorderSize-Left})", auto, auto);
     }
 }
 
 .mod__menu__sub-dropdown--horizontal () {
     @indent_top: -(@Secondary-Container-Padding-Top + @Secondary-Container-BorderSize-Top);
 
-    .mx__position(@indent_top, auto, auto, ~"calc(100% + @{Secondary-Container-Padding-Right} + @{Secondary-Container-BorderSize-Right})");
+    .mod__menu__position(@indent_top, auto, auto, ~"calc(100% + @{Secondary-Container-Padding-Right} + @{Secondary-Container-BorderSize-Right})");
 
     &.pull-left {
-        .mx__position(@indent_top, auto, auto, ~"calc(100% + @{Secondary-Container-Padding-Right} + @{Secondary-Container-BorderSize-Right})");
+        .mod__menu__position(@indent_top, auto, auto, ~"calc(100% + @{Secondary-Container-Padding-Right} + @{Secondary-Container-BorderSize-Right})");
     }
 
     &.pull-right {
-        .mx__position(@indent_top, ~"calc(100% + @{Secondary-Container-Padding-Left} + @{Secondary-Container-BorderSize-Left})", auto, auto);
+        .mod__menu__position(@indent_top, ~"calc(100% + @{Secondary-Container-Padding-Left} + @{Secondary-Container-BorderSize-Left})", auto, auto);
     }
 }

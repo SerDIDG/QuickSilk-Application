@@ -83,7 +83,6 @@ function(params){
         // Classes
         cm.addClass(that.nodes['container'], ['attachment', that.params['attachment']].join('-'));
         cm.addClass(that.nodes['container'], ['expand', that.params['expand']].join('-'));
-        that.nodes['content'].style.width = that.params['width'];
         // Process Tabset
         cm.getConstructor('Com.TabsetHelper', function(classConstructor, className){
             that.components['tabset'] = new classConstructor(that.params[className])
@@ -193,9 +192,9 @@ function(params){
     };
 
     var hide = function(){
-        that.resizeInterval && clearInterval(that.resizeInterval);
         that.hideInterval && clearTimeout(that.hideInterval);
         that.hideInterval = setTimeout(function(){
+            that.resizeInterval && clearInterval(that.resizeInterval);
             cm.removeClass(that.nodes['content'], 'is-show');
             that.nodes['menu-label'].innerHTML = '';
             that.hideInterval = setTimeout(function(){
@@ -211,14 +210,16 @@ function(params){
             that.resizeInterval && clearInterval(that.resizeInterval);
             switch(that.params['attachment']) {
                 case 'screen':
-                    contentResizeHandler();
-                    that.resizeInterval = setInterval(contentResizeHandler, 5);
-                    break;
-                case 'container':
-                default:
-                    that.nodes['content'].style.minWidth = 'auto';
-                    that.nodes['content'].style.top = 'auto';
-                    that.nodes['content'].style.bottom = 'auto';
+                    if(that.isEditing){
+                        that.nodes['content'].style.width = 'auto';
+                        that.nodes['content'].style.minWidth = 'auto';
+                        that.nodes['content'].style.top = 'auto';
+                        that.nodes['content'].style.bottom = 'auto';
+                    }else{
+                        that.nodes['content'].style.width = that.params['width'];
+                        contentResizeHandler();
+                        that.resizeInterval = setInterval(contentResizeHandler, 5);
+                    }
                     break;
             }
             // Show
@@ -257,11 +258,11 @@ function(params){
         var isSameBottom = that.previousPosition && that.previousPosition['bottom'] == that.currentPosition['bottom'];
         var isSameWidth = that.previousPosition && that.previousPosition['width'] == that.currentPosition['width'];
         // Set Content Min Width
-        if(!that.isEditing && !isSameWidth){
+        if(!isSameWidth){
             that.nodes['content'].style.minWidth = that.currentPosition['width'] + 'px';
         }
         // Set Content Position
-        if(!that.isEditing && (!isSameTop || !isSameBottom)){
+        if(!isSameTop || !isSameBottom){
             var pageSize = cm.getPageSize();
             switch(that.params['expand']) {
                 case 'top':

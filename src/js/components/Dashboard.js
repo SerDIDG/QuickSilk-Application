@@ -590,7 +590,7 @@ function(params){
         block.node.style.top = '';
         block.node.style.width = '';
         block.node.style.opacity = '';
-        cm.setCSSTranslate(block.node, 'auto', 'auto');
+        cm.clearCSSTranslate(block.node);
     };
 
     /* *** PLACEHOLDER *** */

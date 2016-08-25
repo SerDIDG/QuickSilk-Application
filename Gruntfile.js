@@ -92,6 +92,7 @@ module.exports = function(grunt) {
                     '<%= paths.src %>/less/pages/**/*.less',
                     '<%= paths.src %>/less/dev/**/*.less',
                     '!<%= paths.src %>/less/modules/templates/**/*.less',
+                    '!<%= paths.src %>/less/modules/templates_default/**/*.less',
                     '!<%= paths.src %>/less/components/old/**/*.less'
                 ],
                 dest : '<%= paths.build %>/less/<%= pkg.name %>.less'

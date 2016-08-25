@@ -232,6 +232,61 @@
     .mx__transition(all, @CmUI-Transition-DurationReverse);
 }
 
+/* ******* CUSTOM ******* */
+
+.mod__menu--custom {
+    &.is-vertical {
+        &.is-dropdown {
+            .menu__sub {
+                > ul {
+                    .pt__menu-dropdown--base;
+                    .pt__menu-dropdown--inside;
+                }
+            }
+
+            .mod__menu__sub-dropdown();
+        }
+    }
+}
+
+.mod__menu__sub-dropdown (@parentPadding: 0px, @parentBorder: 0px, @selfPadding: 0px, @selfBorder: 0px) {
+    .menu__sub {
+        .mod__menu__sub-dropdown--parent-horizontal(@parentPadding, @parentBorder, @selfPadding, @selfBorder);
+
+        .menu__sub {
+            .mod__menu__sub-dropdown--horizontal(@selfPadding, @selfBorder);
+        }
+    }
+}
+
+.mod__menu__sub-dropdown--parent-horizontal (@parentPadding, @parentBorder, @selfPadding, @selfBorder) {
+    @indent_top: -(@selfPadding + @selfBorder);
+
+    .mod__menu__position(@indent_top, auto, auto, ~"calc(100% + @{parentPadding} + @{parentBorder})");
+
+    &.pull-left {
+        .mod__menu__position(@indent_top, auto, auto, ~"calc(100% + @{parentPadding} + @{parentBorder})");
+    }
+
+    &.pull-right {
+        .mod__menu__position(@indent_top, ~"calc(100% + @{parentPadding} + @{parentBorder})", auto, auto);
+    }
+}
+
+.mod__menu__sub-dropdown--horizontal (@selfPadding, @selfBorder) {
+    @indent_top: -(@selfPadding + @selfBorder);
+
+    .mod__menu__position(@indent_top, auto, auto, ~"calc(100% + @{selfPadding} + @{selfBorder})");
+
+    &.pull-left {
+        .mod__menu__position(@indent_top, auto, auto, ~"calc(100% + @{selfPadding} + @{selfBorder})");
+    }
+
+    &.pull-right {
+        .mod__menu__position(@indent_top, ~"calc(100% + @{selfPadding} + @{selfBorder})", auto, auto);
+    }
+}
+
 /* ******* MODULES: MENU: ADAPTIVE ******* */
 
 @media only screen and (max-width : @CmUI-AdaptiveFrom) {
@@ -239,9 +294,7 @@
     html.is-adaptive {
         .mod__menu {
             &.is-adaptive {
-                &.is-horizontal {
-                    .mod__menu--adaptive;
-                }
+                .mod__menu--adaptive;
             }
         }
     }
