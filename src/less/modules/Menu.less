@@ -262,28 +262,28 @@
 .mod__menu__sub-dropdown--parent-horizontal (@parentPadding, @parentBorder, @selfPadding, @selfBorder) {
     @indent_top: -(@selfPadding + @selfBorder);
 
-    .mod__menu__position(@indent_top, auto, auto, ~"calc(100% + @{parentPadding} + @{parentBorder})");
+    .mx__position(@indent_top, auto, auto, ~"calc(100% + @{parentPadding} + @{parentBorder})");
 
     &.pull-left {
-        .mod__menu__position(@indent_top, auto, auto, ~"calc(100% + @{parentPadding} + @{parentBorder})");
+        .mx__position(@indent_top, auto, auto, ~"calc(100% + @{parentPadding} + @{parentBorder})");
     }
 
     &.pull-right {
-        .mod__menu__position(@indent_top, ~"calc(100% + @{parentPadding} + @{parentBorder})", auto, auto);
+        .mx__position(@indent_top, ~"calc(100% + @{parentPadding} + @{parentBorder})", auto, auto);
     }
 }
 
 .mod__menu__sub-dropdown--horizontal (@selfPadding, @selfBorder) {
     @indent_top: -(@selfPadding + @selfBorder);
 
-    .mod__menu__position(@indent_top, auto, auto, ~"calc(100% + @{selfPadding} + @{selfBorder})");
+    .mx__position(@indent_top, auto, auto, ~"calc(100% + @{selfPadding} + @{selfBorder})");
 
     &.pull-left {
-        .mod__menu__position(@indent_top, auto, auto, ~"calc(100% + @{selfPadding} + @{selfBorder})");
+        .mx__position(@indent_top, auto, auto, ~"calc(100% + @{selfPadding} + @{selfBorder})");
     }
 
     &.pull-right {
-        .mod__menu__position(@indent_top, ~"calc(100% + @{selfPadding} + @{selfBorder})", auto, auto);
+        .mx__position(@indent_top, ~"calc(100% + @{selfPadding} + @{selfBorder})", auto, auto);
     }
 }
 
