@@ -138,6 +138,16 @@ function(params){
         });
     };
 
+    var afterExpand = function(){
+        cm.replaceClass(that.params['target'], 'is-sidebar--collapsed is-sidebar--expanding', 'is-sidebar--expanded', true);
+        that.triggerEvent('onExpandEnd');
+    };
+
+    var afterCollapse = function(){
+        cm.replaceClass(that.params['target'], 'is-sidebar--expanded is-sidebar--collapsing', 'is-sidebar--collapsed', true);
+        that.triggerEvent('onCollapseEnd');
+    };
+
     /* ******* MAIN ******* */
 
     that.collapse = function(isImmediately, force){
@@ -154,7 +164,7 @@ function(params){
                 cm.addClass(that.params['target'], 'is-immediately');
             }
             cm.replaceClass(that.nodes['container'], 'is-expanded', 'is-collapsed', true);
-            cm.replaceClass(that.params['target'], 'is-sidebar--expanded', 'is-sidebar--collapsed', true);
+            cm.addClass(that.params['target'], 'is-sidebar--collapsing', true);
             // Trigger collapse event after change classes
             that.triggerEvent('onCollapse');
             // Unset active class to collapse buttons
@@ -164,14 +174,14 @@ function(params){
             // Remove immediately animation hack
             that.openInterval && clearTimeout(that.openInterval);
             if(isImmediately){
-                that.triggerEvent('onCollapseEnd');
+                afterCollapse();
                 that.openInterval = setTimeout(function(){
                     cm.removeClass(that.nodes['container'], 'is-immediately');
                     cm.removeClass(that.params['target'], 'is-immediately');
                 }, 5);
             }else{
                 that.openInterval = setTimeout(function(){
-                    that.triggerEvent('onCollapseEnd');
+                    afterCollapse();
                 }, that.params['duration'] + 5);
             }
         }
@@ -192,7 +202,7 @@ function(params){
                 cm.addClass(that.params['target'], 'is-immediately');
             }
             cm.replaceClass(that.nodes['container'], 'is-collapsed', 'is-expanded', true);
-            cm.replaceClass(that.params['target'], 'is-sidebar--collapsed', 'is-sidebar--expanded', true);
+            cm.addClass(that.params['target'], 'is-sidebar--expanding', true);
             // Trigger expand event after change classes
             that.triggerEvent('onExpand');
             // Set active class to collapse buttons
@@ -202,14 +212,14 @@ function(params){
             // Remove immediately animation hack
             that.openInterval && clearTimeout(that.openInterval);
             if(isImmediately){
-                that.triggerEvent('onExpandEnd');
+                afterExpand();
                 that.openInterval = setTimeout(function(){
                     cm.removeClass(that.nodes['container'], 'is-immediately');
                     cm.removeClass(that.params['target'], 'is-immediately');
                 }, 5);
             }else{
                 that.openInterval = setTimeout(function(){
-                    that.triggerEvent('onExpandEnd');
+                    afterExpand();
                 }, that.params['duration'] + 5);
             }
         }

@@ -1,4 +1,4 @@
-/*! ************ QuickSilk-Application v3.14.2 (2016-08-26 17:42) ************ */
+/*! ************ QuickSilk-Application v3.14.3 (2016-08-26 21:11) ************ */
 
 // /* ************************************************ */
 // /* ******* QUICKSILK: VARIABLES: ICONS ******* */
@@ -37,7 +37,7 @@
 // /* *** BLOCK *** */
 
 @AppIcon-Block-Size: 90px;
-@AppIcon-Block-Names: default anchor button column menu divider spacer zone workingarea content logo googlemap tabs search blogcontent blogcategories blogroll blogblock blogarchive blogcalendar image imagegallery slider videogallery forum forum_build comment twitter socialmedia socialmedia_rating socialmedia_share login registration memberdirectory memberwidget filegridlist filegridlistwidget webexmeetings events eventscalendar latestevents flickr languageswitcher d3 rss breadcrumb breadcrumbs form_builder;
+@AppIcon-Block-Names: default anchor button column menu divider spacer zone workingarea content logo googlemap tabs search blogcontent blogcategories blogroll blogblock blogarchive blogcalendar image imagegallery slider videogallery forum forum_build comment twitter socialmedia socialmedia_rating socialmedia_share login registration memberdirectory memberwidget filegridlist filegridlistwidget webexmeetings events eventscalendar latestevents flickr languageswitcher d3 rss breadcrumb breadcrumbs form_builder rollover-tabs;
 
 @AppIcon-Block-default: 0;
 @AppIcon-Block-anchor: 1;
@@ -87,6 +87,7 @@
 @AppIcon-Block-breadcrumbs: 41;
 @AppIcon-Block-button: 42;
 @AppIcon-Block-form_builder: 56;
+@AppIcon-Block-rollover-tabs: 57;
 
 @AppIcon-Block-Element-Names: button column content divider spacer input text password hidden select checkbox radiobutton textarea wysiwyg multicheckbox captcha imagebrowser datepicker timepicker;
 
@@ -1024,7 +1025,7 @@ html {
         overflow: hidden;
     }
 
-    &.is-sidebar {
+    &.is-editor--collapsed {
         .app__content {
             margin-left: @AppSidebar-WidthCollapsed;
         }
@@ -1040,7 +1041,7 @@ html {
         }
     }
 
-    &.is-sidebar--expanded {
+    &.is-editor--expanded {
         .app__content {
             margin-left: @AppSidebar-WidthExpanded;
         }
@@ -5278,7 +5279,7 @@ html {
         }
     }
 
-    &:not(.is-editing) {
+    &.is-not-editing {
         &.expand-top {
             > .inner {
                 > .tabs__content {
@@ -5395,6 +5396,38 @@ html {
     .app-mod__rollover-tabs__label-title-indent(@AppMod-RolloverTabs-Label-TitleIndent);
     .app-mod__rollover-tabs__content-indent(@AppMod-RolloverTabs-Content-Indent);
     .app-mod__rollover-tabs__image-size(@AppMod-RolloverTabs-Image-Size);
+}
+
+/* *** STATES *** */
+
+html {
+    &.is-editor--expanded {
+        .app-mod__rollover-tabs {
+            &.is-not-editing {
+                &.attachment-screen {
+                    > .inner {
+                        > .tabs__content {
+                            left: @AppSidebar-WidthExpanded;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    &.is-editor--collapsed {
+        .app-mod__rollover-tabs {
+            &.is-not-editing {
+                &.attachment-screen {
+                    > .inner {
+                        > .tabs__content {
+                            left: @AppSidebar-WidthCollapsed;
+                        }
+                    }
+                }
+            }
+        }
+    }
 }
 
 /* *** THEMES *** */
@@ -5642,6 +5675,12 @@ html {
                 }
 
                 > .tabs__content {
+                    position: absolute !important;
+                    left: 0  !important;
+                    right: 0  !important;
+                    top: 100% !important;
+                    bottom: auto !important;
+
                     > .inner {
                         > ul {
                             .cm__transition-none;

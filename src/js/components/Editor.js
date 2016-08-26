@@ -95,8 +95,8 @@ function(params){
         });
         cm.find('App.Sidebar', that.params['sidebarName'], null, function(classObject){
             that.components['sidebar'] = classObject
-                .addEvent('onExpand', sidebarExpandAction)
-                .addEvent('onCollapse', sidebarCollapseAction)
+                .addEvent('onExpandEnd', sidebarExpandAction)
+                .addEvent('onCollapseStart', sidebarCollapseAction)
                 .addEvent('onTabShow', function(sidebar, data){
                     setEditorType(data.item['id']);
                 });
@@ -128,6 +128,7 @@ function(params){
     var sidebarExpandAction = function(){
         if(typeof that.isExpanded !== 'boolean' || !that.isExpanded){
             that.isExpanded = true;
+            cm.replaceClass(cm.getDocumentHtml(), 'is-editor--collapsed', 'is-editor--expanded');
             cm.addClass(cm.getDocumentHtml(), 'is-editing');
             cm.forEach(that.zones, function(item){
                 item.enableEditing();
@@ -146,6 +147,7 @@ function(params){
     var sidebarCollapseAction = function(){
         if(typeof that.isExpanded !== 'boolean' || that.isExpanded){
             that.isExpanded = false;
+            cm.replaceClass(cm.getDocumentHtml(), 'is-editor--expanded', 'is-editor--collapsed');
             cm.removeClass(cm.getDocumentHtml(), 'is-editing');
             cm.forEach(that.zones, function(item){
                 item.disableEditing();

@@ -1,11 +1,11 @@
-/*! ************ QuickSilk-Application v3.14.2 (2016-08-26 17:42) ************ */
+/*! ************ QuickSilk-Application v3.14.3 (2016-08-26 21:11) ************ */
 
 // /* ************************************************ */
 // /* ******* QUICKSILK: COMMON ******* */
 // /* ************************************************ */
 
 var App = {
-    '_version' : '3.14.2',
+    '_version' : '3.14.3',
     'Elements': {},
     'Nodes' : {},
     'Test' : []
@@ -1624,8 +1624,8 @@ function(params){
         });
         cm.find('App.Sidebar', that.params['sidebarName'], null, function(classObject){
             that.components['sidebar'] = classObject
-                .addEvent('onExpand', sidebarExpandAction)
-                .addEvent('onCollapse', sidebarCollapseAction)
+                .addEvent('onExpandEnd', sidebarExpandAction)
+                .addEvent('onCollapseStart', sidebarCollapseAction)
                 .addEvent('onTabShow', function(sidebar, data){
                     setEditorType(data.item['id']);
                 });
@@ -1657,6 +1657,7 @@ function(params){
     var sidebarExpandAction = function(){
         if(typeof that.isExpanded !== 'boolean' || !that.isExpanded){
             that.isExpanded = true;
+            cm.replaceClass(cm.getDocumentHtml(), 'is-editor--collapsed', 'is-editor--expanded');
             cm.addClass(cm.getDocumentHtml(), 'is-editing');
             cm.forEach(that.zones, function(item){
                 item.enableEditing();
@@ -1675,6 +1676,7 @@ function(params){
     var sidebarCollapseAction = function(){
         if(typeof that.isExpanded !== 'boolean' || that.isExpanded){
             that.isExpanded = false;
+            cm.replaceClass(cm.getDocumentHtml(), 'is-editor--expanded', 'is-editor--collapsed');
             cm.removeClass(cm.getDocumentHtml(), 'is-editing');
             cm.forEach(that.zones, function(item){
                 item.disableEditing();
@@ -4298,6 +4300,16 @@ function(params){
         });
     };
 
+    var afterExpand = function(){
+        cm.replaceClass(that.params['target'], 'is-sidebar--collapsed is-sidebar--expanding', 'is-sidebar--expanded', true);
+        that.triggerEvent('onExpandEnd');
+    };
+
+    var afterCollapse = function(){
+        cm.replaceClass(that.params['target'], 'is-sidebar--expanded is-sidebar--collapsing', 'is-sidebar--collapsed', true);
+        that.triggerEvent('onCollapseEnd');
+    };
+
     /* ******* MAIN ******* */
 
     that.collapse = function(isImmediately, force){
@@ -4314,7 +4326,7 @@ function(params){
                 cm.addClass(that.params['target'], 'is-immediately');
             }
             cm.replaceClass(that.nodes['container'], 'is-expanded', 'is-collapsed', true);
-            cm.replaceClass(that.params['target'], 'is-sidebar--expanded', 'is-sidebar--collapsed', true);
+            cm.addClass(that.params['target'], 'is-sidebar--collapsing', true);
             // Trigger collapse event after change classes
             that.triggerEvent('onCollapse');
             // Unset active class to collapse buttons
@@ -4324,14 +4336,14 @@ function(params){
             // Remove immediately animation hack
             that.openInterval && clearTimeout(that.openInterval);
             if(isImmediately){
-                that.triggerEvent('onCollapseEnd');
+                afterCollapse();
                 that.openInterval = setTimeout(function(){
                     cm.removeClass(that.nodes['container'], 'is-immediately');
                     cm.removeClass(that.params['target'], 'is-immediately');
                 }, 5);
             }else{
                 that.openInterval = setTimeout(function(){
-                    that.triggerEvent('onCollapseEnd');
+                    afterCollapse();
                 }, that.params['duration'] + 5);
             }
         }
@@ -4352,7 +4364,7 @@ function(params){
                 cm.addClass(that.params['target'], 'is-immediately');
             }
             cm.replaceClass(that.nodes['container'], 'is-collapsed', 'is-expanded', true);
-            cm.replaceClass(that.params['target'], 'is-sidebar--collapsed', 'is-sidebar--expanded', true);
+            cm.addClass(that.params['target'], 'is-sidebar--expanding', true);
             // Trigger expand event after change classes
             that.triggerEvent('onExpand');
             // Set active class to collapse buttons
@@ -4362,14 +4374,14 @@ function(params){
             // Remove immediately animation hack
             that.openInterval && clearTimeout(that.openInterval);
             if(isImmediately){
-                that.triggerEvent('onExpandEnd');
+                afterExpand();
                 that.openInterval = setTimeout(function(){
                     cm.removeClass(that.nodes['container'], 'is-immediately');
                     cm.removeClass(that.params['target'], 'is-immediately');
                 }, 5);
             }else{
                 that.openInterval = setTimeout(function(){
-                    that.triggerEvent('onExpandEnd');
+                    afterExpand();
                 }, that.params['duration'] + 5);
             }
         }
@@ -6128,21 +6140,7 @@ function(params){
         var item = that.components['tabset'].getCurrentTab();
         if(item && (that.params['showEmptyTab'] || that.isEditing || item['tab']['inner'].childNodes.length)){
             // Set position
-            that.resizeInterval && clearInterval(that.resizeInterval);
-            switch(that.params['attachment']) {
-                case 'screen':
-                    if(that.isEditing){
-                        that.nodes['content'].style.width = 'auto';
-                        that.nodes['content'].style.minWidth = 'auto';
-                        that.nodes['content'].style.top = 'auto';
-                        that.nodes['content'].style.bottom = 'auto';
-                    }else{
-                        that.nodes['content'].style.width = that.params['width'];
-                        contentResizeHandler();
-                        that.resizeInterval = setInterval(contentResizeHandler, 5);
-                    }
-                    break;
-            }
+            that.redraw();
             // Show
             that.hideInterval && clearTimeout(that.hideInterval);
             cm.addClass(that.nodes['content'], 'is-show', true);
@@ -6203,7 +6201,7 @@ function(params){
     that.enableEditing = function(){
         if(!cm.isBoolean(that.isEditing) || !that.isEditing){
             that.isEditing = true;
-            cm.addClass(that.params['node'], 'is-editing is-editable');
+            cm.replaceClass(that.params['node'], 'is-not-editing', 'is-editing is-editable');
             that.components['tabset'].setByIndex(0);
             show();
             that.triggerEvent('enableEditing');
@@ -6215,7 +6213,7 @@ function(params){
     that.disableEditing = function(){
         if(!cm.isBoolean(that.isEditing) || that.isEditing){
             that.isEditing = false;
-            cm.removeClass(that.params['node'], 'is-editing is-editable');
+            cm.replaceClass(that.params['node'], 'is-editing is-editable', 'is-not-editing');
             hide();
             that.triggerEvent('disableEditing');
             that.triggerEvent('disableEditable');
@@ -6234,6 +6232,25 @@ function(params){
     };
 
     that.redraw = function(){
+        that.resizeInterval && clearInterval(that.resizeInterval);
+        switch(that.params['attachment']) {
+            case 'screen':
+                if(that.isEditing){
+                    that.previousPosition = null;
+                    that.currentPosition = null;
+                    that.nodes['content'].style.maxWidth = '';
+                    that.nodes['content'].style.minWidth = '';
+                    that.nodes['content'].style.top = '';
+                    that.nodes['content'].style.bottom = '';
+                }else{
+                    that.previousPosition = null;
+                    that.currentPosition = null;
+                    that.nodes['content'].style.maxWidth = that.params['width'];
+                    contentResizeHandler();
+                    that.resizeInterval = setInterval(contentResizeHandler, 5);
+                }
+                break;
+        }
         return that;
     };
 

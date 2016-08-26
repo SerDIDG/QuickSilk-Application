@@ -137,7 +137,7 @@
         }
     }
 
-    &:not(.is-editing) {
+    &.is-not-editing {
         &.expand-top {
             > .inner {
                 > .tabs__content {
@@ -254,6 +254,38 @@
     .app-mod__rollover-tabs__label-title-indent(@AppMod-RolloverTabs-Label-TitleIndent);
     .app-mod__rollover-tabs__content-indent(@AppMod-RolloverTabs-Content-Indent);
     .app-mod__rollover-tabs__image-size(@AppMod-RolloverTabs-Image-Size);
+}
+
+/* *** STATES *** */
+
+html {
+    &.is-editor--expanded {
+        .app-mod__rollover-tabs {
+            &.is-not-editing {
+                &.attachment-screen {
+                    > .inner {
+                        > .tabs__content {
+                            left: @AppSidebar-WidthExpanded;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    &.is-editor--collapsed {
+        .app-mod__rollover-tabs {
+            &.is-not-editing {
+                &.attachment-screen {
+                    > .inner {
+                        > .tabs__content {
+                            left: @AppSidebar-WidthCollapsed;
+                        }
+                    }
+                }
+            }
+        }
+    }
 }
 
 /* *** THEMES *** */
@@ -501,6 +533,12 @@
                 }
 
                 > .tabs__content {
+                    position: absolute !important;
+                    left: 0  !important;
+                    right: 0  !important;
+                    top: 100% !important;
+                    bottom: auto !important;
+
                     > .inner {
                         > ul {
                             .cm__transition-none;

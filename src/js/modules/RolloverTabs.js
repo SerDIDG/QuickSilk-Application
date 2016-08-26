@@ -207,21 +207,7 @@ function(params){
         var item = that.components['tabset'].getCurrentTab();
         if(item && (that.params['showEmptyTab'] || that.isEditing || item['tab']['inner'].childNodes.length)){
             // Set position
-            that.resizeInterval && clearInterval(that.resizeInterval);
-            switch(that.params['attachment']) {
-                case 'screen':
-                    if(that.isEditing){
-                        that.nodes['content'].style.width = 'auto';
-                        that.nodes['content'].style.minWidth = 'auto';
-                        that.nodes['content'].style.top = 'auto';
-                        that.nodes['content'].style.bottom = 'auto';
-                    }else{
-                        that.nodes['content'].style.width = that.params['width'];
-                        contentResizeHandler();
-                        that.resizeInterval = setInterval(contentResizeHandler, 5);
-                    }
-                    break;
-            }
+            that.redraw();
             // Show
             that.hideInterval && clearTimeout(that.hideInterval);
             cm.addClass(that.nodes['content'], 'is-show', true);
@@ -282,7 +268,7 @@ function(params){
     that.enableEditing = function(){
         if(!cm.isBoolean(that.isEditing) || !that.isEditing){
             that.isEditing = true;
-            cm.addClass(that.params['node'], 'is-editing is-editable');
+            cm.replaceClass(that.params['node'], 'is-not-editing', 'is-editing is-editable');
             that.components['tabset'].setByIndex(0);
             show();
             that.triggerEvent('enableEditing');
@@ -294,7 +280,7 @@ function(params){
     that.disableEditing = function(){
         if(!cm.isBoolean(that.isEditing) || that.isEditing){
             that.isEditing = false;
-            cm.removeClass(that.params['node'], 'is-editing is-editable');
+            cm.replaceClass(that.params['node'], 'is-editing is-editable', 'is-not-editing');
             hide();
             that.triggerEvent('disableEditing');
             that.triggerEvent('disableEditable');
@@ -313,6 +299,25 @@ function(params){
     };
 
     that.redraw = function(){
+        that.resizeInterval && clearInterval(that.resizeInterval);
+        switch(that.params['attachment']) {
+            case 'screen':
+                if(that.isEditing){
+                    that.previousPosition = null;
+                    that.currentPosition = null;
+                    that.nodes['content'].style.maxWidth = '';
+                    that.nodes['content'].style.minWidth = '';
+                    that.nodes['content'].style.top = '';
+                    that.nodes['content'].style.bottom = '';
+                }else{
+                    that.previousPosition = null;
+                    that.currentPosition = null;
+                    that.nodes['content'].style.maxWidth = that.params['width'];
+                    contentResizeHandler();
+                    that.resizeInterval = setInterval(contentResizeHandler, 5);
+                }
+                break;
+        }
         return that;
     };
 
