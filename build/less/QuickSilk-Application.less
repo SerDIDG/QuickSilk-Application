@@ -1,4 +1,4 @@
-/*! ************ QuickSilk-Application v3.14.4 (2016-08-30 21:06) ************ */
+/*! ************ QuickSilk-Application v3.14.5 (2016-08-31 20:22) ************ */
 
 // /* ************************************************ */
 // /* ******* QUICKSILK: VARIABLES: ICONS ******* */
@@ -1596,6 +1596,7 @@ html {
     z-index: 1;
     margin: 0 0 @AppBlock-Indent;
     .mx__transition(z-index, @CmUI-Transition-Duration);
+    .mx__transition-delay(@CmUI-Transition-Delay-Hide);
 
     // /* Inner */
 
@@ -1608,6 +1609,7 @@ html {
     &:active {
         z-index: 10;
         .mx__transition(z-index, @CmUI-Transition-DurationReverse);
+        .mx__transition-delay(0ms);
 
         > .app__block-dummy {
             &:extend(.app__block-dummy--hover all);
@@ -1617,6 +1619,7 @@ html {
     &.is-active {
         z-index: 10;
         .mx__transition(z-index, @CmUI-Transition-DurationReverse);
+        .mx__transition-delay(0ms);
 
         > .app__block-dummy {
             &:extend(.app__block-dummy--active all);
@@ -3610,6 +3613,7 @@ html {
                     }
 
                     > .pt__menu-dropdown {
+                        min-width: 100%;
                         .check-first-level (@value) when (@value = true) {
                             .app__topmenu__dropdown--desktop-first;
                         }
