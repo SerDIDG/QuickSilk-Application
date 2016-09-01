@@ -137,7 +137,7 @@
         }
     }
 
-    &.is-not-editing {
+    &:not(.is-editing) {
         &.expand-top {
             > .inner {
                 > .tabs__content {
@@ -261,7 +261,7 @@
 html {
     &.is-editor--expanded {
         .app-mod__rollover-tabs {
-            &.is-not-editing {
+            &:not(.is-editing) {
                 &.attachment-screen {
                     > .inner {
                         > .tabs__content {
@@ -275,7 +275,7 @@ html {
 
     &.is-editor--collapsed {
         .app-mod__rollover-tabs {
-            &.is-not-editing {
+            &:not(.is-editing) {
                 &.attachment-screen {
                     > .inner {
                         > .tabs__content {

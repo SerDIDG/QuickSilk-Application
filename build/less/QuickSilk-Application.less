@@ -1,4 +1,4 @@
-/*! ************ QuickSilk-Application v3.14.5 (2016-08-31 20:22) ************ */
+/*! ************ QuickSilk-Application v3.14.6 (2016-09-01 05:54) ************ */
 
 // /* ************************************************ */
 // /* ******* QUICKSILK: VARIABLES: ICONS ******* */
@@ -5283,7 +5283,7 @@ html {
         }
     }
 
-    &.is-not-editing {
+    &:not(.is-editing) {
         &.expand-top {
             > .inner {
                 > .tabs__content {
@@ -5407,7 +5407,7 @@ html {
 html {
     &.is-editor--expanded {
         .app-mod__rollover-tabs {
-            &.is-not-editing {
+            &:not(.is-editing) {
                 &.attachment-screen {
                     > .inner {
                         > .tabs__content {
@@ -5421,7 +5421,7 @@ html {
 
     &.is-editor--collapsed {
         .app-mod__rollover-tabs {
-            &.is-not-editing {
+            &:not(.is-editing) {
                 &.attachment-screen {
                     > .inner {
                         > .tabs__content {
