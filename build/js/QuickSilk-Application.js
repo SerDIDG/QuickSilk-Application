@@ -1,11 +1,11 @@
-/*! ************ QuickSilk-Application v3.14.6 (2016-09-02 18:44) ************ */
+/*! ************ QuickSilk-Application v3.14.7 (2016-09-02 21:23) ************ */
 
 // /* ************************************************ */
 // /* ******* QUICKSILK: COMMON ******* */
 // /* ************************************************ */
 
 var App = {
-    '_version' : '3.14.6',
+    '_version' : '3.14.7',
     'Elements': {},
     'Nodes' : {},
     'Test' : []
@@ -3838,10 +3838,10 @@ cm.getConstructor('App.Panel', function(classConstructor, className, classProto)
 
     classProto.setAttributes = function(){
         var that = this;
-        that.triggerEvent('onSetAttributesStart');
-        that.triggerEvent('onSetAttributesProcess');
+        // Call parent method
+        _inherit.prototype.construct.apply(that, arguments);
+        // Type class
         cm.addClass(that.nodes['container'], ['app__panel', that.params['type']].join('--'));
-        that.triggerEvent('onSetAttributesEnd');
         return that;
     };
 

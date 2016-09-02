@@ -482,10 +482,10 @@ cm.getConstructor('App.Panel', function(classConstructor, className, classProto)
 
     classProto.setAttributes = function(){
         var that = this;
-        that.triggerEvent('onSetAttributesStart');
-        that.triggerEvent('onSetAttributesProcess');
+        // Call parent method
+        _inherit.prototype.construct.apply(that, arguments);
+        // Type class
         cm.addClass(that.nodes['container'], ['app__panel', that.params['type']].join('--'));
-        that.triggerEvent('onSetAttributesEnd');
         return that;
     };
 
