@@ -111,7 +111,7 @@ function(params){
     /* ******* PUBLIC ******* */
 
     that.enableEditing = function(){
-        if(typeof that.isEditing !== 'boolean' || !that.isEditing){
+        if(!cm.isBoolean(that.isEditing) || !that.isEditing){
             that.isEditing = true;
             cm.addClass(that.node, 'is-editing', true);
             if(!that.params['locked']){
@@ -122,7 +122,7 @@ function(params){
     };
 
     that.disableEditing = function(){
-        if(typeof that.isEditing !== 'boolean' || that.isEditing){
+        if(!cm.isBoolean(that.isEditing) || that.isEditing){
             that.isEditing = false;
             cm.removeClass(that.node, 'is-editing', true);
             if(!that.params['locked']){

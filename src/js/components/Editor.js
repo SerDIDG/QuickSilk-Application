@@ -126,7 +126,7 @@ function(params){
     };
 
     var sidebarExpandAction = function(){
-        if(typeof that.isExpanded !== 'boolean' || !that.isExpanded){
+        if(!cm.isBoolean(that.isExpanded) || !that.isExpanded){
             that.isExpanded = true;
             cm.replaceClass(cm.getDocumentHtml(), 'is-editor--collapsed', 'is-editor--expanded');
             cm.addClass(cm.getDocumentHtml(), 'is-editing');
@@ -145,7 +145,7 @@ function(params){
     };
 
     var sidebarCollapseAction = function(){
-        if(typeof that.isExpanded !== 'boolean' || that.isExpanded){
+        if(!cm.isBoolean(that.isExpanded)  || that.isExpanded){
             that.isExpanded = false;
             cm.replaceClass(cm.getDocumentHtml(), 'is-editor--expanded', 'is-editor--collapsed');
             cm.removeClass(cm.getDocumentHtml(), 'is-editing');
