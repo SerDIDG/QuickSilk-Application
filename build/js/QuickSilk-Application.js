@@ -1,4 +1,4 @@
-/*! ************ QuickSilk-Application v3.14.7 (2016-09-02 21:23) ************ */
+/*! ************ QuickSilk-Application v3.14.7 (2016-09-07 20:55) ************ */
 
 // /* ************************************************ */
 // /* ******* QUICKSILK: COMMON ******* */
@@ -3447,19 +3447,6 @@ cm.define('App.Panel', {
 },
 function(params){
     var that = this;
-    that.nodes = {};
-    that.components = {};
-    that.isOpen = false;
-    that.isHide = false;
-    that.isLoaded = false;
-    that.isDestructed = false;
-    that.isProccesing = false;
-    that.destructOnClose = false;
-    that.hasGetRequest = false;
-    that.hasPostRequest = false;
-    that.isGetRequest = false;
-    that.isPostRequest = false;
-    that.transitionInterval = null;
     // Call parent class construct
     Com.AbstractController.apply(that, arguments);
 });
@@ -3471,6 +3458,20 @@ cm.getConstructor('App.Panel', function(classConstructor, className, classProto)
 
     classProto.construct = function(params){
         var that = this;
+        // Variables
+        that.nodes = {};
+        that.components = {};
+        that.isOpen = false;
+        that.isHide = false;
+        that.isLoaded = false;
+        that.isDestructed = false;
+        that.isProccesing = false;
+        that.destructOnClose = false;
+        that.hasGetRequest = false;
+        that.hasPostRequest = false;
+        that.isGetRequest = false;
+        that.isPostRequest = false;
+        that.transitionInterval = null;
         // Bind context to methods
         that.openHandler = that.open.bind(that);
         that.closeHandler = that.close.bind(that);
@@ -3839,7 +3840,7 @@ cm.getConstructor('App.Panel', function(classConstructor, className, classProto)
     classProto.setAttributes = function(){
         var that = this;
         // Call parent method
-        _inherit.prototype.construct.apply(that, arguments);
+        _inherit.prototype.setAttributes.apply(that, arguments);
         // Type class
         cm.addClass(that.nodes['container'], ['app__panel', that.params['type']].join('--'));
         return that;
