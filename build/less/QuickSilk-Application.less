@@ -1,4 +1,4 @@
-/*! ************ QuickSilk-Application v3.14.8 (2016-09-12 20:18) ************ */
+/*! ************ QuickSilk-Application v3.15.0 (2016-09-13 20:09) ************ */
 
 // /* ************************************************ */
 // /* ******* QUICKSILK: VARIABLES: ICONS ******* */
@@ -3558,6 +3558,7 @@ html {
 
 .app__topmenu__dropdown--desktop () {
     .pt__menu-dropdown--base;
+    .pt__menu-dropdown--position;
 }
 
 .app__topmenu__dropdown--desktop-first () {
@@ -4356,7 +4357,7 @@ html {
 .app-mod__member-directory-widget {
 
 }
-/* ******* MODULES: MENU ******* */
+/* ******* BASE ******* */
 
 .mod__menu {
     .menu__menu,
@@ -4418,7 +4419,6 @@ html {
         .select__button {
             .icon.initial;
             .icon.linked;
-            .icon.medium.menu;
             width: @CmSize-Large;
             position: absolute;
             z-index: 1;
@@ -4593,59 +4593,208 @@ html {
 /* ******* CUSTOM ******* */
 
 .mod__menu--custom {
-    &.is-vertical {
-        &.is-dropdown {
-            .menu__sub {
+    /* *** DROPDOWN *** */
+
+    &.is-dropdown {
+        .menu__sub {
+            > ul {
+                .pt__menu-dropdown--base;
+                .pt__menu-dropdown--embed;
+            }
+        }
+    }
+
+    .mx__mod__menu__sub--dropdown-position(@PtMenu-IndentX, @PtMenu-IndentY, @PtMenu-BorderWidth, @PtMenu-BorderWidth);
+
+    /* *** SELECT *** */
+    
+    .mx__mod__menu__select--size();
+    .mx__mod__menu__select--font();
+    .mx__mod__menu__select--background();
+}
+
+/* ******* MIXINS ******* */
+
+/* *** ITEMS *** */
+
+.mx__mod__menu__primary-item--indent (@indent: 0px) {
+    &.is-horizontal {
+        &.pull-left,
+        &.pull-center,
+        &.pull-justify {
+            .menu__menu {
                 > ul {
-                    .pt__menu-dropdown--base;
-                    .pt__menu-dropdown--inside;
+                    > li {
+                        margin-right: @indent;
+
+                        &:last-child {
+                            margin-right: 0;
+                        }
+                    }
                 }
             }
+        }
 
-            .mod__menu__sub-dropdown();
+        &.pull-right {
+            .menu__menu {
+                > ul {
+                    > li {
+                        margin-left: @indent;
+
+                        &:first-child {
+                            margin-left: 0;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    &.is-vertical {
+        .menu__menu {
+            > ul {
+                > li {
+                    margin-top: @indent;
+
+                    &:first-child {
+                        margin-top: 0;
+                    }
+                }
+            }
         }
     }
 }
 
-.mod__menu__sub-dropdown (@parentPadding: 0px, @parentBorder: 0px, @selfPadding: 0px, @selfBorder: 0px) {
+.mx__mod__menu__secondary-item--indent (@indent: 0px) {
     .menu__sub {
-        .mod__menu__sub-dropdown--parent-horizontal(@parentPadding, @parentBorder, @selfPadding, @selfBorder);
+        > ul {
+            > li {
+                margin-top: @indent;
 
-        .menu__sub {
-            .mod__menu__sub-dropdown--horizontal(@selfPadding, @selfBorder);
+                &:first-child {
+                    margin-top: 0;
+                }
+            }
         }
     }
 }
 
-.mod__menu__sub-dropdown--parent-horizontal (@parentPadding, @parentBorder, @selfPadding, @selfBorder) {
-    @indent_top: -(@selfPadding + @selfBorder);
+/* *** SELECT *** */
 
-    .mx__position(@indent_top, auto, auto, ~"calc(100% + @{parentPadding} + @{parentBorder})");
+.mx__mod__menu__select--size (@size: @CmForm-FieldHeight, @padding: @CmIndent-XXXSmall) {
+    .menu__select {
+        .select__select {
+            @button_indent: @size + @padding;
+            height: @size;
+            padding: @padding @button_indent @padding @padding;
+        }
 
-    &.pull-left {
-        .mx__position(@indent_top, auto, auto, ~"calc(100% + @{parentPadding} + @{parentBorder})");
-    }
-
-    &.pull-right {
-        .mx__position(@indent_top, ~"calc(100% + @{parentPadding} + @{parentBorder})", auto, auto);
-    }
-}
-
-.mod__menu__sub-dropdown--horizontal (@selfPadding, @selfBorder) {
-    @indent_top: -(@selfPadding + @selfBorder);
-
-    .mx__position(@indent_top, auto, auto, ~"calc(100% + @{selfPadding} + @{selfBorder})");
-
-    &.pull-left {
-        .mx__position(@indent_top, auto, auto, ~"calc(100% + @{selfPadding} + @{selfBorder})");
-    }
-
-    &.pull-right {
-        .mx__position(@indent_top, ~"calc(100% + @{selfPadding} + @{selfBorder})", auto, auto);
+        .select__button {
+            width: @size;
+            height: @size;
+        }
     }
 }
 
-/* ******* MODULES: MENU: ADAPTIVE ******* */
+.mx__mod__menu__select--font (@color: @CmFont-Base-Color, @size: @CmFont-Base-Size) {
+    .menu__select {
+        .select__select {
+            font-size: @CmFont-Base-Size;
+            color: @color;
+
+            option,
+            optgroup {
+                font-size: @CmFont-Base-Size;
+                color: @color; 
+            }
+        }
+    }
+}
+
+.mx__mod__menu__select--background (@background: @CmColor-Background, @image: ~"@{CmPath-Images}/icons/medium/menu.png") {
+    .menu__select {
+        background: @background;
+
+        .select__select {
+            option,
+            optgroup {
+                background: @background;
+            }
+        }
+
+        .select__button {
+            background-image: url("@{image}");
+        }
+    }
+}
+
+/* *** DROPDOWN *** */
+
+.mx__mod__menu__sub--dropdown-position (@paddingX: 0px, @paddingY: 0px, @borderX: 0px, @borderY: 0px) {
+    &.is-dropdown {
+        &.is-horizontal {
+            .menu__sub {
+                .mx__mod__menu__sub--dropdown-position--parent-vertical(@paddingX, @paddingY, @borderX, @borderY);
+
+                .menu__sub {
+                    .mx__mod__menu__sub--dropdown-position--horizontal(@paddingX, @paddingY, @borderX, @borderY);
+                }
+            }
+        }
+        
+        &.is-vertical {
+            .menu__sub {
+                .mx__mod__menu__sub--dropdown-position--parent-horizontal(@paddingX, @paddingY, @borderX, @borderY);
+
+                .menu__sub {
+                    .mx__mod__menu__sub--dropdown-position--horizontal(@paddingX, @paddingY, @borderX, @borderY);
+                }
+            }
+        }
+    }
+}
+
+.mx__mod__menu__sub--dropdown-position--parent-vertical (@paddingX, @paddingY, @borderX, @borderY) {
+    .mx__position(100%, auto, auto, 0);
+
+    &.pull-left {
+        .mx__position(100%, auto, auto, 0);
+    }
+
+    &.pull-right {
+        .mx__position(100%, 0, auto, auto);
+    }
+}
+
+.mx__mod__menu__sub--dropdown-position--parent-horizontal (@paddingX, @paddingY, @borderX, @borderY) {
+    @indent_top: -(@paddingY + @borderY);
+
+    .mx__position(@indent_top, auto, auto, calc(100%));
+
+    &.pull-left {
+        .mx__position(@indent_top, auto, auto, calc(100%));
+    }
+
+    &.pull-right {
+        .mx__position(@indent_top, calc(100%), auto, auto);
+    }
+}
+
+.mx__mod__menu__sub--dropdown-position--horizontal (@paddingX, @paddingY, @borderX, @borderY) {
+    @indent_top: -(@paddingY + @borderY);
+
+    .mx__position(@indent_top, auto, auto, ~"calc(100% + @{paddingX} + @{borderX})");
+
+    &.pull-left {
+        .mx__position(@indent_top, auto, auto, ~"calc(100% + @{paddingX} + @{borderX})");
+    }
+
+    &.pull-right {
+        .mx__position(@indent_top, ~"calc(100% + @{paddingX} + @{borderX})", auto, auto);
+    }
+}
+
+/* ******* ADAPTIVE ******* */
 
 @media only screen and (max-width : @CmUI-AdaptiveFrom) {
 
@@ -4659,7 +4808,7 @@ html {
 
 }
 
-/* ******* MODULES: MENU: PRINT ******* */
+/* ******* PRINT ******* */
 
 @media print {
 
@@ -4714,6 +4863,7 @@ html {
     .pt__menu-dropdown {
         text-align: left;
         .pt__menu-dropdown--base;
+        .pt__menu-dropdown--position;
     }
 
     .menu-select {
@@ -5234,6 +5384,7 @@ html {
 
             .pt__menu-dropdown {
                 .pt__menu-dropdown--base;
+                .pt__menu-dropdown--position;
                 min-width: 100%;
                 top: 100%;
             }
