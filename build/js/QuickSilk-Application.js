@@ -1,11 +1,11 @@
-/*! ************ QuickSilk-Application v3.15.1 (2016-09-21 20:29) ************ */
+/*! ************ QuickSilk-Application v3.15.2 (2016-10-05 20:20) ************ */
 
 // /* ************************************************ */
 // /* ******* QUICKSILK: COMMON ******* */
 // /* ************************************************ */
 
 var App = {
-    '_version' : '3.15.1',
+    '_version' : '3.15.2',
     'Elements': {},
     'Nodes' : {},
     'Test' : []
@@ -1562,7 +1562,7 @@ cm.define('App.Editor', {
         'onProcessEnd'
     ],
     'params' : {
-        'node' : cm.Node('div'),
+        'node' : cm.node('div'),
         'name' : 'app-editor',
         'topMenuName' : 'app-topmenu',
         'sidebarName' : 'app-sidebar',
@@ -3484,8 +3484,10 @@ cm.getConstructor('App.Panel', function(classConstructor, className, classProto)
         that.constructEndHandler = that.constructEnd.bind(that);
         that.setEventsProcessHandler = that.setEventsProcess.bind(that);
         that.unsetEventsProcessHandler = that.unsetEventsProcess.bind(that);
+        that.onGetLESSVariablesProcessHandler = that.onGetLESSVariablesProcess.bind(that);
         // Add events
         that.addEvent('onConstructEnd', that.constructEndHandler);
+        that.addEvent('onGetLESSVariablesProcess', that.onGetLESSVariablesProcessHandler);
         that.addEvent('onSetEventsProcess', that.setEventsProcessHandler);
         that.addEvent('onUnsetEventsProcess', that.unsetEventsProcessHandler);
         // Call parent method
@@ -3512,15 +3514,6 @@ cm.getConstructor('App.Panel', function(classConstructor, className, classProto)
         return that;
     };
 
-    classProto.getLESSVariables = function(){
-        var that = this;
-        that.triggerEvent('onGetLESSVariablesStart');
-        that.triggerEvent('onGetLESSVariablesProcess');
-        that.params['duration'] = cm.getTransitionDurationFromLESS('AppPanel-Duration', that.params['duration']);
-        that.triggerEvent('onGetLESSVariablesEnd');
-        return that;
-    };
-
     classProto.validateParams = function(){
         var that = this;
         that.triggerEvent('onValidateParamsStart');
@@ -3536,6 +3529,12 @@ cm.getConstructor('App.Panel', function(classConstructor, className, classProto)
         that.hasGetRequest = !cm.isEmpty(that.params['get']['url']);
         that.hasPostRequest = !cm.isEmpty(that.params['post']['url']);
         that.triggerEvent('onValidateParamsEnd');
+        return that;
+    };
+
+    classProto.onGetLESSVariablesProcess = function(){
+        var that = this;
+        that.params['duration'] = cm.getTransitionDurationFromLESS('AppPanel-Duration', that.params['duration']);
         return that;
     };
 
@@ -5131,6 +5130,16 @@ function(params){
         return that;
     };
 
+    that.getHeaderDimensions = function(key){
+        var rect = cm.getRect(that.nodes['header']);
+        return rect[key] || rect;
+    };
+
+    that.getFooterDimensions = function(key){
+        var rect = cm.getRect(that.nodes['footer']);
+        return rect[key] || rect;
+    };
+
     that.getNodes = function(key){
         return that.nodes[key] || that.nodes;
     };
@@ -5514,10 +5523,180 @@ function(params){
     // Call parent class construct
     Com.elFinderFileManagerContainer.apply(that, arguments);
 });
+cm.define('Module.Anchor', {
+    'extend' : 'App.AbstractModule',
+    'params' : {
+        'renderStructure' : false,
+        'embedStructureOnRender' : false,
+        'duration' : 'cm._config.animDuration',
+        'scroll' : 'document.body',
+        'topMenuName' : 'app-topmenu',
+        'templateName' : 'app-template'
+    }
+},
+function(params){
+    var that = this;
+    // Call parent class construct
+    App.AbstractModule.apply(that, arguments);
+});
+
+cm.getConstructor('Module.Anchor', function(classConstructor, className, classProto){
+    var _inherit = classProto._inherit;
+
+    classProto.construct = function(){
+        var that = this;
+        // Variables
+        that.isActive = false;
+        that.topMenuParams = {};
+        that.templateParams = {};
+        // Bind context to methods
+        that.onHashChangeHandler = that.onHashChange.bind(that);
+        that.onConstructEndHandler = that.onConstructEnd.bind(that);
+        that.onDestructProcessHandler = that.onDestructProcess.bind(that);
+        that.onRedrawHandler = that.onRedraw.bind(that);
+        // Add events
+        that.addEvent('onConstructEnd', that.onConstructEndHandler);
+        that.addEvent('onDestructProcess', that.onDestructProcessHandler);
+        that.addEvent('onRedraw', that.onRedrawHandler);
+        // Call parent method
+        _inherit.prototype.construct.apply(that, arguments);
+        return that;
+    };
+
+    classProto.onConstructEnd = function(){
+        var that = this;
+        that.prepareHash({
+            'immediately' : true,
+            'force' : true
+        });
+        return that;
+    };
+
+    classProto.onDestructProcess = function(){
+        var that = this;
+        // Remove location hash change handler
+        cm.removeEvent(window, 'hashchange', that.onHashChangeHandler);
+        // Remove current hash if it equal to anchor name
+        that.clearHash();
+        return that;
+    };
+
+    classProto.onRedraw = function(){
+        var that = this;
+        that.prepareHash({
+            'immediately' : true,
+            'force' : true
+        });
+        return that;
+    };
+
+    classProto.onHashChange = function(e){
+        var that = this;
+        if(that.isHashActive()){
+            cm.preventDefault(e);
+        }
+        that.prepareHash({
+            'immediately' : false,
+            'force' : false
+        });
+        return that;
+    };
+
+    classProto.renderViewModel = function(){
+        var that = this;
+        // Call parent method - render
+        _inherit.prototype.renderViewModel.apply(that, arguments);
+        // Get TopMenu
+        new cm.Finder('App.TopMenu', that.params['topMenuName'], null, function(classObject){
+            that.components['topMenu'] = classObject;
+            that.topMenuParams = that.components['topMenu'].getParams();
+        });
+        // Get Template
+        new cm.Finder('App.Template', that.params['templateName'], null, function(classObject){
+            that.components['template'] = classObject;
+            that.templateParams = that.components['template'].getParams();
+        });
+        // Init animation handler
+        that.components['animation'] = new cm.Animation(that.params['scroll']);
+        // Add location hash change handler
+        cm.addEvent(window, 'hashchange', that.onHashChangeHandler);
+        return that;
+    };
+
+    classProto.prepareHash = function(params){
+        var that = this;
+        // Configure
+        params = cm.merge({
+            'immediately' : false,
+            'force' : false
+        }, params);
+        // Check hash state
+        if(that.isHashActive()){
+            if(!that.isActive || params['force']){
+                that.isActive = true;
+                that.processHash(params);
+            }
+        }else{
+            that.isActive = false;
+        }
+        return that;
+    };
+
+    classProto.processHash = function(params){
+        var that = this,
+            styles = {},
+            top = 0;
+        // Prepare
+        top = cm.getY(that.params['node']);
+        // Add top menu gape
+        if(that.components['topMenu']){
+            top -= that.components['topMenu'].getDimensions('height');
+        }
+        // Add template's fixed header gape
+        if(that.components['template'] && that.templateParams['header']['fixed']){
+            top -= that.components['template'].getHeaderDimensions('height');
+        }
+        // Set safe values
+        top = Math.max(top, 0);
+        top = Math.min(top, cm._pageSize['scrollHeight']);
+        // Move scroll
+        if(params['immediately']){
+            cm.setScrollTop(that.params['scroll'], top);
+        }else{
+            // Scroll style
+            if(that.params['scroll'] == document.body){
+                styles = {'docScrollTop' : top};
+            }else{
+                styles = {'scrollTop' : top};
+            }
+            // Go
+            that.components['animation'].go({'style' : styles, 'anim' : 'smooth', 'duration' : that.params['duration']});
+        }
+        return that;
+    };
+
+    classProto.clearHash = function(){
+        var that = this,
+            url;
+        if(that.isHashActive()){
+            url = window.location.href.replace(/(#.*)$/, '');
+            window.history.replaceState(null, null, url);
+        }
+        return that;
+    };
+
+    classProto.isHashActive = function(){
+        var that = this,
+            hash = window.location.hash.replace(/^#/, '');
+        return that.params['name'] === hash;
+    };
+});
 
 cm.define('Module.LogoCarousel', {
     'extend' : 'App.AbstractModule',
     'params' : {
+        'renderStructure' : false,
+        'embedStructureOnRender' : false,
         'duration' : 1000,          // ms per slide
         'delay' : 2000,             // ms
         'columns' : 0,
@@ -5527,14 +5706,6 @@ cm.define('Module.LogoCarousel', {
 },
 function(params){
     var that = this;
-    that.items = {};
-    that.itemsLength = 0;
-    that.isInfinite = false;
-    that.isAnimate = true;
-    that.isProccess = false;
-    that.moveInterval = null;
-    that.current = null;
-    that.columns = 0;
     // Call parent class construct
     App.AbstractModule.apply(that, arguments);
 });
@@ -5544,25 +5715,34 @@ cm.getConstructor('Module.LogoCarousel', function(classConstructor, className, c
 
     classProto.construct = function(){
         var that = this;
+        // Variables
+        that.items = {};
+        that.itemsLength = 0;
+        that.isInfinite = false;
+        that.isAnimate = true;
+        that.isProccess = false;
+        that.moveInterval = null;
+        that.current = null;
+        that.columns = 0;
         // Bind context to methods
-        that.validateParamsProcessHandler = that.validateParamsProcess.bind(that);
-        that.destructProcessHandler = that.destructProcess.bind(that);
-        that.redrawProcessHandler = that.redrawProcess.bind(that);
+        that.onValidateParamsProcessHandler = that.onValidateParamsProcess.bind(that);
+        that.onDestructProcessHandler = that.onDestructProcess.bind(that);
+        that.onRedrawHandler = that.onRedraw.bind(that);
         that.startHandler = that.start.bind(that);
         that.stopHandler = that.stop.bind(that);
         that.mouseOverEventHandler = that.mouseOverEvent.bind(that);
         that.mouseOutEventHandler = that.mouseOutEvent.bind(that);
         that.moveProcessHandler = that.moveProcess.bind(that);
         // Add events
-        that.addEvent('onValidateParamsProcess', that.validateParamsProcessHandler);
-        that.addEvent('onDestructProcess', that.destructProcessHandler);
-        that.addEvent('onRedraw', that.redrawProcessHandler);
+        that.addEvent('onValidateParamsProcess', that.onValidateParamsProcessHandler);
+        that.addEvent('onDestructProcess', that.onDestructProcessHandler);
+        that.addEvent('onRedraw', that.onRedrawHandler);
         // Call parent method
         _inherit.prototype.construct.apply(that, arguments);
         return that;
     };
 
-    classProto.validateParamsProcess = function(){
+    classProto.onValidateParamsProcess = function(){
         var that = this;
         that.isInfinite = !that.params['delay'];
         that.delay = that.params['duration'] + that.params['delay'];
@@ -5570,14 +5750,14 @@ cm.getConstructor('Module.LogoCarousel', function(classConstructor, className, c
         return that;
     };
 
-    classProto.destructProcess = function(){
+    classProto.onDestructProcess = function(){
         var that = this;
         that.stop();
         that.moveInterval && clearTimeout(that.moveInterval);
         return that;
     };
 
-    classProto.redrawProcess = function(){
+    classProto.onRedraw = function(){
         var that = this,
             desktopCol = ['col', that.params['columns']].join('-'),
             mobileCol = ['col', that.params['mobileColumns']].join('-');
@@ -5706,10 +5886,8 @@ cm.getConstructor('Module.LogoCarousel', function(classConstructor, className, c
 cm.define('Module.Menu', {
     'extend' : 'App.AbstractModule',
     'params' : {
-        'node' : cm.node('div'),
-        'embedStructure' : 'none',
         'renderStructure' : false,
-        'name' : '',
+        'embedStructureOnRender' : false,
         'view' : 'horizontal',                      // horizontal | vertical
         'submenu' : 'visible',                      // visible | dropdown | specific | collapsible
         'duration' : 'cm._config.animDuration',
@@ -5718,13 +5896,6 @@ cm.define('Module.Menu', {
 },
 function(params){
     var that = this;
-    that.nodes = {
-        'select' : {
-            'select' : cm.node('select')
-        }
-    };
-    that.alignValues = ['left', 'center', 'right', 'justify'];
-    that.submeniViewValues = ['visible', 'dropdown', 'specific', 'collapsible'];
     // Call parent class construct
     App.AbstractModule.apply(that, arguments);
 });
@@ -5734,6 +5905,14 @@ cm.getConstructor('Module.Menu', function(classConstructor, className, classProt
 
     classProto.construct = function(){
         var that = this;
+        // Variables
+        that.nodes = {
+            'select' : {
+                'select' : cm.node('select')
+            }
+        };
+        that.alignValues = ['left', 'center', 'right', 'justify'];
+        that.submeniViewValues = ['visible', 'dropdown', 'specific', 'collapsible'];
         // Bind context to methods
         that.processSelectHandler = that.processSelect.bind(that);
         // Call parent method

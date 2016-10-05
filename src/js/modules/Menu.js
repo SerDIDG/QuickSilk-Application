@@ -1,10 +1,8 @@
 cm.define('Module.Menu', {
     'extend' : 'App.AbstractModule',
     'params' : {
-        'node' : cm.node('div'),
-        'embedStructure' : 'none',
         'renderStructure' : false,
-        'name' : '',
+        'embedStructureOnRender' : false,
         'view' : 'horizontal',                      // horizontal | vertical
         'submenu' : 'visible',                      // visible | dropdown | specific | collapsible
         'duration' : 'cm._config.animDuration',
@@ -13,13 +11,6 @@ cm.define('Module.Menu', {
 },
 function(params){
     var that = this;
-    that.nodes = {
-        'select' : {
-            'select' : cm.node('select')
-        }
-    };
-    that.alignValues = ['left', 'center', 'right', 'justify'];
-    that.submeniViewValues = ['visible', 'dropdown', 'specific', 'collapsible'];
     // Call parent class construct
     App.AbstractModule.apply(that, arguments);
 });
@@ -29,6 +20,14 @@ cm.getConstructor('Module.Menu', function(classConstructor, className, classProt
 
     classProto.construct = function(){
         var that = this;
+        // Variables
+        that.nodes = {
+            'select' : {
+                'select' : cm.node('select')
+            }
+        };
+        that.alignValues = ['left', 'center', 'right', 'justify'];
+        that.submeniViewValues = ['visible', 'dropdown', 'specific', 'collapsible'];
         // Bind context to methods
         that.processSelectHandler = that.processSelect.bind(that);
         // Call parent method

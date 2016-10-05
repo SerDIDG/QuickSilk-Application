@@ -128,8 +128,10 @@ cm.getConstructor('App.Panel', function(classConstructor, className, classProto)
         that.constructEndHandler = that.constructEnd.bind(that);
         that.setEventsProcessHandler = that.setEventsProcess.bind(that);
         that.unsetEventsProcessHandler = that.unsetEventsProcess.bind(that);
+        that.onGetLESSVariablesProcessHandler = that.onGetLESSVariablesProcess.bind(that);
         // Add events
         that.addEvent('onConstructEnd', that.constructEndHandler);
+        that.addEvent('onGetLESSVariablesProcess', that.onGetLESSVariablesProcessHandler);
         that.addEvent('onSetEventsProcess', that.setEventsProcessHandler);
         that.addEvent('onUnsetEventsProcess', that.unsetEventsProcessHandler);
         // Call parent method
@@ -156,15 +158,6 @@ cm.getConstructor('App.Panel', function(classConstructor, className, classProto)
         return that;
     };
 
-    classProto.getLESSVariables = function(){
-        var that = this;
-        that.triggerEvent('onGetLESSVariablesStart');
-        that.triggerEvent('onGetLESSVariablesProcess');
-        that.params['duration'] = cm.getTransitionDurationFromLESS('AppPanel-Duration', that.params['duration']);
-        that.triggerEvent('onGetLESSVariablesEnd');
-        return that;
-    };
-
     classProto.validateParams = function(){
         var that = this;
         that.triggerEvent('onValidateParamsStart');
@@ -180,6 +173,12 @@ cm.getConstructor('App.Panel', function(classConstructor, className, classProto)
         that.hasGetRequest = !cm.isEmpty(that.params['get']['url']);
         that.hasPostRequest = !cm.isEmpty(that.params['post']['url']);
         that.triggerEvent('onValidateParamsEnd');
+        return that;
+    };
+
+    classProto.onGetLESSVariablesProcess = function(){
+        var that = this;
+        that.params['duration'] = cm.getTransitionDurationFromLESS('AppPanel-Duration', that.params['duration']);
         return that;
     };
 

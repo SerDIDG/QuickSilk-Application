@@ -1,6 +1,8 @@
 cm.define('Module.LogoCarousel', {
     'extend' : 'App.AbstractModule',
     'params' : {
+        'renderStructure' : false,
+        'embedStructureOnRender' : false,
         'duration' : 1000,          // ms per slide
         'delay' : 2000,             // ms
         'columns' : 0,
@@ -10,14 +12,6 @@ cm.define('Module.LogoCarousel', {
 },
 function(params){
     var that = this;
-    that.items = {};
-    that.itemsLength = 0;
-    that.isInfinite = false;
-    that.isAnimate = true;
-    that.isProccess = false;
-    that.moveInterval = null;
-    that.current = null;
-    that.columns = 0;
     // Call parent class construct
     App.AbstractModule.apply(that, arguments);
 });
@@ -27,25 +21,34 @@ cm.getConstructor('Module.LogoCarousel', function(classConstructor, className, c
 
     classProto.construct = function(){
         var that = this;
+        // Variables
+        that.items = {};
+        that.itemsLength = 0;
+        that.isInfinite = false;
+        that.isAnimate = true;
+        that.isProccess = false;
+        that.moveInterval = null;
+        that.current = null;
+        that.columns = 0;
         // Bind context to methods
-        that.validateParamsProcessHandler = that.validateParamsProcess.bind(that);
-        that.destructProcessHandler = that.destructProcess.bind(that);
-        that.redrawProcessHandler = that.redrawProcess.bind(that);
+        that.onValidateParamsProcessHandler = that.onValidateParamsProcess.bind(that);
+        that.onDestructProcessHandler = that.onDestructProcess.bind(that);
+        that.onRedrawHandler = that.onRedraw.bind(that);
         that.startHandler = that.start.bind(that);
         that.stopHandler = that.stop.bind(that);
         that.mouseOverEventHandler = that.mouseOverEvent.bind(that);
         that.mouseOutEventHandler = that.mouseOutEvent.bind(that);
         that.moveProcessHandler = that.moveProcess.bind(that);
         // Add events
-        that.addEvent('onValidateParamsProcess', that.validateParamsProcessHandler);
-        that.addEvent('onDestructProcess', that.destructProcessHandler);
-        that.addEvent('onRedraw', that.redrawProcessHandler);
+        that.addEvent('onValidateParamsProcess', that.onValidateParamsProcessHandler);
+        that.addEvent('onDestructProcess', that.onDestructProcessHandler);
+        that.addEvent('onRedraw', that.onRedrawHandler);
         // Call parent method
         _inherit.prototype.construct.apply(that, arguments);
         return that;
     };
 
-    classProto.validateParamsProcess = function(){
+    classProto.onValidateParamsProcess = function(){
         var that = this;
         that.isInfinite = !that.params['delay'];
         that.delay = that.params['duration'] + that.params['delay'];
@@ -53,14 +56,14 @@ cm.getConstructor('Module.LogoCarousel', function(classConstructor, className, c
         return that;
     };
 
-    classProto.destructProcess = function(){
+    classProto.onDestructProcess = function(){
         var that = this;
         that.stop();
         that.moveInterval && clearTimeout(that.moveInterval);
         return that;
     };
 
-    classProto.redrawProcess = function(){
+    classProto.onRedraw = function(){
         var that = this,
             desktopCol = ['col', that.params['columns']].join('-'),
             mobileCol = ['col', that.params['mobileColumns']].join('-');

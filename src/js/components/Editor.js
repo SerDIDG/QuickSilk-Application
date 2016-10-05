@@ -33,7 +33,7 @@ cm.define('App.Editor', {
         'onProcessEnd'
     ],
     'params' : {
-        'node' : cm.Node('div'),
+        'node' : cm.node('div'),
         'name' : 'app-editor',
         'topMenuName' : 'app-topmenu',
         'sidebarName' : 'app-sidebar',

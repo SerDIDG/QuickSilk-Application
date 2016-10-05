@@ -201,6 +201,16 @@ function(params){
         return that;
     };
 
+    that.getHeaderDimensions = function(key){
+        var rect = cm.getRect(that.nodes['header']);
+        return rect[key] || rect;
+    };
+
+    that.getFooterDimensions = function(key){
+        var rect = cm.getRect(that.nodes['footer']);
+        return rect[key] || rect;
+    };
+
     that.getNodes = function(key){
         return that.nodes[key] || that.nodes;
     };
