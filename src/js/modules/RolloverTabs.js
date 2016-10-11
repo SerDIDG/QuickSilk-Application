@@ -197,6 +197,7 @@ function(params){
             that.resizeInterval && clearInterval(that.resizeInterval);
             cm.removeClass(that.nodes['content'], 'is-show');
             that.nodes['menu-label'].innerHTML = '';
+            that.components['tabset'].unsetHead();
             that.hideInterval = setTimeout(function(){
                 that.components['tabset'].unset();
             }, that.params['delay']);

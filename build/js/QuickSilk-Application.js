@@ -1,11 +1,11 @@
-/*! ************ QuickSilk-Application v3.15.2 (2016-10-05 20:20) ************ */
+/*! ************ QuickSilk-Application v3.15.3 (2016-10-11 19:08) ************ */
 
 // /* ************************************************ */
 // /* ******* QUICKSILK: COMMON ******* */
 // /* ************************************************ */
 
 var App = {
-    '_version' : '3.15.2',
+    '_version' : '3.15.3',
     'Elements': {},
     'Nodes' : {},
     'Test' : []
@@ -6310,6 +6310,7 @@ function(params){
             that.resizeInterval && clearInterval(that.resizeInterval);
             cm.removeClass(that.nodes['content'], 'is-show');
             that.nodes['menu-label'].innerHTML = '';
+            that.components['tabset'].unsetHead();
             that.hideInterval = setTimeout(function(){
                 that.components['tabset'].unset();
             }, that.params['delay']);
