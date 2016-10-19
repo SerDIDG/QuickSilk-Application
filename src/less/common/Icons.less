@@ -105,6 +105,13 @@
 [class*=" app-i__"] {
     &:extend(.cm-i all);
     font-family: @AppIconVars-Family;
+
+    &:link,
+    &:visited,
+    &:hover,
+    &:active {
+        font-family: inherit;
+    }
 }
 
 .app-i__quicksilk {

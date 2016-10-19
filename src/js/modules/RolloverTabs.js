@@ -109,7 +109,7 @@ function(params){
                 })
                 .addEvent('onLabelTarget', function(tabset, data){
                     // If not in editing mod and tab does not contains any blocks, do not show it
-                    if(!that.params['showEmptyTab'] && !that.isEditing && !data.item['tab']['inner'].childNodes.length){
+                    if(!that.params['showEmptyTab'] && !that.isEditing && that.components['tabset'].isTabEmpty(data.item['id'])){
                         hide();
                     }else{
                         show();
@@ -206,7 +206,7 @@ function(params){
 
     var show = function(){
         var item = that.components['tabset'].getCurrentTab();
-        if(item && (that.params['showEmptyTab'] || that.isEditing || item['tab']['inner'].childNodes.length)){
+        if(item && (that.params['showEmptyTab'] || that.isEditing || !that.components['tabset'].isTabEmpty(item['id']))){
             // Set position
             that.redraw();
             // Show

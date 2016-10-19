@@ -162,7 +162,7 @@ cm.getConstructor('Module.Anchor', function(classConstructor, className, classPr
 
     classProto.isHashActive = function(){
         var that = this,
-            hash = window.location.hash.replace(/^#/, '');
+            hash = decodeURIComponent(window.location.hash.replace(/^#/, ''));
         return that.params['name'] === hash;
     };
 });
