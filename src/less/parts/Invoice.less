@@ -1,0 +1,39 @@
+/* ******* PARTS: INVOICE ******* */
+
+.app-pt__invoice {
+    .app-pt__invoice__row-sep {
+        td {
+            padding: 0;
+            border-bottom: @CmBorder-Box;
+        }
+    }
+
+    .app-pt__invoice__row-total {
+        .app-pt__invoice__cell-product {
+            font-weight: bold;
+        }
+    }
+
+    .app-pt__invoice__cell-cost {
+        width: 80px;
+    }
+
+    .app-pt__invoice__cell-product {
+        text-align: right;
+    }
+}
+
+/* *** ADAPTIVE *** */
+
+
+@media only screen and (max-width: @CmUI-AdaptiveFrom) {
+
+    html.is-adaptive {
+        .app-pt__invoice {
+            .app-pt__invoice__cell-product {
+                text-align: left;
+            }
+        }
+    }
+
+}

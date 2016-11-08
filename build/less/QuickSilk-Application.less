@@ -1,4 +1,4 @@
-/*! ************ QuickSilk-Application v3.15.4 (2016-10-26 18:47) ************ */
+/*! ************ QuickSilk-Application v3.15.5 (2016-11-08 19:38) ************ */
 
 // /* ************************************************ */
 // /* ******* QUICKSILK: VARIABLES: ICONS ******* */
@@ -1258,6 +1258,45 @@ html {
 
             .app-pt__box-sign {
                 width: auto;
+            }
+        }
+    }
+
+}
+/* ******* PARTS: INVOICE ******* */
+
+.app-pt__invoice {
+    .app-pt__invoice__row-sep {
+        td {
+            padding: 0;
+            border-bottom: @CmBorder-Box;
+        }
+    }
+
+    .app-pt__invoice__row-total {
+        .app-pt__invoice__cell-product {
+            font-weight: bold;
+        }
+    }
+
+    .app-pt__invoice__cell-cost {
+        width: 80px;
+    }
+
+    .app-pt__invoice__cell-product {
+        text-align: right;
+    }
+}
+
+/* *** ADAPTIVE *** */
+
+
+@media only screen and (max-width: @CmUI-AdaptiveFrom) {
+
+    html.is-adaptive {
+        .app-pt__invoice {
+            .app-pt__invoice__cell-product {
+                text-align: left;
             }
         }
     }
