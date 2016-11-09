@@ -1,0 +1,33 @@
+/* ******* MODULE: MEMBERSHIP CONFIRMATION ******* */
+
+.module__membership-confirmation__item {
+    display: flex;
+    margin: 0 0 @CmIndent-XXXSmall;
+
+    &:last-child {
+        margin: 0;
+    }
+
+    > .label {
+        .mx__flex(1);
+    }
+
+    > .cost {
+        width: 128px;
+        margin: 0 0 0 @CmIndent-XXSmall;
+    }
+}
+
+.module__membership-confirmation__list {
+    .cm__box;
+
+    .module__membership-confirmation__item {
+        > .label {
+            padding: 0 @CmIndent-XSmall;
+        }
+    }
+}
+
+.module__membership-confirmation__total {
+    .cm__box;
+}
