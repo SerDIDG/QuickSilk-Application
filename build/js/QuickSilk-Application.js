@@ -1,11 +1,11 @@
-/*! ************ QuickSilk-Application v3.15.6 (2016-11-09 21:10) ************ */
+/*! ************ QuickSilk-Application v3.15.7 (2016-11-15 19:08) ************ */
 
 // /* ************************************************ */
 // /* ******* QUICKSILK: COMMON ******* */
 // /* ************************************************ */
 
 var App = {
-    '_version' : '3.15.6',
+    '_version' : '3.15.7',
     'Elements': {},
     'Nodes' : {},
     'Test' : []
@@ -2004,7 +2004,7 @@ cm.define('App.FontInput', {
     'extend' : 'Com.AbstractInput',
     'params' : {
         'renderStructure' : true,
-        'renderOnConstruct' : true,
+        'embedStructureOnRender' : true,
         'embedStructure' : 'replace',
         'className' : 'app__file-input',
         'styles' : {

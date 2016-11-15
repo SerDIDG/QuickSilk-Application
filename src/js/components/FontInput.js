@@ -2,7 +2,7 @@ cm.define('App.FontInput', {
     'extend' : 'Com.AbstractInput',
     'params' : {
         'renderStructure' : true,
-        'renderOnConstruct' : true,
+        'embedStructureOnRender' : true,
         'embedStructure' : 'replace',
         'className' : 'app__file-input',
         'styles' : {
