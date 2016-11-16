@@ -3,7 +3,7 @@
 .app__zone {
     .clearfix;
     max-width: 100%;
-    /* min-height: 0; */ // Causing bug in Chrome
+    min-height: 0;
     padding: 0;
     position: relative;
 
@@ -42,8 +42,22 @@
     }
 
     &.is-editable {
-        /* min-height: @AppZone-MinHeight;  */ // Causing bug in Chrome
+        min-height: @AppZone-MinHeight;
         padding: @AppZone-Padding;
+    }
+}
+
+/* *** MODULE SPECIFIC *** */
+
+.com__column {
+    > .inner {
+        &.app__zone {
+            min-height: initial;
+
+            &.is-editable {
+                min-height: initial;
+            }
+        }
     }
 }
 
