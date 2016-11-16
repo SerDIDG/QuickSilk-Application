@@ -1,4 +1,4 @@
-/*! ************ QuickSilk-Application v3.15.7 (2016-11-16 18:00) ************ */
+/*! ************ QuickSilk-Application v3.15.8 (2016-11-16 21:31) ************ */
 
 // /* ************************************************ */
 // /* ******* QUICKSILK: VARIABLES: ICONS ******* */
@@ -241,6 +241,10 @@
 
 @AppPT-LatestPosts-ImageSize: 70;
 @AppPT-LatestPosts-DescrLines: 1;
+
+// /* ******* PLAN ******* */
+
+@AppPT-Plan-Indent: @CmIndent-Medium;
 
 // /* ************************************************ */
 // /* ******* LAYOUTS ******* */
@@ -1322,6 +1326,101 @@ html {
             }
         }
     }
+}
+/* ******* PARTS: PLAN ******* */
+
+.app-pt__plan {
+    @indent_half: @AppPT-Plan-Indent / 2;
+
+    .cm__box;
+
+    > .inner {
+        .display-flex;
+        margin: 0 -@indent_half;
+    }
+
+    .plan__title {
+        .pt__box--flat;
+        .mx__flex(1 0 220px);
+        .mx__align-content(center);
+        .mx__align-items(center);
+
+        .cm__tags {
+            margin: 0;
+            text-align: center;
+        }
+    }
+
+    .plan__info {
+        .mx__flex(1 0 15%);
+
+        ul {
+            .cm__list-clear;
+        }
+    }
+
+    .plan__abstract {
+        border-left: @CmBorder-Temporary;
+        padding: 0 0 0 @AppPT-Plan-Indent;
+        .mx__flex(1 1 auto);
+    }
+
+    .plan__controls {
+        border-left: @CmBorder-Temporary;
+        padding: 0 0 0 @AppPT-Plan-Indent;
+        .mx__flex(1 0 128px);
+    }
+
+    .plan__title,
+    .plan__info,
+    .plan__abstract,
+    .plan__controls {
+        .display-flex;
+        margin: 0 @indent_half;
+        .mx__flex-flow(column nowrap);
+        .mx__justify-content(center);
+
+        .pt__buttons {
+            width: 100%;
+        }
+    }
+
+    &.is-active {
+        .plan__title {
+            background-color: @CmColor-Primary-LightActive;
+        }
+    }
+}
+
+/* ******* PARTS: COLUMNS: ADAPTIVE ******* */
+
+@media only screen and (max-width : @CmUI-AdaptiveFrom) {
+
+    html.is-adaptive {
+        .app-pt__plan {
+            &.is-adaptive {
+                > .inner {
+                    display: block;
+
+                    .plan__title,
+                    .plan__info,
+                    .plan__abstract,
+                    .plan__controls {
+                        .cm__box;
+                    }
+
+
+                    .plan__abstract,
+                    .plan__controls {
+                        border-left: none;
+                        border-top: @CmBorder-Temporary;
+                        padding: @AppPT-Plan-Indent 0 0;
+                    }
+                }
+            }
+        }
+    }
+
 }
 /* ******* LAYOUTS: ADVANCED EDITOR ******* */
 
