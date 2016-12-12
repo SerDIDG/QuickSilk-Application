@@ -1,11 +1,11 @@
-/*! ************ QuickSilk-Application v3.15.8 (2016-11-16 21:31) ************ */
+/*! ************ QuickSilk-Application v3.15.9 (2016-12-12 20:12) ************ */
 
 // /* ************************************************ */
 // /* ******* QUICKSILK: COMMON ******* */
 // /* ************************************************ */
 
 var App = {
-    '_version' : '3.15.8',
+    '_version' : '3.15.9',
     'Elements': {},
     'Nodes' : {},
     'Test' : []
@@ -6114,7 +6114,10 @@ cm.define('Module.Anchor', {
         'duration' : 'cm._config.animDuration',
         'scroll' : 'document.body',
         'topMenuName' : 'app-topmenu',
-        'templateName' : 'app-template'
+        'templateName' : 'app-template',
+        'customEvents' : true,
+        'resizeEvent' : true,
+        'scrollEvent' : true
     }
 },
 function(params){
@@ -6130,6 +6133,8 @@ cm.getConstructor('Module.Anchor', function(classConstructor, className, classPr
         var that = this;
         // Variables
         that.isActive = false;
+        that.isHashProcess = false;
+        that.isRenewProcess = false;
         that.topMenuParams = {};
         that.templateParams = {};
         // Bind context to methods
@@ -6137,10 +6142,12 @@ cm.getConstructor('Module.Anchor', function(classConstructor, className, classPr
         that.onConstructEndHandler = that.onConstructEnd.bind(that);
         that.onDestructProcessHandler = that.onDestructProcess.bind(that);
         that.onRedrawHandler = that.onRedraw.bind(that);
+        that.onScrollHandler = that.onScroll.bind(that);
         // Add events
         that.addEvent('onConstructEnd', that.onConstructEndHandler);
         that.addEvent('onDestructProcess', that.onDestructProcessHandler);
         that.addEvent('onRedraw', that.onRedrawHandler);
+        that.addEvent('onScroll', that.onScrollHandler);
         // Call parent method
         _inherit.prototype.construct.apply(that, arguments);
         return that;
@@ -6173,15 +6180,29 @@ cm.getConstructor('Module.Anchor', function(classConstructor, className, classPr
         return that;
     };
 
+    classProto.onScroll = function(){
+        var that = this;
+        if(!that.isHashProcess){
+            that.clearHash();
+        }
+        return that;
+    };
+
     classProto.onHashChange = function(e){
         var that = this;
-        if(that.isHashActive()){
+        if(that.isRenewProcess){
             cm.preventDefault(e);
+            that.isRenewProcess = false;
+            that.isActive = false;
+        }else{
+            if(that.isHashActive()){
+                cm.preventDefault(e);
+            }
+            that.prepareHash({
+                'immediately' : false,
+                'force' : false
+            });
         }
-        that.prepareHash({
-            'immediately' : false,
-            'force' : false
-        });
         return that;
     };
 
@@ -6244,8 +6265,10 @@ cm.getConstructor('Module.Anchor', function(classConstructor, className, classPr
         top = Math.min(top, cm._pageSize['scrollHeight']);
         // Move scroll
         if(params['immediately']){
+            that.isHashProcess = false;
             cm.setScrollTop(that.params['scroll'], top);
         }else{
+            that.isHashProcess = true;
             // Scroll style
             if(that.params['scroll'] == document.body){
                 styles = {'docScrollTop' : top};
@@ -6253,7 +6276,11 @@ cm.getConstructor('Module.Anchor', function(classConstructor, className, classPr
                 styles = {'scrollTop' : top};
             }
             // Go
-            that.components['animation'].go({'style' : styles, 'anim' : 'smooth', 'duration' : that.params['duration']});
+            that.components['animation'].go({'style' : styles, 'anim' : 'smooth', 'duration' : that.params['duration'], 'onStop' : function(){
+                setTimeout(function(){
+                    that.isHashProcess = false;
+                }, 500);
+            }});
         }
         return that;
     };
@@ -6262,7 +6289,9 @@ cm.getConstructor('Module.Anchor', function(classConstructor, className, classPr
         var that = this,
             url;
         if(that.isHashActive()){
+            that.isRenewProcess = true;
             url = window.location.href.replace(/(#.*)$/, '');
+            window.location.hash = ['__hash', Date.now(), 'hash__'].join('--');
             window.history.replaceState(null, null, url);
         }
         return that;
