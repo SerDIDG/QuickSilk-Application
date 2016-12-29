@@ -23,6 +23,10 @@ html {
         .tpl__container {
             margin-top: @AppTopMenu-Height;
         }
+
+        .tpl__header__transformed {
+            top: @AppTopMenu-Height;
+        }
     }
 
     &.is-topmenu--expanded {
@@ -38,7 +42,8 @@ html {
             margin-left: @AppSidebar-WidthCollapsed;
         }
 
-        .tpl__header__container {
+        .tpl__header__container,
+        .tpl__header__transformed {
             &.is-fixed {
                 left: @AppSidebar-WidthCollapsed;
             }
@@ -54,10 +59,15 @@ html {
             margin-left: @AppSidebar-WidthExpanded;
         }
 
-        .tpl__header__container {
+        .tpl__header__container,
+        .tpl__header__transformed {
             &.is-fixed {
                 left: @AppSidebar-WidthExpanded;
             }
+        }
+
+        .tpl__header__transformed {
+            margin-top: @AppTpl-Content-EditableIndent;
         }
 
         .tpl__content {
@@ -65,6 +75,7 @@ html {
         }
 
         .tpl__header__container,
+        .tpl__header__transformed,
         .tpl__header,
         .tpl__content,
         .tpl__footer {

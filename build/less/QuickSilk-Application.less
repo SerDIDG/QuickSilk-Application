@@ -1,4 +1,4 @@
-/*! ************ QuickSilk-Application v3.15.9 (2016-12-12 20:12) ************ */
+/*! ************ QuickSilk-Application v3.15.10 (2016-12-29 18:37) ************ */
 
 // /* ************************************************ */
 // /* ******* QUICKSILK: VARIABLES: ICONS ******* */
@@ -1051,6 +1051,10 @@ html {
         .tpl__container {
             margin-top: @AppTopMenu-Height;
         }
+
+        .tpl__header__transformed {
+            top: @AppTopMenu-Height;
+        }
     }
 
     &.is-topmenu--expanded {
@@ -1066,7 +1070,8 @@ html {
             margin-left: @AppSidebar-WidthCollapsed;
         }
 
-        .tpl__header__container {
+        .tpl__header__container,
+        .tpl__header__transformed {
             &.is-fixed {
                 left: @AppSidebar-WidthCollapsed;
             }
@@ -1082,10 +1087,15 @@ html {
             margin-left: @AppSidebar-WidthExpanded;
         }
 
-        .tpl__header__container {
+        .tpl__header__container,
+        .tpl__header__transformed {
             &.is-fixed {
                 left: @AppSidebar-WidthExpanded;
             }
+        }
+
+        .tpl__header__transformed {
+            margin-top: @AppTpl-Content-EditableIndent;
         }
 
         .tpl__content {
@@ -1093,6 +1103,7 @@ html {
         }
 
         .tpl__header__container,
+        .tpl__header__transformed,
         .tpl__header,
         .tpl__content,
         .tpl__footer {
@@ -3448,11 +3459,28 @@ html {
     }
 }
 
-.tpl__header__fake {
+.tpl__header__space {
     display: none;
 
     &.is-show {
         display: block;
+    }
+}
+
+.tpl__header__transformed {
+    z-index: 4;
+    visibility: hidden;
+    .mx__transform(translateY(-100%));
+    .mx__transition(visibility transform, @CmUI-Transition-Duration, @CmUI-MotionAsymmetric);
+
+    &.is-fixed {
+        position: fixed;
+        .mx__position(0, 0, auto, 0);
+    }
+
+    &.is-show {
+        visibility: visible;
+        .mx__transform(translateY(0%));
     }
 }
 
@@ -3490,7 +3518,8 @@ html {
         .mx__align(@AppTpl-Container-Align);
     }
 
-    .tpl__header__container {
+    .tpl__header__container,
+    .tpl__header__transformed {
         &.is-fixed {
             padding: 0 @AppTpl-Container-Indent;
 
@@ -3555,7 +3584,8 @@ html {
             margin-left: 0 !important;
         }
 
-        .tpl__header__container {
+        .tpl__header__container,
+        .tpl__header__transformed {
             &.is-fixed,
             &.is-overlapping {
                 left: 0 !important;
@@ -3577,7 +3607,8 @@ html {
         margin: 0 !important;
     }
 
-    .tpl__header__container {
+    .tpl__header__container,
+    .tpl__header__transformed {
         &.is-fixed,
         &.is-overlapping {
             left: 0 !important;

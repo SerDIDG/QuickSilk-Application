@@ -1,11 +1,11 @@
-/*! ************ QuickSilk-Application v3.15.9 (2016-12-12 20:12) ************ */
+/*! ************ QuickSilk-Application v3.15.10 (2016-12-29 18:37) ************ */
 
 // /* ************************************************ */
 // /* ******* QUICKSILK: COMMON ******* */
 // /* ************************************************ */
 
 var App = {
-    '_version' : '3.15.9',
+    '_version' : '3.15.10',
     'Elements': {},
     'Nodes' : {},
     'Test' : []
@@ -5542,7 +5542,9 @@ cm.define('App.Template', {
         },
         'header' : {
             'fixed' : false,
-            'overlapping' : false
+            'overlapping' : false,
+            'sticky' : false,           // Not implemented
+            'transformed' : false
         },
         'content' : {
             'editableIndent' : 0
@@ -5559,7 +5561,9 @@ function(params){
         'container' : cm.Node('div'),
         'inner' : cm.Node('div'),
         'headerContainer' : cm.Node('div'),
+        'headerTransformed' : cm.Node('div'),
         'header' : cm.Node('div'),
+        'header2' : cm.Node('div'),
         'content' : cm.Node('div'),
         'footer' : cm.Node('div'),
         'buttonUp' : cm.Node('div'),
@@ -5591,8 +5595,8 @@ function(params){
 
     var render = function(){
         // Structure
-        that.nodes['headerFake'] = cm.node('div', {'class' : 'tpl__header__fake'});
-        cm.insertAfter(that.nodes['headerFake'], that.nodes['headerContainer']);
+        that.nodes['headerSpace'] = cm.node('div', {'class' : 'tpl__header__space'});
+        cm.insertAfter(that.nodes['headerSpace'], that.nodes['headerContainer']);
         // Find components
         cm.find('App.TopMenu', that.params['topMenuName'], null, function(classObject){
             that.components['topMenu'] = classObject;
@@ -5613,6 +5617,11 @@ function(params){
                 redraw(true);
             });
         });
+        cm.addEvent(window, 'scroll', function(){
+            animFrame(function(){
+                scroll();
+            });
+        });
     };
 
     var setState = function(){
@@ -5623,36 +5632,64 @@ function(params){
             cm.addClass(that.nodes['headerContainer'], 'is-fixed');
         }
         if(that.params['header']['fixed'] && !that.params['header']['overlapping']){
-            cm.addClass(that.nodes['headerFake'], 'is-show');
+            cm.addClass(that.nodes['headerSpace'], 'is-show');
         }
+        cm.addClass(that.nodes['headerTransformed'], 'is-fixed');
+        cm.removeClass(that.nodes['headerTransformed'], 'is-show');
     };
 
     var unsetState = function(){
         cm.removeClass(that.nodes['headerContainer'], 'is-overlapping is-fixed');
-        cm.removeClass(that.nodes['headerFake'], 'is-show');
+        cm.removeClass(that.nodes['headerSpace'], 'is-show');
+        cm.removeClass(that.nodes['headerTransformed'], 'is-fixed');
+        if(that.params['header']['transformed']){
+            cm.addClass(that.nodes['headerTransformed'], 'is-show');
+        }
     };
 
     var redraw = function(triggerEvents){
-        // Fixed Header
+        getOffsets();
+        resizeContent();
+        setHeaderTransformed();
+        // Redraw Events
+        if(triggerEvents){
+            that.triggerEvent('onRedraw');
+        }
+    };
+
+    var scroll = function(){
+        getOffsets();
+        setHeaderTransformed();
+    };
+
+    var getOffsets = function(){
         that.offsets['top'] = that.components['topMenu'] ? that.components['topMenu'].getDimensions('height') : 0;
         that.offsets['left'] = that.components['sidebar'] ? that.components['sidebar'].getDimensions('width') : 0;
         that.offsets['header'] = that.nodes['header'].offsetHeight;
+        that.offsets['header2'] = that.nodes['header2'].offsetHeight;
         that.offsets['footer'] = that.nodes['footer'].offsetHeight;
         that.offsets['height'] = cm.getPageSize('winHeight') - that.offsets['top'];
-        // Resize
+        that.offsets['scrollTop'] = cm.getBodyScrollTop();
+    };
+
+    var resizeContent = function(){
         that.nodes['inner'].style.minHeight = that.offsets['height'] + 'px';
         if(that.isEditing){
             if(that.params['footer']['sticky']){
-                that.nodes['content'].style.minHeight = Math.max((
-                        that.offsets['height']
-                        - that.offsets['header']
-                        - that.offsets['footer']
-                        - (that.params['content']['editableIndent'] * 2)
-                    ), 0) + 'px';
+                that.offsets['contentHeightCalc'] = that.offsets['height']
+                    - that.offsets['header']
+                    - that.offsets['footer']
+                    - (that.params['content']['editableIndent'] * 2);
+                if(that.params['header']['transformed']){
+                    that.offsets['contentHeightCalc'] = that.offsets['contentHeightCalc']
+                        - that.offsets['header2']
+                        - that.params['content']['editableIndent'];
+                }
+                that.nodes['content'].style.minHeight = Math.max(that.offsets['contentHeightCalc'], 0) + 'px';
             }
         }else{
             if(that.params['header']['fixed'] && !that.params['header']['overlapping']){
-                that.nodes['headerFake'].style.height = that.offsets['header'] + 'px';
+                that.nodes['headerSpace'].style.height = that.offsets['header'] + 'px';
             }
             if(that.params['footer']['sticky']){
                 if(that.params['header']['overlapping']){
@@ -5662,9 +5699,19 @@ function(params){
                 }
             }
         }
-        // Redraw Events
-        if(triggerEvents){
-            that.triggerEvent('onRedraw');
+    };
+
+    var setHeaderTransformed = function(){
+        if(that.params['header']['transformed']){
+            if(that.isEditing){
+                cm.addClass(that.nodes['headerTransformed'], 'is-show');
+            }else{
+                if(that.offsets['scrollTop'] >= that.offsets['header']){
+                    cm.addClass(that.nodes['headerTransformed'], 'is-show');
+                }else{
+                    cm.removeClass(that.nodes['headerTransformed'], 'is-show');
+                }
+            }
         }
     };
 
