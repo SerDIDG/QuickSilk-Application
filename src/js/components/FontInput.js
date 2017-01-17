@@ -101,6 +101,12 @@ cm.getConstructor('App.FontInput', function(classConstructor, className, classPr
     classProto.validateParamsEnd = function(){
         var that = this;
         // Validate config
+        if(cm.isString(that.params['value'])){
+            that.params['value'] = cm.parseJSON(that.params['value']);
+        }
+        if(cm.isString(that.params['defaultValue'])){
+            that.params['defaultValue'] = cm.parseJSON(that.params['defaultValue']);
+        }
         that.validateItemConfig(that.params['value']);
         that.validateItemConfig(that.params['defaultValue']);
         // Extend global styles config
