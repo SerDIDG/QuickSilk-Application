@@ -319,3 +319,13 @@
 .app__block-dummy-helper__width {
     width: @AppBlock-Dummy-Width;
 }
+
+/* ******* COMPONENTS: BLOCK: ADAPTIVE ******* */
+
+@media only screen and (max-width : @CmScreen-Mobile) {
+    .app__block {
+        &.hover--fadeIn {
+            opacity: 1;
+        }
+    }
+}

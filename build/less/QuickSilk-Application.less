@@ -1,4 +1,4 @@
-/*! ************ QuickSilk-Application v3.15.11 (2017-01-17 19:23) ************ */
+/*! ************ QuickSilk-Application v3.15.12 (2017-01-18 20:22) ************ */
 
 // /* ************************************************ */
 // /* ******* QUICKSILK: VARIABLES: ICONS ******* */
@@ -2083,6 +2083,16 @@ html {
 
 .app__block-dummy-helper__width {
     width: @AppBlock-Dummy-Width;
+}
+
+/* ******* COMPONENTS: BLOCK: ADAPTIVE ******* */
+
+@media only screen and (max-width : @CmScreen-Mobile) {
+    .app__block {
+        &.hover--fadeIn {
+            opacity: 1;
+        }
+    }
 }
 /* ******* COMPONENTS: CONTENT ******** */
 
