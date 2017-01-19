@@ -188,6 +188,7 @@ cm.getConstructor('App.FontInput', function(classConstructor, className, classPr
     classProto.renderContent = function(){
         var that = this,
             nodes = {};
+        that.nodes['content'] = nodes;
         // Structure
         nodes['container'] = cm.node('div', {'class' : 'app__stylizer__item'},
             nodes['preview'] = cm.node(that.params['previewTag'], {'class' : 'item-preview', 'innerHTML' : that.params['placeholder']})
@@ -196,7 +197,6 @@ cm.getConstructor('App.FontInput', function(classConstructor, className, classPr
         // Render tooltip structure view
         that.renderTooltipView();
         // Push
-        that.nodes['component'] = nodes;
         return nodes['container'];
     };
 
@@ -211,13 +211,13 @@ cm.getConstructor('App.FontInput', function(classConstructor, className, classPr
             that.components['tooltip'] = new classConstructor(
                 cm.merge(that.params[className], {
                     'content' : that.nodes['tooltip']['container'],
-                    'target' : that.nodes['component']['container'],
+                    'target' : that.nodes['content']['container'],
                     'events' : {
                         'onShowStart' : function(){
-                            cm.addClass(that.nodes['component']['container'], 'active')
+                            cm.addClass(that.nodes['content']['container'], 'active')
                         },
                         'onHideStart' : function(){
-                            cm.removeClass(that.nodes['component']['container'], 'active')
+                            cm.removeClass(that.nodes['content']['container'], 'active')
                         }
                     }
                 })
@@ -570,7 +570,7 @@ cm.getConstructor('App.FontInput', function(classConstructor, className, classPr
                     break;
             }
             // Set preview
-            that.nodes['component']['preview'].style[cm.styleStrToKey(key)] = that.value[key];
+            that.nodes['content']['preview'].style[cm.styleStrToKey(key)] = that.value[key];
         });
         return that;
     };
