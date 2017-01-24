@@ -1,0 +1,57 @@
+/* ******* MODULES: BUTTON ******* */
+
+.mod__button {
+    .button {
+        .display-flex;
+        .cm__flex--center;
+
+        .image {
+            position: relative;
+
+            img {
+                .cm__image-centered;
+            }
+        }
+
+        .label {
+            &:first-child {
+                margin-left: 0;
+            }
+
+            &:last-child {
+                margin-right: 0;
+            }
+        }
+    }
+
+    .mod__button__label-indent(@ModButton-LabelIndent);
+    .mod__button__image-size(@ModButton-ImageSize);
+}
+
+// /* *** MIXINS *** */
+
+.mod__button__label-indent (@indent: @ModButton-LabelIndent) {
+    .button {
+        .label {
+            margin-left: @indent;
+            margin-right: @indent;
+
+            &:first-child {
+                margin-left: 0;
+            }
+
+            &:last-child {
+                margin-right: 0;
+            }
+        }
+    }
+}
+
+.mod__button__image-size (@size: @ModButton-ImageSize) {
+    .button {
+        .image {
+            width: @size;
+            height: @size;
+        }
+    }
+}

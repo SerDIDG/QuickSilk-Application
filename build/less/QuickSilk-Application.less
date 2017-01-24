@@ -1,4 +1,4 @@
-/*! ************ QuickSilk-Application v3.15.13 (2017-01-19 19:48) ************ */
+/*! ************ QuickSilk-Application v3.15.14 (2017-01-24 19:04) ************ */
 
 // /* ************************************************ */
 // /* ******* QUICKSILK: VARIABLES: ICONS ******* */
@@ -481,6 +481,11 @@
 @AppMod-RolloverTabs-ThemeLight-Label-ActiveBackground: @CmColor-Background;
 @AppMod-RolloverTabs-ThemeLight-Menu-Background: @CmColor-Background;
 @AppMod-RolloverTabs-ThemeLight-Content-Background: @CmColor-Background;
+
+// /* ******* BUTTON ******* */
+
+@ModButton-LabelIndent: @CmIndent-XXSmall;
+@ModButton-ImageSize: @CmSize-Medium;
 
 // /* ************************************************ */
 // /* ******* PAGES ******* */
@@ -4242,6 +4247,63 @@ html {
     .app-pt__latest-posts {
         .app-pt__latest-posts__image-size(@AppMod-BlogWidget-ImageSize);
         .app-pt__latest-posts__descr-lines(@AppMod-BlogWidget-DescrLines);
+    }
+}
+/* ******* MODULES: BUTTON ******* */
+
+.mod__button {
+    .button {
+        .display-flex;
+        .cm__flex--center;
+
+        .image {
+            position: relative;
+
+            img {
+                .cm__image-centered;
+            }
+        }
+
+        .label {
+            &:first-child {
+                margin-left: 0;
+            }
+
+            &:last-child {
+                margin-right: 0;
+            }
+        }
+    }
+
+    .mod__button__label-indent(@ModButton-LabelIndent);
+    .mod__button__image-size(@ModButton-ImageSize);
+}
+
+// /* *** MIXINS *** */
+
+.mod__button__label-indent (@indent: @ModButton-LabelIndent) {
+    .button {
+        .label {
+            margin-left: @indent;
+            margin-right: @indent;
+
+            &:first-child {
+                margin-left: 0;
+            }
+
+            &:last-child {
+                margin-right: 0;
+            }
+        }
+    }
+}
+
+.mod__button__image-size (@size: @ModButton-ImageSize) {
+    .button {
+        .image {
+            width: @size;
+            height: @size;
+        }
     }
 }
 /* ******* MODULES: CALENDAR ******* */
