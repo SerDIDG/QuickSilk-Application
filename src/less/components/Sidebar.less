@@ -277,6 +277,9 @@
 }
 
 .app__sidebar__theme (@theme) when (@theme = Dark) {
+    @background: @AppSidebar-ThemeDark-Background;
+    @color: @AppSidebar-ThemeDark-Color;
+
     .pt__toolbar {
         .button {
             .button.button-white;
@@ -287,19 +290,25 @@
         > ul {
             > li {
                 > a {
-                    color: ~"@{AppSidebar-Theme@{theme}-Color}";
+                    color: @color;
 
                     &:hover {
-                        color: ~"@{AppSidebar-Theme@{theme}-Background}";
+                        color: @background;
                     }
                 }
 
                 &.active {
                     > a {
-                        color: ~"@{AppSidebar-Theme@{theme}-Background}";
+                        color: @background;
                     }
                 }
             }
+        }
+    }
+
+    .pt__overlay {
+        &.theme-dark {
+            background-color: fade(@background, 70%);
         }
     }
 }

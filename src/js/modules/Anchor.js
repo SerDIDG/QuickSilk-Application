@@ -180,7 +180,7 @@ cm.getConstructor('Module.Anchor', function(classConstructor, className, classPr
     classProto.clearHash = function(){
         var that = this,
             url;
-        if(that.isHashActive()){
+        if(cm._isDocumentLoad && that.isHashActive()){
             that.isRenewProcess = true;
             url = window.location.href.replace(/(#.*)$/, '');
             window.location.hash = ['__hash', Date.now(), 'hash__'].join('--');

@@ -1,4 +1,4 @@
-/*! ************ QuickSilk-Application v3.15.14 (2017-01-24 19:04) ************ */
+/*! ************ QuickSilk-Application v3.15.15 (2017-02-06 19:56) ************ */
 
 // /* ************************************************ */
 // /* ******* QUICKSILK: VARIABLES: ICONS ******* */
@@ -8,7 +8,7 @@
 
 @AppIconVars-Family: 'QuickSilk-Glyphs';
 @AppIconVars-Color: @CmIconVars-Color;
-@AppIconVars-Version: 26;
+@AppIconVars-Version: @AppVersion;
 
 @AppIcon-QuickSilk: '\e600';
 @AppIcon-Plus: '\e601';
@@ -114,6 +114,8 @@
 // /* ************************************************ */
 // /* ******* VARIABLES ******* */
 // /* ************************************************ */
+
+@AppVersion: '3.15.15';
 
 // /* ******* PATH ******* */
 
@@ -3274,6 +3276,9 @@ html {
 }
 
 .app__sidebar__theme (@theme) when (@theme = Dark) {
+    @background: @AppSidebar-ThemeDark-Background;
+    @color: @AppSidebar-ThemeDark-Color;
+
     .pt__toolbar {
         .button {
             .button.button-white;
@@ -3284,19 +3289,25 @@ html {
         > ul {
             > li {
                 > a {
-                    color: ~"@{AppSidebar-Theme@{theme}-Color}";
+                    color: @color;
 
                     &:hover {
-                        color: ~"@{AppSidebar-Theme@{theme}-Background}";
+                        color: @background;
                     }
                 }
 
                 &.active {
                     > a {
-                        color: ~"@{AppSidebar-Theme@{theme}-Background}";
+                        color: @background;
                     }
                 }
             }
+        }
+    }
+
+    .pt__overlay {
+        &.theme-dark {
+            background-color: fade(@background, 70%);
         }
     }
 }

@@ -27,6 +27,7 @@ cm.define('App.Sidebar', {
         'active' : 'template-manager',
         'target' : 'document.html',
         'remember' : true,
+        'theme' : 'dark',
         'ajax' : {
             'type' : 'json',
             'method' : 'get',
@@ -37,6 +38,9 @@ cm.define('App.Sidebar', {
             'node' : cm.Node('div'),
             'name' : '',
             'responseHTML' : true
+        },
+        'Com.Overlay' : {
+            'theme' : 'dark'
         }
     }
 },
@@ -71,12 +75,15 @@ function(params){
 
     var getLESSVariables = function(){
         that.params['duration'] = cm.getTransitionDurationFromLESS('AppSidebar-Duration', that.params['duration']);
+        that.params['theme'] = cm.getLESSVariable('AppSidebar-Theme', that.params['theme']).toLowerCase();
     };
 
     var validateParams = function(){
+        that.params['Com.Overlay']['theme'] = that.params['theme'];
         that.params['Com.TabsetHelper']['node'] = that.nodes['inner'];
         that.params['Com.TabsetHelper']['name'] = [that.params['name'], 'tabset'].join('-');
         that.params['Com.TabsetHelper']['ajax'] = that.params['ajax'];
+        that.params['Com.TabsetHelper']['Com.Overlay'] = that.params['Com.Overlay']
     };
 
     var render = function(){

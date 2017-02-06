@@ -119,6 +119,29 @@ module.exports = function(grunt) {
             }
         },
 
+        replace: {
+            options: {
+                patterns: [
+                    {
+                        match: 'VERSION',
+                        replacement: '<%= pkg.version %>'
+                    }
+                ]
+            },
+            scripts: {
+                src: ['<%= paths.build %>/js/<%= pkg.name %>.js'],
+                dest: '<%= paths.build %>/js/<%= pkg.name %>.js'
+            },
+            styles: {
+                src: ['<%= paths.build %>/less/<%= pkg.name %>.less'],
+                dest: '<%= paths.build %>/less/<%= pkg.name %>.less'
+            },
+            variables: {
+                src: ['<%= paths.build %>/less/<%= pkg.name %>.variables.less'],
+                dest: '<%= paths.build %>/less/<%= pkg.name %>.variables.less'
+            }
+        },
+
         uglify : {
             build : {
                 src : ['<%= paths.build %>/js/<%= pkg.name %>.js'],
@@ -207,10 +230,10 @@ module.exports = function(grunt) {
     grunt.registerTask('default', ['clean', 'pre', 'scripts', 'styles', 'images', 'fonts']);
     grunt.registerTask('optimize', ['clean:temp', 'default', 'uglify', 'imagemin', 'copy:image_optimize', 'clean:temp']);
 
-    grunt.registerTask('scripts', ['concat:scripts', 'copy:scripts']);
-    grunt.registerTask('styles', ['variables', 'concat:styles', 'copy:styles']);
+    grunt.registerTask('scripts', ['concat:scripts', 'replace:scripts', 'copy:scripts']);
+    grunt.registerTask('styles', ['variables', 'concat:styles', 'replace:styles', 'copy:styles']);
     grunt.registerTask('images', ['copy:images']);
     grunt.registerTask('fonts', ['copy:fonts']);
-    grunt.registerTask('variables', ['concat:variables', 'lessvars']);
+    grunt.registerTask('variables', ['concat:variables', 'replace:variables', 'lessvars']);
     grunt.registerTask('pre', ['variables']);
 };

@@ -1,6 +1,6 @@
 {
   "name": "QuickSilk-Application",
-  "version": "3.15.14",
+  "version": "3.15.15",
   "license": "CC-BY-NC-SA-4.0",
   "dependencies": {
     "bower": "~1.3.0",
@@ -16,6 +16,7 @@
     "grunt-contrib-watch": "~0.6.0",
     "grunt-less-imports": "^1.1.0",
     "grunt-lessvars": "^0.3.0",
+    "grunt-replace": "^1.0.1",
     "load-grunt-tasks": "~3.3.0",
     "time-grunt": "^1.2.2"
   }

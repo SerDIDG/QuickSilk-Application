@@ -1,11 +1,11 @@
-/*! ************ QuickSilk-Application v3.15.14 (2017-01-24 19:04) ************ */
+/*! ************ QuickSilk-Application v3.15.15 (2017-02-06 19:56) ************ */
 
 // /* ************************************************ */
 // /* ******* QUICKSILK: COMMON ******* */
 // /* ************************************************ */
 
 var App = {
-    '_version' : '3.15.14',
+    '_version' : '3.15.15',
     'Elements': {},
     'Nodes' : {},
     'Test' : []
@@ -4778,6 +4778,7 @@ cm.define('App.Sidebar', {
         'active' : 'template-manager',
         'target' : 'document.html',
         'remember' : true,
+        'theme' : 'dark',
         'ajax' : {
             'type' : 'json',
             'method' : 'get',
@@ -4788,6 +4789,9 @@ cm.define('App.Sidebar', {
             'node' : cm.Node('div'),
             'name' : '',
             'responseHTML' : true
+        },
+        'Com.Overlay' : {
+            'theme' : 'dark'
         }
     }
 },
@@ -4822,12 +4826,15 @@ function(params){
 
     var getLESSVariables = function(){
         that.params['duration'] = cm.getTransitionDurationFromLESS('AppSidebar-Duration', that.params['duration']);
+        that.params['theme'] = cm.getLESSVariable('AppSidebar-Theme', that.params['theme']).toLowerCase();
     };
 
     var validateParams = function(){
+        that.params['Com.Overlay']['theme'] = that.params['theme'];
         that.params['Com.TabsetHelper']['node'] = that.nodes['inner'];
         that.params['Com.TabsetHelper']['name'] = [that.params['name'], 'tabset'].join('-');
         that.params['Com.TabsetHelper']['ajax'] = that.params['ajax'];
+        that.params['Com.TabsetHelper']['Com.Overlay'] = that.params['Com.Overlay']
     };
 
     var render = function(){
@@ -6341,7 +6348,7 @@ cm.getConstructor('Module.Anchor', function(classConstructor, className, classPr
     classProto.clearHash = function(){
         var that = this,
             url;
-        if(that.isHashActive()){
+        if(cm._isDocumentLoad && that.isHashActive()){
             that.isRenewProcess = true;
             url = window.location.href.replace(/(#.*)$/, '');
             window.location.hash = ['__hash', Date.now(), 'hash__'].join('--');
