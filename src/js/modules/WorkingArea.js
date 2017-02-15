@@ -87,14 +87,17 @@ function(params){
     };
 
     var linkAction = function(e){
-        cm.preventDefault(e);
-        switch(that.params['target']){
-            case '_blank':
-                window.open(that.params['href'],'_blank');
-                break;
-            default:
-                window.location.href = that.params['href'];
-                break;
+        var target = cm.getEventTarget(e);
+        if((target.tagName && target.tagName.toLowerCase() !== 'a') || cm.isEmpty(target.getAttribute('href'))){
+            cm.preventDefault(e);
+            switch(that.params['target']){
+                case '_blank':
+                    window.open(that.params['href'],'_blank');
+                    break;
+                default:
+                    window.location.href = that.params['href'];
+                    break;
+            }
         }
     };
 

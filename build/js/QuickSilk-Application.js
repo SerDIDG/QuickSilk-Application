@@ -1,11 +1,11 @@
-/*! ************ QuickSilk-Application v3.15.15 (2017-02-06 19:56) ************ */
+/*! ************ QuickSilk-Application v3.15.16 (2017-02-15 19:56) ************ */
 
 // /* ************************************************ */
 // /* ******* QUICKSILK: COMMON ******* */
 // /* ************************************************ */
 
 var App = {
-    '_version' : '3.15.15',
+    '_version' : '3.15.16',
     'Elements': {},
     'Nodes' : {},
     'Test' : []
@@ -2587,6 +2587,72 @@ cm.getConstructor('App.FontInput', function(classConstructor, className, classPr
             that.triggerEvent('onChange', that.value);
         }
         return that;
+    };
+});
+cm.define('App.FormStyles', {
+    'extend' : 'Com.AbstractController',
+    'params' : {
+        'renderStructure' : false,
+        'embedStructureOnRender' : false,
+        'controllerEvents' : true
+    }
+},
+function(params){
+    var that = this;
+    // Call parent class construct
+    Com.AbstractController.apply(that, arguments);
+});
+
+cm.getConstructor('App.FormStyles', function(classConstructor, className, classProto){
+    var _inherit = classProto._inherit;
+
+    classProto.onConstruct = function(){
+        var that = this;
+        // Bind context to methods
+        that.outerIndentTriggerHandler = that.outerIndentTrigger.bind(that);
+        that.backgroundPositionTriggerHandler = that.backgroundPositionTrigger.bind(that);
+    };
+
+    classProto.onRender = function(){
+        var that = this;
+        that.outerIndentTrigger();
+        that.backgroundPositionTrigger();
+    };
+
+    classProto.renderViewModel = function(){
+        var that = this;
+        // Find Components
+        cm.find('Com.BoxTools', 'outer-indent', that.nodes['container'], function(classObject){
+            that.components['outer-indent'] = classObject;
+        });
+        cm.find('Com.PositionTools', 'background-position', that.nodes['container'], function(classObject){
+            that.components['background-position'] = classObject;
+        });
+        // Outer Indent Trigger
+        cm.addEvent(that.nodes['outer-indent-auto'], 'change', that.outerIndentTriggerHandler);
+        // Background Position Trigger
+        cm.addEvent(that.nodes['background-position-custom'], 'change', that.backgroundPositionTriggerHandler);
+    };
+
+    classProto.outerIndentTrigger = function(){
+        var that = this;
+        if(that.nodes['outer-indent-auto'].checked){
+            that.components['outer-indent'].disable();
+        }else{
+            that.components['outer-indent'].enable();
+        }
+    };
+
+    classProto.backgroundPositionTrigger = function(e){
+        var that = this;
+        if(that.nodes['background-position-custom'].checked){
+            that.components['background-position'].disable();
+            that.nodes['background-position-value'].disabled = false;
+            e && that.nodes['background-position-value'].focus();
+        }else{
+            that.components['background-position'].enable();
+            that.nodes['background-position-value'].disabled = true;
+        }
     };
 });
 cm.define('App.HelpTour', {
@@ -7198,14 +7264,17 @@ function(params){
     };
 
     var linkAction = function(e){
-        cm.preventDefault(e);
-        switch(that.params['target']){
-            case '_blank':
-                window.open(that.params['href'],'_blank');
-                break;
-            default:
-                window.location.href = that.params['href'];
-                break;
+        var target = cm.getEventTarget(e);
+        if((target.tagName && target.tagName.toLowerCase() !== 'a') || cm.isEmpty(target.getAttribute('href'))){
+            cm.preventDefault(e);
+            switch(that.params['target']){
+                case '_blank':
+                    window.open(that.params['href'],'_blank');
+                    break;
+                default:
+                    window.location.href = that.params['href'];
+                    break;
+            }
         }
     };
 
