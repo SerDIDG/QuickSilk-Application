@@ -1,4 +1,4 @@
-/*! ************ QuickSilk-Application v3.15.16 (2017-02-15 19:56) ************ */
+/*! ************ QuickSilk-Application v3.15.17 (2017-02-16 09:37) ************ */
 
 // /* ************************************************ */
 // /* ******* QUICKSILK: VARIABLES: ICONS ******* */
@@ -115,7 +115,7 @@
 // /* ******* VARIABLES ******* */
 // /* ************************************************ */
 
-@AppVersion: '3.15.16';
+@AppVersion: '3.15.17';
 
 // /* ******* PATH ******* */
 
@@ -6516,6 +6516,103 @@ html {
         }
     }
 
+}
+.app__additional-donations__row {
+    .display-flex;
+    min-height: @CmForm-FieldHeight;
+    line-height: @CmForm-FieldHeight;
+
+    .unveil {
+        display: none;
+    }
+
+    label {
+        @padding: round((@CmForm-FieldHeight - @CmFont-Base-LineHeight) / 2);
+        padding: 0;
+        margin: 0 0 0 @CmIndent-XSmall;
+        line-height: @CmForm-FieldHeight;
+        cursor: pointer;
+        .mx__flex(1 1 auto);
+    }
+
+    input[type="radio"],
+    input[type="checkbox"] {
+        @margin: floor((@CmForm-FieldHeight - 13px) / 2);
+
+        margin: @margin 0 @margin 0;
+        padding: 0;
+        cursor: pointer;
+
+        &:checked + .unveil,
+        &:checked + label + .unveil,
+        &:checked + label + .unveil + .unveil {
+            display: block;
+        }
+    }
+
+    > .price,
+    > .select,
+    > .field {
+        margin: 0 0 0 @CmIndent-Small;
+        padding: 0;
+        line-height: @CmForm-FieldHeight;
+        .mx__flex(none);
+    }
+
+    > .select {
+        width: 15%;
+    }
+
+    > .price {
+        width: 50%;
+    }
+}
+
+@media only screen and (max-width: @CmScreen-Tablet) {
+    html.is-adaptive {
+        .app__additional-donations__row {
+            > .select {
+                width: 25%;
+            }
+
+            > .price {
+                width: 35%;
+            }
+        }
+    }
+}
+
+@media only screen and (max-width: @CmUI-AdaptiveFrom) {
+    html.is-adaptive {
+        .app__additional-donations__row {
+            > .select {
+                width: 35%;
+            }
+
+            > .price {
+                width: 20%;
+            }
+        }
+    }
+}
+
+@media only screen and (max-width: @CmScreen-Mobile) {
+    html.is-adaptive {
+        .app__additional-donations__row {
+            display: block;
+
+            > .price,
+            > .select,
+            > .field {
+                width: auto;
+                margin: 0 0 @CmIndent-XXSmall 0;
+
+                &:last-child {
+                    margin: 0;
+                }
+            }
+        }
+    }
 }
 /* ******* PAGES: GROUP PROFILE ******* */
 
