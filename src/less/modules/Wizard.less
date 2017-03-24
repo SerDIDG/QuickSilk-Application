@@ -1,0 +1,419 @@
+/* ******* MODULES: EVENTS WIDGET ******* */
+
+.mod__wizard {
+    z-index: 1;
+    .mx__transition(z-index, @CmUI-Transition-Duration);
+
+    > .inner {
+        position: relative;
+
+        > .tabs__head {
+            position: relative;
+            z-index: 2;
+
+            ul {
+                .cm__list-clear;
+                .cm__list-inline;
+
+                > li {
+                    position: relative;
+                    z-index: 1;
+                    .mx__transition(all, @CmUI-Transition-Duration);
+
+                    > a {
+                        .display-flex;
+                        white-space: nowrap;
+                        .mx__transition(all, @CmUI-Transition-Duration);
+                        .mx__align-items(center);
+                        .mx__flex-flow(row nowrap);
+
+                        .image {
+                            position: relative;
+
+                            img {
+                                .cm__image-centered;
+                            }
+                        }
+
+                        .title {
+                            &:first-child {
+                                margin-left: 0;
+                            }
+
+                            &:last-child {
+                                margin-right: 0;
+                            }
+                        }
+
+                        &:hover {
+                            .mx__transition(all, @CmUI-Transition-DurationReverse);
+                        }
+                    }
+
+                    &:hover {
+                        z-index: 2;
+                        .mx__transition(all, @CmUI-Transition-DurationReverse);
+                    }
+                }
+            }
+        }
+
+        > .tabs__menu {
+            display: none;
+            position: relative;
+            z-index: 3;
+
+            > .inner {
+                position: relative;
+
+                .label {
+                    .cm__text-nowrap;
+                }
+
+                .icon {
+                    float: right;
+
+                    &.default {
+                        .icon.medium.menu;
+                    }
+                }
+
+                &:hover,
+                &.active {
+                    .pt__menu-dropdown {
+                        .pt__menu-dropdown--active;
+                    }
+                }
+            }
+
+            .pt__menu-dropdown {
+                .pt__menu-dropdown--base;
+                .pt__menu-dropdown--position;
+                min-width: 100%;
+                top: 100%;
+            }
+        }
+
+        > .tabs__content {
+            z-index: 1;
+
+            > .inner {
+                > ul {
+                    .cm__list-clear;
+                    .cm__box;
+                    position: relative;
+                    .mx__transition(height, @AppMod-Wizard-Duration);
+
+                    > li {
+                        position: absolute;
+                        z-index: 1;
+                        visibility: hidden;
+                        opacity: 0;
+                        overflow: hidden;
+                        .mx__position(0, 0, 0, 0);
+                        .mx__transition(all, @AppMod-Wizard-Duration);
+
+                        &.active {
+                            position: relative;
+                            z-index: 2;
+                            visibility: visible;
+                            opacity: 1;
+                            overflow: visible;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    &.pull-left {
+        > .inner {
+            > .tabs__head {
+                ul {
+                    text-align: left;
+                }
+            }
+        }
+    }
+
+    &.pull-center {
+        > .inner {
+            > .tabs__head {
+                ul {
+                    text-align: center;
+                }
+            }
+        }
+    }
+
+    &.pull-right {
+        > .inner {
+            > .tabs__head {
+                ul {
+                    text-align: right;
+                }
+            }
+        }
+    }
+
+    &.pull-justify {
+        > .inner {
+            > .tabs__head {
+                ul {
+                    .display-flex;
+                    text-align: center;
+                    .mx__flex-flow(row wrap);
+
+                    > li {
+                        max-width: 100%;
+                        .mx__flex(1 1 0);
+
+                        > a {
+                            .mx__justify-content(center);
+
+                            .title {
+                                .cm__text-nowrap;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    &:hover {
+        z-index: 10;
+    }
+
+    .mod__wizard__label-indent(@AppMod-Wizard-Label-Indent);
+    .mod__wizard__label-title-indent(@AppMod-Wizard-Label-TitleIndent);
+    .mod__wizard__content-indent(@AppMod-Wizard-Content-Indent);
+    .mod__wizard__image-size(@AppMod-Wizard-Image-Size);
+}
+
+/* *** THEMES *** */
+
+.mod__wizard {
+    &.theme-initial {
+        > .inner {
+            > .tabs__head {
+                > .inner {
+                    ul {
+                        > li {
+                            border: @AppMod-Wizard-Border;
+                            border-radius: @AppMod-Wizard-BorderRadius;
+
+                            > a {
+                                .cm__font;
+                                text-decoration: none;
+                            }
+                        }
+                    }
+                }
+            }
+
+            > .tabs__menu {
+                > .inner {
+                    border: @AppMod-Wizard-Border;
+                    border-radius: @AppMod-Wizard-BorderRadius;
+
+                    .label {
+                        .cm__font;
+                        min-height: @AppMod-Wizard-Menu-Height;
+                        line-height: @AppMod-Wizard-Menu-Height;
+                        padding: 0 @AppMod-Wizard-Menu-Indent;
+                    }
+
+                    .icon {
+                        width: @AppMod-Wizard-Menu-Height;
+                        height: @AppMod-Wizard-Menu-Height;
+                    }
+                }
+            }
+
+            > .tabs__content {
+                > .inner {
+                    padding: @AppMod-Wizard-Content-Padding;
+                    border: @AppMod-Wizard-Border;
+                    border-radius: @AppMod-Wizard-BorderRadius;
+                }
+            }
+        }
+
+        .mod__wizard__label-inner-indent(@AppMod-Wizard-Label-InnerIndent);
+        .mod__wizard__label-height(@AppMod-Wizard-Label-Height);
+    }
+
+    &.theme-light {
+        > .inner {
+            > .tabs__head {
+                > .inner {
+                    ul {
+                        > li {
+                            background: @AppMod-Wizard-ThemeLight-Label-DefaultBackground;
+                            border-color: @AppMod-Wizard-ThemeLight-BorderColor;
+
+                            &:hover {
+                                background: @AppMod-Wizard-ThemeLight-Label-HoverBackground;
+                            }
+
+                            &.active {
+                                background: @AppMod-Wizard-ThemeLight-Label-ActiveBackground;
+                            }
+                        }
+                    }
+                }
+            }
+
+            > .tabs__menu {
+                > .inner {
+                    background: @AppMod-Wizard-ThemeLight-Menu-Background;
+                    border-color: @AppMod-Wizard-ThemeLight-BorderColor;
+                }
+            }
+
+            > .tabs__content {
+                > .inner {
+                    background-color: @AppMod-Wizard-ThemeLight-Content-Background;
+                    border-color: @AppMod-Wizard-ThemeLight-BorderColor;
+                }
+            }
+        }
+    }
+
+    &.theme-default {
+        &:extend(.mod__wizard.theme-initial all);
+        &:extend(.mod__wizard.theme-light all);
+    }
+}
+
+// /* *** MIXINS *** */
+
+.mod__wizard__label-indent (@indent: @AppMod-Wizard-Label-Indent) {
+    > .inner {
+        > .tabs__head {
+            ul {
+                margin: -(@indent / 2);
+
+                > li {
+                    margin: (@indent / 2);
+                }
+            }
+        }
+    }
+}
+
+.mod__wizard__label-inner-indent (@indent: @AppMod-Wizard-Label-InnerIndent) {
+    > .inner {
+        > .tabs__head {
+            > .inner {
+                ul {
+                    > li {
+                        > a {
+                            padding: 0 @indent;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+.mod__wizard__label-height (@height: @AppMod-Wizard-Label-Height) {
+    > .inner {
+        > .tabs__head {
+            > .inner {
+                ul {
+                    > li {
+                        > a {
+                            height: @height;
+                            line-height: @height;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+.mod__wizard__label-title-indent (@indent: @AppMod-Wizard-Label-TitleIndent) {
+    > .inner {
+        > .tabs__head {
+            ul {
+                > li {
+                    > a {
+                        .title {
+                            margin-left: @indent;
+                            margin-right: @indent;
+
+                            &:first-child {
+                                margin-left: 0;
+                            }
+
+                            &:last-child {
+                                margin-right: 0;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+.mod__wizard__content-indent (@indent: @AppMod-Wizard-Content-Indent) {
+    > .inner {
+        > .tabs__content {
+            margin: @indent 0;
+
+            &:first-child {
+                margin-top: 0;
+            }
+
+            &:last-child {
+                margin-bottom: 0;
+            }
+        }
+    }
+}
+
+.mod__wizard__image-size (@size: @AppMod-Wizard-Image-Size) {
+    > .inner {
+        > .tabs__head {
+            ul {
+                > li {
+                    > a {
+                        .image {
+                            width: @size;
+                            height: @size;
+                        }
+                    }
+                }
+            }
+
+            .pt__image {
+                width: @size;
+                height: @size;
+            }
+        }
+    }
+}
+
+/* ******* COMPONENTS: TABSET: ADAPTIVE ******* */
+
+@media only screen and (max-width : @AppMod-Wizard-AdaptiveFrom) {
+
+    html.is-adaptive {
+        .mod__wizard {
+            > .inner {
+                > .tabs__head {
+                    display: none;
+                }
+
+                > .tabs__menu {
+                    display: block;
+                }
+            }
+        }
+    }
+}

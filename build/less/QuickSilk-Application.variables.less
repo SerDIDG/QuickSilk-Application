@@ -33,7 +33,7 @@
 // /* ******* MAGPIE UI: VARIABLES ******* */
 // /* ************************************************ */
 
-@CmVersion: '3.25.0';
+@CmVersion: '3.25.1';
 
 // /* ******* PATH ******* */
 
@@ -1037,7 +1037,7 @@
 @AppIcon-Block-form_builder: 56;
 @AppIcon-Block-rollover-tabs: 57;
 
-@AppIcon-Block-Element-Names: button column content divider spacer input text password hidden select checkbox radiobutton textarea wysiwyg multicheckbox captcha imagebrowser datepicker timepicker;
+@AppIcon-Block-Element-Names: button column content divider spacer input text password hidden select checkbox radiobutton textarea wysiwyg multicheckbox captcha imagebrowser fileuploader datepicker timepicker;
 
 @AppIcon-Block-Element-button: 42;
 @AppIcon-Block-Element-column: 2;
@@ -1056,6 +1056,7 @@
 @AppIcon-Block-Element-wysiwyg: 51;
 @AppIcon-Block-Element-captcha: 52;
 @AppIcon-Block-Element-imagebrowser: 53;
+@AppIcon-Block-Element-fileuploader: 53;
 @AppIcon-Block-Element-timepicker: 54;
 @AppIcon-Block-Element-datepicker: 55;
 
@@ -1063,7 +1064,7 @@
 // /* ******* VARIABLES ******* */
 // /* ************************************************ */
 
-@AppVersion: '3.15.21';
+@AppVersion: '3.16.0';
 
 // /* ******* PATH ******* */
 
@@ -1159,7 +1160,7 @@
 @AppFont-Button-Family: Open Sans, sans-serif;
 @AppFont-Button-Size: 13px;
 @AppFont-Button-Weight: 400;
-@AppFont-Button-Color: #666666;
+@AppFont-Button-Color: #ffffff;
 @AppFont-Button-Decoration: none;
 @AppFont-Button-Style: normal;
 
@@ -1431,6 +1432,32 @@
 @AppMod-RolloverTabs-ThemeLight-Label-ActiveBackground: @CmColor-Background;
 @AppMod-RolloverTabs-ThemeLight-Menu-Background: @CmColor-Background;
 @AppMod-RolloverTabs-ThemeLight-Content-Background: @CmColor-Background;
+
+// /* ******* WIZARD ******* */
+
+@AppMod-Wizard-AdaptiveFrom: @CmUI-AdaptiveFrom;
+@AppMod-Wizard-BorderRadius: @CmBorder-Radius;
+@AppMod-Wizard-BorderWidth: @CmBorder-Width;
+@AppMod-Wizard-Border: @AppMod-Wizard-BorderWidth solid transparent;
+@AppMod-Wizard-Duration: @CmUI-Transition-Duration;
+@AppMod-Wizard-Theme: 'Light';
+
+@AppMod-Wizard-Label-Height: @CmForm-FieldHeight;
+@AppMod-Wizard-Label-Indent: @CmIndent-XXXSmall;
+@AppMod-Wizard-Label-InnerIndent: @CmIndent-XSmall;
+@AppMod-Wizard-Label-TitleIndent: @CmIndent-XXSmall;
+@AppMod-Wizard-Image-Size: @CmSize-Medium;
+@AppMod-Wizard-Menu-Height: @CmForm-FieldHeight;
+@AppMod-Wizard-Menu-Indent: @CmIndent-XSmall;
+@AppMod-Wizard-Content-Indent: 4px;
+@AppMod-Wizard-Content-Padding: @CmIndent-Medium;
+
+@AppMod-Wizard-ThemeLight-BorderColor: @CmColor-Border;
+@AppMod-Wizard-ThemeLight-Label-DefaultBackground: @CmColor-Secondary-LightActive;
+@AppMod-Wizard-ThemeLight-Label-HoverBackground: @CmColor-Secondary-LightHover;
+@AppMod-Wizard-ThemeLight-Label-ActiveBackground: @CmColor-Background;
+@AppMod-Wizard-ThemeLight-Menu-Background: @CmColor-Background;
+@AppMod-Wizard-ThemeLight-Content-Background: @CmColor-Background;
 
 // /* ******* BUTTON ******* */
 

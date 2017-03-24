@@ -1,11 +1,11 @@
-/*! ************ QuickSilk-Application v3.15.21 (2017-03-07 20:52) ************ */
+/*! ************ QuickSilk-Application v3.16.0 (2017-03-24 20:04) ************ */
 
 // /* ************************************************ */
 // /* ******* QUICKSILK: COMMON ******* */
 // /* ************************************************ */
 
 var App = {
-    '_version' : '3.15.21',
+    '_version' : '3.16.0',
     'Elements': {},
     'Nodes' : {},
     'Test' : []
@@ -14,15 +14,74 @@ var App = {
 var Module = {};
 cm.define('App.AbstractModule', {
     'extend' : 'Com.AbstractController',
+    'events' : [
+        'enableEditing',
+        'disableEditing',
+        'enableEditable',
+        'disableEditable'
+    ],
     'params' : {
         'renderStructure' : false,
-        'embedStructureOnRender' : false
+        'embedStructureOnRender' : false,
+        'controllerEvents' : true,
+        'customEvents' : true
     }
 },
 function(params){
     var that = this;
     // Call parent class construct
     Com.AbstractController.apply(that, arguments);
+});
+
+cm.getConstructor('App.AbstractModule', function(classConstructor, className, classProto){
+    var _inherit = classProto._inherit;
+
+    classProto.construct = function(){
+        var that = this;
+        // Variables
+        that.isEditing = null;
+        // Bind
+        that.enableEditingHandler = that.enableEditing.bind(that);
+        that.disableEditingHandler = that.disableEditing.bind(that);
+        // Call parent method
+        _inherit.prototype.construct.apply(that, arguments);
+    };
+
+    classProto.onSetCustomEvents = function(){
+        var that = this;
+        cm.customEvent.add(that.params['node'], 'enableEditable', that.enableEditingHandler);
+        cm.customEvent.add(that.params['node'], 'disableEditable', that.disableEditingHandler);
+    };
+
+    classProto.onUnsetCustomEvents = function(){
+        var that = this;
+        cm.customEvent.remove(that.params['node'], 'enableEditable', that.enableEditingHandler);
+        cm.customEvent.remove(that.params['node'], 'disableEditable', that.disableEditingHandler);
+    };
+
+    /*** PUBLIC ***/
+
+    classProto.enableEditing = function(){
+        var that = this;
+        if(!cm.isBoolean(that.isEditing) || !that.isEditing){
+            that.isEditing = true;
+            cm.replaceClass(that.params['node'], 'is-not-editing', 'is-editing is-editable');
+            that.triggerEvent('enableEditing');
+            that.triggerEvent('enableEditable');
+        }
+        return that;
+    };
+
+    classProto.disableEditing = function(){
+        var that = this;
+        if(!cm.isBoolean(that.isEditing) || that.isEditing){
+            that.isEditing = false;
+            cm.replaceClass(that.params['node'], 'is-editing is-editable', 'is-not-editing');
+            that.triggerEvent('disableEditing');
+            that.triggerEvent('disableEditable');
+        }
+        return that;
+    };
 });
 cm.define('App.AbstractForm', {
     'extend' : 'Com.AbstractController'
@@ -31,6 +90,90 @@ function(params){
     var that = this;
     // Call parent class construct
     Com.AbstractController.apply(that, arguments);
+});
+cm.define('App.AbstractModuleElement', {
+    'extend' : 'App.AbstractModule',
+    'params' : {
+        'renderStructure' : false,
+        'embedStructureOnRender' : false,
+        'required' : false,
+        'pattern' : /^\s*$/g,
+        'match' : false,
+        'targetController' : false
+    }
+},
+function(params){
+    var that = this;
+    // Call parent class construct
+    App.AbstractModule.apply(that, arguments);
+});
+
+cm.getConstructor('App.AbstractModuleElement', function(classConstructor, className, classProto){
+    var _inherit = classProto._inherit;
+
+    classProto.renderViewModel = function(){
+        var that = this;
+        // Call parent method
+        _inherit.prototype.renderViewModel.apply(that, arguments);
+        // Get controller
+        if(that.params['targetController']){
+            cm.find(that.params['targetController'], that.params['name'], that.nodes['field'], function(classObject){
+                that.components['controller'] = classObject;
+            });
+        }
+    };
+
+    classProto.get = function(){
+        var that = this;
+        if(that.components['controller']){
+            return that.components['controller'].get();
+        }
+        if(!cm.isEmpty(that.nodes['inputs'])){
+            return that.getMultiple();
+        }
+        return that.nodes['input'].value;
+    };
+
+    classProto.getMultiple = function(){
+        var that = this,
+            value = [];
+        cm.forEach(that.nodes['inputs'], function(nodes){
+            value.push(nodes['input'].value);
+        });
+        return value;
+    };
+
+    classProto.validateValue = function(){
+        var that = this,
+            value = that.get(),
+            test;
+        if(cm.isRegExp(that.params['pattern'])){
+            if(cm.isEmpty(value)){
+                test = true;
+            }else{
+                test = that.params['pattern'].test(value);
+            }
+        }else{
+            test = that.params['pattern'] === value;
+        }
+        return that.params['match']? test : !test;
+    };
+
+    classProto.validate = function(){
+        var that = this,
+            isValid = true;
+        if(that.params['required']){
+            isValid = that.validateValue();
+            if(isValid){
+                cm.removeClass(that.nodes['field'], 'error');
+                cm.addClass(that.nodes['errors'], 'hidden');
+            }else{
+                cm.addClass(that.nodes['field'], 'error');
+                cm.removeClass(that.nodes['errors'], 'hidden');
+            }
+        }
+        return isValid;
+    };
 });
 cm.define('App.Block', {
     'modules' : [
@@ -6382,6 +6525,353 @@ cm.getConstructor('Module.Anchor', function(classConstructor, className, classPr
     };
 });
 
+cm.define('Mod.ElementCaptcha', {
+    'extend' : 'App.AbstractModuleElement',
+    'params' : {
+    }
+},
+function(params){
+    var that = this;
+    // Call parent class construct
+    App.AbstractModuleElement.apply(that, arguments);
+});
+cm.define('Mod.ElementCheckbox', {
+    'extend' : 'App.AbstractModuleElement',
+    'params' : {
+    }
+},
+function(params){
+    var that = this;
+    // Call parent class construct
+    App.AbstractModuleElement.apply(that, arguments);
+});
+
+cm.getConstructor('Mod.ElementCheckbox', function(classConstructor, className, classProto){
+    var _inherit = classProto._inherit;
+
+    classProto.get = function(){
+        var that = this;
+        return that.nodes['input'].checked;
+    };
+
+    classProto.validateValue = function(){
+        var that = this;
+        return that.get();
+    };
+});
+cm.define('Mod.ElementDatePicker', {
+    'extend' : 'App.AbstractModuleElement',
+    'params' : {
+        'targetController' : 'Com.Datepicker',
+        'pattern' : /^(0000-00-00)$/
+    }
+},
+function(params){
+    var that = this;
+    // Call parent class construct
+    App.AbstractModuleElement.apply(that, arguments);
+});
+cm.define('Mod.ElementFileUploader', {
+    'extend' : 'App.AbstractModuleElement',
+    'params' : {
+        'targetController' : 'App.FileInput'
+    }
+},
+function(params){
+    var that = this;
+    // Call parent class construct
+    App.AbstractModuleElement.apply(that, arguments);
+});
+cm.define('Mod.ElementMultiCheckbox', {
+    'extend' : 'App.AbstractModuleElement',
+    'params' : {
+    }
+},
+function(params){
+    var that = this;
+    // Call parent class construct
+    App.AbstractModuleElement.apply(that, arguments);
+});
+
+cm.getConstructor('Mod.ElementMultiCheckbox', function(classConstructor, className, classProto){
+    var _inherit = classProto._inherit;
+
+    classProto.getMultiple = function(){
+        var that = this,
+            value = [];
+        cm.forEach(that.nodes['inputs'], function(nodes){
+            if(nodes['input'].checked){
+                value.push(nodes['input'].value);
+            }
+        });
+        return value;
+    };
+});
+cm.define('Mod.ElementPassword', {
+    'extend' : 'App.AbstractModuleElement',
+    'params' : {
+    }
+},
+function(params){
+    var that = this;
+    // Call parent class construct
+    App.AbstractModuleElement.apply(that, arguments);
+});
+cm.define('Mod.ElementRadioButton', {
+    'extend' : 'App.AbstractModuleElement',
+    'params' : {
+    }
+},
+function(params){
+    var that = this;
+    // Call parent class construct
+    App.AbstractModuleElement.apply(that, arguments);
+});
+
+cm.getConstructor('Mod.ElementRadioButton', function(classConstructor, className, classProto){
+    var _inherit = classProto._inherit;
+
+    classProto.getMultiple = function(){
+        var that = this,
+            value = '';
+        cm.forEach(that.nodes['inputs'], function(nodes){
+            if(nodes['input'].checked){
+                value = nodes['input'].value;
+            }
+        });
+        return value;
+    };
+});
+cm.define('Mod.ElementSelect', {
+    'extend' : 'App.AbstractModuleElement',
+    'params' : {
+        'targetController' : 'Com.Select'
+    }
+},
+function(params){
+    var that = this;
+    // Call parent class construct
+    App.AbstractModuleElement.apply(that, arguments);
+});
+cm.define('Mod.ElementText', {
+    'extend' : 'App.AbstractModuleElement',
+    'params' : {
+    }
+},
+function(params){
+    var that = this;
+    // Call parent class construct
+    App.AbstractModuleElement.apply(that, arguments);
+});
+cm.define('Mod.ElementTextArea', {
+    'extend' : 'App.AbstractModuleElement',
+    'params' : {
+    }
+},
+function(params){
+    var that = this;
+    // Call parent class construct
+    App.AbstractModuleElement.apply(that, arguments);
+});
+cm.define('Mod.ElementWizard', {
+    'extend' : 'App.AbstractModule',
+    'events' : [
+        'onTabShow',
+        'onTabHide'
+    ],
+    'params' : {
+        'duration' : 'cm._config.animDuration',
+        'delay' : 'cm._config.hideDelay',
+        'Com.TabsetHelper' : {
+            'targetEvent' : 'none'
+        }
+    }
+},
+function(params){
+    var that = this;
+    // Call parent class construct
+    App.AbstractModule.apply(that, arguments);
+});
+
+cm.getConstructor('Mod.ElementWizard', function(classConstructor, className, classProto){
+    var _inherit = classProto._inherit;
+
+    classProto.onConstructStart = function(){
+        var that = this;
+        // Variables
+        that.tabs = {};
+        that.tabsCount = 0;
+        that.options = [];
+        that.isProcessing = false;
+        that.changeInterval = null;
+        that.currentTab = 0;
+        // Bind
+        that.prevTabHandler = that.prevTab.bind(that);
+        that.nextTabHandler = that.nextTab.bind(that);
+    };
+
+    classProto.onConstructEnd = function(){
+        var that = this;
+        that.setTab(0);
+    };
+
+    classProto.onValidateParams = function(){
+        var that = this;
+        that.params['Com.TabsetHelper']['node'] = that.nodes['inner'];
+        that.params['Com.TabsetHelper']['name'] = [that.params['name'], 'tabset'].join('-');
+    };
+
+    classProto.renderViewModel = function(){
+        var that = this;
+        // Process Tabset
+        that.processTabset();
+        that.processTabs();
+        that.processMenu();
+        // Buttons
+        that.processButtons();
+    };
+
+    classProto.processTabset = function(){
+        var that = this;
+        cm.getConstructor('Com.TabsetHelper', function(classConstructor, className){
+            that.components['tabset'] = new classConstructor(that.params[className])
+                .addEvent('onTabHide', function(tabset, data){
+                    that.triggerEvent('onTabHide', data['item']);
+                })
+                .addEvent('onTabShowStart', function(tabset, data){
+                    if(!that.isProcessing){
+                        that.nodes['content-list'].style.overflow = 'hidden';
+                        that.nodes['content-list'].style.height = that.nodes['content-list'].offsetHeight + 'px';
+                    }
+                    that.isProcessing = true;
+                    that.changeInterval && clearTimeout(that.changeInterval);
+                    that.changeInterval = setTimeout(function(){
+                        that.isProcessing = false;
+                        that.nodes['content-list'].style.height = 'auto';
+                        that.nodes['content-list'].style.overflow = 'visible';
+                    }, that.params['duration']);
+                })
+                .addEvent('onTabShow', function(tabset, data){
+                    that.currentTab = data['item'];
+                    that.nodes['content-list'].style.height = data['item']['tab']['container'].offsetHeight + 'px';
+                    that.setMenu();
+                    that.setButtons();
+                    that.triggerEvent('onTabShow', data['item']);
+                })
+                .processTabs(that.nodes['tabs'], that.nodes['labels']);
+        });
+    };
+
+    classProto.processTabs = function(){
+        var that = this;
+        that.tabs = that.components['tabset'].getTabs();
+        that.tabsCount = that.components['tabset'].getTabsCount();
+        cm.forEach(that.tabs, function(item){
+            cm.addEvent(item['label']['container'], 'click', function(){
+                if(that.validateTab() && that.currentTab['id'] != item['id']){
+                    that.components['tabset'].set(item['id']);
+                }
+            });
+        });
+    };
+
+    classProto.processMenu = function(){
+        var that = this;
+        cm.forEach(that.nodes['options'], function(nodes){
+            var item = cm.merge({
+                'id' : '',
+                'nodes' : nodes
+            }, that.getNodeDataConfig(nodes['container']));
+            // Click Events
+            cm.addEvent(nodes['container'], 'click', function(){
+                if(that.validateTab() && that.currentTab['id'] != item['id']){
+                    that.components['tabset'].set(item['id']);
+                }
+            });
+            // Push
+            that.options.push(item);
+        });
+    };
+
+    classProto.setMenu = function(){
+        var that = this;
+        that.nodes['menu-label'].innerHTML = that.currentTab['title'];
+    };
+
+    classProto.processButtons = function(){
+        var that = this;
+        cm.addEvent(that.nodes['buttonPrev'], 'click', that.prevTabHandler);
+        cm.addEvent(that.nodes['buttonNext'], 'click', that.nextTabHandler);
+    };
+
+    classProto.setButtons = function(){
+        var that = this,
+            index = that.currentTab['index'];
+        if(index === 0){
+            cm.addClass(that.nodes['buttonPrev'], 'is-hidden');
+            cm.removeClass(that.nodes['buttonNext'], 'is-hidden');
+            cm.addClass(that.nodes['buttonDone'], 'is-hidden');
+        }
+        if(index > 0 && index < that.tabsCount - 1){
+            cm.removeClass(that.nodes['buttonPrev'], 'is-hidden');
+            cm.removeClass(that.nodes['buttonNext'], 'is-hidden');
+            cm.addClass(that.nodes['buttonDone'], 'is-hidden');
+        }
+        if(index === that.tabsCount - 1){
+            cm.removeClass(that.nodes['buttonPrev'], 'is-hidden');
+            cm.addClass(that.nodes['buttonNext'], 'is-hidden');
+            cm.removeClass(that.nodes['buttonDone'], 'is-hidden');
+        }
+    };
+
+    /*** TABS ***/
+
+    classProto.validateTab = function(){
+        var that = this,
+            isValid = true;
+        if(!that.isEditing){
+            cm.find('App.AbstractModuleElement', null, that.currentTab['tab']['inner'], function(classObject){
+                if(cm.isFunction(classObject.validate)){
+                    if(!classObject.validate()){
+                        isValid = false;
+                    }
+                }
+            }, {'childs' : true});
+        }
+        return isValid;
+    };
+
+    classProto.prevTab = function(){
+        var that = this;
+        if(that.validateTab() && that.currentTab['index'] > 0){
+            var index = that.currentTab['index'] - 1;
+            that.setTab(index);
+        }
+    };
+
+    classProto.nextTab = function(){
+        var that = this;
+        if(that.validateTab() && that.currentTab['index'] < that.tabsCount - 1){
+            var index = that.currentTab['index'] + 1;
+            that.setTab(index);
+        }
+    };
+
+    classProto.setTab = function(index){
+        var that = this;
+        that.components['tabset'].setByIndex(index);
+    };
+});
+cm.define('Mod.ElementWysiwyg', {
+    'extend' : 'App.AbstractModuleElement',
+    'params' : {
+    }
+},
+function(params){
+    var that = this;
+    // Call parent class construct
+    App.AbstractModuleElement.apply(that, arguments);
+});
 cm.define('Module.LogoCarousel', {
     'extend' : 'App.AbstractModule',
     'params' : {
