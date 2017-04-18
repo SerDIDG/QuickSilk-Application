@@ -1,6 +1,7 @@
 cm.define('Mod.ElementCheckbox', {
     'extend' : 'App.AbstractModuleElement',
     'params' : {
+        'inputEvent' : 'change'
     }
 },
 function(params){
@@ -12,13 +13,19 @@ function(params){
 cm.getConstructor('Mod.ElementCheckbox', function(classConstructor, className, classProto){
     var _inherit = classProto._inherit;
 
+    classProto.validateValue = function(){
+        var that = this;
+        return that.get();
+    };
+
     classProto.get = function(){
         var that = this;
         return that.nodes['input'].checked;
     };
 
-    classProto.validateValue = function(){
+    classProto.set = function(value){
         var that = this;
-        return that.get();
+        that.nodes['input'].checked = value;
+        return that;
     };
 });

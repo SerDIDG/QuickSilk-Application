@@ -126,6 +126,30 @@
         }
     }
 
+    > .tabs__input {
+        display: none;
+    }
+
+    &.is-editing {
+        > .inner {
+            > .tabs__content {
+                position: relative;
+
+                > .inner {
+                    > ul {
+                        > li {
+                            display: none;
+
+                            &.active {
+                                display: block;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
     &.pull-left {
         > .inner {
             > .tabs__head {

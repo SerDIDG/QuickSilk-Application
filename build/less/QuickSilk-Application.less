@@ -1,4 +1,4 @@
-/*! ************ QuickSilk-Application v3.16.0 (2017-03-24 20:04) ************ */
+/*! ************ QuickSilk-Application v3.17.0 (2017-04-18 17:58) ************ */
 
 // /* ************************************************ */
 // /* ******* QUICKSILK: VARIABLES: ICONS ******* */
@@ -116,7 +116,7 @@
 // /* ******* VARIABLES ******* */
 // /* ************************************************ */
 
-@AppVersion: '3.16.0';
+@AppVersion: '3.17.0';
 
 // /* ******* PATH ******* */
 
@@ -3366,7 +3366,7 @@ html {
         }
     }
 
-    .pt__overlay {
+    .sidebar__overlay {
         &.theme-dark {
             background-color: fade(@background, 70%);
         }
@@ -6657,6 +6657,30 @@ html {
                             visibility: visible;
                             opacity: 1;
                             overflow: visible;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    > .tabs__input {
+        display: none;
+    }
+
+    &.is-editing {
+        > .inner {
+            > .tabs__content {
+                position: relative;
+
+                > .inner {
+                    > ul {
+                        > li {
+                            display: none;
+
+                            &.active {
+                                display: block;
+                            }
                         }
                     }
                 }

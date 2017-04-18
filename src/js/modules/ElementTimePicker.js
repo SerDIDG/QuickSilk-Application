@@ -1,7 +1,8 @@
-cm.define('Mod.ElementCaptcha', {
+cm.define('Mod.ElementTimePicker', {
     'extend' : 'App.AbstractModuleElement',
     'params' : {
-        'memorable' : false
+        'targetController' : 'Com.TimeSelect',
+        'pattern' : /^(00-00-00)$/
     }
 },
 function(params){

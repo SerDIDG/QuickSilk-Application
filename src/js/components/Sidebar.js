@@ -40,7 +40,8 @@ cm.define('App.Sidebar', {
             'responseHTML' : true
         },
         'Com.Overlay' : {
-            'theme' : 'dark'
+            'theme' : 'dark',
+            'className' : 'sidebar__overlay'
         }
     }
 },

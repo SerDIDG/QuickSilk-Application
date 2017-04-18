@@ -2,13 +2,18 @@ cm.define('Mod.ElementWizard', {
     'extend' : 'App.AbstractModule',
     'events' : [
         'onTabShow',
-        'onTabHide'
+        'onTabHide',
+        'onTabChange'
     ],
     'params' : {
         'duration' : 'cm._config.animDuration',
         'delay' : 'cm._config.hideDelay',
+        'active' : null,
         'Com.TabsetHelper' : {
             'targetEvent' : 'none'
+        },
+        'Com.AbstractInput' : {
+            'className' : 'tabs__input'
         }
     }
 },
@@ -29,7 +34,7 @@ cm.getConstructor('Mod.ElementWizard', function(classConstructor, className, cla
         that.options = [];
         that.isProcessing = false;
         that.changeInterval = null;
-        that.currentTab = 0;
+        that.currentTab = null;
         // Bind
         that.prevTabHandler = that.prevTab.bind(that);
         that.nextTabHandler = that.nextTab.bind(that);
@@ -37,13 +42,21 @@ cm.getConstructor('Mod.ElementWizard', function(classConstructor, className, cla
 
     classProto.onConstructEnd = function(){
         var that = this;
-        that.setTab(0);
+        if(that.currentTab === null){
+            if(that.params['active'] && that.tabs[that.params['active']]){
+                that.setTab(that.params['active']);
+            }else{
+                that.setTabByIndex(0);
+            }
+        }
     };
 
     classProto.onValidateParams = function(){
         var that = this;
         that.params['Com.TabsetHelper']['node'] = that.nodes['inner'];
-        that.params['Com.TabsetHelper']['name'] = [that.params['name'], 'tabset'].join('-');
+        that.params['Com.TabsetHelper']['name'] = that.params['name'];
+        that.params['Com.AbstractInput']['container'] = that.nodes['container'];
+        that.params['Com.AbstractInput']['name'] = that.params['name'];
     };
 
     classProto.renderViewModel = function(){
@@ -54,6 +67,7 @@ cm.getConstructor('Mod.ElementWizard', function(classConstructor, className, cla
         that.processMenu();
         // Buttons
         that.processButtons();
+        that.processInput();
     };
 
     classProto.processTabset = function(){
@@ -81,7 +95,9 @@ cm.getConstructor('Mod.ElementWizard', function(classConstructor, className, cla
                     that.nodes['content-list'].style.height = data['item']['tab']['container'].offsetHeight + 'px';
                     that.setMenu();
                     that.setButtons();
+                    that.setInput();
                     that.triggerEvent('onTabShow', data['item']);
+                    that.triggerEvent('onTabChange', data['item']);
                 })
                 .processTabs(that.nodes['tabs'], that.nodes['labels']);
         });
@@ -94,7 +110,7 @@ cm.getConstructor('Mod.ElementWizard', function(classConstructor, className, cla
         cm.forEach(that.tabs, function(item){
             cm.addEvent(item['label']['container'], 'click', function(){
                 if(that.validateTab() && that.currentTab['id'] != item['id']){
-                    that.components['tabset'].set(item['id']);
+                    that.setTab(item['id']);
                 }
             });
         });
@@ -110,7 +126,7 @@ cm.getConstructor('Mod.ElementWizard', function(classConstructor, className, cla
             // Click Events
             cm.addEvent(nodes['container'], 'click', function(){
                 if(that.validateTab() && that.currentTab['id'] != item['id']){
-                    that.components['tabset'].set(item['id']);
+                    that.setTab(item['id']);
                 }
             });
             // Push
@@ -149,6 +165,18 @@ cm.getConstructor('Mod.ElementWizard', function(classConstructor, className, cla
         }
     };
 
+    classProto.processInput = function(){
+        var that = this;
+        cm.getConstructor('Com.AbstractInput', function(classConstructor, className){
+            that.components['input'] = new classConstructor(that.params[className]);
+        });
+    };
+
+    classProto.setInput = function(){
+        var that = this;
+        that.currentTab && that.components['input'] && that.components['input'].set(that.currentTab['id']);
+    };
+
     /*** TABS ***/
 
     classProto.validateTab = function(){
@@ -170,7 +198,7 @@ cm.getConstructor('Mod.ElementWizard', function(classConstructor, className, cla
         var that = this;
         if(that.validateTab() && that.currentTab['index'] > 0){
             var index = that.currentTab['index'] - 1;
-            that.setTab(index);
+            that.setTabByIndex(index);
         }
     };
 
@@ -178,12 +206,22 @@ cm.getConstructor('Mod.ElementWizard', function(classConstructor, className, cla
         var that = this;
         if(that.validateTab() && that.currentTab['index'] < that.tabsCount - 1){
             var index = that.currentTab['index'] + 1;
-            that.setTab(index);
+            that.setTabByIndex(index);
         }
     };
 
-    classProto.setTab = function(index){
+    classProto.setTab = function(id){
+        var that = this;
+        that.components['tabset'].set(id);
+    };
+
+    classProto.setTabByIndex = function(index){
         var that = this;
         that.components['tabset'].setByIndex(index);
+    };
+
+    classProto.getCurrentTab = function(){
+        var that = this;
+        return that.currentTab;
     };
 });

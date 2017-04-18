@@ -1,12 +1,17 @@
 cm.define('App.AbstractModuleElement', {
     'extend' : 'App.AbstractModule',
+    'events' : [
+        'onChange'
+    ],
     'params' : {
         'renderStructure' : false,
         'embedStructureOnRender' : false,
         'required' : false,
         'pattern' : /^\s*$/g,
         'match' : false,
-        'targetController' : false
+        'targetController' : false,
+        'memorable' : true,
+        'inputEvent' : 'input'
     }
 },
 function(params){
@@ -24,30 +29,58 @@ cm.getConstructor('App.AbstractModuleElement', function(classConstructor, classN
         _inherit.prototype.renderViewModel.apply(that, arguments);
         // Get controller
         if(that.params['targetController']){
-            cm.find(that.params['targetController'], that.params['name'], that.nodes['field'], function(classObject){
-                that.components['controller'] = classObject;
+            that.renderController();
+        }else if(!cm.isEmpty(that.nodes['inputs'])){
+            that.renderInputs();
+        }else{
+            that.renderInput(that.nodes['input']);
+        }
+    };
+
+    classProto.renderController = function(){
+        var that = this;
+        cm.find(that.params['targetController'], that.params['name'], that.nodes['field'], function(classObject){
+            that.components['controller'] = classObject;
+            that.components['controller'].addEvent('onChange', function(my, data){
+                var value = that.get();
+                that.triggerEvent('onChange', value);
+            });
+        });
+    };
+
+    classProto.renderInputs = function(){
+        var that = this;
+        cm.forEach(that.nodes['inputs'], function(nodes){
+            that.renderInput(nodes['input']);
+        });
+    };
+
+    classProto.renderInput = function(node){
+        var that = this;
+        cm.addEvent(node, that.params['inputEvent'], function(){
+            var value = that.get();
+            that.triggerEvent('onChange', value);
+        });
+    };
+
+    classProto.setMultiple = function(values){
+        var that = this;
+        if(cm.isArray(value)){
+            cm.forEach(that.nodes['inputs'], function(nodes, i){
+                if(values[i]){
+                    nodes['input'].value = values[i];
+                }
             });
         }
     };
 
-    classProto.get = function(){
-        var that = this;
-        if(that.components['controller']){
-            return that.components['controller'].get();
-        }
-        if(!cm.isEmpty(that.nodes['inputs'])){
-            return that.getMultiple();
-        }
-        return that.nodes['input'].value;
-    };
-
     classProto.getMultiple = function(){
         var that = this,
-            value = [];
+            values = [];
         cm.forEach(that.nodes['inputs'], function(nodes){
-            value.push(nodes['input'].value);
+            values.push(nodes['input'].value);
         });
-        return value;
+        return values;
     };
 
     classProto.validateValue = function(){
@@ -64,6 +97,31 @@ cm.getConstructor('App.AbstractModuleElement', function(classConstructor, classN
             test = that.params['pattern'] === value;
         }
         return that.params['match']? test : !test;
+    };
+
+    /******* PUBLIC *******/
+
+    classProto.set = function(value){
+        var that = this;
+        if(that.components['controller']){
+            that.components['controller'].set(value);
+        }else if(!cm.isEmpty(that.nodes['inputs'])){
+            that.setMultiple(value);
+        }else{
+            that.nodes['input'].value = value;
+        }
+        return that;
+    };
+
+    classProto.get = function(){
+        var that = this;
+        if(that.components['controller']){
+            return that.components['controller'].get();
+        }
+        if(!cm.isEmpty(that.nodes['inputs'])){
+            return that.getMultiple();
+        }
+        return that.nodes['input'].value;
     };
 
     classProto.validate = function(){

@@ -1,6 +1,7 @@
 cm.define('Mod.ElementRadioButton', {
     'extend' : 'App.AbstractModuleElement',
     'params' : {
+        'inputEvent' : 'change'
     }
 },
 function(params){
@@ -21,5 +22,12 @@ cm.getConstructor('Mod.ElementRadioButton', function(classConstructor, className
             }
         });
         return value;
+    };
+
+    classProto.setMultiple = function(value){
+        var that = this;
+        cm.forEach(that.nodes['inputs'], function(nodes){
+            nodes['input'].checked = nodes['input'].value == value;
+        });
     };
 });

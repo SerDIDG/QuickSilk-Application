@@ -54,7 +54,7 @@ cm.define('App.Editor', {
 function(params){
     var that = this;
 
-    that.types = ['template-manager', 'form-manager'];
+    that.types = ['template-manager', 'form-manager', 'listing-directory-card'];
     that.components = {};
     that.nodes = {};
 

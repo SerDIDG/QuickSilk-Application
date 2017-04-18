@@ -1,6 +1,7 @@
 cm.define('Mod.ElementMultiCheckbox', {
     'extend' : 'App.AbstractModuleElement',
     'params' : {
+        'inputEvent' : 'change'
     }
 },
 function(params){
@@ -14,12 +15,21 @@ cm.getConstructor('Mod.ElementMultiCheckbox', function(classConstructor, classNa
 
     classProto.getMultiple = function(){
         var that = this,
-            value = [];
+            values = [];
         cm.forEach(that.nodes['inputs'], function(nodes){
             if(nodes['input'].checked){
-                value.push(nodes['input'].value);
+                values.push(nodes['input'].value);
             }
         });
-        return value;
+        return values;
+    };
+
+    classProto.setMultiple = function(values){
+        var that = this;
+        if(cm.isArray(values)){
+            cm.forEach(that.nodes['inputs'], function(nodes){
+                nodes['input'].checked = cm.inArray(values, nodes['input'].value);
+            });
+        }
     };
 });
