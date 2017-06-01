@@ -30,14 +30,14 @@ cm.define('App.HelpTour', {
             'name' : '',
             'theme' : 'transparent',
             'position' : 'absolute'
-        },
-        'langs' : {
-            'next' : 'Next',
-            'back' : 'Back',
-            'close' : 'Close',
-            'cancel' : 'Cancel',
-            'finish' : 'Finish'
         }
+    },
+    'strings' : {
+        'next' : 'Next',
+        'back' : 'Back',
+        'close' : 'Close',
+        'cancel' : 'Cancel',
+        'finish' : 'Finish'
     }
 },
 function(params){

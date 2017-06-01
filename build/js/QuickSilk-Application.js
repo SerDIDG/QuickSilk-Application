@@ -1,11 +1,11 @@
-/*! ************ QuickSilk-Application v3.17.0 (2017-04-18 17:58) ************ */
+/*! ************ QuickSilk-Application v3.17.1 (2017-06-01 19:45) ************ */
 
 // /* ************************************************ */
 // /* ******* QUICKSILK: COMMON ******* */
 // /* ************************************************ */
 
 var App = {
-    '_version' : '3.17.0',
+    '_version' : '3.17.1',
     'Elements': {},
     'Nodes' : {},
     'Test' : []
@@ -556,6 +556,7 @@ function(params){
     that.currentZones = null;
     that.currentBlocks = null;
     that.currentBlock = null;
+    that.currentBlockZone = null;
     that.currentBlockOffset = null;
     that.currentBellow = null;
 
@@ -613,6 +614,7 @@ function(params){
         that.currentZones = [];
         that.currentBlocks = [];
         that.currentBlock = null;
+        that.currentBlockZone = null;
         that.currentBlockOffset = {
             'left' : 0,
             'top' : 0
@@ -702,7 +704,7 @@ function(params){
 
     var stop = function(){
         // Drop block
-        if(!that.currentBellow.zone || that.currentBellow.zone.params['type'] == 'remove'){
+        if(!that.currentBellow.zone || that.currentBellow.zone.params['type'] === 'remove'){
             removeBlock(that.currentBlock, {
                 'onEnd' : reset
             });
@@ -778,6 +780,7 @@ function(params){
             that.currentBlock = block
                 .clone();
         }else{
+            that.currentBlockZone = block.zone;
             that.currentBlock = block
                 .unsetZone();
         }
@@ -808,13 +811,13 @@ function(params){
             top -= that.currentBlockOffset['top'];
             left -= that.currentBlockOffset['left'];
         }
-        if(typeof params['width'] != 'undefined'){
+        if(!cm.isUndefined(params['width'])){
             node.style.width = [params['width'], 'px'].join('');
         }
-        if(typeof params['height'] != 'undefined'){
+        if(!cm.isUndefined(params['height'])){
             node.style.height = [params['height'], 'px'].join('');
         }
-        if(typeof params['opacity'] != 'undefined'){
+        if(!cm.isUndefined(params['opacity'])){
             node.style.opacity = params['opacity'];
         }
         cm.setCSSTranslate(node, [left, 'px'].join(''), [top, 'px'].join(''));
@@ -1228,8 +1231,13 @@ function(params){
                 }
             }
         });
+        // If zone not highlighted by coordinates, assign current bellow block's zone
         if(!temp.zone){
             temp.zone = that.currentBellow.zone;
+        }
+        // If there no one zones are found, assign current graggable block's origin zone
+        if(!temp.zone){
+            temp.zone = that.currentBlockZone;
         }
         // Find block below current graggable block
         if(temp.zone){
@@ -1271,14 +1279,14 @@ function(params){
         if(
             that.currentBellow.zone
             && that.currentBellow.zone.isActive
-            && that.currentBellow.zone != temp.zone
+            && that.currentBellow.zone !== temp.zone
         ){
             that.currentBellow.zone.unactive();
         }
         if(
             temp.zone
             && !temp.zone.isActive
-            && temp.zone != that.currentBellow.placeholder
+            && temp.zone !== that.currentBellow.placeholder
         ){
             temp.zone.active();
         }
@@ -1286,7 +1294,7 @@ function(params){
         if(
             that.currentBellow.placeholder
             && that.currentBellow.placeholder.isActive
-            && that.currentBellow.placeholder != temp.placeholder
+            && that.currentBellow.placeholder !== temp.placeholder
         ){
             that.currentBellow.placeholder.unactive();
             that.currentBellow.placeholder.hide(that.params['moveDuration']);
@@ -1294,7 +1302,7 @@ function(params){
         if(
             temp.placeholder
             && !temp.placeholder.isActive
-            && temp.placeholder != that.currentBellow.placeholder
+            && temp.placeholder !== that.currentBellow.placeholder
         ){
             temp.placeholder.active();
             //temp.placeholder.show(that.currentBlock.dimensions['outer']['height'], that.params['moveDuration']);
@@ -1302,8 +1310,8 @@ function(params){
         }
         // Update positions of blocks and zones
         if(
-            that.currentBellow.zone != temp.zone
-            || that.currentBellow.placeholder != temp.placeholder
+            that.currentBellow.zone !== temp.zone
+            || that.currentBellow.placeholder !== temp.placeholder
         ){
             //updateCurrentDimensions();
         }
@@ -2262,18 +2270,18 @@ cm.define('App.FontInput', {
             'renderInBody' : false,
             'showLabel' : false,
             'showClearButton' : false
-        },
-        'langs' : {
-            '100' : 'Thin',
-            '200' : 'Extra Light',
-            '300' : 'Light',
-            '400' : 'Regular',
-            '500' : 'Medium',
-            '600' : 'Semi Bold',
-            '700' : 'Bold',
-            '800' : 'Extra Bold',
-            '900' : 'Black'
         }
+    },
+    'strings' : {
+        '100' : 'Thin',
+        '200' : 'Extra Light',
+        '300' : 'Light',
+        '400' : 'Regular',
+        '500' : 'Medium',
+        '600' : 'Semi Bold',
+        '700' : 'Bold',
+        '800' : 'Extra Bold',
+        '900' : 'Black'
     }
 },
 function(params){
@@ -2840,14 +2848,14 @@ cm.define('App.HelpTour', {
             'name' : '',
             'theme' : 'transparent',
             'position' : 'absolute'
-        },
-        'langs' : {
-            'next' : 'Next',
-            'back' : 'Back',
-            'close' : 'Close',
-            'cancel' : 'Cancel',
-            'finish' : 'Finish'
         }
+    },
+    'strings' : {
+        'next' : 'Next',
+        'back' : 'Back',
+        'close' : 'Close',
+        'cancel' : 'Cancel',
+        'finish' : 'Finish'
     }
 },
 function(params){
@@ -4226,15 +4234,6 @@ cm.define('App.Panel', {
             'url' : '',                                 // Request URL. Variables: %baseUrl%, %callback%.
             'params' : ''                               // Params object. Variables: %baseUrl%, %callback%.
         },
-        'langs' : {
-            'close' : 'Close',
-            'back' : 'Back',
-            'cancel' : 'Cancel',
-            'save' : 'Save',
-            'saving' : 'Saving...',
-            'reload' : 'Reload',
-            'cancelDescription' : 'Cancel'
-        },
         'Com.Request' : {
             'wrapContent' : true,
             'swapContentOnError' : false,
@@ -4251,6 +4250,15 @@ cm.define('App.Panel', {
             'position' : 'absolute',
             'theme' : 'light'
         }
+    },
+    'strings' : {
+        'close' : 'Close',
+        'back' : 'Back',
+        'cancel' : 'Cancel',
+        'save' : 'Save',
+        'saving' : 'Saving...',
+        'reload' : 'Reload',
+        'cancelDescription' : 'Cancel'
     }
 },
 function(params){
@@ -5315,18 +5323,18 @@ cm.define('App.Stylizer', {
         },
         'Com.ColorPicker' : {
             'renderInBody' : false
-        },
-        'langs' : {
-            '100' : 'Thin',
-            '200' : 'Extra Light',
-            '300' : 'Light',
-            '400' : 'Regular',
-            '500' : 'Medium',
-            '600' : 'Semi Bold',
-            '700' : 'Bold',
-            '800' : 'Extra Bold',
-            '900' : 'Black'
         }
+    },
+    'strings' : {
+        '100' : 'Thin',
+        '200' : 'Extra Light',
+        '300' : 'Light',
+        '400' : 'Regular',
+        '500' : 'Medium',
+        '600' : 'Semi Bold',
+        '700' : 'Bold',
+        '800' : 'Extra Bold',
+        '900' : 'Black'
     }
 },
 function(params){

@@ -62,15 +62,6 @@ cm.define('App.Panel', {
             'url' : '',                                 // Request URL. Variables: %baseUrl%, %callback%.
             'params' : ''                               // Params object. Variables: %baseUrl%, %callback%.
         },
-        'langs' : {
-            'close' : 'Close',
-            'back' : 'Back',
-            'cancel' : 'Cancel',
-            'save' : 'Save',
-            'saving' : 'Saving...',
-            'reload' : 'Reload',
-            'cancelDescription' : 'Cancel'
-        },
         'Com.Request' : {
             'wrapContent' : true,
             'swapContentOnError' : false,
@@ -87,6 +78,15 @@ cm.define('App.Panel', {
             'position' : 'absolute',
             'theme' : 'light'
         }
+    },
+    'strings' : {
+        'close' : 'Close',
+        'back' : 'Back',
+        'cancel' : 'Cancel',
+        'save' : 'Save',
+        'saving' : 'Saving...',
+        'reload' : 'Reload',
+        'cancelDescription' : 'Cancel'
     }
 },
 function(params){
