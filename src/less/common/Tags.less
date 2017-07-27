@@ -30,10 +30,12 @@ h6 {
 
 h1, h2, h3, h4, h5, h6 {
     .cm__link {
-        font-style: inherit;
-        font-weight: inherit;
-        color: inherit;
-        text-decoration: inherit;
+        .cm__font--inherit;
+
+        &:hover,
+        &:active {
+            .cm__font--inherit;
+        }
     }
 }
 
@@ -51,4 +53,9 @@ h1, h2, h3, h4, h5, h6 {
 
 .button {
     .app__font--button;
+
+    &:hover,
+    &:active {
+        .cm__font--inherit;
+    }
 }

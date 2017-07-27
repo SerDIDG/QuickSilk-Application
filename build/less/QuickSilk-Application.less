@@ -1,4 +1,4 @@
-/*! ************ QuickSilk-Application v3.17.1 (2017-06-01 19:45) ************ */
+/*! ************ QuickSilk-Application v3.17.3 (2017-07-27 17:22) ************ */
 
 // /* ************************************************ */
 // /* ******* QUICKSILK: VARIABLES: ICONS ******* */
@@ -116,7 +116,7 @@
 // /* ******* VARIABLES ******* */
 // /* ************************************************ */
 
-@AppVersion: '3.17.1';
+@AppVersion: '3.17.3';
 
 // /* ******* PATH ******* */
 
@@ -1071,10 +1071,12 @@ h6 {
 
 h1, h2, h3, h4, h5, h6 {
     .cm__link {
-        font-style: inherit;
-        font-weight: inherit;
-        color: inherit;
-        text-decoration: inherit;
+        .cm__font--inherit;
+
+        &:hover,
+        &:active {
+            .cm__font--inherit;
+        }
     }
 }
 
@@ -1092,6 +1094,11 @@ h1, h2, h3, h4, h5, h6 {
 
 .button {
     .app__font--button;
+
+    &:hover,
+    &:active {
+        .cm__font--inherit;
+    }
 }
 /* ******* COMMON: UI ******* */
 

@@ -374,14 +374,14 @@ function(params){
                         topMenuItem = that.components['topMenu'].getItem(position[1]);
                         if(!topMenuItem){
                             left = Math.round((pageSize['winWidth'] - that.nodes['popup'].offsetWidth) / 2);
-                        }else if(position[2] && position[2] == 'dropdown' && topMenuItem['dropdown']){
-                            if(position[3] && position[3] == 'left'){
+                        }else if(position[2] && position[2] === 'dropdown' && topMenuItem['dropdown']){
+                            if(position[3] && position[3] === 'left'){
                                 left = cm.getX(topMenuItem['dropdown']) - that.nodes['popup'].offsetWidth - that.params['popupIndent'];
                             }else{
                                 left = cm.getX(topMenuItem['dropdown']) + topMenuItem['dropdown'].offsetWidth + that.params['popupIndent'];
                             }
                         }else if(topMenuItem['container']){
-                            if(position[3] && position[3] == 'left'){
+                            if(position[3] && position[3] === 'left'){
                                 left = cm.getX(topMenuItem['container']) + topMenuItem['container'].offsetWidth - that.nodes['popup'].offsetWidth;
                             }else{
                                 left = cm.getX(topMenuItem['container']);
@@ -431,7 +431,7 @@ function(params){
                 top = 0;
                 conentHeight = 'auto';
             }
-            that.nodes['popupContent'].style.height = conentHeight == 'auto' ? conentHeight : [conentHeight, 'px'].join('');
+            that.nodes['popupContent'].style.height = conentHeight === 'auto' ? conentHeight : [conentHeight, 'px'].join('');
             cm.setCSSTranslate(that.nodes['popup'], [left, 'px'].join(''), [top, 'px'].join(''), 0, 'scale(1)');
         }
     };
