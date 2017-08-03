@@ -77,6 +77,7 @@ module.exports = function(grunt) {
                     banner: '<%= banner %>'
                 },
                 src : [
+                    '<%= paths.src %>/less/extra/*.less',
                     '<%= paths.src %>/less/variables/*.less',
                     '<%= paths.src %>/less/mixins.less',
                     '<%= paths.src %>/less/application.less',
@@ -103,6 +104,18 @@ module.exports = function(grunt) {
                     '<%= paths.src %>/less/variables/**/*.less'
                 ],
                 dest : '<%= paths.build %>/less/<%= pkg.name %>.variables.less'
+            }
+        },
+
+        svgcss : {
+            build : {
+                options : {
+                    previewhtml : null,
+                    cssprefix : 'svg__app__',
+                    csstemplate : '<%= paths.src %>/hbs/svg.hbs'
+                },
+                src : ['<%= paths.src %>/img/svg/*.svg'],
+                dest : '<%= paths.src %>/less/extra/svg.less'
             }
         },
 
@@ -232,8 +245,8 @@ module.exports = function(grunt) {
 
     grunt.registerTask('scripts', ['concat:scripts', 'replace:scripts', 'copy:scripts']);
     grunt.registerTask('styles', ['variables', 'concat:styles', 'replace:styles', 'copy:styles']);
-    grunt.registerTask('images', ['copy:images']);
+    grunt.registerTask('images', ['svgcss:build', 'copy:images']);
     grunt.registerTask('fonts', ['copy:fonts']);
     grunt.registerTask('variables', ['concat:variables', 'replace:variables', 'lessvars']);
-    grunt.registerTask('pre', ['variables']);
+    grunt.registerTask('pre', ['svgcss:build', 'variables']);
 };

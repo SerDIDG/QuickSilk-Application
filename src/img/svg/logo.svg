@@ -1,0 +1,20 @@
+<svg id="logo.svg" xmlns="http://www.w3.org/2000/svg" width="50" height="24" viewBox="0 0 50 24">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #21b573;
+      }
+
+      .cls-1, .cls-2 {
+        fill-rule: evenodd;
+      }
+
+      .cls-2 {
+        fill: #fff;
+      }
+    </style>
+  </defs>
+  <path id="_3" data-name="3" class="cls-1" d="M35,24l8.58-12L35,0h6.429L50,12l-8.58,12H35Z"/>
+  <path id="_2" data-name="2" class="cls-2" d="M28,24L19.425,12,28,0H21.575L13,12l8.58,12H28Z"/>
+  <path id="_1" data-name="1" class="cls-2" d="M15,24L6.425,12,15,0H8.575L0,12l8.58,12H15Z"/>
+</svg>

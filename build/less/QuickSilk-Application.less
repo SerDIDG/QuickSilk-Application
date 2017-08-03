@@ -1,4 +1,6 @@
-/*! ************ QuickSilk-Application v3.17.4 (2017-08-03 17:50) ************ */
+/*! ************ QuickSilk-Application v3.17.5 (2017-08-03 19:26) ************ */
+.svg__app__logo { background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20id%3D%22logo.svg%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2250%22%20height%3D%2224%22%20viewBox%3D%220%200%2050%2024%22%3E%20%20%3Cdefs%3E%20%20%20%20%3Cstyle%3E%20%20%20%20%20%20.cls-1%20%7B%20%20%20%20%20%20%20%20fill%3A%20%2321b573%3B%20%20%20%20%20%20%7D%20%20%20%20%20%20.cls-1%2C%20.cls-2%20%7B%20%20%20%20%20%20%20%20fill-rule%3A%20evenodd%3B%20%20%20%20%20%20%7D%20%20%20%20%20%20.cls-2%20%7B%20%20%20%20%20%20%20%20fill%3A%20%23fff%3B%20%20%20%20%20%20%7D%20%20%20%20%3C%2Fstyle%3E%20%20%3C%2Fdefs%3E%20%20%3Cpath%20id%3D%22_3%22%20data-name%3D%223%22%20class%3D%22cls-1%22%20d%3D%22M35%2C24l8.58-12L35%2C0h6.429L50%2C12l-8.58%2C12H35Z%22%2F%3E%20%20%3Cpath%20id%3D%22_2%22%20data-name%3D%222%22%20class%3D%22cls-2%22%20d%3D%22M28%2C24L19.425%2C12%2C28%2C0H21.575L13%2C12l8.58%2C12H28Z%22%2F%3E%20%20%3Cpath%20id%3D%22_1%22%20data-name%3D%221%22%20class%3D%22cls-2%22%20d%3D%22M15%2C24L6.425%2C12%2C15%2C0H8.575L0%2C12l8.58%2C12H15Z%22%2F%3E%3C%2Fsvg%3E"); }
+.svg__app__menu-dropdown { background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20id%3D%22menu-dropdown.svg%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2212%22%20height%3D%227%22%20viewBox%3D%220%200%2012%207%22%3E%20%20%3Cdefs%3E%20%20%20%20%3Cstyle%3E%20%20%20%20%20%20.cls-1%20%7B%20%20%20%20%20%20%20%20fill%3A%20%23fff%3B%20%20%20%20%20%20%20%20fill-rule%3A%20evenodd%3B%20%20%20%20%20%20%7D%20%20%20%20%3C%2Fstyle%3E%20%20%3C%2Fdefs%3E%20%20%3Cpath%20class%3D%22cls-1%22%20d%3D%22M12%2C0L6%2C4.787%2C0%2C0V2.212L6%2C7l6-4.79V0Z%22%2F%3E%3C%2Fsvg%3E"); }
 
 // /* ************************************************ */
 // /* ******* QUICKSILK: VARIABLES: ICONS ******* */
@@ -116,7 +118,7 @@
 // /* ******* VARIABLES ******* */
 // /* ************************************************ */
 
-@AppVersion: '3.17.4';
+@AppVersion: '3.17.5';
 
 // /* ******* PATH ******* */
 
@@ -222,8 +224,8 @@
 
 // /* ******* COLORS ******* */
 
-@AppColor-QuickSilk: #0060a0;
-@AppColor-UI-Panel: #000;
+@AppColor-QuickSilk: #21b573;
+@AppColor-UI-Panel: #1f2630;
 @AppColor-UI-PanelBlock: @CmColor-Primary-DarkActiveHover;
 
 // /* ******* AREA ******* */
@@ -2094,7 +2096,7 @@ html {
     .app__block-container {
         > .app__block-dummy {
             .icon {
-                background-color: @normal;
+                //background-color: @normal;
             }
         }
 
@@ -3073,7 +3075,6 @@ html {
     position: fixed;
     z-index: 200;
     overflow: hidden;
-    box-shadow: @CmUI-Shadow-Right;
     .mx__position(0, auto, 0, 0);
     .mx__backface-visibility(hidden);
     .mx__transition(width, @AppSidebar-Duration, @CmUI-MotionAsymmetric);
@@ -3721,7 +3722,6 @@ html {
     position: fixed;
     z-index: 300;
     background-color: @AppTopMenu-Background;
-    box-shadow: @CmUI-Shadow-Bottom;
     .mx__position(0, 0, auto, 0);
 
     > .inner {
@@ -3750,6 +3750,10 @@ html {
         display: block;
         float: left;
         .mx__transition(opacity, @CmUI-Transition-Duration);
+
+        .menu__icon {
+            background-size: 40px;
+        }
 
         &:hover {
             opacity: @CmUI-Opacity-Hover;
@@ -3919,7 +3923,7 @@ html {
                     &.has-dropdown {
                         > a {
                             @indent: ((@CmSize-Medium - @CmSize-XSmall) / 2);
-                            .app-icon.x-small.arrow-white-down;
+                            .svg__app__menu-dropdown;
                             padding-right: @CmIndent-Medium;
                             background-position: ~'calc(100% - @{indent})' center;
                             background-repeat: no-repeat;

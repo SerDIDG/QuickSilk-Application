@@ -5,7 +5,6 @@
     position: fixed;
     z-index: 300;
     background-color: @AppTopMenu-Background;
-    box-shadow: @CmUI-Shadow-Bottom;
     .mx__position(0, 0, auto, 0);
 
     > .inner {
@@ -34,6 +33,10 @@
         display: block;
         float: left;
         .mx__transition(opacity, @CmUI-Transition-Duration);
+
+        .menu__icon {
+            background-size: 40px;
+        }
 
         &:hover {
             opacity: @CmUI-Opacity-Hover;
@@ -203,7 +206,7 @@
                     &.has-dropdown {
                         > a {
                             @indent: ((@CmSize-Medium - @CmSize-XSmall) / 2);
-                            .app-icon.x-small.arrow-white-down;
+                            .svg__app__menu-dropdown;
                             padding-right: @CmIndent-Medium;
                             background-position: ~'calc(100% - @{indent})' center;
                             background-repeat: no-repeat;
