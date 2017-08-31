@@ -17,6 +17,7 @@ cm.define('App.HelpTour', {
         'sidebarName' : 'app-sidebar',
         'topMenuName' : 'app-topmenu',
         'templateName' : 'app-template',
+        'notificationName' : 'app-notification',
         'duration' : 500,
         'adaptiveFrom' : 768,
         'autoStart' : false,
@@ -52,7 +53,8 @@ function(params){
         },
         startOptions = {
             'sidebarExpanded' : false,
-            'sidebarTab' : 'modules'
+            'sidebarTab' : 'modules',
+            'notificationShow' : false
         };
 
     that.nodes = {};
@@ -138,6 +140,10 @@ function(params){
             that.components['template'] = classObject;
             that.components['overlays']['template'].embed(that.components['template'].getNodes('container'));
         });
+        // Get Notification
+        cm.find('App.Notification', that.params['notificationName'], null, function(classObject){
+            that.components['notification'] = classObject;
+        });
         // Start
         if(that.components['sidebar'] && that.components['topMenu'] && that.components['template']){
             start();
@@ -164,6 +170,11 @@ function(params){
         }
         startOptions['sidebarTab'] = that.components['sidebar'].getTab();
         that.components['sidebar'].unsetTab();
+        // Save Notification State
+        startOptions['notificationShow'] = that.components['notification'].isShow;
+        if(that.components['notification'].isShow){
+            that.components['notification'].hide();
+        }
         // Collapse menu (mobile)
         that.components['topMenu'].collapse();
         // Show overlays
@@ -184,6 +195,12 @@ function(params){
             that.components['sidebar'].collapse();
         }
         that.components['sidebar'].setTab(startOptions['sidebarTab']);
+        // Restore Notification State
+        if(startOptions['notificationShow'] && !that.components['notification'].isShow){
+            that.components['notification'].show();
+        }else if(!startOptions['notificationShow'] && that.components['notification'].isShow){
+            that.components['notification'].hide();
+        }
         // Hide overlays
         cm.forEach(that.components['overlays'], function(item){
             item.close();
@@ -220,10 +237,10 @@ function(params){
                 cm.addClass(that.nodes['popupArrows'][that.currentScene['arrow']], 'is-show');
             }
             // Set Popup Buttons
-            if(that.currentStage == 0){
+            if(that.currentStage === 0){
                 that.nodes['back'].innerHTML = that.lang('close');
                 that.nodes['next'].innerHTML = that.lang('next');
-            }else if(that.currentStage == App.HelpTourScenario.length - 1){
+            }else if(that.currentStage === App.HelpTourScenario.length - 1){
                 that.nodes['back'].innerHTML = that.lang('back');
                 that.nodes['next'].innerHTML = that.lang('finish');
             }else{

@@ -20,6 +20,12 @@ html {
             margin-top: @AppTopMenu-Height;
         }
 
+        .app__notification {
+            &.pull-top {
+                top: @AppTopMenu-Height;
+            }
+        }
+
         .tpl__container {
             margin-top: @AppTopMenu-Height;
         }
@@ -34,6 +40,10 @@ html {
     }
 
     &.is-editor--collapsed {
+        .app__notification {
+            left: @AppSidebar-WidthCollapsed;
+        }
+
         .app__content {
             margin-left: @AppSidebar-WidthCollapsed;
         }
@@ -51,6 +61,10 @@ html {
     }
 
     &.is-editor--expanded {
+        .app__notification {
+            left: @AppSidebar-WidthExpanded;
+        }
+
         .app__content {
             margin-left: @AppSidebar-WidthExpanded;
         }

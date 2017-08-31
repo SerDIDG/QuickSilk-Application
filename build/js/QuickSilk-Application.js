@@ -1,11 +1,11 @@
-/*! ************ QuickSilk-Application v3.17.6 (2017-08-25 19:20) ************ */
+/*! ************ QuickSilk-Application v3.18.0 (2017-08-31 20:56) ************ */
 
 // /* ************************************************ */
 // /* ******* QUICKSILK: COMMON ******* */
 // /* ************************************************ */
 
 var App = {
-    '_version' : '3.17.6',
+    '_version' : '3.18.0',
     'Elements': {},
     'Nodes' : {},
     'Test' : []
@@ -2835,6 +2835,7 @@ cm.define('App.HelpTour', {
         'sidebarName' : 'app-sidebar',
         'topMenuName' : 'app-topmenu',
         'templateName' : 'app-template',
+        'notificationName' : 'app-notification',
         'duration' : 500,
         'adaptiveFrom' : 768,
         'autoStart' : false,
@@ -2870,7 +2871,8 @@ function(params){
         },
         startOptions = {
             'sidebarExpanded' : false,
-            'sidebarTab' : 'modules'
+            'sidebarTab' : 'modules',
+            'notificationShow' : false
         };
 
     that.nodes = {};
@@ -2956,6 +2958,10 @@ function(params){
             that.components['template'] = classObject;
             that.components['overlays']['template'].embed(that.components['template'].getNodes('container'));
         });
+        // Get Notification
+        cm.find('App.Notification', that.params['notificationName'], null, function(classObject){
+            that.components['notification'] = classObject;
+        });
         // Start
         if(that.components['sidebar'] && that.components['topMenu'] && that.components['template']){
             start();
@@ -2982,6 +2988,11 @@ function(params){
         }
         startOptions['sidebarTab'] = that.components['sidebar'].getTab();
         that.components['sidebar'].unsetTab();
+        // Save Notification State
+        startOptions['notificationShow'] = that.components['notification'].isShow;
+        if(that.components['notification'].isShow){
+            that.components['notification'].hide();
+        }
         // Collapse menu (mobile)
         that.components['topMenu'].collapse();
         // Show overlays
@@ -3002,6 +3013,12 @@ function(params){
             that.components['sidebar'].collapse();
         }
         that.components['sidebar'].setTab(startOptions['sidebarTab']);
+        // Restore Notification State
+        if(startOptions['notificationShow'] && !that.components['notification'].isShow){
+            that.components['notification'].show();
+        }else if(!startOptions['notificationShow'] && that.components['notification'].isShow){
+            that.components['notification'].hide();
+        }
         // Hide overlays
         cm.forEach(that.components['overlays'], function(item){
             item.close();
@@ -3038,10 +3055,10 @@ function(params){
                 cm.addClass(that.nodes['popupArrows'][that.currentScene['arrow']], 'is-show');
             }
             // Set Popup Buttons
-            if(that.currentStage == 0){
+            if(that.currentStage === 0){
                 that.nodes['back'].innerHTML = that.lang('close');
                 that.nodes['next'].innerHTML = that.lang('next');
-            }else if(that.currentStage == App.HelpTourScenario.length - 1){
+            }else if(that.currentStage === App.HelpTourScenario.length - 1){
                 that.nodes['back'].innerHTML = that.lang('back');
                 that.nodes['next'].innerHTML = that.lang('finish');
             }else{
@@ -4169,6 +4186,116 @@ function(params){
     var that = this;
     // Call parent class construct
     Com.MultipleFileInput.apply(that, arguments);
+});
+cm.define('App.Notification', {
+    'extend' : 'Com.AbstractController',
+    'params' : {
+        'renderStructure' : false,
+        'embedStructureOnRender' : false,
+        'controllerEvents' : true,
+        'remember' : true
+    }
+},
+function(params){
+    var that = this;
+    // Call parent class construct
+    Com.AbstractController.apply(that, arguments);
+});
+
+cm.getConstructor('App.Notification', function(classConstructor, className, classProto){
+    var _inherit = classProto._inherit;
+
+    classProto.onConstructStart = function(){
+        var that = this;
+        // Variables
+        that.isShow = null;
+        that.isShowStorage = false;
+        // Binds
+        that.showHandler = that.show.bind(that);
+        that.hideHandler = that.hide.bind(that);
+    };
+
+    classProto.onConstructEnd = function(){
+        var that = this;
+        // State
+        that.isShow = cm.isClass(that.nodes['container'], 'is-show');
+        // Check storage
+        if(that.params['remember']){
+            that.isShowStorage = that.storageRead('isShow');
+            that.isShow = that.isShowStorage !== null ? that.isShowStorage : that.isShow;
+        }
+        // Trigger events
+        if(that.isShow){
+            that.show(true, true);
+        }else{
+            that.hide(true, true);
+        }
+    };
+
+    classProto.renderViewModel = function(){
+        var that = this;
+        // Events
+        cm.addEvent(that.nodes['close'], 'click', function(){
+            that.hide();
+        });
+    };
+
+    /******* PUBLIC *******/
+
+    classProto.show = function(isImmediately, force){
+        var that = this;
+        if(force || !cm.isBoolean(that.isShow) || !that.isShow){
+            // Write storage
+            if(that.params['remember']){
+                that.storageWrite('isShow', true);
+            }
+            // Immediately animate
+            if(isImmediately){
+                cm.addClass(that.nodes['container'], 'is-immediately');
+            }
+            // Show
+            that.isShow = true;
+            cm.replaceClass(that.nodes['container'], 'is-hide', 'is-show');
+            // Immediately animate
+            if(isImmediately){
+                cm.removeClass(that.nodes['container'], 'is-immediately');
+            }
+        }
+        return that;
+    };
+
+    classProto.hide = function(isImmediately, force){
+        var that = this;
+        if(force || !cm.isBoolean(that.isShow) || that.isShow){
+            // Write storage
+            if(that.params['remember']){
+                that.storageWrite('isShow', false);
+            }
+            // Immediately animate
+            if(isImmediately){
+                cm.addClass(that.nodes['container'], 'is-immediately');
+            }
+            // Hide
+            that.isShow = false;
+            cm.replaceClass(that.nodes['container'], 'is-show', 'is-hide');
+            // Immediately animate
+            if(isImmediately){
+                cm.removeClass(that.nodes['container'], 'is-immediately');
+            }
+        }
+        return that;
+    };
+
+    classProto.toggle = function(){
+        var that = this;
+        if(that.isShow){
+            that.hide();
+        }else{
+            that.show();
+        }
+        return that;
+    };
+
 });
 cm.define('App.Panel', {
     'extend' : 'Com.AbstractController',

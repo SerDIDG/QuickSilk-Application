@@ -1,4 +1,4 @@
-/*! ************ QuickSilk-Application v3.17.6 (2017-08-25 19:20) ************ */
+/*! ************ QuickSilk-Application v3.18.0 (2017-08-31 20:56) ************ */
 .svg__app__logo { background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20id%3D%22logo.svg%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2250%22%20height%3D%2224%22%20viewBox%3D%220%200%2050%2024%22%3E%20%20%3Cdefs%3E%20%20%20%20%3Cstyle%3E%20%20%20%20%20%20.cls-1%20%7B%20%20%20%20%20%20%20%20fill%3A%20%2321b573%3B%20%20%20%20%20%20%7D%20%20%20%20%20%20.cls-1%2C%20.cls-2%20%7B%20%20%20%20%20%20%20%20fill-rule%3A%20evenodd%3B%20%20%20%20%20%20%7D%20%20%20%20%20%20.cls-2%20%7B%20%20%20%20%20%20%20%20fill%3A%20%23fff%3B%20%20%20%20%20%20%7D%20%20%20%20%3C%2Fstyle%3E%20%20%3C%2Fdefs%3E%20%20%3Cpath%20id%3D%22_3%22%20data-name%3D%223%22%20class%3D%22cls-1%22%20d%3D%22M35%2C24l8.58-12L35%2C0h6.429L50%2C12l-8.58%2C12H35Z%22%2F%3E%20%20%3Cpath%20id%3D%22_2%22%20data-name%3D%222%22%20class%3D%22cls-2%22%20d%3D%22M28%2C24L19.425%2C12%2C28%2C0H21.575L13%2C12l8.58%2C12H28Z%22%2F%3E%20%20%3Cpath%20id%3D%22_1%22%20data-name%3D%221%22%20class%3D%22cls-2%22%20d%3D%22M15%2C24L6.425%2C12%2C15%2C0H8.575L0%2C12l8.58%2C12H15Z%22%2F%3E%3C%2Fsvg%3E"); }
 .svg__app__menu-dropdown { background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20id%3D%22menu-dropdown.svg%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2212%22%20height%3D%227%22%20viewBox%3D%220%200%2012%207%22%3E%20%20%3Cdefs%3E%20%20%20%20%3Cstyle%3E%20%20%20%20%20%20.cls-1%20%7B%20%20%20%20%20%20%20%20fill%3A%20%23fff%3B%20%20%20%20%20%20%20%20fill-rule%3A%20evenodd%3B%20%20%20%20%20%20%7D%20%20%20%20%3C%2Fstyle%3E%20%20%3C%2Fdefs%3E%20%20%3Cpath%20class%3D%22cls-1%22%20d%3D%22M12%2C0L6%2C4.787%2C0%2C0V2.212L6%2C7l6-4.79V0Z%22%2F%3E%3C%2Fsvg%3E"); }
 
@@ -118,7 +118,7 @@
 // /* ******* VARIABLES ******* */
 // /* ************************************************ */
 
-@AppVersion: '3.17.6';
+@AppVersion: '3.18.0';
 
 // /* ******* PATH ******* */
 
@@ -295,6 +295,11 @@
 @AppSidebar-ThemeDark-Background: @CmColor-Primary-DarkDefault;
 @AppSidebar-ThemeLight-Color: @CmColor-Font;
 @AppSidebar-ThemeLight-Background: #ffffff;
+
+// /* ******* NOTIFICATION ******* */
+
+@AppNotification-Height: @AppTopMenu-Height;
+@AppNotification-Fade: 95%;
 
 // /* ******* ZONE ******* */
 
@@ -1124,6 +1129,12 @@ html {
             margin-top: @AppTopMenu-Height;
         }
 
+        .app__notification {
+            &.pull-top {
+                top: @AppTopMenu-Height;
+            }
+        }
+
         .tpl__container {
             margin-top: @AppTopMenu-Height;
         }
@@ -1138,6 +1149,10 @@ html {
     }
 
     &.is-editor--collapsed {
+        .app__notification {
+            left: @AppSidebar-WidthCollapsed;
+        }
+
         .app__content {
             margin-left: @AppSidebar-WidthCollapsed;
         }
@@ -1155,6 +1170,10 @@ html {
     }
 
     &.is-editor--expanded {
+        .app__notification {
+            left: @AppSidebar-WidthExpanded;
+        }
+
         .app__content {
             margin-left: @AppSidebar-WidthExpanded;
         }
@@ -2199,7 +2218,7 @@ html {
 
 }
 
-/* ******* COMPONENTS: TEMPLATE: PRINT ******** */
+/* ******* COMPONENTS: CONTENT: PRINT ******** */
 
 @media print {
 
@@ -2683,6 +2702,122 @@ html {
 
     .app__module__controls,
     .app__module__controls--edit {
+        display: none !important;
+    }
+
+}
+/* ******* COMPONENTS: NOTIFICATION ******* */
+
+.app__notification {
+    @paddingY: max(ceil((@AppNotification-Height - @CmForm-FieldHeight) / 2), 0px);
+    @heightInner: @AppNotification-Height - @paddingY * 2;
+
+    position: fixed;
+    z-index: 150;
+    left: 0;
+    right: 0;
+    opacity: 0;
+    visibility: hidden;
+    .mx__transition(opacity transform visibility, @CmUI-Transition-Duration, @CmUI-MotionAsymmetric);
+
+    > .inner {
+        padding: @paddingY @CmIndent-XLarge;
+        position: relative;
+        background: fade(@CmColor-Secondary-DarkDefault, @AppNotification-Fade);
+
+        > .icon {
+            @top: max(ceil((@AppNotification-Height - @CmSize-Medium) / 2), 0px);
+
+            .cm__size__medium;
+            position: absolute;
+            z-index: 2;
+            .mx__position(@top, @top, auto, auto);
+
+            &.default {
+                .icon.medium.close-white;
+            }
+        }
+
+        > .text {
+            position: relative;
+            z-index: 1;
+            color: @CmColor-Font-Opposite;
+            line-height: @heightInner;
+            text-align: center;
+
+            .text-line {
+                display: inline-block;
+                vertical-align: top;
+                margin: 0 @CmIndent-XXXSmall;
+
+                &:first-child {
+                    margin-left: 0;
+                }
+
+                &:last-child {
+                    margin-right: 0;
+                }
+            }
+        }
+    }
+
+    &.is-success {
+        > .inner {
+            background: fade(@CmColor-Success-DarkDefault, @AppNotification-Fade);
+        }
+    }
+
+    &.is-warning {
+        > .inner {
+            background: fade(@CmColor-Warning-DarkDefault, @AppNotification-Fade);
+        }
+    }
+
+    &.is-danger {
+        > .inner {
+            background: fade(@CmColor-Danger-DarkDefault, @AppNotification-Fade);
+        }
+    }
+
+    &.pull-top {
+        top: 0;
+        .mx__transform(translateY(-100%));
+    }
+
+    &.pull-bottom {
+        bottom: 0;
+        .mx__transform(translateY(100%));
+    }
+
+    &.is-show {
+        opacity: 1;
+        visibility: visible;
+        .mx__transform(translateY(0));
+    }
+
+    &.is-immediately {
+        .cm__transition-none;
+    }
+}
+
+
+/* ******* COMPONENTS: NOTIFICATION: ADAPTIVE ******* */
+
+@media only screen and (max-width : @CmUI-AdaptiveFrom) {
+
+    html.is-adaptive {
+        .app__notification {
+            left: 0 !important;
+        }
+    }
+
+}
+
+/* ******* COMPONENTS: NOTIFICATION: PRINT ******** */
+
+@media print {
+
+    .app__notification {
         display: none !important;
     }
 

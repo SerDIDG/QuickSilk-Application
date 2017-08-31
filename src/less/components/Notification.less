@@ -1,0 +1,116 @@
+/* ******* COMPONENTS: NOTIFICATION ******* */
+
+.app__notification {
+    @paddingY: max(ceil((@AppNotification-Height - @CmForm-FieldHeight) / 2), 0px);
+    @heightInner: @AppNotification-Height - @paddingY * 2;
+
+    position: fixed;
+    z-index: 150;
+    left: 0;
+    right: 0;
+    opacity: 0;
+    visibility: hidden;
+    .mx__transition(opacity transform visibility, @CmUI-Transition-Duration, @CmUI-MotionAsymmetric);
+
+    > .inner {
+        padding: @paddingY @CmIndent-XLarge;
+        position: relative;
+        background: fade(@CmColor-Secondary-DarkDefault, @AppNotification-Fade);
+
+        > .icon {
+            @top: max(ceil((@AppNotification-Height - @CmSize-Medium) / 2), 0px);
+
+            .cm__size__medium;
+            position: absolute;
+            z-index: 2;
+            .mx__position(@top, @top, auto, auto);
+
+            &.default {
+                .icon.medium.close-white;
+            }
+        }
+
+        > .text {
+            position: relative;
+            z-index: 1;
+            color: @CmColor-Font-Opposite;
+            line-height: @heightInner;
+            text-align: center;
+
+            .text-line {
+                display: inline-block;
+                vertical-align: top;
+                margin: 0 @CmIndent-XXXSmall;
+
+                &:first-child {
+                    margin-left: 0;
+                }
+
+                &:last-child {
+                    margin-right: 0;
+                }
+            }
+        }
+    }
+
+    &.is-success {
+        > .inner {
+            background: fade(@CmColor-Success-DarkDefault, @AppNotification-Fade);
+        }
+    }
+
+    &.is-warning {
+        > .inner {
+            background: fade(@CmColor-Warning-DarkDefault, @AppNotification-Fade);
+        }
+    }
+
+    &.is-danger {
+        > .inner {
+            background: fade(@CmColor-Danger-DarkDefault, @AppNotification-Fade);
+        }
+    }
+
+    &.pull-top {
+        top: 0;
+        .mx__transform(translateY(-100%));
+    }
+
+    &.pull-bottom {
+        bottom: 0;
+        .mx__transform(translateY(100%));
+    }
+
+    &.is-show {
+        opacity: 1;
+        visibility: visible;
+        .mx__transform(translateY(0));
+    }
+
+    &.is-immediately {
+        .cm__transition-none;
+    }
+}
+
+
+/* ******* COMPONENTS: NOTIFICATION: ADAPTIVE ******* */
+
+@media only screen and (max-width : @CmUI-AdaptiveFrom) {
+
+    html.is-adaptive {
+        .app__notification {
+            left: 0 !important;
+        }
+    }
+
+}
+
+/* ******* COMPONENTS: NOTIFICATION: PRINT ******** */
+
+@media print {
+
+    .app__notification {
+        display: none !important;
+    }
+
+}
