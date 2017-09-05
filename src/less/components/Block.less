@@ -3,13 +3,16 @@
 .app__block-container {
     position: relative;
     z-index: 1;
+    margin: 0 0 @AppBlock-Indent;
     .mx__transition(z-index, @CmUI-Transition-Duration);
     .mx__transition-delay(@CmUI-Transition-Delay-Hide);
 
-    // /* Inner */
-
     > .app__block {
         .pt__editable__bundle > .normal;
+        margin: 0;
+    }
+
+    &:last-child {
         margin: 0;
     }
 
@@ -87,16 +90,6 @@
 
     &.is-visible {
         display: block;
-    }
-
-    &.is-indent-auto {
-        margin: 0 0 @AppBlock-Indent;
-
-        &:not(.is-editing):not(.is-replacing) {
-            &:last-child {
-                margin: 0;
-            }
-        }
     }
 
     &.is-immediately {
