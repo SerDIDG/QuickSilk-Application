@@ -24,16 +24,11 @@
             position: absolute;
             z-index: 2;
             .mx__position(@top, @top, auto, auto);
-
-            &.default {
-                .icon.medium.close-white;
-            }
         }
 
         > .text {
             position: relative;
             z-index: 1;
-            color: @CmColor-Font-Opposite;
             line-height: @heightInner;
             text-align: center;
 
@@ -48,6 +43,50 @@
 
                 &:last-child {
                     margin-right: 0;
+                }
+            }
+        }
+    }
+
+    &.is-secondary,
+    &.is-success,
+    &.is-warning,
+    &.is-danger,
+    &.is-quicksilk {
+        > .inner {
+            > .icon {
+                &.default {
+                    .icon.medium.close-white;
+                }
+            }
+
+            > .text {
+                color: @CmColor-Font-Opposite;
+
+                .cm__tags,
+                .cm__link {
+                    color: @CmColor-Font-Opposite;
+                }
+
+                .cm__link {
+                    text-decoration: underline;
+
+                    &:hover {
+                        text-decoration: none;
+                    }
+                }
+            }
+        }
+    }
+
+    &.is-success--light,
+    &.is-warning--light,
+    &.is-danger--light,
+    &.is-white {
+        > .inner {
+            > .icon {
+                &.default {
+                    .icon.medium.close;
                 }
             }
         }
@@ -74,6 +113,30 @@
     &.is-quicksilk {
         > .inner {
             background: fade(@AppColor-QuickSilk, @AppNotification-Fade);
+        }
+    }
+
+    &.is-white {
+        > .inner {
+            background: fade(@CmColor-Background, @AppNotification-Fade);
+        }
+    }
+
+    &.is-success--light {
+        > .inner {
+            background: fade(@CmColor-Success-LightActive, @AppNotification-Fade);
+        }
+    }
+
+    &.is-warning--light {
+        > .inner {
+            background: fade(@CmColor-Warning-LightActive, @AppNotification-Fade);
+        }
+    }
+
+    &.is-danger--light {
+        > .inner {
+            background: fade(@CmColor-Danger-LightActive, @AppNotification-Fade);
         }
     }
 
