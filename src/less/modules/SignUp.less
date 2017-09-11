@@ -1,0 +1,102 @@
+/* ******* MODULES: SIGN UP ******* */
+
+.mod__signup {
+}
+
+.mod__signup__title {
+    .cm__tags {
+        text-align: center;
+    }
+}
+
+.mod__signup__block {
+    margin: @CmIndent-XLarge 0;
+}
+
+.mod__signup__columns {
+    .display-flex;
+
+    > .column {
+    }
+
+    > .column--form {
+        .mx__flex(1 1 auto);
+    }
+
+    > .column--social {
+        .display-flex;
+        .cm__flex--center;
+        .mx__flex(0 1 30%);
+
+        .button {
+            text-align: left;
+        }
+    }
+
+    > .separator {
+        width: @ModSignup-Separator-Size;
+        margin: 0 @ModSignup-Separator-Indent;
+        position: relative;
+        .mx__flex(0 1 auto);
+
+        &:before {
+            width: 0;
+            display: block;
+            position: absolute;
+            margin: auto;
+            z-index: 1;
+            border-left: @ModSignup-Separator-Border;
+            content: '';
+            .mx__position(0, 0, 0, 0);
+        }
+
+        .label {
+            width: @ModSignup-Separator-Size;
+            height: @ModSignup-Separator-Size;
+            position: absolute;
+            margin: auto;
+            z-index: 2;
+            border: @ModSignup-Separator-Border;
+            border-radius: 100%;
+            background: @CmColor-Background;
+            text-align: center;
+            line-height: @ModSignup-Separator-Size;
+            .mx__position(0, 0, 0, 0);
+        }
+    }
+}
+
+.mod__signup__disclaimer {
+    margin: @CmIndent-Medium 0 0 0;
+}
+
+/* ******* MODULES: SIGN UP: Adaptive ******* */
+
+
+@media only screen and (max-width : @CmUI-AdaptiveFrom) {
+
+    html.is-adaptive {
+        .mod__signup__columns {
+            display: block;
+
+            > .separator {
+                width: auto;
+                height: @ModSignup-Separator-Size;
+                margin: @ModSignup-Separator-Indent 0;
+
+                &:before {
+                    width: auto;
+                    height: 0;
+                    border-left: none;
+                    border-top: @ModSignup-Separator-Border;
+                }
+            }
+
+            > .column--social {
+                width: auto;
+                display: block;
+            }
+        }
+    }
+
+}
