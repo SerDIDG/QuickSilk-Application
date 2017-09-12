@@ -77,6 +77,13 @@
     text-decoration: none;
 }
 
+.app__font--admin {
+    font: @AppFont-Default-Weight ~'@{AppFont-Default-Size}/@{AppFont-Default-LineHeight}' @AppFont-Admin-Family;
+    color: @AppFont-Default-Color;
+    font-style: normal;
+    text-decoration: none;
+}
+
 .app__font--button {
     font: @AppFont-Button-Weight ~'@{AppFont-Button-Size}/@{AppFont-P-LineHeight}' @AppFont-Button-Family;
     color: @AppFont-Button-Color;
@@ -95,15 +102,15 @@
 }
 
 .app__topmenu-font {
-    .app__font--default;
+    .app__font--admin;
 }
 
 .app__sidebar-font {
-    .app__font--default;
+    .app__font--admin;
 }
 
 .app__helptour-font {
-    .app__font--default;
+    .app__font--admin;
 
     .cm__inherit {
         color: @AppFont-Default-Color;

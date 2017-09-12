@@ -33,7 +33,7 @@
 // /* ******* MAGPIE UI: VARIABLES ******* */
 // /* ************************************************ */
 
-@CmVersion: '3.30.2';
+@CmVersion: '3.30.3';
 
 // /* ******* PATH ******* */
 
@@ -105,6 +105,8 @@
 @CmUI-TooltipWidth: 320px;
 @CmUI-ColumnIndent: @CmIndent-Medium;
 @CmUI-BoxIndent: @CmIndent-Medium;
+@CmUI-GoogleFont: Open Sans;
+@CmUI-GoogleFont-Weight: 100,300,400,600,700,800;
 
 // /* ************************************************ */
 // /* ******* COLORS ******* */
@@ -385,7 +387,7 @@
 
 @CmFont-Base-LineHeight: 18px;
 @CmFont-Base-LineHeightSmall: 18px;
-@CmFont-Base-Family: 'Open Sans', arial, helvetica, sans-serif;
+@CmFont-Base-Family: @CmUI-GoogleFont, arial, helvetica, sans-serif;
 @CmFont-Base-Size: 13px;
 @CmFont-Base-SizeSmall: 11px;
 @CmFont-Base-Weight: @CmFont-Base-NormalWeight;
@@ -404,7 +406,7 @@
 @CmFont-UI-LineHeight: 18px;
 @CmFont-UI-Size: 13px;
 @CmFont-UI-SizeSmall: 11px;
-@CmFont-UI-Family: 'Open Sans', arial, helvetica, sans-serif;
+@CmFont-UI-Family: @CmUI-GoogleFont, arial, helvetica, sans-serif;
 @CmFont-UI-Weight: @CmFont-UI-NormalWeight;
 @CmFont-UI-Color: @CmColor-Font;
 @CmFont-UI-ColorOpposite: @CmColor-Font-Opposite;
@@ -1126,7 +1128,7 @@
 // /* ******* VARIABLES ******* */
 // /* ************************************************ */
 
-@AppVersion: '3.18.5';
+@AppVersion: '3.18.6';
 
 // /* ******* PATH ******* */
 
@@ -1142,13 +1144,15 @@
 // /* ******* FONT ******* */
 // /* ************************************************ */
 
-@AppFont-Default-Family: Open Sans, sans-serif;
+@AppFont-Admin-Family: Quicksand, sans-serif;
+
+@AppFont-Default-Family: Quicksand, sans-serif;
 @AppFont-Default-LineHeight: 18px;
 @AppFont-Default-Size: 13px;
 @AppFont-Default-Weight: 400;
 @AppFont-Default-Color: #666666;
 
-@AppFont-H1-Family: Open Sans, sans-serif;
+@AppFont-H1-Family: Quicksand, sans-serif;
 @AppFont-H1-LineHeight: 64px;
 @AppFont-H1-Size: 48px;
 @AppFont-H1-Weight: 100;
@@ -1156,7 +1160,7 @@
 @AppFont-H1-Decoration: none;
 @AppFont-H1-Style: normal;
 
-@AppFont-H2-Family: Open Sans, sans-serif;
+@AppFont-H2-Family: Quicksand, sans-serif;
 @AppFont-H2-LineHeight: 42px;
 @AppFont-H2-Size: 32px;
 @AppFont-H2-Weight: 400;
@@ -1164,7 +1168,7 @@
 @AppFont-H2-Decoration: none;
 @AppFont-H2-Style: normal;
 
-@AppFont-H3-Family: Open Sans, sans-serif;
+@AppFont-H3-Family: Quicksand, sans-serif;
 @AppFont-H3-LineHeight: 32px;
 @AppFont-H3-Size: 24px;
 @AppFont-H3-Weight: 400;
@@ -1172,7 +1176,7 @@
 @AppFont-H3-Decoration: none;
 @AppFont-H3-Style: normal;
 
-@AppFont-H4-Family: Open Sans, sans-serif;
+@AppFont-H4-Family: Quicksand, sans-serif;
 @AppFont-H4-LineHeight: 24px;
 @AppFont-H4-Size: 18px;
 @AppFont-H4-Weight: 400;
@@ -1180,7 +1184,7 @@
 @AppFont-H4-Decoration: none;
 @AppFont-H4-Style: normal;
 
-@AppFont-H5-Family: Open Sans, sans-serif;
+@AppFont-H5-Family: Quicksand, sans-serif;
 @AppFont-H5-LineHeight: 24px;
 @AppFont-H5-Size: 16px;
 @AppFont-H5-Weight: 400;
@@ -1188,7 +1192,7 @@
 @AppFont-H5-Decoration: none;
 @AppFont-H5-Style: normal;
 
-@AppFont-H6-Family: Open Sans, sans-serif;
+@AppFont-H6-Family: Quicksand, sans-serif;
 @AppFont-H6-LineHeight: 18px;
 @AppFont-H6-Size: 12px;
 @AppFont-H6-Weight: 600;
@@ -1196,7 +1200,7 @@
 @AppFont-H6-Decoration: none;
 @AppFont-H6-Style: normal;
 
-@AppFont-P-Family: Open Sans, sans-serif;
+@AppFont-P-Family: Quicksand, sans-serif;
 @AppFont-P-LineHeight: 18px;
 @AppFont-P-Size: 13px;
 @AppFont-P-Weight: 400;
@@ -1531,7 +1535,6 @@
 @ModButton-LabelIndent: @CmIndent-XXSmall;
 @ModButton-ImageSize: @CmSize-Medium;
 
-
 // /* ******* SIGNUP ******* */
 
 @ModSignup-Separator-Size: @CmSize-Large;
@@ -1572,6 +1575,11 @@
 
 // /* ******* COMMON ******* */
 
+// /* *** UI *** */
+
+@CmUI-GoogleFont: Quicksand;
+@CmUI-GoogleFont-Weight: 300,400,500,700;
+
 // /* *** FONT *** */
 
 @CmColor-Font: @AppFont-P-Color;
@@ -1581,6 +1589,8 @@
 @CmFont-Base-LineHeight: @AppFont-P-LineHeight;
 @CmFont-Base-Size: @AppFont-P-Size;
 @CmFont-Base-Weight: @AppFont-P-Weight;
+
+@CmFont-UI-Family: @AppFont-Admin-Family;
 
 // /* ******* COMPONENTS ******* */
 
