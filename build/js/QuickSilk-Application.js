@@ -1,11 +1,11 @@
-/*! ************ QuickSilk-Application v3.18.7 (2017-09-13 19:49) ************ */
+/*! ************ QuickSilk-Application v3.18.8 (2017-09-13 20:04) ************ */
 
 // /* ************************************************ */
 // /* ******* QUICKSILK: COMMON ******* */
 // /* ************************************************ */
 
 var App = {
-    '_version' : '3.18.7',
+    '_version' : '3.18.8',
     'Elements': {},
     'Nodes' : {},
     'Test' : []
@@ -2989,9 +2989,11 @@ function(params){
         startOptions['sidebarTab'] = that.components['sidebar'].getTab();
         that.components['sidebar'].unsetTab();
         // Save Notification State
-        startOptions['notificationShow'] = that.components['notification'].isShow;
-        if(that.components['notification'].isShow){
-            that.components['notification'].hide();
+        if(that.components['notification']){
+            startOptions['notificationShow'] = that.components['notification'].isShow;
+            if(that.components['notification'].isShow){
+                that.components['notification'].hide();
+            }
         }
         // Collapse menu (mobile)
         that.components['topMenu'].collapse();
@@ -3014,10 +3016,12 @@ function(params){
         }
         that.components['sidebar'].setTab(startOptions['sidebarTab']);
         // Restore Notification State
-        if(startOptions['notificationShow'] && !that.components['notification'].isShow){
-            that.components['notification'].show();
-        }else if(!startOptions['notificationShow'] && that.components['notification'].isShow){
-            that.components['notification'].hide();
+        if(that.components['notification']){
+            if(startOptions['notificationShow'] && !that.components['notification'].isShow){
+                that.components['notification'].show();
+            }else if(!startOptions['notificationShow'] && that.components['notification'].isShow){
+                that.components['notification'].hide();
+            }
         }
         // Hide overlays
         cm.forEach(that.components['overlays'], function(item){

@@ -171,9 +171,11 @@ function(params){
         startOptions['sidebarTab'] = that.components['sidebar'].getTab();
         that.components['sidebar'].unsetTab();
         // Save Notification State
-        startOptions['notificationShow'] = that.components['notification'].isShow;
-        if(that.components['notification'].isShow){
-            that.components['notification'].hide();
+        if(that.components['notification']){
+            startOptions['notificationShow'] = that.components['notification'].isShow;
+            if(that.components['notification'].isShow){
+                that.components['notification'].hide();
+            }
         }
         // Collapse menu (mobile)
         that.components['topMenu'].collapse();
@@ -196,10 +198,12 @@ function(params){
         }
         that.components['sidebar'].setTab(startOptions['sidebarTab']);
         // Restore Notification State
-        if(startOptions['notificationShow'] && !that.components['notification'].isShow){
-            that.components['notification'].show();
-        }else if(!startOptions['notificationShow'] && that.components['notification'].isShow){
-            that.components['notification'].hide();
+        if(that.components['notification']){
+            if(startOptions['notificationShow'] && !that.components['notification'].isShow){
+                that.components['notification'].show();
+            }else if(!startOptions['notificationShow'] && that.components['notification'].isShow){
+                that.components['notification'].hide();
+            }
         }
         // Hide overlays
         cm.forEach(that.components['overlays'], function(item){
