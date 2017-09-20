@@ -1,11 +1,11 @@
-/*! ************ QuickSilk-Application v3.18.9 (2017-09-20 16:56) ************ */
+/*! ************ QuickSilk-Application v3.18.10 (2017-09-20 18:35) ************ */
 
 // /* ************************************************ */
 // /* ******* QUICKSILK: COMMON ******* */
 // /* ************************************************ */
 
 var App = {
-    '_version' : '3.18.9',
+    '_version' : '3.18.10',
     'Elements': {},
     'Nodes' : {},
     'Test' : []
@@ -7773,6 +7773,7 @@ function(params){
     that.resizeInterval = null;
     that.currentPosition = null;
     that.previousPosition = null;
+    that.isMenuShow = false;
 
     var init = function(){
         getLESSVariables();
@@ -7838,7 +7839,7 @@ function(params){
         // Tabs
         processTabs();
         // Mobile menu
-        cm.forEach(that.nodes['options'], processMenuItem);
+        processMenu();
         // Set target events
         setTargetEvents();
         // Add custom event
@@ -7874,6 +7875,15 @@ function(params){
         });
     };
 
+    /* *** MOBILE MENU ***/
+
+    var processMenu = function(){
+        // Button
+        cm.addEvent(that.nodes['menu-icon'], 'click', toggleMenu);
+        // Items
+        cm.forEach(that.nodes['options'], processMenuItem);
+    };
+
     var processMenuItem = function(nodes){
         var item = cm.merge({
                 'id' : '',
@@ -7883,11 +7893,32 @@ function(params){
             if(that.components['tabset'].get() != item['id']){
                 cm.preventDefault(e);
                 that.components['tabset'].set(item['id']);
+                hideMenu();
                 show();
             }
         });
         that.options.push(item);
     };
+
+    var toggleMenu = function(){
+        if(that.isMenuShow){
+            hideMenu();
+        }else{
+            showMenu();
+        }
+    };
+
+    var hideMenu = function(){
+        that.isMenuShow = false;
+        cm.removeClass(that.nodes['menu-inner'], 'active');
+    };
+
+    var showMenu = function(){
+        that.isMenuShow = true;
+        cm.addClass(that.nodes['menu-inner'], 'active');
+    };
+
+    /*** EVENTS ***/
 
     var setTargetEvents = function(){
         if(that.params['event'] == 'hover'){
@@ -7949,6 +7980,7 @@ function(params){
     var clickOutEvent = function(e){
         var target = cm.getEventTarget(e);
         if(!cm.isParent(that.nodes['container'], target, true)){
+            hideMenu();
             !that.isEditing && hide();
         }else{
             show();
