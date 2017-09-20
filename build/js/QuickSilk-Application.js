@@ -1,11 +1,11 @@
-/*! ************ QuickSilk-Application v3.18.8 (2017-09-13 20:04) ************ */
+/*! ************ QuickSilk-Application v3.18.9 (2017-09-20 16:56) ************ */
 
 // /* ************************************************ */
 // /* ******* QUICKSILK: COMMON ******* */
 // /* ************************************************ */
 
 var App = {
-    '_version' : '3.18.8',
+    '_version' : '3.18.9',
     'Elements': {},
     'Nodes' : {},
     'Test' : []
@@ -7964,7 +7964,14 @@ function(params){
         var isSameWidth = that.previousPosition && that.previousPosition['width'] == that.currentPosition['width'];
         // Set Content Min Width
         if(!isSameWidth){
-            that.nodes['content'].style.minWidth = that.currentPosition['width'] + 'px';
+            switch(that.params['attachment']){
+                case 'screen':
+                    that.nodes['content'].style.minWidth = Math.min(that.params['width'], that.currentPosition['width']) + 'px';
+                    break;
+                case 'container':
+                    that.nodes['content'].style.minWidth = that.currentPosition['width'] + 'px';
+                    break;
+            }
         }
         // Set Content Position
         if(!isSameTop || !isSameBottom){
