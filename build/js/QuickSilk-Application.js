@@ -1,11 +1,11 @@
-/*! ************ QuickSilk-Application v3.18.10 (2017-09-20 18:35) ************ */
+/*! ************ QuickSilk-Application v3.18.11 (2017-09-22 20:22) ************ */
 
 // /* ************************************************ */
 // /* ******* QUICKSILK: COMMON ******* */
 // /* ************************************************ */
 
 var App = {
-    '_version' : '3.18.10',
+    '_version' : '3.18.11',
     'Elements': {},
     'Nodes' : {},
     'Test' : []
@@ -7739,13 +7739,14 @@ cm.define('App.ModuleRolloverTabs', {
         'node' : cm.Node('div'),
         'name' : '',
         'event' : 'hover',                          // hover | click
-        'useMouseOut' : true,
+        'stay' : false,
         'showEmptyTab' : false,
         'duration' : 'cm._config.animDuration',
         'delay' : 'cm._config.hideDelay',
         'width' : 'auto',
         'attachment' : 'container',                 // container | screen
         'expand' : 'bottom',                        // top | bottom
+        'active' : false,
         'isEditing' : false,
         'customEvents' : true,
         'Com.TabsetHelper' : {}
@@ -7809,6 +7810,13 @@ function(params){
                     that.triggerEvent('onTabHide', data);
                 })
                 .addEvent('onTabShowStart', function(tabset, data){
+                    // If not in editing and tab does not contains any blocks, do not show it
+                    if(!that.params['showEmptyTab'] && !that.isEditing && that.components['tabset'].isTabEmpty(data.item['id'])){
+                        hide(data.item);
+                    }else{
+                        show(data.item);
+                    }
+                    // Container
                     if(!that.isProcessing){
                         that.nodes['content-list'].style.overflow = 'hidden';
                         that.nodes['content-list'].style.height = that.nodes['content-list'].offsetHeight + 'px';
@@ -7825,14 +7833,6 @@ function(params){
                     that.nodes['content-list'].style.height = data['item']['tab']['container'].offsetHeight + 'px';
                     that.nodes['menu-label'].innerHTML = data['item']['title'];
                     that.triggerEvent('onTabShow', data);
-                })
-                .addEvent('onLabelTarget', function(tabset, data){
-                    // If not in editing mod and tab does not contains any blocks, do not show it
-                    if(!that.params['showEmptyTab'] && !that.isEditing && that.components['tabset'].isTabEmpty(data.item['id'])){
-                        hide();
-                    }else{
-                        show();
-                    }
                 })
                 .processTabs(that.nodes['tabs'], that.nodes['labels']);
         });
@@ -7856,6 +7856,10 @@ function(params){
             cm.customEvent.add(that.params['node'], 'disableEditable', function(){
                 that.disableEditing();
             });
+        }
+        // Set
+        if(that.params['active']){
+            that.components['tabset'].set(that.params['active']);
         }
         // Editing
         that.params['isEditing'] && that.enableEditing();
@@ -7921,23 +7925,23 @@ function(params){
     /*** EVENTS ***/
 
     var setTargetEvents = function(){
-        if(that.params['event'] == 'hover'){
+        if(that.params['event'] === 'hover'){
             cm.addEvent(that.nodes['container'], 'mouseover', mouseOverEvent);
         }
-        if(that.params['event'] == 'hover' || that.params['useMouseOut']){
+        if(!that.params['stay']){
             cm.addEvent(that.nodes['container'], 'mouseout', mouseOutEvent);
+            cm.addEvent(window, 'click', clickOutEvent);
         }
-        cm.addEvent(window, 'click', clickOutEvent);
     };
 
     var removeTargetEvents = function(){
-        if(that.params['event'] == 'hover'){
+        if(that.params['event'] === 'hover'){
             cm.removeEvent(that.nodes['container'], 'mouseover', mouseOverEvent);
         }
-        if(that.params['event'] == 'hover' || that.params['useMouseOut']){
+        if(!that.params['stay']){
             cm.removeEvent(that.nodes['container'], 'mouseout', mouseOutEvent);
+            cm.removeEvent(window, 'click', clickOutEvent);
         }
-        cm.removeEvent(window, 'click', clickOutEvent);
     };
 
     var hide = function(){
@@ -7953,8 +7957,8 @@ function(params){
         }, that.params['delay']);
     };
 
-    var show = function(){
-        var item = that.components['tabset'].getCurrentTab();
+    var show = function(item){
+        item = that.components['tabset'].getCurrentTab() || item;
         if(item && (that.params['showEmptyTab'] || that.isEditing || !that.components['tabset'].isTabEmpty(item['id']))){
             // Set position
             that.redraw();
