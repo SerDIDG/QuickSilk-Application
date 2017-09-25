@@ -1,5 +1,5 @@
 cm.define('App.elFinderFileManagerContainer', {
-    'extend' : 'Com.elFinderFileManagerContainer',
+    'extend' : 'Com.AbstractFileManagerContainer',
     'params' : {
         'constructor' : 'App.elFinderFileManager'
     }
@@ -7,5 +7,5 @@ cm.define('App.elFinderFileManagerContainer', {
 function(params){
     var that = this;
     // Call parent class construct
-    Com.elFinderFileManagerContainer.apply(that, arguments);
+    Com.AbstractFileManagerContainer.apply(that, arguments);
 });

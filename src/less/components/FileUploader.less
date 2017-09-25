@@ -1,0 +1,47 @@
+/* ******* COMPONENTS: FILE UPLOADER ******* */
+
+.app__file-uploader__dropzone {
+    position: relative;
+}
+
+.app__file-uploader__title {
+    .cm__font--ui-h4;
+    text-align: center;
+}
+
+.app__file-uploader__files {
+    margin-top: @CmIndent-Medium;
+
+    &:first-child {
+        margin-top: 0;
+    }
+
+    &.is-hidden {
+        display: none;
+    }
+}
+
+.app__file-uploader__local {
+    position: relative;
+
+    .app__file-uploader__title,
+    .app__file-uploader__holder,
+    .app__file-uploader__dropzone {
+        margin-top: @CmIndent-XSmall;
+
+        &:first-child {
+            margin-top: 0;
+        }
+    }
+}
+
+.app__file-uploader__file-manager {
+    &.is-fullsize {
+        position: absolute;
+        .mx__position(0, 0, 0, 0);
+
+        .app__file-uploader__holder {
+            height: 100%;
+        }
+    }
+}
