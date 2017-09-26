@@ -416,6 +416,48 @@
 @ModSignup-Separator-Border: @CmBorder-Default;
 @ModSignup-Separator-Indent: @CmIndent-Medium;
 
+// /* ******* CALENDAR ******* */
+
+@ModCalendar-BorderWidth: @CmBorder-Width;
+@ModCalendar-BorderColor: @CmColor-Border;
+@ModCalendar-Border: @ModCalendar-BorderWidth solid @ModCalendar-BorderColor;
+@ModCalendar-Background: @CmColor-Background;
+
+@ModCalendarEvent-TooltipWidth: @CmUI-TooltipWidth;
+@ModCalendarEvent-Padding: @CmIndent-XXXSmall;
+@ModCalendarEvent-LineHeight: @CmFont-Base-LineHeight;
+@ModCalendarEvent-Short-Indent: 1px;
+@ModCalendarEvent-Short-Height: @ModCalendarMonth-Item-LineHeight + (@ModCalendar-BorderWidth * 2);
+@ModCalendarEvent-Long-Indent: @CmIndent-XSmall;
+
+@ModCalendarTable-Border: @ModCalendar-Border;
+@ModCalendarTable-Default-Background: @CmColor-Background;
+@ModCalendarTable-Default-BackgroundHover: @CmColor-Secondary-LightHover;
+@ModCalendarTable-Inactive-Background: @CmColor-Background;
+@ModCalendarTable-Inactive-BackgroundHover: @CmColor-Secondary-LightHover;
+@ModCalendarTable-Weekend-Background: @CmColor-Secondary-LightActive;
+@ModCalendarTable-Weekend-BackgroundHover: @CmColor-Secondary-LightActiveHover;
+@ModCalendarTable-Today-Background: @CmColor-Primary-LightHighlight;
+@ModCalendarTable-Today-BackgroundHover: @CmColor-Primary-LightHover;
+@ModCalendarTable-Active-Background: @CmColor-Primary-LightActive;
+@ModCalendarTable-Active-BackgroundHover: @CmColor-Primary-LightActiveHover;
+
+@ModCalendarAgenda-Day-Indent: @CmIndent-Medium;
+@ModCalendarAgenda-Day-Padding: @CmIndent-XSmall;
+@ModCalendarAgenda-Day-Width: 72px;
+
+@ModCalendarWeek-Day-Indent: @CmIndent-XXXSmall;
+@ModCalendarWeek-Item-Height: @ModCalendarEvent-Short-Height;
+
+@ModCalendarMonth-Item-Count: 3;
+@ModCalendarMonth-Item-LineHeight: @ModCalendarEvent-LineHeight;
+@ModCalendarMonth-Item-Height: @ModCalendarEvent-Short-Height;
+@ModCalendarMonth-Item-Indent: @ModCalendarEvent-Short-Indent;
+@ModCalendarMonth-Day-Indent: @CmIndent-XXXSmall;
+@ModCalendarMonth-Day-Items : @ModCalendarMonth-Item-Count + 2;
+@ModCalendarMonth-Day-Height: (@ModCalendarMonth-Item-Height * @ModCalendarMonth-Day-Items) + (@ModCalendarMonth-Item-Indent * (@ModCalendarMonth-Day-Items - 1));
+
+
 // /* ************************************************ */
 // /* ******* PAGES ******* */
 // /* ************************************************ */

@@ -1,11 +1,11 @@
-/*! ************ QuickSilk-Application v3.18.12 (2017-09-25 19:58) ************ */
+/*! ************ QuickSilk-Application v3.18.13 (2017-09-26 16:28) ************ */
 
 // /* ************************************************ */
 // /* ******* QUICKSILK: COMMON ******* */
 // /* ************************************************ */
 
 var App = {
-    '_version' : '3.18.12',
+    '_version' : '3.18.13',
     'Elements': {},
     'Nodes' : {},
     'Test' : []
@@ -2880,7 +2880,7 @@ cm.getConstructor('App.FontInput', function(classConstructor, className, classPr
     classProto.validateItemConfig = function(config){
         var that = this;
         if(config['line-height']){
-            if(config['line-height'] != 'normal'){
+            if(config['line-height'] !== 'normal'){
                 config['line-height'] = parseInt(config['line-height']);
             }
         }
@@ -2923,9 +2923,9 @@ cm.getConstructor('App.FontInput', function(classConstructor, className, classPr
             return a - b;
         });
         that.params['styles']['line-height'].sort(function(a, b){
-            if(a == 'normal'){
+            if(a === 'normal'){
                 return -1;
-            }else if(b == 'normal'){
+            }else if(b === 'normal'){
                 return 1;
             }
             return a - b;
@@ -3118,7 +3118,7 @@ cm.getConstructor('App.FontInput', function(classConstructor, className, classPr
             )
         );
         cm.addEvent(that.nodes['tooltip']['font-style-button'], 'click', function(){
-            that.set(cm.merge(that.value, {'font-style' : (that.value['font-style'] == 'italic'? 'normal' : 'italic')}), true);
+            that.set(cm.merge(that.value, {'font-style' : (that.value['font-style'] === 'italic'? 'normal' : 'italic')}), true);
         });
         return that;
     };
@@ -3132,7 +3132,7 @@ cm.getConstructor('App.FontInput', function(classConstructor, className, classPr
             )
         );
         cm.addEvent(that.nodes['tooltip']['text-decoration-button'], 'click', function(){
-            that.set(cm.merge(that.value, {'text-decoration' : (that.value['text-decoration'] == 'underline'? 'none' : 'underline')}), true);
+            that.set(cm.merge(that.value, {'text-decoration' : (that.value['text-decoration'] === 'underline'? 'none' : 'underline')}), true);
         });
     };
 
@@ -3174,7 +3174,7 @@ cm.getConstructor('App.FontInput', function(classConstructor, className, classPr
         );
         cm.forEach(that.params['styles']['line-height'], function(item){
             that.nodes['tooltip']['line-height'].appendChild(
-                cm.node('option', {'value' : item}, (item == 'normal'? that.lang('auto') : item))
+                cm.node('option', {'value' : item}, (item === 'normal'? that.lang('auto') : item))
             );
         });
         // Component
@@ -3310,14 +3310,14 @@ cm.getConstructor('App.FontInput', function(classConstructor, className, classPr
                     }
                     break;
                 case 'text-decoration':
-                    if(value == 'underline'){
+                    if(value === 'underline'){
                         cm.addClass(that.nodes['tooltip']['text-decoration-button'], 'active');
                     }else{
                         cm.removeClass(that.nodes['tooltip']['text-decoration-button'], 'active');
                     }
                     break;
                 case 'font-style':
-                    if(value == 'italic'){
+                    if(value === 'italic'){
                         cm.addClass(that.nodes['tooltip']['font-style-button'], 'active');
                     }else{
                         cm.removeClass(that.nodes['tooltip']['font-style-button'], 'active');
@@ -3334,8 +3334,8 @@ cm.getConstructor('App.FontInput', function(classConstructor, className, classPr
 
     classProto.changeAction = function(triggerEvents){
         var that = this;
-        triggerEvents = typeof triggerEvents == 'undefined'? true : triggerEvents;
-        var isChanged = JSON.stringify(that.value) != JSON.stringify(that.previousValue);
+        triggerEvents = cm.isUndefined(triggerEvents)? true : triggerEvents;
+        var isChanged = JSON.stringify(that.value) !== JSON.stringify(that.previousValue);
         if(triggerEvents && isChanged){
             that.triggerEvent('onChange', that.value);
         }
@@ -5928,504 +5928,6 @@ function(params){
 
     init();
 });
-cm.define('App.Stylizer', {
-    'modules' : [
-        'Params',
-        'Events',
-        'Langs',
-        'DataConfig',
-        'DataNodes',
-        'Stack'
-    ],
-    'events' : [
-        'onRender',
-        'onSelect',
-        'onChange'
-    ],
-    'params' : {
-        'node' : cm.node('div'),
-        'name' : '',
-        'customEvents' : true,
-        'active' : {},
-        'default' : {},
-        'styles' : {
-            'font-family' : [
-                "Arial, Helvetica, sans-serif",
-                "Arial Black, Gadget, sans-serif",
-                "Courier New, Courier, monospace",
-                "Georgia, serif",
-                "Impact, Charcoal, sans-serif",
-                "Lucida Console, Monaco, monospace",
-                "Lucida Sans Unicode, Lucida Grande, sans-serif",
-                "Palatino Linotype, Book Antiqua, Palatino, serif",
-                "Tahoma, Geneva, sans-serif",
-                "Times New Roman, Times, serif",
-                "Trebuchet MS, Helvetica, sans-serif",
-                "Verdana, Geneva, sans-serif"
-            ],
-            'line-height' : [8, 10, 12, 16, 20, 24, 28, 32, 36, 40, 48, 56, 64, 72, 80, 88, 96, 108, 120],
-            'font-size' : [8, 9, 10, 11, 12, 13, 14, 18, 20, 22, 24, 28, 32, 36, 42, 48, 54, 60, 72, 96],
-            'font-weight' : [100, 300, 400, 600, 700, 900],
-            'font-style' : ['normal', 'italic'],
-            'text-decoration' : ['none', 'underline']
-        },
-        'styleBinds' : {
-            'font-weight' : {
-                'normal' : 400,
-                'bold' : 700
-            }
-        },
-        'controls' : {
-            'font-family' : true,
-            'line-height' : true,
-            'font-size' : true,
-            'font-weight' : true,
-            'font-style' : true,
-            'text-decoration' : true,
-            'color' : true
-        },
-        'showResetButtons' : true,
-        'overrideControls' : true,
-        'Com.Tooltip' : {
-            'targetEvent' : 'click',
-            'hideOnReClick' : true,
-            'top' : 'targetHeight + 6',
-            'left' : '-6',
-            'className' : 'app__stylizer-tooltip'
-        },
-        'Com.Select' : {
-            'renderInBody' : false
-        },
-        'Com.ColorPicker' : {
-            'renderInBody' : false
-        }
-    },
-    'strings' : {
-        '100' : 'Thin',
-        '200' : 'Extra Light',
-        '300' : 'Light',
-        '400' : 'Regular',
-        '500' : 'Medium',
-        '600' : 'Semi Bold',
-        '700' : 'Bold',
-        '800' : 'Extra Bold',
-        '900' : 'Black'
-    }
-},
-function(params){
-    var that = this;
-
-    that.nodes = {
-        'container' : cm.node('div'),
-        'input' : cm.node('input', {'type' : 'hidden'}),
-        'preview' : cm.node('div'),
-        'tooltip' : {}
-    };
-    that.components = {};
-    that.value = null;
-    that.previousValue = null;
-    that.safeValue = null;
-    that.isDestructed = null;
-
-    var init = function(){
-        that.destructHandler = that.destruct.bind(that);
-        that.setParams(params);
-        that.convertEvents(that.params['events']);
-        that.getDataNodes(that.params['node']);
-        that.getDataConfig(that.params['node']);
-        validateParams();
-        // Render editor toolbar
-        renderTooltip();
-        setEvents();
-        // Add to stack
-        that.addToStack(that.nodes['container']);
-        // Set
-        set(cm.merge(that.params['default'], that.params['active']), false);
-        // Trigger events
-        that.triggerEvent('onRender', that.value);
-    };
-
-    var validateParams = function(){
-        if(cm.isNode(that.nodes['input'])){
-            that.params['name'] = that.nodes['input'].getAttribute('name') || that.params['name'];
-        }
-        // Get config
-        that.params['default'] = cm.merge(
-            that.params['default'],
-            that.getNodeDataConfig(that.nodes['input'], 'data-default')
-        );
-        that.params['active'] = cm.merge(
-            cm.merge(that.params['default'], that.params['active']),
-            that.getNodeDataConfig(that.nodes['input'], 'value')
-        );
-        // Validate config
-        validateItemConfig(that.params['active']);
-        validateItemConfig(that.params['default']);
-        // Extend global styles config
-        extendGlobalConfig(that.params['active']);
-        extendGlobalConfig(that.params['default']);
-        sortGlobalConfig();
-        // Override controls
-        if(that.params['overrideControls']){
-            cm.forEach(that.params['controls'], function(item, key){
-                that.params['controls'][key] = !!(that.params['default'][key] || that.params['active'][key]);
-            });
-        }
-    };
-
-    var validateItemConfig = function(config){
-        if(config['line-height']){
-            if(config['line-height'] != 'normal'){
-                config['line-height'] = parseInt(config['line-height']);
-            }
-        }
-        if(config['font-size']){
-            config['font-size'] = parseInt(config['font-size']);
-        }
-        if(config['font-weight']){
-            if(that.params['styleBinds']['font-weight'][config['font-weight']]){
-                config['font-weight'] = that.params['styleBinds']['font-weight'][config['font-weight']];
-            }
-            config['font-weight'] = parseInt(config['font-weight']);
-            config['font-weight'] = cm.inArray(that.params['styles']['font-weight'], config['font-weight'])? config['font-weight'] : 400;
-        }
-        if(config['font-style']){
-            config['font-style'] = cm.inArray(that.params['styles']['font-style'], config['font-style'])? config['font-style'] : 'normal';
-        }
-        if(config['text-decoration']){
-            config['text-decoration'] = cm.inArray(that.params['styles']['text-decoration'], config['text-decoration'])? config['text-decoration'] : 'none';
-        }
-        return config;
-    };
-
-    var extendGlobalConfig = function(config){
-        if(config['font-size'] && !cm.inArray(that.params['styles']['font-size'], config['font-size'])){
-            that.params['styles']['font-size'].push(config['font-size']);
-        }
-        if(config['line-height'] && !cm.inArray(that.params['styles']['line-height'], config['line-height'])){
-            that.params['styles']['line-height'].push(config['line-height']);
-        }
-        if(config['font-family'] && !cm.inArray(that.params['styles']['font-family'], config['font-family'])){
-            that.params['styles']['font-family'].push(config['font-family']);
-        }
-    };
-
-    var sortGlobalConfig = function(){
-        that.params['styles']['font-size'].sort(function(a, b){
-            return a - b;
-        });
-        that.params['styles']['line-height'].sort(function(a, b){
-            if(a == 'normal'){
-                return -1;
-            }else if(b == 'normal'){
-                return 1;
-            }
-            return a - b;
-        });
-        that.params['styles']['font-family'].sort(function(a, b){
-            var t1 = a.toLowerCase().replace(/["']/g, ''),
-                t2 = b.toLowerCase().replace(/["']/g, '');
-            return (t1 < t2)? -1 : ((t1 > t2)? 1 : 0);
-        });
-    };
-
-    var renderTooltip = function(){
-        // Structure
-        that.nodes['tooltip']['container'] = cm.node('div', {'class' : 'pt__toolbar'},
-            that.nodes['tooltip']['inner'] = cm.node('div', {'class' : 'inner'},
-                that.nodes['tooltip']['group1'] = cm.node('ul', {'class' : 'group'}),
-                that.nodes['tooltip']['group2'] = cm.node('ul', {'class' : 'group'}),
-                that.nodes['tooltip']['group3'] = cm.node('ul', {'class' : 'group'}),
-                that.nodes['tooltip']['group4'] = cm.node('ul', {'class' : 'group'})
-            )
-        );
-        // Font-Family
-        if(that.params['controls']['font-family']){
-            that.nodes['tooltip']['group2'].appendChild(
-                cm.node('li', {'class' : 'is-select medium'},
-                    that.nodes['tooltip']['font-family'] = cm.node('select', {'title' : that.lang('Font')})
-                )
-            );
-            cm.forEach(that.params['styles']['font-family'], function(item){
-                that.nodes['tooltip']['font-family'].appendChild(
-                    cm.node('option', {'value' : item, 'style' : {'font-family' : item}}, item.replace(/["']/g, '').split(',')[0])
-                );
-            });
-            that.components['font-family'] = new Com.Select(
-                cm.merge(that.params['Com.Select'], {
-                    'select' : that.nodes['tooltip']['font-family'],
-                    'events' : {
-                        'onChange' : function(my, value){
-                            set(cm.merge(that.value, {'font-family' : value}), true);
-                        }
-                    }
-                })
-            );
-        }
-        // Font-Weight
-        if(that.params['controls']['font-weight']){
-            // Button
-            that.nodes['tooltip']['group1'].appendChild(
-                that.nodes['tooltip']['font-weight-button'] = cm.node('li', {'class' : 'button button-secondary is-icon'},
-                    cm.node('span', {'class' : 'icon toolbar bold'})
-                )
-            );
-            cm.addEvent(that.nodes['tooltip']['font-weight-button'], 'click', function(){
-                set(cm.merge(that.value, {'font-weight' : (that.value['font-weight'] > 400? 400 : 700)}), true);
-            });
-            // Select
-            that.nodes['tooltip']['group2'].appendChild(
-                cm.node('li', {'class' : 'is-select medium'},
-                    that.nodes['tooltip']['font-weight'] = cm.node('select', {'title' : that.lang('Weight')})
-                )
-            );
-            cm.forEach(that.params['styles']['font-weight'], function(item){
-                that.nodes['tooltip']['font-weight'].appendChild(
-                    cm.node('option', {'value' : item}, that.lang(item))
-                );
-            });
-            that.components['font-weight'] = new Com.Select(
-                cm.merge(that.params['Com.Select'], {
-                    'select' : that.nodes['tooltip']['font-weight'],
-                    'events' : {
-                        'onChange' : function(my, value){
-                            set(cm.merge(that.value, {'font-weight' : value}), true);
-                        }
-                    }
-                })
-            );
-        }
-        // Font-Style
-        if(that.params['controls']['font-style']){
-            // Button
-            that.nodes['tooltip']['group1'].appendChild(
-                that.nodes['tooltip']['font-style-button'] = cm.node('li', {'class' : 'button button-secondary is-icon'},
-                    cm.node('span', {'class' : 'icon toolbar italic'})
-                )
-            );
-            cm.addEvent(that.nodes['tooltip']['font-style-button'], 'click', function(){
-                set(cm.merge(that.value, {'font-style' : (that.value['font-style'] == 'italic'? 'normal' : 'italic')}), true);
-            });
-        }
-        // Text-Decoration
-        if(that.params['controls']['text-decoration']){
-            // Button
-            that.nodes['tooltip']['group1'].appendChild(
-                that.nodes['tooltip']['text-decoration-button'] = cm.node('li', {'class' : 'button button-secondary is-icon'},
-                    cm.node('span', {'class' : 'icon toolbar underline'})
-                )
-            );
-            cm.addEvent(that.nodes['tooltip']['text-decoration-button'], 'click', function(){
-                set(cm.merge(that.value, {'text-decoration' : (that.value['text-decoration'] == 'underline'? 'none' : 'underline')}), true);
-            });
-        }
-        // Font-Size
-        if(that.params['controls']['font-size']){
-            // Select
-            that.nodes['tooltip']['group2'].appendChild(
-                cm.node('li', {'class' : 'is-select x-small'},
-                    that.nodes['tooltip']['font-size'] = cm.node('select', {'title' : that.lang('Size')})
-                )
-            );
-            cm.forEach(that.params['styles']['font-size'], function(item){
-                that.nodes['tooltip']['font-size'].appendChild(
-                    cm.node('option', {'value' : item}, item)
-                );
-            });
-            that.components['font-size'] = new Com.Select(
-                cm.merge(that.params['Com.Select'], {
-                    'select' : that.nodes['tooltip']['font-size'],
-                    'events' : {
-                        'onChange' : function(my, value){
-                            set(cm.merge(that.value, {'font-size' : value}), true);
-                        }
-                    }
-                })
-            );
-        }
-        // Line-Height
-        if(that.params['controls']['line-height']){
-            // Select
-            that.nodes['tooltip']['group2'].appendChild(
-                cm.node('li', {'class' : 'is-select x-small'},
-                    that.nodes['tooltip']['line-height'] = cm.node('select', {'title' : that.lang('Leading')})
-                )
-            );
-            cm.forEach(that.params['styles']['line-height'], function(item){
-                that.nodes['tooltip']['line-height'].appendChild(
-                    cm.node('option', {'value' : item}, (item == 'normal'? that.lang('auto') : item))
-                );
-            });
-            that.components['line-height'] = new Com.Select(
-                cm.merge(that.params['Com.Select'], {
-                    'select' : that.nodes['tooltip']['line-height'],
-                    'events' : {
-                        'onChange' : function(my, value){
-                            set(cm.merge(that.value, {'line-height' : value}), true);
-                        }
-                    }
-                })
-            );
-        }
-        // Color
-        if(that.params['controls']['color']){
-            that.nodes['tooltip']['group3'].appendChild(
-                cm.node('li', {'class' : 'is-select medium'},
-                    that.nodes['tooltip']['color'] = cm.node('input', {'type' : 'text', 'title' : that.lang('Color')})
-                )
-            );
-            that.components['color'] = new Com.ColorPicker(
-                cm.merge(that.params['Com.ColorPicker'], {
-                    'input' : that.nodes['tooltip']['color'],
-                    'defaultValue' : that.params['default']['color'],
-                    'events' : {
-                        'onChange' : function(my, value){
-                            set(cm.merge(that.value, {'color' : value}), true);
-                        }
-                    }
-                })
-            );
-        }
-        // Reset
-        if(that.params['showResetButtons']){
-            // Button
-            that.nodes['tooltip']['group4'].appendChild(
-                cm.node('li',
-                    that.nodes['tooltip']['reset-default-button'] = cm.node('div', {'class' : 'button button-primary'}, that.lang('Reset to default'))
-                )
-            );
-            that.nodes['tooltip']['group4'].appendChild(
-                cm.node('li',
-                    that.nodes['tooltip']['reset-current-button'] = cm.node('div', {'class' : 'button button-primary'}, that.lang('Reset to current'))
-                )
-            );
-            cm.addEvent(that.nodes['tooltip']['reset-default-button'], 'click', function(){
-                set(cm.clone(that.params['default']), true);
-            });
-            cm.addEvent(that.nodes['tooltip']['reset-current-button'], 'click', function(){
-                set(cm.clone(that.params['active']), true);
-            });
-        }else{
-            cm.remove(that.nodes['tooltip']['group4']);
-        }
-        // Render tooltip
-        that.components['tooltip'] = new Com.Tooltip(
-            cm.merge(that.params['Com.Tooltip'], {
-                'content' : that.nodes['tooltip']['container'],
-                'target' : that.nodes['container'],
-                'events' : {
-                    'onShowStart' : function(){
-                        cm.addClass(that.nodes['container'], 'active')
-                    },
-                    'onHideStart' : function(){
-                        cm.removeClass(that.nodes['container'], 'active')
-                    }
-                }
-            })
-        );
-    };
-
-    var setEvents = function(){
-        // Add custom event
-        if(that.params['customEvents']){
-            cm.customEvent.add(that.nodes['container'], 'destruct', that.destructHandler);
-        }
-    };
-
-    var unsetEvents = function(){
-        // Add custom event
-        if(that.params['customEvents']){
-            cm.customEvent.remove(that.nodes['container'], 'destruct', that.destructHandler);
-        }
-    };
-
-    var set = function(styles, triggerEvents){
-        that.previousValue = cm.clone(that.value);
-        that.value = cm.clone(styles);
-        that.value['_type'] = 'font';
-        that.safeValue = cm.clone(that.value);
-        // Set components
-        cm.forEach(styles, function(value, key){
-            if(that.components[key]){
-                that.components[key].set(value, false);
-            }
-            // Set buttons
-            switch(key){
-                case 'font-weight':
-                    if(value > 400){
-                        cm.addClass(that.nodes['tooltip']['font-weight-button'], 'active');
-                    }else{
-                        cm.removeClass(that.nodes['tooltip']['font-weight-button'], 'active');
-                    }
-                    break;
-                case 'text-decoration':
-                    if(value == 'underline'){
-                        cm.addClass(that.nodes['tooltip']['text-decoration-button'], 'active');
-                    }else{
-                        cm.removeClass(that.nodes['tooltip']['text-decoration-button'], 'active');
-                    }
-                    break;
-                case 'font-style':
-                    if(value == 'italic'){
-                        cm.addClass(that.nodes['tooltip']['font-style-button'], 'active');
-                    }else{
-                        cm.removeClass(that.nodes['tooltip']['font-style-button'], 'active');
-                    }
-                    break;
-                case 'font-size':
-                    that.safeValue[key] = cm.isNumber(value) || /^\d+$/.test(value) ? (value + 'px') : value;
-                    break;
-                case 'line-height':
-                    that.safeValue[key] = cm.isNumber(value) || /^\d+$/.test(value) ? (value + 'px') : value;
-                    break;
-            }
-            // Set preview
-            that.nodes['preview'].style[cm.styleStrToKey(key)] = that.safeValue[key];
-        });
-        // Set hidden input data
-        that.nodes['input'].value = JSON.stringify(that.safeValue);
-        // Trigger events
-        if(triggerEvents){
-            that.triggerEvent('onSelect', that.safeValue);
-            eventOnChange();
-        }
-    };
-
-    var eventOnChange = function(){
-        if(JSON.stringify(that.value) != JSON.stringify(that.previousValue)){
-            that.triggerEvent('onChange', that.safeValue);
-        }
-    };
-
-    /* ******* MAIN ******* */
-
-    that.destruct = function(){
-        var that = this;
-        if(!that.isDestructed){
-            that.isDestructed = true;
-            cm.customEvent.trigger(that.nodes['tooltip']['container'], 'destruct', {
-                'type' : 'child',
-                'self' : false
-            });
-            unsetEvents();
-            that.removeFromStack();
-        }
-        return that;
-    };
-
-    that.set = function(styles, triggerEvents){
-        triggerEvents = typeof triggerEvents != 'undefined'? triggerEvents : true;
-        styles = cm.isObject(styles)? validateItemConfig(styles) : that.params['default'];
-        set(styles, triggerEvents);
-        return that;
-    };
-
-    that.get = function(){
-        return that.safeValue;
-    };
-
-    init();
-});
 cm.define('App.Template', {
     'modules' : [
         'Params',
@@ -7395,7 +6897,864 @@ cm.getConstructor('Module.Anchor', function(classConstructor, className, classPr
         return that.params['name'] === hash;
     };
 });
+/* ******* COMPONENTS: CALENDAR ******* */
 
+cm.define('Module.Calendar', {
+    'modules' : [
+        'Params',
+        'Events',
+        'Langs',
+        'DataConfig',
+        'DataNodes',
+        'Callbacks',
+        'Stack'
+    ],
+    'events' : [
+        'onRenderStart',
+        'onRender',
+        'onError',
+        'onAbort',
+        'onSuccess',
+        'onSendStart',
+        'onSendEnd',
+        'onProcessEnd'
+    ],
+    'params' : {
+        'node' : cm.node('div'),
+        'name' : '',
+        'defaultView' : 'agenda',                                   // agenda | week | month
+        'isViewPreloaded' : false,
+        'animateDuration' : 'cm._config.animDuration',
+        'showLoader' : true,
+        'loaderDelay' : 'cm._config.loadDelay',
+        'responseKey' : 'data',                                     // Instead of using filter callback, you can provide response array key
+        'responseHTML' : true,                                      // If true, html will append automatically
+        'ajax' : {
+            'type' : 'json',
+            'method' : 'get',
+            'url' : '',                                             // Request URL. Variables: %baseUrl%, %view%, %year%, %month%, %week%, %callback% for JSONP.
+            'params' : {                                            // Params object. %baseUrl%, %view%, %year%, %month%, %week%, %callback% for JSONP.
+                'view' : '%view%',
+                'week' : '%week%',
+                'month' : '%month%',
+                'year' : '%year%',
+                'query' : '%query%'
+            }
+        },
+        'Com.Overlay' : {
+            'position' : 'absolute',
+            'autoOpen' : false,
+            'removeOnClose' : true,
+            'appendMode' : 'insertFirst'
+        }
+    },
+    'strings' : {
+        'server_error' : 'An unexpected error has occurred. Please try again later.'
+    }
+},
+function(params){
+    var that = this,
+        viewDetailsPattern = {
+            'view' : null,
+            'week' : null,
+            'month' : null,
+            'year' : null,
+            'query' : null
+        };
+
+    that.nodes = {
+        'container' : cm.node('div'),
+        'buttons' : {
+            'views' : {
+                'agenda' : cm.node('div'),
+                'week' : cm.node('div'),
+                'month' : cm.node('div')
+            }
+        },
+        'holder' : {
+            'container' : cm.node('div'),
+            'inner' : cm.node('div')
+        }
+    };
+    that.components = {};
+    that.animations = {};
+
+    that.ajaxHandler = null;
+    that.isProcess = false;
+    that.isRendering = false;
+    that.loaderDelay = null;
+    that.viewDetails = cm.clone(viewDetailsPattern);
+
+    var init = function(){
+        that.setParams(params);
+        that.convertEvents(that.params['events']);
+        that.getDataNodes(that.params['node']);
+        that.getDataConfig(that.params['node']);
+        validateParams();
+        that.addToStack(that.params['node']);
+        that.triggerEvent('onRenderStart');
+        render();
+        that.addToStack(that.nodes['container']);
+        that.triggerEvent('onRender');
+    };
+
+    var validateParams = function(){
+        that.params['defaultView'] = cm.inArray(['agenda', 'week', 'month'], that.params['defaultView']) ? that.params['defaultView'] : 'month';
+        that.params['Com.Overlay']['container'] = that.nodes['container'];
+    };
+
+    var render = function(){
+        // Overlay
+        cm.getConstructor('Com.Overlay', function(classConstructor, className){
+            that.components['loader'] = new classConstructor(that.params[className]);
+        });
+        // Animations
+        that.animations['response'] = new cm.Animation(that.nodes['holder']['container']);
+        // View Buttons
+        cm.forEach(that.nodes['buttons']['views'], function(node, key){
+            cm.addEvent(node, 'click', function(e){
+                cm.preventDefault(e);
+                setView({
+                    'view' : key
+                });
+            });
+        });
+        // View Finder
+        new cm.Finder('Module.CalendarAgenda', that.params['name'], that.nodes['holder']['inner'], function(classObject){
+            classObject.addEvent('onRequestView', function(calendar, data){
+                setView(data);
+            });
+        }, {'multiple' : true});
+        new cm.Finder('Module.CalendarWeek', that.params['name'], that.nodes['holder']['inner'], function(classObject){
+            classObject.addEvent('onRequestView', function(calendar, data){
+                setView(data);
+            });
+        }, {'multiple' : true});
+        new cm.Finder('Module.CalendarMonth', that.params['name'], that.nodes['holder']['inner'], function(classObject){
+            classObject.addEvent('onRequestView', function(calendar, data){
+                setView(data);
+            });
+        }, {'multiple' : true});
+        // Render View
+        !that.params['isViewPreloaded'] && setView({
+            'view' : that.params['defaultView']
+        });
+    };
+
+    var setViewDetails = function(data){
+        that.viewDetails = cm.merge(viewDetailsPattern, data);
+    };
+
+    var setView = function(data){
+        if(that.isProcess){
+            that.abort();
+        }
+        if(!that.isProcess && !that.isRendering){
+            setViewDetails(data);
+            cm.forEach(that.nodes['buttons']['views'], function(node, key){
+                if(key === that.viewDetails['view']){
+                    cm.replaceClass(node, 'button-secondary', 'button-primary');
+                }else{
+                    cm.replaceClass(node, 'button-primary', 'button-secondary');
+                }
+            });
+            that.ajaxHandler = that.callbacks.request(that, cm.clone(that.params['ajax']));
+        }
+    };
+
+    /* ******* CALLBACKS ******* */
+
+    /* *** AJAX *** */
+
+    that.callbacks.prepare = function(that, config){
+        config = that.callbacks.beforePrepare(that, config);
+        config['url'] = cm.strReplace(config['url'], {
+            '%baseUrl%' : cm._baseUrl,
+            '%view%' : that.viewDetails['view'],
+            '%year%' : that.viewDetails['year'],
+            '%month%' : that.viewDetails['month'],
+            '%week%' : that.viewDetails['week'],
+            '%query%' : that.viewDetails['query']
+        });
+        config['params'] = cm.objectReplace(config['params'], {
+            '%baseUrl%' : cm._baseUrl,
+            '%view%' : that.viewDetails['view'],
+            '%year%' : that.viewDetails['year'],
+            '%month%' : that.viewDetails['month'],
+            '%week%' : that.viewDetails['week'],
+            '%query%' : that.viewDetails['query']
+        });
+        config = that.callbacks.afterPrepare(that, config);
+        return config;
+    };
+
+    that.callbacks.beforePrepare = function(that, config){
+        return config;
+    };
+
+    that.callbacks.afterPrepare = function(that, config){
+        return config;
+    };
+
+    that.callbacks.request = function(that, config){
+        config = that.callbacks.prepare(that, config);
+        // Return ajax handler (XMLHttpRequest) to providing abort method.
+        return cm.ajax(
+            cm.merge(config, {
+                'onStart' : function(){
+                    that.callbacks.start(that);
+                },
+                'onSuccess' : function(response){
+                    that.callbacks.response(that, config, response);
+                },
+                'onError' : function(){
+                    that.callbacks.error(that, config);
+                },
+                'onAbort' : function(){
+                    that.callbacks.abort(that, config);
+                },
+                'onEnd' : function(){
+                    that.callbacks.end(that);
+                }
+            })
+        );
+    };
+
+    that.callbacks.filter = function(that, config, response){
+        var data,
+            dataItem = cm.objectSelector(that.params['responseKey'], response);
+        if(dataItem && !cm.isEmpty(dataItem)){
+            data = dataItem;
+        }
+        return data;
+    };
+
+    that.callbacks.start = function(that, config){
+        that.isProcess = true;
+        // Show Loader
+        if(that.params['showLoader']){
+            that.loaderDelay = setTimeout(function(){
+                if(that.components['loader'] && !that.components['loader'].isOpen){
+                    that.components['loader'].open();
+                }
+            }, that.params['loaderDelay']);
+        }
+        that.triggerEvent('onSendStart');
+    };
+
+    that.callbacks.end = function(that, config){
+        that.isProcess = false;
+        // Hide Loader
+        if(that.params['showLoader']){
+            that.loaderDelay && clearTimeout(that.loaderDelay);
+            if(that.components['loader'] && that.components['loader'].isOpen){
+                that.components['loader'].close();
+            }
+        }
+        that.triggerEvent('onSendEnd');
+        that.triggerEvent('onProcessEnd', that.nodes['holder']['inner']);
+    };
+
+    that.callbacks.response = function(that, config, response){
+        if(!cm.isEmpty(response)){
+            response = that.callbacks.filter(that, config, response);
+        }
+        if(!cm.isEmpty(response)){
+            that.callbacks.success(that, response);
+        }else{
+            that.callbacks.error(that, config);
+        }
+    };
+
+    that.callbacks.error = function(that, config){
+        that.callbacks.renderError(that, config);
+        that.triggerEvent('onError');
+    };
+
+    that.callbacks.success = function(that, response){
+        that.callbacks.render(that, response);
+        that.triggerEvent('onSuccess', response);
+    };
+
+    that.callbacks.abort = function(that, config){
+        that.triggerEvent('onAbort');
+    };
+
+    /* *** RENDER *** */
+
+    that.callbacks.renderTemporary = function(that){
+        return cm.node('div', {'class' : 'calendar__temporary'});
+    };
+
+    that.callbacks.render = function(that, data){
+        var nodes, temporary;
+        if(that.params['responseHTML']){
+            that.isRendering = true;
+            temporary = that.callbacks.renderTemporary(that);
+            nodes = cm.strToHTML(data);
+            if(!cm.isEmpty(nodes)){
+                if(cm.isNode(nodes)){
+                    temporary.appendChild(nodes);
+                }else{
+                    while(nodes.length){
+                        if(cm.isNode(nodes[0])){
+                            temporary.appendChild(nodes[0]);
+                        }else{
+                            cm.remove(nodes[0]);
+                        }
+                    }
+                }
+            }
+            that.callbacks.append(that, temporary);
+        }
+    };
+
+    that.callbacks.renderError = function(that, config){
+        if(that.params['responseHTML']){
+            that.isRendering = true;
+            var temporary = that.callbacks.renderTemporary(that);
+            temporary.appendChild(
+                cm.node('div', {'class' : 'cm__empty'}, that.lang('server_error'))
+            );
+            that.callbacks.append(that, temporary);
+        }
+    };
+
+    that.callbacks.append = function(that, temporary){
+        var height;
+        // Wrap old content
+        if(!that.nodes['holder']['temporary']){
+            that.nodes['holder']['temporary'] = that.callbacks.renderTemporary(that);
+            cm.appendNodes(that.nodes['holder']['inner'].childNodes, that.nodes['holder']['temporary']);
+            cm.appendChild(that.nodes['holder']['temporary'], that.nodes['holder']['inner']);
+        }
+        cm.removeClass(that.nodes['holder']['temporary'], 'is-show', true);
+        // Append temporary
+        cm.appendChild(temporary, that.nodes['holder']['inner']);
+        cm.addClass(temporary, 'is-show', true);
+        // Animate
+        cm.removeClass(that.nodes['holder']['container'], 'is-loaded', true);
+        cm.addClass(that.nodes['holder']['container'], 'is-show', true);
+        height = temporary.offsetHeight;
+        that.animations['response'].go({
+            'style' : {'height' : [height, 'px'].join('')},
+            'duration' : that.params['animateDuration'],
+            'anim' : 'smooth',
+            'onStop' : function(){
+                that.nodes['holder']['container'].style.height = '';
+                cm.remove(that.nodes['holder']['temporary']);
+                cm.addClass(that.nodes['holder']['container'], 'is-loaded', true);
+                that.nodes['holder']['temporary'] = temporary;
+                that.isRendering = false;
+            }
+        });
+    };
+
+    /* ******* PUBLIC ******* */
+
+    that.refresh = function(){
+        setView(that.viewDetails);
+        return that;
+    };
+
+    that.abort = function(){
+        if(that.ajaxHandler && that.ajaxHandler.abort){
+            that.ajaxHandler.abort();
+        }
+        return that;
+    };
+
+    that.setAction = function(o, mode, update){
+        mode = cm.inArray(['raw', 'update', 'current'], mode)? mode : 'current';
+        switch(mode){
+            case 'raw':
+                that.params['ajax'] = cm.merge(that._raw.params['ajax'], o);
+                break;
+            case 'current':
+                that.params['ajax'] = cm.merge(that.params['ajax'], o);
+                break;
+            case 'update':
+                that.params['ajax'] = cm.merge(that._update.params['ajax'], o);
+                break;
+        }
+        if(update){
+            that._update.params['ajax'] = cm.clone(that.params['ajax']);
+        }
+        return that;
+    };
+
+    init();
+});
+
+/* *** CALENDAR EVENT *** */
+
+cm.define('Module.CalendarEvent', {
+    'modules' : [
+        'Params',
+        'Events',
+        'Langs',
+        'DataConfig',
+        'DataNodes',
+        'Stack'
+    ],
+    'events' : [
+        'onRenderStart',
+        'onRender'
+    ],
+    'params' : {
+        'node' : cm.Node('div'),
+        'name' : '',
+        'data' : {
+            'title' : null,
+            'date' : null,
+            'description' : null
+        },
+        'Com.Tooltip' : {
+            'delay' : 'cm._config.hideDelayLong',
+            'className' : 'module__calendar-event-tooltip',
+            'minWidth' : 250
+        }
+    }
+},
+function(params){
+    var that = this;
+
+    that.nodes = {
+        'template' : null
+    };
+    that.components = {};
+    that.template = null;
+
+    var init = function(){
+        that.setParams(params);
+        that.convertEvents(that.params['events']);
+        that.getDataNodes(that.params['node']);
+        that.getDataConfig(that.params['node']);
+        that.addToStack(that.params['node']);
+        that.triggerEvent('onRenderStart');
+        render();
+        that.triggerEvent('onRender');
+    };
+
+    var render = function(){
+        // Render tooltip
+        cm.getConstructor('Com.Tooltip', function(classConstructor, className){
+            that.components['tooltip'] = new classConstructor(
+                cm.merge(that.params[className],{
+                    'target' : that.params['node']
+                })
+            );
+        });
+    };
+
+    var renderContent = function(template){
+        if(!cm.isEmpty(that.params['data']['title'])){
+            template['title'].innerHTML = that.params['data']['title'];
+        }
+        if(!cm.isEmpty(that.params['data']['date'])){
+            template['date'].innerHTML = that.params['data']['date'];
+        }
+        if(!cm.isEmpty(that.params['data']['description'])){
+            template['description'].innerHTML = that.params['data']['description'];
+        }else{
+            cm.remove(template['description-container']);
+        }
+        if(!cm.isEmpty(that.params['data']['url'])){
+            template['button'].setAttribute('href', that.params['data']['url']);
+        }else{
+            cm.remove(template['button-container']);
+        }
+    };
+
+    /* ******* PUBLIC ******* */
+
+    that.setTemplate = function(node){
+        that.nodes['template'] = cm.getNodes(node);
+        if(that.nodes['template']){
+            renderContent(that.nodes['template']);
+            that.components['tooltip'] && that.components['tooltip'].setContent(that.nodes['template']['container']);
+        }
+        return that;
+    };
+
+    that.setTooltipParams = function(o){
+        that.params['Com.Tooltip'] = cm.merge(that.params['Com.Tooltip'], o);
+        that.components['tooltip'] && that.components['tooltip'].setParams(that.params['Com.Tooltip']);
+        return that;
+    };
+
+    init();
+});
+
+/* *** CALENDAR VIEW ABSTRACT *** */
+
+cm.define('Module.AbstractCalendarView', {
+    'modules' : [
+        'Params',
+        'Events',
+        'Langs',
+        'DataConfig',
+        'DataNodes',
+        'Stack'
+    ],
+    'events' : [
+        'onRenderStart',
+        'onRender',
+        'onRequestView'
+    ],
+    'params' : {
+        'node' : cm.Node('div'),
+        'name' : '',
+        'viewName' : '',
+        'itemShortIndent' : 1,
+        'itemShortHeight' : 24,
+        'dayIndent' : 4,
+        'Com.Tooltip' : {}
+    }
+},
+function(params){
+    var that = this;
+
+    that.nodes = {
+        'container' : cm.node('div'),
+        'buttons' : {
+            'container' : cm.node('div'),
+            'prev' : cm.node('div'),
+            'next' : cm.node('div'),
+            'search-button' : cm.node('div'),
+            'search-input' : cm.node('input'),
+            'views' : {
+                'agenda' : cm.node('div'),
+                'week' : cm.node('div'),
+                'month' : cm.node('div')
+            }
+        },
+        'templates' : {
+            'event' : {}
+        }
+    };
+    that.components = {};
+    that.days = [];
+
+    var init = function(){
+        that.getLESSVariables();
+        that.setParams(params);
+        that.convertEvents(that.params['events']);
+        that.getDataNodes(that.params['node']);
+        that.getDataConfig(that.params['node']);
+        that.validateParams();
+        that.addToStack(that.params['node']);
+        that.triggerEvent('onRenderStart');
+        that.renderToolbar();
+        that.render();
+        that.triggerEvent('onRender');
+    };
+
+    /* ******* PUBLIC ******* */
+
+    init();
+});
+
+cm.getConstructor('Module.AbstractCalendarView', function(classConstructor, className, classProto){
+    classProto.getLESSVariables = function(){
+        var that = this;
+        that.params['itemShortIndent'] = cm.getLESSVariable('ComCalendarEvent-Short-Indent', that.params['itemShortIndent'], true);
+        that.params['itemShortHeight'] = cm.getLESSVariable('ComCalendarEvent-Short-Height', that.params['itemShortHeight'], true);
+        return that;
+    };
+
+    classProto.validateParams = function(){
+        var that = this;
+        if(that.params['Com.Tooltip']['width'] !== 'auto'){
+            that.params['Com.Tooltip']['width'] = cm.strReplace(that.params['Com.Tooltip']['width'], {
+                '%itemShortIndent%' : that.params['itemShortIndent'],
+                '%itemShortHeight%' : that.params['itemShortHeight'],
+                '%dayIndent%' : that.params['dayIndent']
+            });
+        }
+        that.params['Com.Tooltip']['top'] = cm.strReplace(that.params['Com.Tooltip']['top'], {
+            '%itemShortIndent%' : that.params['itemShortIndent'],
+            '%itemShortHeight%' : that.params['itemShortHeight'],
+            '%dayIndent%' : that.params['dayIndent']
+        });
+        that.params['Com.Tooltip']['left'] = cm.strReplace(that.params['Com.Tooltip']['left'], {
+            '%itemShortIndent%' : that.params['itemShortIndent'],
+            '%itemShortHeight%' : that.params['itemShortHeight'],
+            '%dayIndent%' : that.params['dayIndent']
+        });
+        return that;
+    };
+
+    classProto.render = function(){
+        var that = this;
+        // Find events and set template and tooltip config
+        new cm.Finder('Module.CalendarEvent', null, that.params['node'], function(classObject){
+            // Clone template
+            var template = cm.clone(that.nodes['templates']['event']['container'], true);
+            // Set Node
+            classObject
+                .setTooltipParams(that.params['Com.Tooltip'])
+                .setTemplate(template);
+        }, {'multiple' : true});
+        return that;
+    };
+
+    classProto.renderToolbar = function(){
+        var that = this;
+        // Toolbar Controls
+        new cm.Finder('Com.Select', 'week', that.nodes['buttons']['container'], function(classObject){
+            that.components['week'] = classObject
+                .addEvent('onChange', that.updateView.bind(that));
+        });
+        new cm.Finder('Com.Select', 'month', that.nodes['buttons']['container'], function(classObject){
+            that.components['month'] = classObject
+                .addEvent('onChange',  that.updateView.bind(that));
+        });
+        new cm.Finder('Com.Select', 'year', that.nodes['buttons']['container'], function(classObject){
+            that.components['year'] = classObject
+                .addEvent('onChange', that.updateView.bind(that));
+        });
+        // Search
+        cm.addEvent(that.nodes['buttons']['search-input'], 'keypress', function(e){
+            if(e.keyCode == 13){
+                cm.preventDefault(e);
+                that.updateView();
+            }
+        });
+        cm.addEvent(that.nodes['buttons']['search-button'], 'click', function(e){
+            cm.preventDefault(e);
+            that.updateView();
+        });
+        // View Buttons
+        cm.forEach(that.nodes['buttons']['views'], function(node, key){
+            if(key === that.params['viewName']){
+                cm.replaceClass(node, 'button-secondary', 'button-primary');
+            }else{
+                cm.replaceClass(node, 'button-primary', 'button-secondary');
+            }
+            cm.addEvent(node, 'click', function(e){
+                cm.preventDefault(e);
+                that.requestView({
+                    'view' : key
+                });
+            });
+        });
+        // Prev / Next Buttons
+        cm.addEvent(that.nodes['buttons']['prev'], 'click', function(e){
+            cm.preventDefault(e);
+            that.prev();
+        });
+        cm.addEvent(that.nodes['buttons']['next'], 'click', function(e){
+            cm.preventDefault(e);
+            that.next();
+        });
+        return that;
+    };
+
+    classProto.searchQuery = function(str){
+        var that = this;
+        var data = that.getData();
+        data.query = str;
+        that.requestView(data);
+        return that;
+    };
+
+    classProto.requestView = function(data){
+        var that = this;
+        that.triggerEvent('onRequestView', data);
+        return that;
+    };
+
+    classProto.getData = function(){
+        var that = this;
+        return {
+            'query' : that.nodes['buttons']['search-input'].value,
+            'view' : that.params['viewName'],
+            'year' : that.components['year'] ? that.components['year'].get() : null,
+            'month' : that.components['month'] ? that.components['month'].get() : null,
+            'week' : that.components['week'] ? that.components['week'].get() : null
+        };
+    };
+
+    classProto.updateView = function(){
+        var that = this;
+        that.triggerEvent('onRequestView', that.getData());
+        return that;
+    };
+
+    classProto.prev = function(){
+        var that = this;
+        var data = that.getData();
+        if(data['week'] !== null){
+            if(data['week'] == 1){
+                data['year']--;
+                data['week'] = cm.getWeeksInYear(data['year']);
+            }else{
+                data['week']--;
+            }
+        }else if(data['month'] !== null){
+            if(data['month'] == 0){
+                data['year']--;
+                data['month'] = 11;
+            }else{
+                data['month']--;
+            }
+        }else{
+            data['year']--;
+        }
+        that.requestView(data);
+        return that;
+    };
+
+    classProto.next = function(){
+        var that = this;
+        var data = that.getData();
+        if(data['week'] !== null){
+            if(data['week'] == cm.getWeeksInYear(data['year'])){
+                data['year']++;
+                data['week'] = 1;
+            }else{
+                data['week']++;
+            }
+        }else if(data['month'] !== null){
+            if(data['month'] == 11){
+                data['year']++;
+                data['month'] = 0;
+            }else{
+                data['month']++;
+            }
+        }else {
+            data['year']++;
+        }
+        that.requestView(data);
+        return that;
+    };
+});
+
+/* *** CALENDAR MONTH VIEW *** */
+
+cm.define('Module.CalendarMonth', {
+    'extend' : 'Module.AbstractCalendarView',
+    'params' : {
+        'viewName' : 'month',
+        'Com.Tooltip' : {
+            'width' : '(targetWidth + %dayIndent%) * 2 - targetHeight * 2',
+            'top' : 'targetHeight + %itemShortIndent%',
+            'left' : '-(selfWidth - targetWidth) - targetHeight'
+        }
+    }
+},
+function(params){
+    var that = this;
+    Module.AbstractCalendarView.apply(that, arguments);
+});
+
+cm.getConstructor('Module.CalendarMonth', function(classConstructor, className, classProto){
+    var _inherit = classProto._inherit;
+
+    classProto.processDay = function(nodes){
+        var that = this;
+        var item = {
+            'isShow' : false,
+            'nodes' : nodes
+        };
+        // Show all events on more button click
+        cm.addEvent(item.nodes['more-button'], 'click', function(){
+            that.showMoreEvents(item);
+        });
+        // Prevent document scrolling while scroll all events block
+        cm.addIsolateScrolling(item.nodes['more-holder']);
+        // Push
+        that.days.push(item);
+    };
+
+    classProto.showMoreEvents = function(item){
+        var that = this;
+        item.delay && clearTimeout(item.delay);
+        if(!item.isShow){
+            item.isShow = true;
+            cm.setScrollTop(item.nodes['more-holder'], 0);
+            cm.addClass(item.nodes['more-holder'], 'is-show');
+        }
+    };
+
+    classProto.hideMoreEvents = function(item, isImmediately){
+        var that = this;
+        item.delay && clearTimeout(item.delay);
+        if(item.isShow){
+            if(isImmediately){
+                item.isShow = false;
+                cm.removeClass(item.nodes['more-holder'], 'is-show');
+            }else{
+                item.delay = setTimeout(function(){
+                    item.isShow = false;
+                    cm.removeClass(item.nodes['more-holder'], 'is-show');
+                }, that.params['delay']);
+            }
+        }
+    };
+
+    classProto.getLESSVariables = function(){
+        var that = this;
+        _inherit.prototype.getLESSVariables.call(that);
+        that.params['dayIndent'] = cm.getLESSVariable('ComCalendarMonth-Day-Indent', that.params['dayIndent'], true);
+        return that;
+    };
+
+    classProto.render = function(){
+        var that = this;
+        _inherit.prototype.render.call(that);
+        cm.forEach(that.nodes['days'], that.processDay.bind(that));
+        return that;
+    };
+});
+
+/* *** CALENDAR WEEK VIEW *** */
+
+cm.define('Module.CalendarWeek', {
+    'extend' : 'Module.AbstractCalendarView',
+    'params' : {
+        'viewName' : 'week',
+        'Com.Tooltip' : {
+            'width' : '(targetWidth + %dayIndent%) * 2 - targetHeight * 2',
+            'top' : 'targetHeight + %itemShortIndent%',
+            'left' : 'targetHeight'
+        }
+    }
+},
+function(params){
+    var that = this;
+    Module.AbstractCalendarView.apply(that, arguments);
+});
+
+cm.getConstructor('Module.CalendarWeek', function(classConstructor, className, classProto){
+    var _inherit = classProto._inherit;
+
+    classProto.getLESSVariables = function(){
+        var that = this;
+        _inherit.prototype.getLESSVariables.call(that);
+        that.params['dayIndent'] = cm.getLESSVariable('ComCalendarWeek-Day-Indent', that.params['dayIndent'], true);
+        return that;
+    };
+});
+
+/* *** CALENDAR AGENDA VIEW *** */
+
+cm.define('Module.CalendarAgenda', {
+    'extend' : 'Module.AbstractCalendarView',
+    'params' : {
+        'viewName' : 'agenda',
+        'Com.Tooltip' : {
+            'width' : 'targetWidth - %itemShortHeight% * 2',
+            'top' : 'targetHeight + %itemShortIndent%',
+            'left' : 'targetHeight'
+        }
+    }
+},
+function(params){
+    var that = this;
+    Module.AbstractCalendarView.apply(that, arguments);
+});
 cm.define('Mod.ElementCaptcha', {
     'extend' : 'App.AbstractModuleElement',
     'params' : {

@@ -125,7 +125,7 @@ cm.getConstructor('App.FontInput', function(classConstructor, className, classPr
     classProto.validateItemConfig = function(config){
         var that = this;
         if(config['line-height']){
-            if(config['line-height'] != 'normal'){
+            if(config['line-height'] !== 'normal'){
                 config['line-height'] = parseInt(config['line-height']);
             }
         }
@@ -168,9 +168,9 @@ cm.getConstructor('App.FontInput', function(classConstructor, className, classPr
             return a - b;
         });
         that.params['styles']['line-height'].sort(function(a, b){
-            if(a == 'normal'){
+            if(a === 'normal'){
                 return -1;
-            }else if(b == 'normal'){
+            }else if(b === 'normal'){
                 return 1;
             }
             return a - b;
@@ -363,7 +363,7 @@ cm.getConstructor('App.FontInput', function(classConstructor, className, classPr
             )
         );
         cm.addEvent(that.nodes['tooltip']['font-style-button'], 'click', function(){
-            that.set(cm.merge(that.value, {'font-style' : (that.value['font-style'] == 'italic'? 'normal' : 'italic')}), true);
+            that.set(cm.merge(that.value, {'font-style' : (that.value['font-style'] === 'italic'? 'normal' : 'italic')}), true);
         });
         return that;
     };
@@ -377,7 +377,7 @@ cm.getConstructor('App.FontInput', function(classConstructor, className, classPr
             )
         );
         cm.addEvent(that.nodes['tooltip']['text-decoration-button'], 'click', function(){
-            that.set(cm.merge(that.value, {'text-decoration' : (that.value['text-decoration'] == 'underline'? 'none' : 'underline')}), true);
+            that.set(cm.merge(that.value, {'text-decoration' : (that.value['text-decoration'] === 'underline'? 'none' : 'underline')}), true);
         });
     };
 
@@ -419,7 +419,7 @@ cm.getConstructor('App.FontInput', function(classConstructor, className, classPr
         );
         cm.forEach(that.params['styles']['line-height'], function(item){
             that.nodes['tooltip']['line-height'].appendChild(
-                cm.node('option', {'value' : item}, (item == 'normal'? that.lang('auto') : item))
+                cm.node('option', {'value' : item}, (item === 'normal'? that.lang('auto') : item))
             );
         });
         // Component
@@ -555,14 +555,14 @@ cm.getConstructor('App.FontInput', function(classConstructor, className, classPr
                     }
                     break;
                 case 'text-decoration':
-                    if(value == 'underline'){
+                    if(value === 'underline'){
                         cm.addClass(that.nodes['tooltip']['text-decoration-button'], 'active');
                     }else{
                         cm.removeClass(that.nodes['tooltip']['text-decoration-button'], 'active');
                     }
                     break;
                 case 'font-style':
-                    if(value == 'italic'){
+                    if(value === 'italic'){
                         cm.addClass(that.nodes['tooltip']['font-style-button'], 'active');
                     }else{
                         cm.removeClass(that.nodes['tooltip']['font-style-button'], 'active');
@@ -579,8 +579,8 @@ cm.getConstructor('App.FontInput', function(classConstructor, className, classPr
 
     classProto.changeAction = function(triggerEvents){
         var that = this;
-        triggerEvents = typeof triggerEvents == 'undefined'? true : triggerEvents;
-        var isChanged = JSON.stringify(that.value) != JSON.stringify(that.previousValue);
+        triggerEvents = cm.isUndefined(triggerEvents)? true : triggerEvents;
+        var isChanged = JSON.stringify(that.value) !== JSON.stringify(that.previousValue);
         if(triggerEvents && isChanged){
             that.triggerEvent('onChange', that.value);
         }
