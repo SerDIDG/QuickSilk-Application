@@ -1,4 +1,4 @@
-/*! ************ QuickSilk-Application v3.18.14 (2017-10-02 18:25) ************ */
+/*! ************ QuickSilk-Application v3.18.14 (2017-10-02 20:08) ************ */
 
 // /* ************************************************ */
 // /* ******* QUICKSILK: COMMON ******* */
@@ -2607,8 +2607,8 @@ cm.getConstructor('App.FileUploaderLocal', function(classConstructor, className,
         var that = this;
         that.triggerEvent('onRenderViewStart');
         // Structure
-        that.nodes['container'] = cm.node('div', {'class' : 'com__file-uploader__local'},
-            that.nodes['holder'] = cm.node('div', {'class' : 'com__file-uploader__holder'},
+        that.nodes['container'] = cm.node('div', {'class' : 'app__file-uploader__local'},
+            that.nodes['holder'] = cm.node('div', {'class' : 'app__file-uploader__holder'},
                 cm.node('div', {'class' : 'pt__buttons pull-center'},
                     cm.node('div', {'class' : 'inner'},
                         cm.node('div', {'class' : 'browse-button'},
@@ -2622,14 +2622,14 @@ cm.getConstructor('App.FileUploaderLocal', function(classConstructor, className,
             )
         );
         if(that.params['dropzone']){
-            that.nodes['dropzoneHolder'] = cm.node('div', {'class' : 'com__file-uploader__holder'},
-                cm.node('div', {'class' : 'com__file-uploader__title'}, that.lang('or')),
-                that.nodes['dropzone'] = cm.node('div', {'class' : 'com__file-uploader__dropzone'})
+            that.nodes['dropzoneHolder'] = cm.node('div', {'class' : 'app__file-uploader__holder'},
+                cm.node('div', {'class' : 'app__file-uploader__title'}, that.lang('or')),
+                that.nodes['dropzone'] = cm.node('div', {'class' : 'app__file-uploader__dropzone'})
             );
             cm.appendChild(that.nodes['dropzoneHolder'], that.nodes['container']);
         }
         if(that.params['fileList']){
-            that.nodes['files'] = cm.node('div', {'class' : 'com__file-uploader__files is-hidden'});
+            that.nodes['files'] = cm.node('div', {'class' : 'app__file-uploader__files is-hidden'});
             cm.appendChild(that.nodes['files'], that.nodes['container']);
         }
         that.isMultiple && that.nodes['input'].setAttribute('multiple', 'multiple');
