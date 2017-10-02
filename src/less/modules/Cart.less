@@ -1,0 +1,68 @@
+/* ******* MODULES: CART ******* */
+
+.mod__cart {
+    .button {
+        .display-flex;
+        .cm__flex--center;
+
+        .image {
+            position: relative;
+
+            img {
+                .cm__image-centered;
+            }
+        }
+
+        .label {
+            &:first-child {
+                margin-left: 0;
+            }
+
+            &:last-child {
+                margin-right: 0;
+            }
+        }
+
+        .count {
+            color: @CmColor-Font-Hint;
+
+            &:before {
+                content: '(';
+            }
+            &:after {
+                content: ')';
+            }
+        }
+    }
+
+    .mod__cart__label-indent(@ModCart-LabelIndent);
+    .mod__cart__image-size(@ModCart-ImageSize);
+}
+
+// /* *** MIXINS *** */
+
+.mod__cart__label-indent (@indent: @ModCart-LabelIndent) {
+    .button {
+        .label {
+            margin-left: @indent;
+            margin-right: @indent;
+
+            &:first-child {
+                margin-left: 0;
+            }
+
+            &:last-child {
+                margin-right: 0;
+            }
+        }
+    }
+}
+
+.mod__cart__image-size (@size: @ModCart-ImageSize) {
+    .button {
+        .image {
+            width: @size;
+            height: @size;
+        }
+    }
+}
