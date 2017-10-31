@@ -122,6 +122,37 @@
             }
         }
     }
+
+    // /* Notifications */
+
+    .menu__notifications {
+        width: 320px;
+        padding: (@CmIndent-XSmall - @PtMenu-IndentY) (@CmIndent-XSmall - @PtMenu-IndentX);
+
+        .label {
+            .cm__font--ui-h1;
+            margin: @CmIndent-XSmall 0 0 0;
+            color: @PtMenu-ItemColor;
+
+            &:first-child {
+                margin: 0;
+            }
+        }
+
+        ul {
+            .cm__list-clear;
+
+            li {
+                .cm__font;
+                margin: @CmIndent-XXSmall 0 0 0;
+                color: @PtMenu-ItemColor;
+
+                &:first-child {
+                    margin: 0;
+                }
+            }
+        }
+    }
 }
 
 /* *** FONT *** */
@@ -134,6 +165,7 @@
 .app__topmenu__dropdown--desktop () {
     .pt__menu-dropdown--base;
     .pt__menu-dropdown--position;
+    .mx__transition(all, @AppTopMenu-Dropdown-Duration);
 }
 
 .app__topmenu__dropdown--desktop-first () {
@@ -201,15 +233,12 @@
                         > a {
                             padding-left: 0;
                         }
-                    }
 
-                    &.has-dropdown {
-                        > a {
-                            @indent: ((@CmSize-Medium - @CmSize-XSmall) / 2);
-                            .svg__app__menu-dropdown;
-                            padding-right: @CmIndent-Medium;
-                            background-position: ~'calc(100% - @{indent})' center;
-                            background-repeat: no-repeat;
+                        &.is-no-label {
+                            > a {
+                                padding: 0;
+                                font-size: 0;
+                            }
                         }
                     }
 
@@ -219,6 +248,7 @@
                     &.is-show {
                         > .pt__menu-dropdown {
                             .pt__menu-dropdown--active;
+                            .mx__transition(visibility opacity, @AppTopMenu-Dropdown-Duration);
                         }
                     }
 
@@ -274,6 +304,20 @@
 
                 .menu {
                     white-space: nowrap;
+                }
+            }
+
+            .menu {
+                > li {
+                    &.has-dropdown:not(.is-no-label) {
+                        > a {
+                            @indent: ((@CmSize-Medium - @CmSize-XSmall) / 2);
+                            .svg__app__menu-dropdown;
+                            padding-right: @CmIndent-Medium;
+                            background-position: ~'calc(100% - @{indent})' center;
+                            background-repeat: no-repeat;
+                        }
+                    }
                 }
             }
         }
@@ -414,6 +458,11 @@
                         > a {
                             padding-left: 0;
                         }
+                    }
+
+                    &.item--help,
+                    &.item--note {
+                        display: none;
                     }
                 }
 
