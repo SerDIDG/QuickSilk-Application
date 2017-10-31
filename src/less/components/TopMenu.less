@@ -18,11 +18,23 @@
     .menu__icon {
         display: inline-block;
         vertical-align: top;
+        position: relative;
         color: @AppTopMenu-Color;
         line-height: @AppTopMenu-Height;
         .cm-i__size(@CmSize-Large);
         .cm-i__b-size(@AppTopMenu-Height);
         .mx__transition(all, @CmUI-Transition-Duration);
+
+        .mark {
+            .cm__size__x-small;
+            display: block;
+            position: absolute;
+            background: @CmColor-Primary-MiddleDefault;
+            border: 2px solid @AppTopMenu-Background;
+            border-radius: 100%;
+            .mx__transition(all, @CmUI-Transition-Duration);
+            .mx__position(auto, 6px, 6px, auto);
+        }
     }
 
     // /* QuickSilk Logo */
@@ -261,6 +273,11 @@
 
                             .menu__icon {
                                 color: @AppTopMenu-ColorHover;
+
+                                .mark {
+                                    border-color: @AppTopMenu-HoverBackground;
+                                    .mx__transition(all, @CmUI-Transition-DurationReverse);
+                                }
                             }
                         }
                     }
@@ -273,6 +290,11 @@
 
                             .menu__icon {
                                 color: @AppTopMenu-ColorActive;
+
+                                .mark {
+                                    border-color: #ffffff;
+                                    .mx__transition(all, @CmUI-Transition-DurationReverse);
+                                }
                             }
                         }
                     }
