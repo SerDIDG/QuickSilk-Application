@@ -19,11 +19,15 @@
     }
 
     .image {
+        .cm__aspect-4x3;
         position: relative;
         z-index: 1;
 
         img {
             .cm__image-resizable;
+            position: absolute;
+            margin: auto;
+            .mx__position(0, 0, 0, 0);
         }
     }
 

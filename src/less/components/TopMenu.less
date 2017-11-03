@@ -29,7 +29,7 @@
             .cm__size__x-small;
             display: block;
             position: absolute;
-            background: @CmColor-Primary-MiddleDefault;
+            background: @AppColor-QuickSilkRed;
             border: 2px solid @AppTopMenu-Background;
             border-radius: 100%;
             .mx__transition(all, @CmUI-Transition-Duration);
@@ -142,9 +142,23 @@
         padding: (@CmIndent-XSmall - @PtMenu-IndentY) (@CmIndent-XSmall - @PtMenu-IndentX);
 
         .label {
-            .cm__font--ui-h1;
+            .cm__font--ui-h4;
             margin: @CmIndent-XSmall 0 0 0;
-            color: @PtMenu-ItemColor;
+            color: @PtMenu-Item-Color;
+
+            a {
+                .cm__font--link;
+                color: @PtMenu-Item-Color;
+                padding: 0;
+
+                &:hover {
+                    color: @PtMenu-Item-HoverColor;
+                }
+
+                &:active {
+                    color: @PtMenu-Item-ActiveColor;
+                }
+            }
 
             &:first-child {
                 margin: 0;
@@ -157,7 +171,7 @@
             li {
                 .cm__font;
                 margin: @CmIndent-XXSmall 0 0 0;
-                color: @PtMenu-ItemColor;
+                color: @PtMenu-Item-Color;
 
                 &:first-child {
                     margin: 0;
