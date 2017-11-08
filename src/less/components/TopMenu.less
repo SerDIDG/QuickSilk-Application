@@ -27,13 +27,35 @@
 
         .mark {
             .cm__size__x-small;
-            display: block;
+            margin: 0;
             position: absolute;
-            background: @AppColor-QuickSilkRed;
             border: 2px solid @AppTopMenu-Background;
-            border-radius: 100%;
             .mx__transition(all, @CmUI-Transition-Duration);
             .mx__position(auto, 6px, 6px, auto);
+        }
+    }
+
+    .mark {
+        .cm__size__xx-small;
+        display: block;
+        background: @AppColor-QuickSilk;
+        background: @CmColor-Success-MiddleActive;
+        border-radius: 100%;
+
+        &.default {
+            background: @CmColor-Secondary-MiddleActive;
+        }
+
+        &.success {
+            background: @CmColor-Success-MiddleActive;
+        }
+
+        &.danger {
+            background: @CmColor-Danger-MiddleActive;
+        }
+
+        &.warning {
+            background: @CmColor-Warning-MiddleActive;
         }
     }
 
@@ -130,6 +152,12 @@
 
                 &:hover {
                     .mx__transition(all, @CmUI-Transition-DurationReverse);
+                }
+
+                > .mark {
+                    display: inline-block;
+                    vertical-align: baseline;
+                    margin: 0 @CmIndent-XXSmall 0 0;
                 }
             }
         }
