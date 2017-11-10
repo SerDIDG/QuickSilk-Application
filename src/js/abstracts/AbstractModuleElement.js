@@ -11,6 +11,7 @@ cm.define('App.AbstractModuleElement', {
         'match' : false,
         'targetController' : false,
         'memorable' : true,
+        'remember' : false,
         'inputEvent' : 'input'
     }
 },
@@ -22,6 +23,20 @@ function(params){
 
 cm.getConstructor('App.AbstractModuleElement', function(classConstructor, className, classProto){
     var _inherit = classProto._inherit;
+
+    classProto.construct = function(){
+        var that = this;
+        // Bind
+        that.changeEventHandler = that.changeEvent.bind(that);
+        // Call parent method
+        _inherit.prototype.construct.apply(that, arguments);
+    };
+
+    classProto.onConstructEnd = function(){
+        var that = this;
+        // Restore value from local storage
+        that.restoreLocalValue();
+    };
 
     classProto.renderViewModel = function(){
         var that = this;
@@ -41,10 +56,7 @@ cm.getConstructor('App.AbstractModuleElement', function(classConstructor, classN
         var that = this;
         cm.find(that.params['targetController'], that.params['name'], that.nodes['field'], function(classObject){
             that.components['controller'] = classObject;
-            that.components['controller'].addEvent('onChange', function(my, data){
-                var value = that.get();
-                that.triggerEvent('onChange', value);
-            });
+            that.components['controller'].addEvent('onChange', that.changeEventHandler);
         });
     };
 
@@ -57,10 +69,34 @@ cm.getConstructor('App.AbstractModuleElement', function(classConstructor, classN
 
     classProto.renderInput = function(node){
         var that = this;
-        cm.addEvent(node, that.params['inputEvent'], function(){
+        cm.addEvent(node, that.params['inputEvent'], that.changeEventHandler);
+    };
+
+    /*** EVENTS ***/
+
+    classProto.changeEvent = function(){
+        var that = this;
+        var value = that.get();
+        that.saveLocalValue();
+        that.triggerEvent('onChange', value);
+    };
+
+    /*** DATA ***/
+
+    classProto.saveLocalValue = function(){
+        var that = this;
+        if(that.params['memorable'] && that.params['remember']){
             var value = that.get();
-            that.triggerEvent('onChange', value);
-        });
+            that.storageWrite('value', value);
+        }
+    };
+
+    classProto.restoreLocalValue = function(){
+        var that = this;
+        if(that.params['memorable'] && that.params['remember']){
+            var value = that.storageRead('value');
+            that.set(value);
+        }
     };
 
     classProto.setMultiple = function(values){

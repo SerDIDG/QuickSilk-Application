@@ -1,11 +1,11 @@
-/*! ************ QuickSilk-Application v3.19.3 (2017-11-08 18:38) ************ */
+/*! ************ QuickSilk-Application v3.20.0 (2017-11-10 20:48) ************ */
 
 // /* ************************************************ */
 // /* ******* QUICKSILK: COMMON ******* */
 // /* ************************************************ */
 
 var App = {
-    '_version' : '3.19.3',
+    '_version' : '3.20.0',
     'Elements': {},
     'Nodes' : {},
     'Test' : []
@@ -104,6 +104,7 @@ cm.define('App.AbstractModuleElement', {
         'match' : false,
         'targetController' : false,
         'memorable' : true,
+        'remember' : false,
         'inputEvent' : 'input'
     }
 },
@@ -115,6 +116,20 @@ function(params){
 
 cm.getConstructor('App.AbstractModuleElement', function(classConstructor, className, classProto){
     var _inherit = classProto._inherit;
+
+    classProto.construct = function(){
+        var that = this;
+        // Bind
+        that.changeEventHandler = that.changeEvent.bind(that);
+        // Call parent method
+        _inherit.prototype.construct.apply(that, arguments);
+    };
+
+    classProto.onConstructEnd = function(){
+        var that = this;
+        // Restore value from local storage
+        that.restoreLocalValue();
+    };
 
     classProto.renderViewModel = function(){
         var that = this;
@@ -134,10 +149,7 @@ cm.getConstructor('App.AbstractModuleElement', function(classConstructor, classN
         var that = this;
         cm.find(that.params['targetController'], that.params['name'], that.nodes['field'], function(classObject){
             that.components['controller'] = classObject;
-            that.components['controller'].addEvent('onChange', function(my, data){
-                var value = that.get();
-                that.triggerEvent('onChange', value);
-            });
+            that.components['controller'].addEvent('onChange', that.changeEventHandler);
         });
     };
 
@@ -150,10 +162,34 @@ cm.getConstructor('App.AbstractModuleElement', function(classConstructor, classN
 
     classProto.renderInput = function(node){
         var that = this;
-        cm.addEvent(node, that.params['inputEvent'], function(){
+        cm.addEvent(node, that.params['inputEvent'], that.changeEventHandler);
+    };
+
+    /*** EVENTS ***/
+
+    classProto.changeEvent = function(){
+        var that = this;
+        var value = that.get();
+        that.saveLocalValue();
+        that.triggerEvent('onChange', value);
+    };
+
+    /*** DATA ***/
+
+    classProto.saveLocalValue = function(){
+        var that = this;
+        if(that.params['memorable'] && that.params['remember']){
             var value = that.get();
-            that.triggerEvent('onChange', value);
-        });
+            that.storageWrite('value', value);
+        }
+    };
+
+    classProto.restoreLocalValue = function(){
+        var that = this;
+        if(that.params['memorable'] && that.params['remember']){
+            var value = that.storageRead('value');
+            that.set(value);
+        }
     };
 
     classProto.setMultiple = function(values){
@@ -7981,6 +8017,7 @@ cm.getConstructor('Mod.ElementWizard', function(classConstructor, className, cla
         // Bind
         that.prevTabHandler = that.prevTab.bind(that);
         that.nextTabHandler = that.nextTab.bind(that);
+        that.doneTabHandler = that.doneTab.bind(that);
     };
 
     classProto.onConstructEnd = function(){
@@ -8086,6 +8123,7 @@ cm.getConstructor('Mod.ElementWizard', function(classConstructor, className, cla
         var that = this;
         cm.addEvent(that.nodes['buttonPrev'], 'click', that.prevTabHandler);
         cm.addEvent(that.nodes['buttonNext'], 'click', that.nextTabHandler);
+        cm.addEvent(that.nodes['buttonDone'], 'click', that.doneTabHandler);
     };
 
     classProto.setButtons = function(){
@@ -8137,19 +8175,28 @@ cm.getConstructor('Mod.ElementWizard', function(classConstructor, className, cla
         return isValid;
     };
 
-    classProto.prevTab = function(){
+    classProto.prevTab = function(e){
         var that = this;
+        cm.preventDefault(e);
         if(that.validateTab() && that.currentTab['index'] > 0){
             var index = that.currentTab['index'] - 1;
             that.setTabByIndex(index);
         }
     };
 
-    classProto.nextTab = function(){
+    classProto.nextTab = function(e){
         var that = this;
+        cm.preventDefault(e);
         if(that.validateTab() && that.currentTab['index'] < that.tabsCount - 1){
             var index = that.currentTab['index'] + 1;
             that.setTabByIndex(index);
+        }
+    };
+
+    classProto.doneTab = function(e){
+        var that = this;
+        if(that.validateTab()){
+            cm.preventDefault(e);
         }
     };
 
@@ -8180,8 +8227,14 @@ function(params){
 });
 cm.define('Mod.Form', {
     'extend' : 'App.AbstractModule',
+    'events' : [
+        'onSubmit',
+        'onReset'
+    ],
     'params' : {
         'remember' : false,
+        'local' : false,
+        'unload' : false,
         'ajax' : {
             'method' : 'POST',
             'async' : false,
@@ -8202,27 +8255,42 @@ cm.getConstructor('Mod.Form', function(classConstructor, className, classProto){
     classProto.onConstructStart = function(){
         var that = this;
         // Variables
+        that.isAjax = false;
+        that.isUnload = false;
         that.items = {};
         that.values = {};
         // Binds
         that.processItemHandler = that.processItem.bind(that);
         that.processWizardHandler = that.processWizard.bind(that);
         that.unloadEventHanlder = that.unloadEvent.bind(that);
+        that.submitEventHandler = that.submitEvent.bind(that);
+        that.resetEventHandler = that.resetEvent.bind(that);
     };
 
     classProto.onDestruct = function(){
         var that = this;
         that.components['finder'] && that.components['finder'].remove();
         that.components['finderWizard'] && that.components['finderWizard'].remove();
-        cm.removeEvent(window, 'unload', that.unloadEventHanlder);
+        that.isUnload && cm.removeEvent(window, 'unload', that.unloadEventHanlder);
+    };
+
+    classProto.onValidateParams = function(){
+        var that = this;
+        // If URL parameter exists, use ajax data
+        if(!cm.isEmpty(that.params['ajax']['url'])){
+            that.isAjax = true;
+        }
+        that.isUnload = that.params['unload'] && that.isAjax;
     };
 
     classProto.renderViewModel = function(){
         var that = this;
+        // Call parent method
+        _inherit.prototype.renderViewModel.apply(that, arguments);
         // Init form saving
         if(that.params['remember']){
             // Page unload event
-            cm.addEvent(window, 'unload', that.unloadEventHanlder);
+            that.isUnload && cm.addEvent(window, 'unload', that.unloadEventHanlder);
             // Local saving
             if(that.params['local']){
                 that.values = that.storageRead('items');
@@ -8235,6 +8303,9 @@ cm.getConstructor('Mod.Form', function(classConstructor, className, classProto){
                 });
             }
         }
+        // Form events
+        cm.addEvent(that.nodes['form'], 'submit', that.submitEventHandler);
+        cm.addEvent(that.nodes['form'], 'reset', that.resetEventHandler);
         return that;
     };
 
@@ -8304,6 +8375,8 @@ cm.getConstructor('Mod.Form', function(classConstructor, className, classProto){
         that.storageWrite('items', that.values);
     };
 
+    /*** EVENTS ***/
+
     classProto.unloadEvent = function(){
         var that = this,
             data;
@@ -8319,6 +8392,21 @@ cm.getConstructor('Mod.Form', function(classConstructor, className, classProto){
                 'params' : data
             })
         );
+    };
+
+    classProto.submitEvent = function(e){
+        var that = this;
+        var data = new FormData(that.nodes['form']);
+        cm.preventDefault(e);
+        that.triggerEvent('onSubmit', data);
+        that.clear();
+    };
+
+    classProto.resetEvent = function(e){
+        var that = this;
+        cm.preventDefault(e);
+        that.triggerEvent('onReset');
+        that.clear();
     };
 
     /******* PUBLIC *******/

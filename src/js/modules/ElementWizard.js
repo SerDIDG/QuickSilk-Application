@@ -38,6 +38,7 @@ cm.getConstructor('Mod.ElementWizard', function(classConstructor, className, cla
         // Bind
         that.prevTabHandler = that.prevTab.bind(that);
         that.nextTabHandler = that.nextTab.bind(that);
+        that.doneTabHandler = that.doneTab.bind(that);
     };
 
     classProto.onConstructEnd = function(){
@@ -143,6 +144,7 @@ cm.getConstructor('Mod.ElementWizard', function(classConstructor, className, cla
         var that = this;
         cm.addEvent(that.nodes['buttonPrev'], 'click', that.prevTabHandler);
         cm.addEvent(that.nodes['buttonNext'], 'click', that.nextTabHandler);
+        cm.addEvent(that.nodes['buttonDone'], 'click', that.doneTabHandler);
     };
 
     classProto.setButtons = function(){
@@ -194,19 +196,28 @@ cm.getConstructor('Mod.ElementWizard', function(classConstructor, className, cla
         return isValid;
     };
 
-    classProto.prevTab = function(){
+    classProto.prevTab = function(e){
         var that = this;
+        cm.preventDefault(e);
         if(that.validateTab() && that.currentTab['index'] > 0){
             var index = that.currentTab['index'] - 1;
             that.setTabByIndex(index);
         }
     };
 
-    classProto.nextTab = function(){
+    classProto.nextTab = function(e){
         var that = this;
+        cm.preventDefault(e);
         if(that.validateTab() && that.currentTab['index'] < that.tabsCount - 1){
             var index = that.currentTab['index'] + 1;
             that.setTabByIndex(index);
+        }
+    };
+
+    classProto.doneTab = function(e){
+        var that = this;
+        if(that.validateTab()){
+            cm.preventDefault(e);
         }
     };
 
