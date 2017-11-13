@@ -8,6 +8,7 @@ cm.define('Mod.Form', {
         'remember' : false,
         'local' : false,
         'unload' : false,
+        'action' : null,
         'ajax' : {
             'method' : 'POST',
             'async' : false,
@@ -32,6 +33,9 @@ cm.getConstructor('Mod.Form', function(classConstructor, className, classProto){
         that.isUnload = false;
         that.items = {};
         that.values = {};
+        that.nodes = {
+            'form' : cm.node('form')
+        };
         // Binds
         that.processItemHandler = that.processItem.bind(that);
         that.processWizardHandler = that.processWizard.bind(that);
@@ -54,6 +58,8 @@ cm.getConstructor('Mod.Form', function(classConstructor, className, classProto){
             that.isAjax = true;
         }
         that.isUnload = that.params['unload'] && that.isAjax;
+        // Get form action
+        that.params['action'] = that.nodes['form'].getAttribute('action') || that.params['action'];
     };
 
     classProto.renderViewModel = function(){
@@ -171,14 +177,23 @@ cm.getConstructor('Mod.Form', function(classConstructor, className, classProto){
         var that = this;
         var data = new FormData(that.nodes['form']);
         cm.preventDefault(e);
-        that.triggerEvent('onSubmit', data);
+        that.triggerEvent('onSubmit', {
+            'form' : that.nodes['form'],
+            'data' : data,
+            'action' : that.params['action']
+        });
         that.clear();
     };
 
     classProto.resetEvent = function(e){
         var that = this;
+        var data = new FormData(that.nodes['form']);
         cm.preventDefault(e);
-        that.triggerEvent('onReset');
+        that.triggerEvent('onReset', {
+            'form' : that.nodes['form'],
+            'data' : data,
+            'action' : that.params['action']
+        });
         that.clear();
     };
 
