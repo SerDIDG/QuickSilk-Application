@@ -72,7 +72,7 @@ cm.getConstructor('Mod.Form', function(classConstructor, className, classProto){
             that.isUnload && cm.addEvent(window, 'unload', that.unloadEventHanlder);
             // Local saving
             if(that.params['local']){
-                that.values = that.storageRead('items');
+                that.values = that.storageRead('items') || {};
                 that.components['finder'] = new cm.Finder('App.AbstractModuleElement', null, that.nodes['container'], that.processItemHandler, {
                     'multiple' : true,
                     'childs' : true

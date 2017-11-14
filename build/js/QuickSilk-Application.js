@@ -1,11 +1,11 @@
-/*! ************ QuickSilk-Application v3.20.1 (2017-11-13 17:30) ************ */
+/*! ************ QuickSilk-Application v3.20.2 (2017-11-14 20:05) ************ */
 
 // /* ************************************************ */
 // /* ******* QUICKSILK: COMMON ******* */
 // /* ************************************************ */
 
 var App = {
-    '_version' : '3.20.1',
+    '_version' : '3.20.2',
     'Elements': {},
     'Nodes' : {},
     'Test' : []
@@ -8299,7 +8299,7 @@ cm.getConstructor('Mod.Form', function(classConstructor, className, classProto){
             that.isUnload && cm.addEvent(window, 'unload', that.unloadEventHanlder);
             // Local saving
             if(that.params['local']){
-                that.values = that.storageRead('items');
+                that.values = that.storageRead('items') || {};
                 that.components['finder'] = new cm.Finder('App.AbstractModuleElement', null, that.nodes['container'], that.processItemHandler, {
                     'multiple' : true,
                     'childs' : true
