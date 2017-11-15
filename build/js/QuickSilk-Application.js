@@ -1,11 +1,11 @@
-/*! ************ QuickSilk-Application v3.20.2 (2017-11-14 20:05) ************ */
+/*! ************ QuickSilk-Application v3.20.3 (2017-11-15 18:56) ************ */
 
 // /* ************************************************ */
 // /* ******* QUICKSILK: COMMON ******* */
 // /* ************************************************ */
 
 var App = {
-    '_version' : '3.20.2',
+    '_version' : '3.20.3',
     'Elements': {},
     'Nodes' : {},
     'Test' : []
@@ -4777,7 +4777,9 @@ cm.define('App.Notification', {
         'renderStructure' : false,
         'embedStructureOnRender' : false,
         'controllerEvents' : true,
-        'remember' : true
+        'show' : 'inherit',                           // true | false | inherit
+        'remember' : true,
+        'rememberTime' : false
     }
 },
 function(params){
@@ -4793,20 +4795,27 @@ cm.getConstructor('App.Notification', function(classConstructor, className, clas
         var that = this;
         // Variables
         that.isShow = null;
-        that.isShowStorage = false;
         // Binds
         that.showHandler = that.show.bind(that);
         that.hideHandler = that.hide.bind(that);
     };
 
     classProto.onConstructEnd = function(){
-        var that = this;
-        // State
-        that.isShow = cm.isClass(that.nodes['container'], 'is-show');
+        var that = this,
+            isShowStorage,
+            storageDate,
+            isExpiredStorage;
+        // Check inherit state
+        that.isShow = that.params['show'] === 'inherit' ? cm.isClass(that.nodes['container'], 'is-show') : that.params['show'];
         // Check storage
         if(that.params['remember']){
-            that.isShowStorage = that.storageRead('isShow');
-            that.isShow = that.isShowStorage !== null ? that.isShowStorage : that.isShow;
+            isShowStorage = that.storageRead('isShow');
+            storageDate = that.storageRead('date');
+            // Check state
+            if(!cm.isUndefined(isShowStorage) && !cm.isUndefined(storageDate)){
+                isExpiredStorage = that.params['rememberTime']? (Date.now() - parseInt(that.params['rememberTime']) > parseInt(storageDate)) : false;
+                that.isShow = isExpiredStorage ? that.isShow : isShowStorage;
+            }
         }
         // Trigger events
         if(that.isShow){
@@ -4832,17 +4841,20 @@ cm.getConstructor('App.Notification', function(classConstructor, className, clas
             // Write storage
             if(that.params['remember']){
                 that.storageWrite('isShow', true);
+                that.storageWrite('date', Date.now());
             }
             // Immediately animate
             if(isImmediately){
-                cm.addClass(that.nodes['container'], 'is-immediately');
+                cm.addClass(that.nodes['container'], 'is-immediately', true);
             }
             // Show
             that.isShow = true;
             cm.replaceClass(that.nodes['container'], 'is-hide', 'is-show');
             // Immediately animate
             if(isImmediately){
-                cm.removeClass(that.nodes['container'], 'is-immediately');
+                setTimeout(function(){
+                    cm.removeClass(that.nodes['container'], 'is-immediately');
+                }, 5);
             }
         }
         return that;
@@ -4854,6 +4866,7 @@ cm.getConstructor('App.Notification', function(classConstructor, className, clas
             // Write storage
             if(that.params['remember']){
                 that.storageWrite('isShow', false);
+                that.storageWrite('date', Date.now());
             }
             // Immediately animate
             if(isImmediately){
@@ -4864,7 +4877,9 @@ cm.getConstructor('App.Notification', function(classConstructor, className, clas
             cm.replaceClass(that.nodes['container'], 'is-show', 'is-hide');
             // Immediately animate
             if(isImmediately){
-                cm.removeClass(that.nodes['container'], 'is-immediately');
+                setTimeout(function(){
+                    cm.removeClass(that.nodes['container'], 'is-immediately');
+                }, 5);
             }
         }
         return that;
