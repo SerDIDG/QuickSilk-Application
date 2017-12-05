@@ -133,13 +133,13 @@ cm.getConstructor('Mod.Form', function(classConstructor, className, classProto){
         // Set value
         item['controller'].setTab(item['value']);
         // Events
-        item['controller'].addEvent('onTabChange', function(my, data){
+        item['controller'].addEvent('onTabChange', function(){
             item['tab'] = item['controller'].getCurrentTab();
             item['value'] = item['tab']['id'];
             that.values[item['name']] = item['value'];
             that.processSave();
         });
-        item['controller'].addEvent('onDestruct', function(my){
+        item['controller'].addEvent('onDestruct', function(){
             delete that.values[item['name']];
             delete that.items[item['name']];
             that.processSave();

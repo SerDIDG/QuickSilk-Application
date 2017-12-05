@@ -1,7 +1,8 @@
 cm.define('Mod.ElementFileUploader', {
     'extend' : 'App.AbstractModuleElement',
     'params' : {
-        'targetController' : 'App.FileInput'
+        'targetController' : 'App.FileInput',
+        'memorable' : false
     }
 },
 function(params){

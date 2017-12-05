@@ -1,11 +1,11 @@
-/*! ************ QuickSilk-Application v3.20.3 (2017-11-15 18:56) ************ */
+/*! ************ QuickSilk-Application v3.20.4 (2017-12-05 20:46) ************ */
 
 // /* ************************************************ */
 // /* ******* QUICKSILK: COMMON ******* */
 // /* ************************************************ */
 
 var App = {
-    '_version' : '3.20.3',
+    '_version' : '3.20.4',
     'Elements': {},
     'Nodes' : {},
     'Test' : []
@@ -269,6 +269,311 @@ cm.getConstructor('App.AbstractModuleElement', function(classConstructor, classN
         return isValid;
     };
 });
+App.FlowScenario = [{
+    'title' : 'Edit Header and Footer',
+    'order' : 2,
+    'type' : 'flow',
+    /*'flow' : 'compliant'*/
+    'flow' : 'forced',
+    'data' : [{
+        'position' : 'template:left-top',
+        'arrow' : 'left',
+        'overlays' : {
+            'main' : 'transparent',
+            'sidebar' : 'transparent',
+            'topMenu' : 'dark',
+            'template' : 'dark'
+        },
+        'sidebar' : false,
+        'topMenu' : false,
+        'content' : '<h3>Click on Layouts</h3>'
+    },{
+        'position' : 'template:left-top',
+        'arrow' : 'left',
+        'overlays' : {
+            'main' : 'transparent',
+            'sidebar' : 'transparent',
+            'topMenu' : 'dark',
+            'template' : 'dark'
+        },
+        'sidebar' : 'layouts',
+        'topMenu' : false,
+        'content' : '<h3>Click on Inner Page Layout</h3>'
+    },{
+        'position' : 'template:center',
+        'arrow' : false,
+        'overlays' : {
+            'main' : 'transparent',
+            'sidebar' : 'dark',
+            'topMenu' : 'dark',
+            'template' : 'light'
+        },
+        'sidebar' : false,
+        'topMenu' : false,
+        'url' : 'admin/template/layout/content/',
+        'content' : '<h3>You\'re in the right place!</h3><p>Your header and footer can be edited in "Inner Page Layout". These changes will be applied to all pages using this layout.</p>'
+    }]
+},{
+    'title' : 'How to change or edit templates',
+    'order' : 3,
+    'type' : 'flow',
+    'flow' : 'forced',
+    'data' : [{
+        'position' : 'topMenuItem:modules:container:right',
+        'arrow' : 'top',
+        'overlays' : {
+            'main' : 'transparent',
+            'sidebar' : 'dark',
+            'topMenu' : 'transparent',
+            'template' : 'dark'
+        },
+        'sidebar' : false,
+        'topMenu' : false,
+        'content' : '<h3>Hover over Modules > Create</h3>'
+    },{
+        'position' : 'topMenuItem:modules:dropdown:right',
+        'arrow' : 'left',
+        'overlays' : {
+            'main' : 'transparent',
+            'sidebar' : 'dark',
+            'topMenu' : 'transparent',
+            'template' : 'dark'
+        },
+        'sidebar' : false,
+        'topMenu' : 'modules',
+        'content' : '<h3>Click on Templates</h3>'
+    },{
+        'position' : 'template:top',
+        'arrow' : 'bottom',
+        'overlays' : {
+            'main' : 'transparent',
+            'sidebar' : 'dark',
+            'topMenu' : 'dark',
+            'template' : 'transparent'
+        },
+        'sidebar' : false,
+        'topMenu' : false,
+        'url' : 'admin/template-library',
+        'content' : '<h3>Here are your existing templates</h3><p>You can customize any of these</p>'
+    },{
+        'position' : 'template:top',
+        'arrow' : 'bottom',
+        'overlays' : {
+            'main' : 'transparent',
+            'sidebar' : 'dark',
+            'topMenu' : 'dark',
+            'template' : 'transparent'
+        },
+        'sidebar' : false,
+        'topMenu' : false,
+        'content' : '<h3>Click Template Library</h3><p>To browse new templates</p>'
+    },{
+        'position' : 'template:center',
+        'arrow' : false,
+        'overlays' : {
+            'main' : 'transparent',
+            'sidebar' : 'dark',
+            'topMenu' : 'dark',
+            'template' : 'light'
+        },
+        'sidebar' : false,
+        'topMenu' : false,
+        'content' : '<h3>Here you can download new templates</h3><p>By hovering over the template and clicking "Install"</p>'
+    }]
+},{
+    'title' : 'How to edit styles',
+    'order' : 4,
+    'type' : 'flow',
+    'flow' : 'forced',
+    'data' : [{
+        'position' : 'topMenuItem:modules:container:right',
+        'arrow' : 'top',
+        'overlays' : {
+            'main' : 'transparent',
+            'sidebar' : 'dark',
+            'topMenu' : 'transparent',
+            'template' : 'dark'
+        },
+        'sidebar' : false,
+        'topMenu' : false,
+        'content' : '<h3>Hover over Modules > Create</h3>'
+    },{
+        'position' : 'topMenuItem:modules:dropdown:right',
+        'arrow' : 'left',
+        'overlays' : {
+            'main' : 'transparent',
+            'sidebar' : 'dark',
+            'topMenu' : 'transparent',
+            'template' : 'dark'
+        },
+        'sidebar' : false,
+        'topMenu' : 'modules',
+        'content' : '<h3>Click on Templates</h3>'
+    },{
+        'position' : 'template:top',
+        'arrow' : 'bottom',
+        'overlays' : {
+            'main' : 'transparent',
+            'sidebar' : 'dark',
+            'topMenu' : 'dark',
+            'template' : 'transparent'
+        },
+        'sidebar' : false,
+        'topMenu' : false,
+        'url' : 'admin/template-library',
+        'content' : '<h3>Hover over any of your existing templates</h3><p>And select "Customize"</p>'
+    },{
+        'position' : 'template:top',
+        'arrow' : 'bottom',
+        'overlays' : {
+            'main' : 'transparent',
+            'sidebar' : 'dark',
+            'topMenu' : 'dark',
+            'template' : 'transparent'
+        },
+        'sidebar' : false,
+        'topMenu' : false,
+        'url' : 'admin/template/editor/edit/',
+        'content' : '<h3>Click on Template Default Styles</h3>'
+    },{
+        'position' : 'template:center',
+        'arrow' : false,
+        'overlays' : {
+            'main' : 'transparent',
+            'sidebar' : 'dark',
+            'topMenu' : 'dark',
+            'template' : 'light'
+        },
+        'sidebar' : false,
+        'topMenu' : false,
+        'content' : '<h3>Select any text style</h3><p>To edit the font, colours, etc.</p>'
+    }]
+},{
+    'title' : 'Help Tour',
+    'order' : 1,
+    'type' : 'tour',
+    'data' : [{
+        'position' : 'window:center',
+        'arrow' : false,
+        'overlays' : {
+            'main' : 'transparent',
+            'sidebar' : 'dark',
+            'topMenu' : 'dark',
+            'template' : 'dark'
+        },
+        'sidebar' : false,
+        'topMenu' : false,
+        'content' : '<h3>QuickSilk Online Tour!</h3><p>Welcome to QuickSilk! Use the buttons at the bottom of each help bubble to quickly discover how to navigate and use the QuickSilk software. This online tour automatically appears the first time you login. Anytime after this, simply click on the help tour menu item for a quick refresher.</p>'
+    },{
+        'position' : 'topMenuItem:user:dropdown:left',
+        'arrow' : 'right',
+        'overlays' : {
+            'main' : 'transparent',
+            'sidebar' : 'dark',
+            'topMenu' : 'transparent',
+            'template' : 'dark'
+        },
+        'sidebar' : false,
+        'topMenu' : 'user',
+        'content' : '<h3>User Menu</h3><p>Click on your name to view the admin panel (future), your profile, or to logout. The View Profile link provides the ability to manage your subscription and billing, password, forum settings, working groups and public profile.</p>'
+    },{
+        'position' : 'topMenuItem:modules:dropdown:right',
+        'arrow' : 'left',
+        'overlays' : {
+            'main' : 'transparent',
+            'sidebar' : 'dark',
+            'topMenu' : 'transparent',
+            'template' : 'dark'
+        },
+        'sidebar' : false,
+        'topMenu' : 'modules',
+        'content' : '<h3>Modules</h3><p>The Module manager allows you to work on your modules from the administration panel. Simply mouse over the Modules menu and then scroll down and click on the module you wish to work with. </p>'
+    },{
+        'position' : 'template:left-top',
+        'arrow' : 'left',
+        'overlays' : {
+            'main' : 'transparent',
+            'sidebar' : 'transparent',
+            'topMenu' : 'dark',
+            'template' : 'dark'
+        },
+        'sidebar' : false,
+        'topMenu' : false,
+        'content' : '<h3>Left Panel Slider</h3><p>The left slider widget provides you with quick access to the modules, pages, layouts and template features. Simply click on the icon for the tab you wish to use.</p>'
+    },{
+        'position' : 'template:left-top',
+        'arrow' : 'left',
+        'overlays' : {
+            'main' : 'transparent',
+            'sidebar' : 'transparent',
+            'topMenu' : 'dark',
+            'template' : 'dark'
+        },
+        'sidebar' : 'template-manager',
+        'topMenu' : false,
+        'content' : '<h3>Installed Modules</h3><p>The modules tab provides quick access to the modules that you\'ve subscribed to. Once you\'ve opened a page or a template, open the modules tab to drag and drop the modules you wish to include.</p>'
+    },{
+        'position' : 'template:left-top',
+        'arrow' : 'left',
+        'overlays' : {
+            'main' : 'transparent',
+            'sidebar' : 'transparent',
+            'topMenu' : 'dark',
+            'template' : 'dark'
+        },
+        'sidebar' : 'pages',
+        'topMenu' : false,
+        'content' : '<h3>Site Pages</h3><p>The site pages tab allows you to quickly open, modify and manage your website pages. Simply open the tab and click on the web page you wish to work on.</p>'
+    },{
+        'position' : 'template:left-top',
+        'arrow' : 'left',
+        'overlays' : {
+            'main' : 'transparent',
+            'sidebar' : 'transparent',
+            'topMenu' : 'dark',
+            'template' : 'dark'
+        },
+        'sidebar' : 'layouts',
+        'topMenu' : false,
+        'content' : '<h3>Page Layouts</h3><p>Use the page layout tab to open, modify and manage the layouts of your various web page templates. A page layout will consist of the common elements you have on every page.</p>'
+    },{
+        'position' : 'template:left-top',
+        'arrow' : 'left',
+        'overlays' : {
+            'main' : 'transparent',
+            'sidebar' : 'transparent',
+            'topMenu' : 'dark',
+            'template' : 'dark'
+        },
+        'sidebar' : 'templates',
+        'topMenu' : false,
+        'content' : '<h3>Templates</h3><p>The templates tab displays the different custom or predesigned templates that you\'ve installed and are immediately available for use on your website. If you want to view or install other templates, you\'ll do so from the template gallery.</p>'
+    },{
+        'position' : 'template:center',
+        'arrow' : false,
+        'overlays' : {
+            'main' : 'transparent',
+            'sidebar' : 'dark',
+            'topMenu' : 'dark',
+            'template' : 'light'
+        },
+        'sidebar' : false,
+        'topMenu' : false,
+        'content' : '<h3>Drop Area</h3><p>The drop area is where you drag and drop the modules. To move a module onto a page or template place your mouse on the desired module icon, hold down the left button on your mouse, and drag the module to the highlighted area of the page you wish to drop it, then let go of the mouse button.</p>'
+    },{
+        'position' : 'topMenuItem:support:container:right',
+        'arrow' : 'top',
+        'overlays' : {
+            'main' : 'transparent',
+            'sidebar' : 'dark',
+            'topMenu' : 'transparent',
+            'template' : 'dark'
+        },
+        'sidebar' : false,
+        'topMenu' : 'support',
+        'content' : '<h3>Need Help?</h3><p>Are you stuck, experiencing an issue, found a bug or have a suggestion? Simply click on this link and send us a message. FYI, to assist in the troubleshooting process we automatically collect information on the operating system, browser and browser version you are using. Our goal is to respond to your message within 1 business day.</p>'
+    }]
+}];
 cm.define('App.Block', {
     'modules' : [
         'Params',
@@ -1871,8 +2176,8 @@ function(params){
             that.components['sidebar'] = classObject
                 .addEvent('onExpandEnd', sidebarExpandAction)
                 .addEvent('onCollapseStart', sidebarCollapseAction)
-                .addEvent('onTabShow', function(sidebar, data){
-                    setEditorType(data.item['id']);
+                .addEvent('onTabShow', function(sidebar, item){
+                    setEditorType(item['id']);
                 });
         });
         cm.find('App.Template', that.params['templateName'], null, function(classObject){
@@ -2789,6 +3094,687 @@ cm.getConstructor('App.FileUploaderLocal', function(classConstructor, className,
         return that;
     };
 });
+cm.define('App.Flow', {
+    'extend' : 'Com.AbstractController',
+    'params' : {
+        'renderStructure' : true,
+        'embedStructureOnRender' : true,
+        'controllerEvents' : true,
+        'scenario' : App.FlowScenario,
+        'directorConstructor' : 'App.FlowDirector',
+        'directorParams' : {
+            'autoStart' : false
+        }
+    },
+    'strings' : {
+        'description' : 'Choose a course:'
+    }
+},
+function(params){
+    var that = this;
+    // Call parent class construct
+    Com.AbstractController.apply(that, arguments);
+});
+
+cm.getConstructor('App.Flow', function(classConstructor, className, classProto){
+    var _inherit = classProto._inherit;
+
+    classProto.onConstructStart = function(){
+        var that = this;
+        // Variables
+        that.items = [];
+        // Binds
+        that.renderListItemHandler = that.renderListItem.bind(that);
+    };
+
+    classProto.onValidateParams = function(){
+        var that = this;
+        // Validate Scenario
+        if(cm.isString(that.params['scenario'])){
+            that.params['scenario'] = cm.parseJSON(that.params['scenario']);
+        }
+        // Sort scenario by order
+        that.params['scenario'] = cm.arraySort(that.params['scenario'], 'order', 'desc');
+    };
+
+    classProto.onDestructProcess = function(){
+        var that = this;
+        that.components['director'] && !that.components['director'].isRunning && that.components['director'].destruct();
+    };
+
+    /******* VIEW MODEL *******/
+
+    classProto.renderView = function(){
+        var that = this;
+        // Structure
+        that.nodes['container'] = cm.node('div', {'class' : 'app__flow__list'},
+            cm.node('h4', that.lang('description')),
+            cm.node('div', {'class' : 'pt__listing-items'},
+                that.nodes['items'] = cm.node('ul')
+            )
+        );
+        // Items
+        cm.forEach(that.params['scenario'], that.renderListItemHandler);
+    };
+
+    classProto.renderListItem = function(item){
+        var that = this,
+            nodes =  {};
+        // Validate scenario
+        item['nodes'] = nodes;
+        // Structure
+        nodes['container'] = cm.node('li',
+            nodes['link'] = cm.node('a', item['title'])
+        );
+        // Events
+        cm.addEvent(nodes['link'], 'click', function(e){
+            cm.preventDefault(e);
+            that.components['director']
+                .setScenario(item['data'])
+                .setTarget(nodes['link'])
+                .start();
+        });
+        // Embed
+        cm.appendChild(nodes['container'], that.nodes['items']);
+        that.items.push(item);
+    };
+
+    classProto.renderViewModel = function(){
+        var that = this;
+        // Call parent method - renderViewModel
+        _inherit.prototype.renderViewModel.apply(that, arguments);
+        // Init Director
+        cm.getConstructor(that.params['directorConstructor'], function(classObject){
+            that.components['director'] = new classObject(that.params['directorParams']);
+        });
+    };
+});
+cm.define('App.FlowContainer', {
+    'extend' : 'Com.AbstractContainer',
+    'params' : {
+        'constructor' : 'App.Flow',
+        'placeholder' : true,
+        'placeholderConstructor' : 'Com.DialogContainer',
+        'placeholderParams' : {
+            'params' : {
+                'width' : 500,
+                'className' : 'app__flow__dialog',
+                'documentScroll' : true
+            }
+        }
+    },
+    'strings' : {
+        'title' : 'QuickSilk Flow'
+    }
+},
+function(params){
+    var that = this;
+    // Call parent class construct
+    Com.AbstractContainer.apply(that, arguments);
+});
+
+
+cm.getConstructor('App.FlowContainer', function(classConstructor, className, classProto){
+    var _inherit = classProto._inherit;
+});
+cm.define('App.FlowDirector', {
+    'extend' : 'Com.AbstractController',
+    'params' : {
+        'renderStructure' : false,
+        'embedStructureOnRender' : false,
+        'controllerEvents' : true,
+        'destructOnStop' : true,
+        'container' : 'document.body',
+        'name' : 'app-helptour',
+        'sidebarName' : 'app-sidebar',
+        'topMenuName' : 'app-topmenu',
+        'templateName' : 'app-template',
+        'notificationName' : 'app-notification',
+        'duration' : 500,
+        'adaptiveFrom' : 768,
+        'popupIndent' : 24,
+        'overlayConstructor' : 'Com.Overlay',
+        'overlayParams' : {
+            'container' : 'document.body',
+            'autoOpen' : false,
+            'removeOnClose' : true,
+            'showSpinner' : false,
+            'showContent' : false,
+            'name' : '',
+            'theme' : 'transparent',
+            'position' : 'absolute'
+        }
+    },
+    'strings' : {
+        'next' : 'Next',
+        'back' : 'Back',
+        'close' : 'Close',
+        'cancel' : 'Cancel',
+        'finish' : 'Finish'
+    }
+},
+function(params){
+    var that = this;
+    // Call parent class construct
+    Com.AbstractController.apply(that, arguments);
+});
+
+cm.getConstructor('App.FlowDirector', function(classConstructor, className, classProto){
+    var _inherit = classProto._inherit;
+    
+    classProto.onConstructStart = function(){
+        var that = this;
+        // Variables
+        that.isRunning = false;
+        that.scenario = App.HelpTourScenario;
+        that.dimensions = {
+            'sidebarCollapsed' : 0,
+            'sidebarExpanded' : 0,
+            'topMenu' : 0,
+            'popupHeight' : 0,
+            'popupSelfHeight' : 0,
+            'popupContentHeight' : 0
+        };
+        that.startOptions = {
+            'sidebarExpanded' : false,
+            'sidebarTab' : 'modules',
+            'notificationShow' : false
+        };
+        that.startX = 0;
+        that.startY = 0;
+        that.components = {
+            'overlays' : {}
+        };
+        that.currentStage = -1;         // Scene ID
+        that.currentScene = null;       // Scene Object
+        that.currentSceneNode = null;
+        that.previousStage = null;
+        that.previousScene = null;
+        that.previousSceneNode = null;
+        that.sceneIntervals = {};
+        // Binds
+        that.startHandler = that.start.bind(that);
+        that.stopHandler = that.stop.bind(that);
+        that.nextHandler = that.next.bind(that);
+        that.prevHandler = that.prev.bind(that);
+        that.prepareHandler = that.prepare.bind(that);
+        that.keyDownEventHandler = that.keyDownEvent.bind(that);
+    };
+    
+    classProto.onValidateParamsProcess = function(){
+        var that = this;
+        // Overlay
+        that.params['overlayParams']['container'] = that.params['container'];
+        that.params['overlayParams']['name'] = [that.params['name'], 'overlay'].join('-')
+    };
+
+    classProto.onGetLESSVariablesProcess = function(){
+        var that = this;
+        that.params['duration'] = cm.getTransitionDurationFromLESS('AppHelpTour-Duration', that.params['duration']);
+        that.params['adaptiveFrom'] = cm.getLESSVariable('AppHelpTour-AdaptiveFrom', that.params['adaptiveFrom'], true);
+    };
+    
+    classProto.onSetEvents = function(){
+        var that = this;
+        cm.addEvent(window, 'keydown', that.keyDownEventHandler);
+    };
+
+    classProto.onUnsetEvents = function(){
+        var that = this;
+        cm.removeEvent(window, 'keydown', that.keyDownEventHandler);
+    };
+
+    classProto.onRedraw = function(){
+        var that = this;
+        that.isRunning && that.setPopupPosition();
+    };
+    
+    /******* VIEW MODEL *******/
+
+    classProto.renderViewModel = function(){
+        var that = this;
+        // Call parent method - renderViewModel
+        _inherit.prototype.renderViewModel.apply(that, arguments);
+        // Init Overlay
+        cm.getConstructor(that.params['overlayConstructor'], function(classConstructor){
+            that.components['overlays']['main'] = new classConstructor(
+                cm.merge(that.params['overlayParams'], {
+                    'position' : 'fixed'
+                })
+            );
+            that.components['overlays']['sidebar'] = new classConstructor(that.params['overlayParams']);
+            that.components['overlays']['topMenu'] = new classConstructor(that.params['overlayParams']);
+            that.components['overlays']['template'] = new classConstructor(
+                cm.merge(that.params['overlayParams'], {
+                    'position' : 'fixed'
+                })
+            );
+        });
+        return that;
+    };
+
+    /******* CONTROLS *******/
+
+    classProto.prepare = function(){
+        var that = this;
+        // Get Sidebar
+        cm.find('App.Sidebar', that.params['sidebarName'], null, function(classObject){
+            that.components['sidebar'] = classObject;
+            that.components['overlays']['sidebar'].embed(that.components['sidebar'].getNodes('inner'));
+        });
+        // Get TopMenu
+        cm.find('App.TopMenu', that.params['topMenuName'], null, function(classObject){
+            that.components['topMenu'] = classObject;
+            that.components['overlays']['topMenu'].embed(that.components['topMenu'].getNodes('inner'));
+        });
+        // Get Template
+        cm.find('App.Template', that.params['templateName'], null, function(classObject){
+            that.components['template'] = classObject;
+            that.components['overlays']['template'].embed(that.components['template'].getNodes('container'));
+        });
+        // Get Notification
+        cm.find('App.Notification', that.params['notificationName'], null, function(classObject){
+            that.components['notification'] = classObject;
+        });
+        // Start
+        if(that.components['sidebar'] && that.components['topMenu'] && that.components['template']){
+            return true;
+        }else{
+            cm.errorLog({
+                'type' : 'error',
+                'name' : that._name['full'],
+                'message' : ['Required components does not constructed.'].join(' ')
+            });
+            return false;
+        }
+    };
+
+    classProto.start = function(){
+        var that = this,
+            isPrepare = that.prepare();
+        if(!that.isRunning && isPrepare){
+            that.isRunning = true;
+            // Close Containers
+            cm.find('Com.AbstractContainer', null, null, function(classObject){
+                classObject.close();
+            }, {'childs' : true});
+            // Render Popup
+            that.renderPopup();
+            // Save Sidebar State
+            that.startOptions['sidebarExpanded'] = that.components['sidebar'].isExpanded;
+            if(that.components['sidebar'].isExpanded){
+                that.components['sidebar'].collapse();
+            }
+            that.startOptions['sidebarTab'] = that.components['sidebar'].getTab();
+            that.components['sidebar'].unsetTab();
+            // Save Notification State
+            if(that.components['notification']){
+                that.startOptions['notificationShow'] = that.components['notification'].isShow;
+                if(that.components['notification'].isShow){
+                    that.components['notification'].hide();
+                }
+            }
+            // Collapse menu (mobile)
+            that.components['topMenu'].collapse();
+            // Show overlays
+            cm.forEach(that.components['overlays'], function(item){
+                item.open();
+            });
+            // Start scenario
+            that.setStage(0);
+        }
+    };
+
+    classProto.stop = function(){
+        var that = this;
+        if(that.isRunning){
+            that.isRunning = false;
+            // Remove Popup
+            that.removePopup();
+            // Restore Sidebar State
+            if(that.startOptions['sidebarExpanded'] && !that.components['sidebar'].isExpanded){
+                that.components['sidebar'].expand();
+            }else if(!that.startOptions['sidebarExpanded'] && that.components['sidebar'].isExpanded){
+                that.components['sidebar'].collapse();
+            }
+            that.components['sidebar'].setTab(that.startOptions['sidebarTab']);
+            // Restore Notification State
+            if(that.components['notification']){
+                if(that.startOptions['notificationShow'] && !that.components['notification'].isShow){
+                    that.components['notification'].show();
+                }else if(!that.startOptions['notificationShow'] && that.components['notification'].isShow){
+                    that.components['notification'].hide();
+                }
+            }
+            // Hide overlays
+            cm.forEach(that.components['overlays'], function(item){
+                item.close();
+            });
+            // Stop scenario
+            that.unsetStage();
+            // Destruct
+            that.params['destructOnStop'] && that.destruct();
+        }
+        return that;
+    };
+
+    classProto.next = function(){
+        var that = this;
+        if(that.currentStage >= 0){
+            if(that.scenario[that.currentStage + 1]){
+                that.setStage(that.currentStage + 1);
+            }else{
+                that.stop();
+            }
+        }
+        return that;
+    };
+
+    classProto.prev = function(){
+        var that = this;
+        if(that.currentStage >= 0){
+            if(that.scenario[that.currentStage - 1]){
+                that.setStage(that.currentStage - 1);
+            }else{
+                that.stop();
+            }
+        }
+        return that;
+    };
+
+    /******* SCREENPLAY *******/
+
+    classProto.setScenario = function(scenario){
+        var that = this;
+        that.scenario = scenario;
+        return that;
+    };
+
+    classProto.setStage = function(stage){
+        var that = this;
+        if(that.scenario[stage]){
+            // Destruct Previous Scene
+            that.unsetStage();
+            // Construct New Scene
+            that.currentStage = stage;
+            that.currentScene = that.scenario[stage];
+            // Set Overlays
+            cm.forEach(that.currentScene['overlays'], function(item, key){
+                that.components['overlays'][key].setTheme(item);
+            });
+            // Set Sidebar
+            if(!that.currentScene['sidebar']){
+                that.components['sidebar']
+                    .unsetTab()
+                    .collapse();
+            }else{
+                that.components['sidebar']
+                    .setTab(that.currentScene['sidebar'])
+                    .expand();
+            }
+            // Set Top Menu
+            that.components['topMenu'].setActiveItem(that.currentScene['topMenu']);
+            // Set Popup Arrow
+            if(that.currentScene['arrow']){
+                cm.addClass(that.nodes['popupArrows'][that.currentScene['arrow']], 'is-show');
+            }
+            // Set Popup Buttons
+            if(that.currentStage === 0){
+                that.nodes['back'].innerHTML = that.lang('close');
+                that.nodes['next'].innerHTML = that.lang('next');
+            }else if(that.currentStage === that.scenario.length - 1){
+                that.nodes['back'].innerHTML = that.lang('back');
+                that.nodes['next'].innerHTML = that.lang('finish');
+            }else{
+                that.nodes['back'].innerHTML = that.lang('back');
+                that.nodes['next'].innerHTML = that.lang('next');
+            }
+            // Set Popup Content
+            if(!that.previousStage){
+                cm.addClass(that.nodes['popupContent'], 'is-immediately', true);
+            }
+            that.currentSceneNode = cm.node('div', {'class' : 'popup__content__item', 'innerHTML' : that.currentScene['content']});
+            cm.appendChild(that.currentSceneNode, that.nodes['popupContent']);
+            cm.addClass(that.currentSceneNode, 'is-show', true);
+            // Set Popup Position
+            that.setPopupPosition();
+            // Construct
+            that.currentScene['construct'] && that.currentScene['construct'].call(that);
+        }
+    };
+
+    classProto.unsetStage = function(){
+        var that = this;
+        if(that.currentStage >= 0){
+            that.previousStage = that.currentStage;
+            that.previousScene = that.currentScene;
+            that.previousSceneNode = that.currentSceneNode;
+            // Top Menu
+            that.components['topMenu'].unsetActiveItem(that.previousScene['topMenu']);
+            // Clear Popup Arrow
+            if(that.previousScene['arrow']){
+                cm.removeClass(that.nodes['popupArrows'][that.previousScene['arrow']], 'is-show');
+            }
+            // Clear Scene Intervals
+            cm.forEach(that.sceneIntervals, function(item){
+                clearInterval(item);
+            });
+            // Remove Popup Node
+            (function(node){
+                setTimeout(function(){
+                    cm.remove(node);
+                }, that.params['duration']);
+            })(that.previousSceneNode);
+            // Remove immediately fix
+            setTimeout(function(){
+                cm.removeClass(that.nodes['popupContent'], 'is-immediately', true);
+            }, 5);
+            // Destruct
+            that.previousScene['destruct'] && that.previousScene['destruct'].call(that);
+        }
+        that.currentStage = -1;
+    };
+
+    /******* POPUP *******/
+
+    classProto.renderPopup = function(){
+        var that = this;
+        that.nodes['popupArrows'] = {};
+        that.nodes['popup'] = cm.node('div', {'class' : 'app__helptour__popup'},
+            that.nodes['popupArrows']['top'] = cm.node('div', {'class' : 'popup__arrow popup__arrow--top'}),
+            that.nodes['popupArrows']['right'] = cm.node('div', {'class' : 'popup__arrow popup__arrow--right'}),
+            that.nodes['popupArrows']['bottom'] = cm.node('div', {'class' : 'popup__arrow popup__arrow--bottom'}),
+            that.nodes['popupArrows']['left'] = cm.node('div', {'class' : 'popup__arrow popup__arrow--left'}),
+            that.nodes['popupClose'] = cm.node('div', {'class' : 'popup__close', 'title' : that.lang('close')}),
+            that.nodes['popupContent'] = cm.node('div', {'class' : 'popup__content'}),
+            that.nodes['popupButtons'] = cm.node('div', {'class' : 'popup__buttons'},
+                cm.node('div', {'class' : 'btn-wrap pull-center'},
+                    that.nodes['back'] = cm.node('button', that.lang('back')),
+                    that.nodes['next'] = cm.node('button', that.lang('next'))
+                )
+            )
+        );
+        that.setPopupStartPosition();
+        // Append
+        cm.appendChild(that.nodes['popup'], that.params['container']);
+        cm.addClass(that.nodes['popup'], 'is-show', true);
+        // Events
+        cm.addEvent(that.nodes['popupClose'], 'click', that.stopHandler);
+        cm.addEvent(that.nodes['next'], 'click', that.nextHandler);
+        cm.addEvent(that.nodes['back'], 'click', that.prevHandler);
+    };
+
+    classProto.removePopup = function(){
+        var that = this;
+        // Set end position
+        that.setPopupStartPosition();
+        cm.removeClass(that.nodes['popup'], 'is-show');
+        // Remove node
+        setTimeout(function(){
+            cm.remove(that.nodes['popup']);
+        }, that.params['duration']);
+    };
+
+    classProto.setPopupStartPosition = function(){
+        var that = this;
+        if(!that.startX){
+            that.startX = [Math.round(cm.getX(that.params['node']) + that.params['node'].offsetWidth / 2), 'px'].join('');
+        }
+        if(!that.startY){
+            that.startY = [Math.round(cm.getY(that.params['node']) + that.params['node'].offsetHeight / 2), 'px'].join('');
+        }
+        cm.setCSSTranslate(that.nodes['popup'], that.startX, that.startY, 0, 'scale(0)');
+    };
+
+    classProto.setPopupPosition = function(){
+        var that = this,
+            position, pageSize, top, left, conentHeight, topMenuItem;
+        if(that.currentScene){
+            pageSize = cm.getPageSize();
+            // Desktop or mobile view
+            if(pageSize['winWidth'] > that.params['adaptiveFrom']){
+                that.getDimensions();
+                position = that.currentScene['position'].split(':');
+                conentHeight = that.dimensions['popupContentHeight'];
+                // Set position
+                switch(position[0]){
+                    // Window related position
+                    case 'window':
+                        switch(position[1]){
+                            case 'top':
+                                left = Math.round((pageSize['winWidth'] - that.nodes['popup'].offsetWidth) / 2);
+                                top = that.params['popupIndent'];
+                                break;
+                            case 'bottom':
+                                left = Math.round((pageSize['winWidth'] - that.nodes['popup'].offsetWidth) / 2);
+                                top = pageSize['winHeight'] - that.dimensions['popupHeight'] - that.params['popupIndent'];
+                                break;
+                            case 'center':
+                            default:
+                                left = Math.round((pageSize['winWidth'] - that.nodes['popup'].offsetWidth) / 2);
+                                top = Math.round((pageSize['winHeight'] - that.dimensions['popupHeight']) / 2);
+                                break;
+                        }
+                        break;
+                    // Top Menu related position
+                    case 'topMenu':
+                        switch(position[1]){
+                            case 'center':
+                            default:
+                                left = Math.round((pageSize['winWidth'] - that.nodes['popup'].offsetWidth) / 2);
+                                top = that.dimensions['topMenu'] + that.params['popupIndent'];
+                                break;
+                        }
+                        break;
+                    // Top Menu Item related position
+                    case 'topMenuItem':
+                        topMenuItem = that.components['topMenu'].getItem(position[1]);
+                        if(!topMenuItem){
+                            left = Math.round((pageSize['winWidth'] - that.nodes['popup'].offsetWidth) / 2);
+                        }else if(position[2] && position[2] === 'dropdown' && topMenuItem['dropdown']){
+                            if(position[3] && position[3] === 'left'){
+                                left = cm.getX(topMenuItem['dropdown']) - that.nodes['popup'].offsetWidth - that.params['popupIndent'];
+                            }else{
+                                left = cm.getX(topMenuItem['dropdown']) + topMenuItem['dropdown'].offsetWidth + that.params['popupIndent'];
+                            }
+                        }else if(topMenuItem['container']){
+                            if(position[3] && position[3] === 'left'){
+                                left = cm.getX(topMenuItem['container']) + topMenuItem['container'].offsetWidth - that.nodes['popup'].offsetWidth;
+                            }else{
+                                left = cm.getX(topMenuItem['container']);
+                            }
+                        }else{
+                            left = Math.round((pageSize['winWidth'] - that.nodes['popup'].offsetWidth) / 2);
+                        }
+                        top = that.dimensions['topMenu'] + that.params['popupIndent'];
+                        break;
+                    // Template related position
+                    case 'template':
+                        switch(position[1]){
+                            case 'top':
+                                left = (that.components['sidebar'].isExpanded ? that.dimensions['sidebarExpanded'] : that.dimensions['sidebarCollapsed']);
+                                left = Math.round((pageSize['winWidth'] + left - that.nodes['popup'].offsetWidth) / 2);
+                                top = that.dimensions['topMenu'] + that.params['popupIndent'];
+                                break;
+                            case 'bottom':
+                                left = (that.components['sidebar'].isExpanded ? that.dimensions['sidebarExpanded'] : that.dimensions['sidebarCollapsed']);
+                                left = Math.round((pageSize['winWidth'] + left - that.nodes['popup'].offsetWidth) / 2);
+                                top = pageSize['winHeight'] - that.dimensions['popupHeight'] - that.params['popupIndent'];
+                                break;
+                            case 'left':
+                                left = (that.components['sidebar'].isExpanded ? that.dimensions['sidebarExpanded'] : that.dimensions['sidebarCollapsed']) + that.params['popupIndent'];
+                                top = Math.round((pageSize['winHeight'] - that.dimensions['popupHeight']) / 2);
+                                break;
+                            case 'left-top':
+                                left = (that.components['sidebar'].isExpanded ? that.dimensions['sidebarExpanded'] : that.dimensions['sidebarCollapsed']) + that.params['popupIndent'];
+                                top = that.dimensions['topMenu'] + that.params['popupIndent'];
+                                break;
+                            case 'center':
+                            default:
+                                left = (that.components['sidebar'].isExpanded ? that.dimensions['sidebarExpanded'] : that.dimensions['sidebarCollapsed']);
+                                left = Math.round((pageSize['winWidth'] + left - that.nodes['popup'].offsetWidth) / 2);
+                                top = Math.round((pageSize['winHeight'] +  that.dimensions['topMenu'] - that.dimensions['popupHeight']) / 2);
+                                break;
+                        }
+                        break;
+                    // Default position
+                    default:
+                        left = Math.round((pageSize['winWidth'] - that.nodes['popup'].offsetWidth) / 2);
+                        top = Math.round((pageSize['winHeight'] - that.dimensions['popupHeight']) / 2);
+                        break;
+                }
+            }else{
+                left = 0;
+                top = 0;
+                conentHeight = 'auto';
+            }
+            that.nodes['popupContent'].style.height = conentHeight === 'auto' ? conentHeight : [conentHeight, 'px'].join('');
+            cm.setCSSTranslate(that.nodes['popup'], [left, 'px'].join(''), [top, 'px'].join(''), 0, 'scale(1)');
+        }
+    };
+
+    /******* HELPERS *******/
+
+    classProto.getDimensions = function(){
+        var that = this;
+        that.dimensions['sidebarCollapsed'] = cm.getLESSVariable('AppSidebar-WidthCollapsed', 0, true);
+        that.dimensions['sidebarExpanded'] = cm.getLESSVariable('AppSidebar-WidthExpanded', 0, true);
+        that.dimensions['topMenu'] = cm.getLESSVariable('AppTopMenu-Height', 0, true);
+        if(!that.dimensions['popupSelfHeight']){
+            that.dimensions['popupSelfHeight'] = that.nodes['popup'].offsetHeight;
+        }
+        if(that.currentSceneNode){
+            that.dimensions['popupContentHeight'] = that.currentSceneNode.offsetHeight;
+        }
+        that.dimensions['popupHeight'] = that.dimensions['popupSelfHeight'] + that.dimensions['popupContentHeight'];
+    };
+
+    classProto.keyDownEvent = function(e){
+        var that = this;
+        if(that.isRunning){
+            cm.preventDefault(e);
+            switch(e.keyCode){
+                case 27:
+                    that.stop();
+                    break;
+                case 37:
+                    that.prev();
+                    break;
+                case 39:
+                    that.next();
+                    break;
+            }
+        }
+    };
+
+    classProto.setTarget = function(node){
+        var that = this;
+        if(cm.isNode(node)){
+            that.params['node'] = node;
+        }
+        return that;
+    };
+});
 cm.define('App.FontInput', {
     'extend' : 'Com.AbstractInput',
     'params' : {
@@ -3394,7 +4380,6 @@ function(params){
 
 cm.getConstructor('App.FormStyles', function(classConstructor, className, classProto){
     var _inherit = classProto._inherit;
-
 });
 cm.define('App.HelpTour', {
     'modules' : [
@@ -5820,16 +6805,16 @@ function(params){
     var processTabset = function(){
         cm.getConstructor('Com.TabsetHelper', function(classConstructor){
             that.components['tabset'] = new classConstructor(that.params['Com.TabsetHelper'])
-                .addEvent('onLabelTarget', function(tabset, data){
-                    if(!that.isExpanded || tabset.get() == data['item']['id']){
+                .addEvent('onLabelTarget', function(tabset, item){
+                    if(!that.isExpanded || tabset.get() === item['id']){
                         that.toggle();
                     }
                 })
-                .addEvent('onTabHide', function(tabset, data){
-                    that.triggerEvent('onTabHide', data);
+                .addEvent('onTabHide', function(tabset, item){
+                    that.triggerEvent('onTabHide', item);
                 })
-                .addEvent('onTabShow', function(tabset, data){
-                    that.triggerEvent('onTabShow', data);
+                .addEvent('onTabShow', function(tabset, item){
+                    that.triggerEvent('onTabShow', item);
                 })
                 .processTabs(that.nodes['tabs'], that.nodes['labels'])
                 .set(that.params['active']);
@@ -7863,7 +8848,8 @@ function(params){
 cm.define('Mod.ElementFileUploader', {
     'extend' : 'App.AbstractModuleElement',
     'params' : {
-        'targetController' : 'App.FileInput'
+        'targetController' : 'App.FileInput',
+        'memorable' : false
     }
 },
 function(params){
@@ -8069,10 +9055,10 @@ cm.getConstructor('Mod.ElementWizard', function(classConstructor, className, cla
         var that = this;
         cm.getConstructor('Com.TabsetHelper', function(classConstructor, className){
             that.components['tabset'] = new classConstructor(that.params[className])
-                .addEvent('onTabHide', function(tabset, data){
-                    that.triggerEvent('onTabHide', data['item']);
+                .addEvent('onTabHide', function(tabset, item){
+                    that.triggerEvent('onTabHide', item);
                 })
-                .addEvent('onTabShowStart', function(tabset, data){
+                .addEvent('onTabShowStart', function(tabset, item){
                     if(!that.isProcessing){
                         that.nodes['content-list'].style.overflow = 'hidden';
                         that.nodes['content-list'].style.height = that.nodes['content-list'].offsetHeight + 'px';
@@ -8085,14 +9071,14 @@ cm.getConstructor('Mod.ElementWizard', function(classConstructor, className, cla
                         that.nodes['content-list'].style.overflow = 'visible';
                     }, that.params['duration']);
                 })
-                .addEvent('onTabShow', function(tabset, data){
-                    that.currentTab = data['item'];
-                    that.nodes['content-list'].style.height = data['item']['tab']['container'].offsetHeight + 'px';
+                .addEvent('onTabShow', function(tabset, item){
+                    that.currentTab = item;
+                    that.nodes['content-list'].style.height = item['tab']['container'].offsetHeight + 'px';
                     that.setMenu();
                     that.setButtons();
                     that.setInput();
-                    that.triggerEvent('onTabShow', data['item']);
-                    that.triggerEvent('onTabChange', data['item']);
+                    that.triggerEvent('onTabShow', item);
+                    that.triggerEvent('onTabChange', item);
                 })
                 .processTabs(that.nodes['tabs'], that.nodes['labels']);
         });
@@ -8104,7 +9090,7 @@ cm.getConstructor('Mod.ElementWizard', function(classConstructor, className, cla
         that.tabsCount = that.components['tabset'].getTabsCount();
         cm.forEach(that.tabs, function(item){
             cm.addEvent(item['label']['container'], 'click', function(){
-                if(that.validateTab() && that.currentTab['id'] != item['id']){
+                if(that.validateTab() && that.currentTab['id'] !== item['id']){
                     that.setTab(item['id']);
                 }
             });
@@ -8120,7 +9106,7 @@ cm.getConstructor('Mod.ElementWizard', function(classConstructor, className, cla
             }, that.getNodeDataConfig(nodes['container']));
             // Click Events
             cm.addEvent(nodes['container'], 'click', function(){
-                if(that.validateTab() && that.currentTab['id'] != item['id']){
+                if(that.validateTab() && that.currentTab['id'] !== item['id']){
                     that.setTab(item['id']);
                 }
             });
@@ -8210,7 +9196,7 @@ cm.getConstructor('Mod.ElementWizard', function(classConstructor, className, cla
 
     classProto.doneTab = function(e){
         var that = this;
-        if(that.validateTab()){
+        if(!that.validateTab()){
             cm.preventDefault(e);
         }
     };
@@ -8375,13 +9361,13 @@ cm.getConstructor('Mod.Form', function(classConstructor, className, classProto){
         // Set value
         item['controller'].setTab(item['value']);
         // Events
-        item['controller'].addEvent('onTabChange', function(my, data){
+        item['controller'].addEvent('onTabChange', function(){
             item['tab'] = item['controller'].getCurrentTab();
             item['value'] = item['tab']['id'];
             that.values[item['name']] = item['value'];
             that.processSave();
         });
-        item['controller'].addEvent('onDestruct', function(my){
+        item['controller'].addEvent('onDestruct', function(){
             delete that.values[item['name']];
             delete that.items[item['name']];
             that.processSave();
@@ -8956,15 +9942,15 @@ function(params){
         // Process Tabset
         cm.getConstructor('Com.TabsetHelper', function(classConstructor, className){
             that.components['tabset'] = new classConstructor(that.params[className])
-                .addEvent('onTabHide', function(tabset, data){
-                    that.triggerEvent('onTabHide', data);
+                .addEvent('onTabHide', function(tabset, item){
+                    that.triggerEvent('onTabHide', item);
                 })
-                .addEvent('onTabShowStart', function(tabset, data){
+                .addEvent('onTabShowStart', function(tabset, item){
                     // If not in editing and tab does not contains any blocks, do not show it
-                    if(!that.params['showEmptyTab'] && !that.isEditing && that.components['tabset'].isTabEmpty(data.item['id'])){
-                        hide(data.item);
+                    if(!that.params['showEmptyTab'] && !that.isEditing && that.components['tabset'].isTabEmpty(item['id'])){
+                        hide(item);
                     }else{
-                        show(data.item);
+                        show(item);
                     }
                     // Container
                     if(!that.isProcessing){
@@ -8979,10 +9965,10 @@ function(params){
                         that.nodes['content-list'].style.overflow = 'visible';
                     }, that.params['duration']);
                 })
-                .addEvent('onTabShow', function(tabset, data){
-                    that.nodes['content-list'].style.height = data['item']['tab']['container'].offsetHeight + 'px';
-                    that.nodes['menu-label'].innerHTML = data['item']['title'];
-                    that.triggerEvent('onTabShow', data);
+                .addEvent('onTabShow', function(tabset, item){
+                    that.nodes['content-list'].style.height = item['tab']['container'].offsetHeight + 'px';
+                    that.nodes['menu-label'].innerHTML = item['title'];
+                    that.triggerEvent('onTabShow', item);
                 })
                 .processTabs(that.nodes['tabs'], that.nodes['labels']);
         });
@@ -9021,7 +10007,7 @@ function(params){
             cm.addEvent(item['label']['link'], 'click', function(e){
                 if(
                     that.isEditing
-                    || (that.params['event'] == 'click' && that.components['tabset'].get() != item['id'])
+                    || (that.params['event'] === 'click' && that.components['tabset'].get() !== item['id'])
                 ){
                     cm.preventDefault(e);
                 }
@@ -9044,7 +10030,7 @@ function(params){
                 'nodes' : nodes
             }, that.getNodeDataConfig(nodes['container']));
         cm.addEvent(nodes['container'], 'click', function(e){
-            if(that.components['tabset'].get() != item['id']){
+            if(that.components['tabset'].get() !== item['id']){
                 cm.preventDefault(e);
                 that.components['tabset'].set(item['id']);
                 hideMenu();
@@ -9145,9 +10131,9 @@ function(params){
         that.previousPosition = cm.clone(that.currentPosition);
         that.currentPosition = cm.getRect(that.nodes['container']);
         // Variables
-        var isSameTop = that.previousPosition && that.previousPosition['top'] == that.currentPosition['top'];
-        var isSameBottom = that.previousPosition && that.previousPosition['bottom'] == that.currentPosition['bottom'];
-        var isSameWidth = that.previousPosition && that.previousPosition['width'] == that.currentPosition['width'];
+        var isSameTop = that.previousPosition && that.previousPosition['top'] === that.currentPosition['top'];
+        var isSameBottom = that.previousPosition && that.previousPosition['bottom'] === that.currentPosition['bottom'];
+        var isSameWidth = that.previousPosition && that.previousPosition['width'] === that.currentPosition['width'];
         // Set Content Min Width
         if(!isSameWidth){
             switch(that.params['attachment']){
@@ -9361,283 +10347,4 @@ function(params){
     };
 
     init();
-});
-cm.define('Dev.Parallax', {
-    'modules' : [
-        'Params',
-        'Events',
-        'Langs',
-        'Structure',
-        'DataConfig',
-        'DataNodes',
-        'Storage',
-        'Stack'
-    ],
-    'events' : [
-        'onRenderStart',
-        'onRender'
-    ],
-    'params' : {
-        'node' : cm.node('div'),
-        'name' : '',
-        'speed' : 1
-    }
-},
-function(params){
-    var that = this;
-    that.nodes = {};
-    that.components = {};
-    that.construct(params);
-});
-
-cm.getConstructor('Dev.Parallax', function(classConstructor, className, classProto){
-    classProto.construct = function(params){
-        var that = this;
-        that.setHandler = that.set.bind(that);
-        that.refreshHandler = that.refresh.bind(that);
-        that.setParams(params);
-        that.convertEvents(that.params['events']);
-        that.getDataNodes(that.params['node']);
-        that.getDataConfig(that.params['node']);
-        that.validateParams();
-        that.addToStack(that.params['node']);
-        that.triggerEvent('onRenderStart');
-        that.render();
-        that.addToStack(that.nodes['container']);
-        that.triggerEvent('onRender');
-        return that;
-    };
-
-    classProto.validateParams = function(){
-        var that = this;
-        return that;
-    };
-
-    classProto.render = function(){
-        var that = this;
-        // Refresh Layout
-        that.refresh();
-        // Set Events
-        cm.addEvent(window, 'scroll', that.setHandler);
-        cm.addEvent(window, 'resize', that.refreshHandler);
-        return that;
-    };
-
-    classProto.refresh = function(){
-        var that = this;
-        that.posY = cm.getY(that.nodes['container']);
-        that.selfHeight = that.nodes['container'].offsetHeight;
-        that.posY2 = that.posY + that.selfHeight;
-        that.winHeight = cm.getPageSize('winHeight');
-        that.halfY = (that.winHeight - that.selfHeight) / 2;
-        that.set();
-        return that;
-    };
-
-    classProto.set = function(){
-        var that = this;
-        var scrollTop = cm.getBodyScrollTop();
-        if(cm.inRange(scrollTop, scrollTop + that.winHeight, that.posY, that.posY2)){
-            var posY = scrollTop + that.halfY - that.posY;
-            var transY = posY - (posY * that.params['speed']);
-            cm.setCSSTranslate(that.nodes['backgroundInner'], '0px', (transY + 'px'))
-        }
-    };
-});
-cm.define('Dev.TBSC', {
-    'modules' : [
-        'Params',
-        'Events',
-        'Langs',
-        'Structure',
-        'DataConfig',
-        'DataNodes',
-        'Storage',
-        'Stack'
-    ],
-    'events' : [
-        'onRenderStart',
-        'onRender'
-    ],
-    'params' : {
-        'node' : cm.node('div'),
-        'name' : '',
-        'customEvents' : true,
-        'ipadSpeed' : 0.12,
-        'characterSpeed' : 0.4,
-        'character2Speed' : 0.288,
-        'raysSpeed' : 0.342
-    }
-},
-function(params){
-    var that = this;
-    that.nodes = {};
-    that.components = {};
-    that.isEditing = null;
-    that.isDestructed = false;
-    that.construct(params);
-});
-
-cm.getConstructor('Dev.TBSC', function(classConstructor, className, classProto){
-    classProto.construct = function(params){
-        var that = this;
-        that.resizeHandler = that.resize.bind(that);
-        that.scrollHandler = that.scroll.bind(that);
-        that.setHandler = that.set.bind(that);
-        that.redrawHandler = that.redraw.bind(that);
-        that.enableEditingHandler = that.enableEditing.bind(that);
-        that.disableEditingHandler = that.disableEditing.bind(that);
-        that.setParams(params);
-        that.convertEvents(that.params['events']);
-        that.getDataNodes(that.params['node']);
-        that.getDataConfig(that.params['node']);
-        that.addToStack(that.params['node']);
-        that.triggerEvent('onRenderStart');
-        that.render();
-        that.addToStack(that.nodes['container']);
-        that.triggerEvent('onRender');
-        return that;
-    };
-
-    classProto.destruct = function(){
-        var that = this;
-        if(!that.isDestructed){
-            that.isDestructed = true;
-            cm.removeEvent(window, 'scroll', that.scrollHandler);
-            cm.removeEvent(window, 'resize', that.resizeHandler);
-            that.removeFromStack();
-        }
-        return that;
-    };
-
-    classProto.render = function(){
-        var that = this;
-        // Refresh Layout
-        that.redraw();
-        // Set Events
-        cm.addEvent(window, 'scroll', that.scrollHandler);
-        cm.addEvent(window, 'resize', that.resizeHandler);
-        // Add custom event
-        if(that.params['customEvents']){
-            cm.customEvent.add(that.params['node'], 'destruct', function(){
-                that.destruct();
-            });
-            cm.customEvent.add(that.params['node'], 'redraw', function(){
-                that.redraw();
-            });
-            cm.customEvent.add(that.params['node'], 'enableEditable', function(){
-                that.enableEditing();
-            });
-            cm.customEvent.add(that.params['node'], 'disableEditable', function(){
-                that.disableEditing();
-            });
-        }
-        return that;
-    };
-
-    classProto.resize = function(){
-        var that = this;
-        that.redraw();
-        return that;
-    };
-
-    classProto.scroll = function(){
-        var that = this;
-        if(!that.isEditing){
-            that.set();
-        }
-        return that;
-    };
-
-    classProto.redraw = function(){
-        var that = this;
-        if(!that.isEditing){
-            cm.addClass(that.nodes['line']['container'], 'is-start');
-            cm.removeClass(that.nodes['height'], 'is-hidden');
-            // Position
-            that.winWidth = cm.getPageSize('winWidth');
-            that.posX = cm.getX(that.nodes['container']);
-            that.posY = cm.getY(that.nodes['container']);
-            // iPad
-            that.ipadStartY = 70;
-            that.ipadEndY = 0;
-            // Character
-            that.characterStartY = -210;
-            that.characterEndY = 0;
-            // Character 2
-            that.character2StartY = -150;
-            that.character2EndY = 0;
-            // Rays
-            that.raysStartY = -180;
-            that.raysEndY = 0;
-            // Set
-            that.set();
-        }else {
-            cm.setCSSTranslate(that.nodes['line']['ipad'], '0px', '0px');
-            cm.setCSSTranslate(that.nodes['line']['character'], '0px', '0px');
-            cm.setCSSTranslate(that.nodes['line']['character2'], '0px', '0px');
-            cm.setCSSTranslate(that.nodes['line']['rays'], '0px', '0px');
-        }
-        return that;
-    };
-
-    classProto.set = function(){
-        var that = this,
-            scrollTop = cm.getBodyScrollTop(),
-            scrollOffset = scrollTop,
-            ipadTrans = that.ipadStartY - (scrollOffset * that.params['ipadSpeed']),
-            characterTrans = that.characterStartY + (scrollOffset * that.params['characterSpeed']),
-            character2Trans = that.character2StartY + (scrollOffset * that.params['character2Speed']),
-            raysTransTrans = that.raysStartY + (scrollOffset * that.params['raysSpeed']);
-        // Ipad
-        if(ipadTrans >= that.ipadStartY){
-            cm.setCSSTranslate(that.nodes['line']['ipad'], '0px', (that.ipadStartY + 'px'));
-        }else if(ipadTrans >= that.ipadEndY){
-            cm.setCSSTranslate(that.nodes['line']['ipad'], '0px', (ipadTrans + 'px'));
-        }else{
-            cm.setCSSTranslate(that.nodes['line']['ipad'], '0px', (that.ipadEndY + 'px'));
-        }
-        // Character
-        if(characterTrans <= that.characterStartY){
-            cm.setCSSTranslate(that.nodes['line']['character'], (that.characterStartY + 'px'), '0px');
-        }else if(characterTrans <= that.characterEndY){
-            cm.setCSSTranslate(that.nodes['line']['character'], (characterTrans + 'px'), '0px');
-        }else{
-            cm.setCSSTranslate(that.nodes['line']['character'], (that.characterEndY + 'px'), '0px');
-        }
-        // Character 2
-        if(character2Trans <= that.character2StartY){
-            cm.setCSSTranslate(that.nodes['line']['character2'], (that.character2StartY + 'px'), '0px');
-        }else if(character2Trans <= that.character2EndY){
-            cm.setCSSTranslate(that.nodes['line']['character2'], (character2Trans + 'px'), '0px');
-        }else{
-            cm.setCSSTranslate(that.nodes['line']['character2'], (that.character2EndY + 'px'), '0px');
-        }
-        // Rays
-        if(raysTransTrans <= that.raysStartY){
-            cm.setCSSTranslate(that.nodes['line']['rays'], (that.raysStartY + 'px'), '0px');
-        }else if(raysTransTrans <= that.raysEndY){
-            cm.setCSSTranslate(that.nodes['line']['rays'], (raysTransTrans + 'px'), '0px');
-        }else{
-            cm.setCSSTranslate(that.nodes['line']['rays'], (that.raysEndY + 'px'), '0px');
-        }
-    };
-
-    classProto.enableEditing = function(){
-        var that = this;
-        if(!cm.isBoolean(that.isEditing) || !that.isEditing){
-            that.isEditing = true;
-            that.redraw();
-        }
-        return that;
-    };
-
-    classProto.disableEditing = function(){
-        var that = this;
-        if(!cm.isBoolean(that.isEditing) || that.isEditing){
-            that.isEditing = false;
-            that.redraw();
-        }
-        return that;
-    };
 });

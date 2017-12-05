@@ -14,5 +14,4 @@ function(params){
 
 cm.getConstructor('App.FormStyles', function(classConstructor, className, classProto){
     var _inherit = classProto._inherit;
-
 });

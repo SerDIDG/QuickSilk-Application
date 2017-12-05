@@ -31,6 +31,10 @@
         position: relative;
         overflow: hidden;
         .mx__transition(all, @AppHelpTour-Duration);
+
+        &.is-immediately {
+            .cm__transition-none;
+        }
     }
 
     .popup__content__item {

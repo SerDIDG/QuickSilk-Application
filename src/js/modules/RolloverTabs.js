@@ -88,15 +88,15 @@ function(params){
         // Process Tabset
         cm.getConstructor('Com.TabsetHelper', function(classConstructor, className){
             that.components['tabset'] = new classConstructor(that.params[className])
-                .addEvent('onTabHide', function(tabset, data){
-                    that.triggerEvent('onTabHide', data);
+                .addEvent('onTabHide', function(tabset, item){
+                    that.triggerEvent('onTabHide', item);
                 })
-                .addEvent('onTabShowStart', function(tabset, data){
+                .addEvent('onTabShowStart', function(tabset, item){
                     // If not in editing and tab does not contains any blocks, do not show it
-                    if(!that.params['showEmptyTab'] && !that.isEditing && that.components['tabset'].isTabEmpty(data.item['id'])){
-                        hide(data.item);
+                    if(!that.params['showEmptyTab'] && !that.isEditing && that.components['tabset'].isTabEmpty(item['id'])){
+                        hide(item);
                     }else{
-                        show(data.item);
+                        show(item);
                     }
                     // Container
                     if(!that.isProcessing){
@@ -111,10 +111,10 @@ function(params){
                         that.nodes['content-list'].style.overflow = 'visible';
                     }, that.params['duration']);
                 })
-                .addEvent('onTabShow', function(tabset, data){
-                    that.nodes['content-list'].style.height = data['item']['tab']['container'].offsetHeight + 'px';
-                    that.nodes['menu-label'].innerHTML = data['item']['title'];
-                    that.triggerEvent('onTabShow', data);
+                .addEvent('onTabShow', function(tabset, item){
+                    that.nodes['content-list'].style.height = item['tab']['container'].offsetHeight + 'px';
+                    that.nodes['menu-label'].innerHTML = item['title'];
+                    that.triggerEvent('onTabShow', item);
                 })
                 .processTabs(that.nodes['tabs'], that.nodes['labels']);
         });
@@ -153,7 +153,7 @@ function(params){
             cm.addEvent(item['label']['link'], 'click', function(e){
                 if(
                     that.isEditing
-                    || (that.params['event'] == 'click' && that.components['tabset'].get() != item['id'])
+                    || (that.params['event'] === 'click' && that.components['tabset'].get() !== item['id'])
                 ){
                     cm.preventDefault(e);
                 }
@@ -176,7 +176,7 @@ function(params){
                 'nodes' : nodes
             }, that.getNodeDataConfig(nodes['container']));
         cm.addEvent(nodes['container'], 'click', function(e){
-            if(that.components['tabset'].get() != item['id']){
+            if(that.components['tabset'].get() !== item['id']){
                 cm.preventDefault(e);
                 that.components['tabset'].set(item['id']);
                 hideMenu();
@@ -277,9 +277,9 @@ function(params){
         that.previousPosition = cm.clone(that.currentPosition);
         that.currentPosition = cm.getRect(that.nodes['container']);
         // Variables
-        var isSameTop = that.previousPosition && that.previousPosition['top'] == that.currentPosition['top'];
-        var isSameBottom = that.previousPosition && that.previousPosition['bottom'] == that.currentPosition['bottom'];
-        var isSameWidth = that.previousPosition && that.previousPosition['width'] == that.currentPosition['width'];
+        var isSameTop = that.previousPosition && that.previousPosition['top'] === that.currentPosition['top'];
+        var isSameBottom = that.previousPosition && that.previousPosition['bottom'] === that.currentPosition['bottom'];
+        var isSameWidth = that.previousPosition && that.previousPosition['width'] === that.currentPosition['width'];
         // Set Content Min Width
         if(!isSameWidth){
             switch(that.params['attachment']){

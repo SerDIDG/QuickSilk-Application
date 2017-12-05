@@ -116,16 +116,16 @@ function(params){
     var processTabset = function(){
         cm.getConstructor('Com.TabsetHelper', function(classConstructor){
             that.components['tabset'] = new classConstructor(that.params['Com.TabsetHelper'])
-                .addEvent('onLabelTarget', function(tabset, data){
-                    if(!that.isExpanded || tabset.get() == data['item']['id']){
+                .addEvent('onLabelTarget', function(tabset, item){
+                    if(!that.isExpanded || tabset.get() === item['id']){
                         that.toggle();
                     }
                 })
-                .addEvent('onTabHide', function(tabset, data){
-                    that.triggerEvent('onTabHide', data);
+                .addEvent('onTabHide', function(tabset, item){
+                    that.triggerEvent('onTabHide', item);
                 })
-                .addEvent('onTabShow', function(tabset, data){
-                    that.triggerEvent('onTabShow', data);
+                .addEvent('onTabShow', function(tabset, item){
+                    that.triggerEvent('onTabShow', item);
                 })
                 .processTabs(that.nodes['tabs'], that.nodes['labels'])
                 .set(that.params['active']);

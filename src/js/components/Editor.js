@@ -97,8 +97,8 @@ function(params){
             that.components['sidebar'] = classObject
                 .addEvent('onExpandEnd', sidebarExpandAction)
                 .addEvent('onCollapseStart', sidebarCollapseAction)
-                .addEvent('onTabShow', function(sidebar, data){
-                    setEditorType(data.item['id']);
+                .addEvent('onTabShow', function(sidebar, item){
+                    setEditorType(item['id']);
                 });
         });
         cm.find('App.Template', that.params['templateName'], null, function(classObject){

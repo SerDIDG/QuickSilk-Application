@@ -1,4 +1,4 @@
-/*! ************ QuickSilk-Application v3.20.3 (2017-11-15 18:56) ************ */
+/*! ************ QuickSilk-Application v3.20.4 (2017-12-05 20:46) ************ */
 .svg__app__logo { background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20id%3D%22logo.svg%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2250%22%20height%3D%2224%22%20viewBox%3D%220%200%2050%2024%22%3E%20%20%3Cdefs%3E%20%20%20%20%3Cstyle%3E%20%20%20%20%20%20.cls-1%20%7B%20%20%20%20%20%20%20%20fill%3A%20%2321b573%3B%20%20%20%20%20%20%7D%20%20%20%20%20%20.cls-1%2C%20.cls-2%20%7B%20%20%20%20%20%20%20%20fill-rule%3A%20evenodd%3B%20%20%20%20%20%20%7D%20%20%20%20%20%20.cls-2%20%7B%20%20%20%20%20%20%20%20fill%3A%20%23fff%3B%20%20%20%20%20%20%7D%20%20%20%20%3C%2Fstyle%3E%20%20%3C%2Fdefs%3E%20%20%3Cpath%20id%3D%22_3%22%20data-name%3D%223%22%20class%3D%22cls-1%22%20d%3D%22M35%2C24l8.58-12L35%2C0h6.429L50%2C12l-8.58%2C12H35Z%22%2F%3E%20%20%3Cpath%20id%3D%22_2%22%20data-name%3D%222%22%20class%3D%22cls-2%22%20d%3D%22M28%2C24L19.425%2C12%2C28%2C0H21.575L13%2C12l8.58%2C12H28Z%22%2F%3E%20%20%3Cpath%20id%3D%22_1%22%20data-name%3D%221%22%20class%3D%22cls-2%22%20d%3D%22M15%2C24L6.425%2C12%2C15%2C0H8.575L0%2C12l8.58%2C12H15Z%22%2F%3E%3C%2Fsvg%3E"); }
 .svg__app__menu-dropdown { background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20id%3D%22menu-dropdown.svg%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2212%22%20height%3D%227%22%20viewBox%3D%220%200%2012%207%22%3E%20%20%3Cdefs%3E%20%20%20%20%3Cstyle%3E%20%20%20%20%20%20.cls-1%20%7B%20%20%20%20%20%20%20%20fill%3A%20%23fff%3B%20%20%20%20%20%20%20%20fill-rule%3A%20evenodd%3B%20%20%20%20%20%20%7D%20%20%20%20%3C%2Fstyle%3E%20%20%3C%2Fdefs%3E%20%20%3Cpath%20class%3D%22cls-1%22%20d%3D%22M12%2C0L6%2C4.787%2C0%2C0V2.212L6%2C7l6-4.79V0Z%22%2F%3E%3C%2Fsvg%3E"); }
 
@@ -119,7 +119,7 @@
 // /* ******* VARIABLES ******* */
 // /* ************************************************ */
 
-@AppVersion: '3.20.3';
+@AppVersion: '3.20.4';
 
 // /* ******* PATH ******* */
 
@@ -2471,6 +2471,10 @@ html {
         position: relative;
         overflow: hidden;
         .mx__transition(all, @AppHelpTour-Duration);
+
+        &.is-immediately {
+            .cm__transition-none;
+        }
     }
 
     .popup__content__item {
@@ -4622,6 +4626,7 @@ html {
                     }
 
                     &.item--help,
+                    &.item--flow,
                     &.item--note {
                         display: none;
                     }
@@ -5334,6 +5339,7 @@ html {
 
         .image {
             position: relative;
+            .mx__flex(0 0 auto);
 
             img {
                 .cm__image-centered;
@@ -8329,186 +8335,4 @@ html {
 
 .app-page__user-groups {
 
-}
-
-.dev__body {
-    padding: 0;
-}
-
-.dev__strip {
-    height: 384px;
-    position: relative;
-
-    h1 {
-        position: absolute;
-        .mx__position(auto, 24px, 24px, 24px);
-    }
-
-    > .background {
-        position: absolute;
-        z-index: 1;
-        overflow: hidden;
-        .mx__position(0, 0, 0, 0);
-
-        > .inner {
-            position: absolute;
-            background-position: 50% 50%;
-            background-repeat: no-repeat;
-            .mx__position(0, 0, 0, 0);
-        }
-    }
-
-    > .inner {
-        position: relative;
-        z-index: 2;
-    }
-}
-
-.dev__strip--1 {
-    > .background {
-        > .inner {
-            background-image: url("@{TplPath-Images}/dev/parallax--1.png");
-        }
-    }
-}
-
-.dev__strip--2 {
-    > .background {
-        > .inner {
-            background-image: url("@{TplPath-Images}/dev/parallax--2.png");
-        }
-    }
-}
-
-.dev__strip--3 {
-    > .background {
-        > .inner {
-            background-image: url("@{TplPath-Images}/dev/parallax--3.png");
-        }
-    }
-}
-
-.dev__strip--sample {
-    background-color: @CmColor-Secondary-LightActive;
-}
-
-/* *** TBSC *** */
-
-.dev__tbsc__header {
-    height: 120px;
-    padding: 0 12px;
-    position: relative;
-    background: url("@{TplPath-Images}/dev/tbsc/header.png") 0 0 repeat-x;
-
-    > .inner {
-        max-width: 1140px;
-        margin: 0 auto;
-        position: relative;
-
-        .logo {
-            width: 165px;
-            height: 84px;
-            position: absolute;
-            background: url("@{TplPath-Images}/dev/tbsc/logo.png");
-            .mx__position(32px, auto, auto, 0);
-        }
-    }
-}
-
-.dev__tbsc__content {
-    padding: 0 12px;
-
-    > .inner {
-        max-width: 1060px;
-        margin: 0 auto;
-        position: relative;
-    }
-}
-
-.dev__tbsc {
-    position: relative;
-}
-
-.dev__tbsc__line {
-    position: relative;
-    z-index: 2;
-    overflow: hidden;
-
-    > .inner {
-        position: relative;
-        padding: 48px 12px;
-    }
-}
-
-.dev__tbsc__inside {
-    max-width: 1060px;
-    min-height: 690px;
-    position: relative;
-    margin: 0 auto;
-}
-
-.dev__tbsc__text {
-    min-height: 390px;
-    padding: 48px 60px 60px;
-    background-color: #e8e8e9;
-    border-radius: 8px;
-
-    > .inner {
-        width: 60%;
-    }
-}
-
-.dev__tbsc__ipad {
-    width: 366px;
-    height: 602px;
-    position: absolute;
-    background: url("@{TplPath-Images}/dev/tbsc/ipad.png");
-    top: 21px;
-    right: 48px;
-    bottom: auto;
-    left: auto;
-}
-
-.dev__tbsc__ipad-shadow {
-    width: 366px;
-    height: 602px;
-    position: absolute;
-    background: url("@{TplPath-Images}/dev/tbsc/ipad-shadow.png");
-    top: 21px;
-    right: 48px;
-    bottom: auto;
-    left: auto;
-}
-
-.dev__tbsc__character {
-    width: 420px;
-    height: 371px;
-    position: absolute;
-    background: url("@{TplPath-Images}/dev/tbsc/character.png");
-    top: 315px;
-    right: auto;
-    bottom: auto;
-    left: 200px;
-}
-
-.dev__tbsc__character2 {
-    width: 420px;
-    height: 371px;
-    position: absolute;
-    background: url("@{TplPath-Images}/dev/tbsc/character2.png");
-    top: 315px;
-    right: auto;
-    bottom: auto;
-    left: 200px;
-}
-
-.dev__tbsc__rays {
-    width: 420px;
-    height: 371px;
-    position: absolute;
-    background: url("@{TplPath-Images}/dev/tbsc/rays.png");
-    top: 315px;
-    right: auto;
-    bottom: auto;
-    left: 200px;
 }
