@@ -81,10 +81,11 @@ function(params){
 
     var validateParams = function(){
         that.params['Com.Overlay']['theme'] = that.params['theme'];
+        that.params['Com.Overlay']['name'] = that.params['name'];
         that.params['Com.TabsetHelper']['node'] = that.nodes['inner'];
         that.params['Com.TabsetHelper']['name'] = [that.params['name'], 'tabset'].join('-');
         that.params['Com.TabsetHelper']['ajax'] = that.params['ajax'];
-        that.params['Com.TabsetHelper']['Com.Overlay'] = that.params['Com.Overlay']
+        that.params['Com.TabsetHelper']['overlayParams'] = that.params['Com.Overlay']
     };
 
     var render = function(){

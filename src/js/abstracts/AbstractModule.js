@@ -4,7 +4,9 @@ cm.define('App.AbstractModule', {
         'enableEditing',
         'disableEditing',
         'enableEditable',
-        'disableEditable'
+        'disableEditable',
+        'onEnableEditing',
+        'onDisableEditing'
     ],
     'params' : {
         'renderStructure' : false,
@@ -54,6 +56,7 @@ cm.getConstructor('App.AbstractModule', function(classConstructor, className, cl
             cm.replaceClass(that.params['node'], 'is-not-editing', 'is-editing is-editable');
             that.triggerEvent('enableEditing');
             that.triggerEvent('enableEditable');
+            that.triggerEvent('onEnableEditing');
         }
         return that;
     };
@@ -65,6 +68,7 @@ cm.getConstructor('App.AbstractModule', function(classConstructor, className, cl
             cm.replaceClass(that.params['node'], 'is-editing is-editable', 'is-not-editing');
             that.triggerEvent('disableEditing');
             that.triggerEvent('disableEditable');
+            that.triggerEvent('onDisableEditing');
         }
         return that;
     };

@@ -1,11 +1,11 @@
-/*! ************ QuickSilk-Application v3.20.4 (2017-12-05 20:46) ************ */
+/*! ************ QuickSilk-Application v3.20.5 (2018-01-04 21:50) ************ */
 
 // /* ************************************************ */
 // /* ******* QUICKSILK: COMMON ******* */
 // /* ************************************************ */
 
 var App = {
-    '_version' : '3.20.4',
+    '_version' : '3.20.5',
     'Elements': {},
     'Nodes' : {},
     'Test' : []
@@ -18,7 +18,9 @@ cm.define('App.AbstractModule', {
         'enableEditing',
         'disableEditing',
         'enableEditable',
-        'disableEditable'
+        'disableEditable',
+        'onEnableEditing',
+        'onDisableEditing'
     ],
     'params' : {
         'renderStructure' : false,
@@ -68,6 +70,7 @@ cm.getConstructor('App.AbstractModule', function(classConstructor, className, cl
             cm.replaceClass(that.params['node'], 'is-not-editing', 'is-editing is-editable');
             that.triggerEvent('enableEditing');
             that.triggerEvent('enableEditable');
+            that.triggerEvent('onEnableEditing');
         }
         return that;
     };
@@ -79,6 +82,7 @@ cm.getConstructor('App.AbstractModule', function(classConstructor, className, cl
             cm.replaceClass(that.params['node'], 'is-editing is-editable', 'is-not-editing');
             that.triggerEvent('disableEditing');
             that.triggerEvent('disableEditable');
+            that.triggerEvent('onDisableEditing');
         }
         return that;
     };
@@ -6770,10 +6774,11 @@ function(params){
 
     var validateParams = function(){
         that.params['Com.Overlay']['theme'] = that.params['theme'];
+        that.params['Com.Overlay']['name'] = that.params['name'];
         that.params['Com.TabsetHelper']['node'] = that.nodes['inner'];
         that.params['Com.TabsetHelper']['name'] = [that.params['name'], 'tabset'].join('-');
         that.params['Com.TabsetHelper']['ajax'] = that.params['ajax'];
-        that.params['Com.TabsetHelper']['Com.Overlay'] = that.params['Com.Overlay']
+        that.params['Com.TabsetHelper']['overlayParams'] = that.params['Com.Overlay']
     };
 
     var render = function(){
@@ -8889,6 +8894,40 @@ cm.getConstructor('Mod.ElementMultiCheckbox', function(classConstructor, classNa
             cm.forEach(that.nodes['inputs'], function(nodes){
                 nodes['input'].checked = cm.inArray(values, nodes['input'].value);
             });
+        }
+    };
+});
+cm.define('Mod.ElementMultiField', {
+    'extend' : 'App.AbstractModuleElement',
+    'params' : {
+        'targetController' : 'Com.MultiField',
+        'memorable' : false
+    }
+},
+function(params){
+    var that = this;
+    // Call parent class construct
+    App.AbstractModuleElement.apply(that, arguments);
+});
+
+cm.getConstructor('Mod.ElementMultiField', function(classConstructor, className, classProto){
+    var _inherit = classProto._inherit;
+
+    classProto.onEnableEditing = function(){
+        var that = this;
+        if(that.components['controller']){
+            that.components['controller']
+                .clear();
+        }
+    };
+
+    classProto.onDisableEditing = function(){
+        var that = this;
+        cm.log(that.components['controller']);
+        if(that.components['controller']){
+            that.components['controller']
+                .clear()
+                .setTemplate(that.nodes['content']['templateInner']);
         }
     };
 });
