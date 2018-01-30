@@ -42,6 +42,7 @@ cm.getConstructor('Mod.Form', function(classConstructor, className, classProto){
         that.unloadEventHanlder = that.unloadEvent.bind(that);
         that.submitEventHandler = that.submitEvent.bind(that);
         that.resetEventHandler = that.resetEvent.bind(that);
+        that.keypressEventHandler = that.keypressEvent.bind(that);
     };
 
     classProto.onDestruct = function(){
@@ -83,6 +84,7 @@ cm.getConstructor('Mod.Form', function(classConstructor, className, classProto){
             }
         }
         // Form events
+        cm.addEvent(that.nodes['form'], 'keypress', that.keypressEventHandler);
         cm.addEvent(that.nodes['form'], 'submit', that.submitEventHandler);
         cm.addEvent(that.nodes['form'], 'reset', that.resetEventHandler);
         return that;
@@ -173,10 +175,19 @@ cm.getConstructor('Mod.Form', function(classConstructor, className, classProto){
         );
     };
 
-    classProto.submitEvent = function(e){
+    classProto.keypressEvent = function(e){
         var that = this;
-        var data = new FormData(that.nodes['form']);
+        if(cm.isFormInputFocused() && cm.isKey(e, 'enter')){
+            cm.preventDefault(e);
+        }
+    };
+
+    classProto.submitEvent = function(e){
+        var that = this,
+            data;
         cm.preventDefault(e);
+        // Submit
+        data = new FormData(that.nodes['form']);
         that.triggerEvent('onSubmit', {
             'form' : that.nodes['form'],
             'data' : data,
