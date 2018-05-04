@@ -1,7 +1,7 @@
 /* ******* COMPONENTS: NOTIFICATION ******* */
 
 .app__notification {
-    @paddingY: max(ceil((@AppNotification-Height - @CmForm-FieldHeight) / 2), 0px);
+    @paddingY: max(ceil((@AppNotification-Height - @CmFont-Base-LineHeight) / 2), 0px);
     @heightInner: @AppNotification-Height - @paddingY * 2;
 
     position: fixed;
@@ -15,7 +15,6 @@
     > .inner {
         padding: @paddingY @CmIndent-XLarge;
         position: relative;
-        background: fade(@CmColor-Secondary-DarkDefault, @AppNotification-Fade);
 
         > .icon {
             @top: max(ceil((@AppNotification-Height - @CmSize-Medium) / 2), 0px);
@@ -79,6 +78,7 @@
         }
     }
 
+    &.is-default,
     &.is-success--light,
     &.is-warning--light,
     &.is-danger--light,
@@ -89,6 +89,12 @@
                     .icon.medium.close;
                 }
             }
+        }
+    }
+
+    &.is-default {
+        > .inner {
+            background: fade(@CmColor-Secondary-LightActive, @AppNotification-Fade);
         }
     }
 
