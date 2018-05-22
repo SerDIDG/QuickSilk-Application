@@ -1,4 +1,4 @@
-/*! ************ QuickSilk-Application v3.20.7 (2018-05-04 16:42) ************ */
+/*! ************ QuickSilk-Application v3.21.1 (2018-05-22 21:00) ************ */
 .svg__app__logo { background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20id%3D%22logo.svg%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2250%22%20height%3D%2224%22%20viewBox%3D%220%200%2050%2024%22%3E%20%20%3Cdefs%3E%20%20%20%20%3Cstyle%3E%20%20%20%20%20%20.cls-1%20%7B%20%20%20%20%20%20%20%20fill%3A%20%2321b573%3B%20%20%20%20%20%20%7D%20%20%20%20%20%20.cls-1%2C%20.cls-2%20%7B%20%20%20%20%20%20%20%20fill-rule%3A%20evenodd%3B%20%20%20%20%20%20%7D%20%20%20%20%20%20.cls-2%20%7B%20%20%20%20%20%20%20%20fill%3A%20%23fff%3B%20%20%20%20%20%20%7D%20%20%20%20%3C%2Fstyle%3E%20%20%3C%2Fdefs%3E%20%20%3Cpath%20id%3D%22_3%22%20data-name%3D%223%22%20class%3D%22cls-1%22%20d%3D%22M35%2C24l8.58-12L35%2C0h6.429L50%2C12l-8.58%2C12H35Z%22%2F%3E%20%20%3Cpath%20id%3D%22_2%22%20data-name%3D%222%22%20class%3D%22cls-2%22%20d%3D%22M28%2C24L19.425%2C12%2C28%2C0H21.575L13%2C12l8.58%2C12H28Z%22%2F%3E%20%20%3Cpath%20id%3D%22_1%22%20data-name%3D%221%22%20class%3D%22cls-2%22%20d%3D%22M15%2C24L6.425%2C12%2C15%2C0H8.575L0%2C12l8.58%2C12H15Z%22%2F%3E%3C%2Fsvg%3E"); }
 .svg__app__menu-dropdown { background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20id%3D%22menu-dropdown.svg%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2212%22%20height%3D%227%22%20viewBox%3D%220%200%2012%207%22%3E%20%20%3Cdefs%3E%20%20%20%20%3Cstyle%3E%20%20%20%20%20%20.cls-1%20%7B%20%20%20%20%20%20%20%20fill%3A%20%23fff%3B%20%20%20%20%20%20%20%20fill-rule%3A%20evenodd%3B%20%20%20%20%20%20%7D%20%20%20%20%3C%2Fstyle%3E%20%20%3C%2Fdefs%3E%20%20%3Cpath%20class%3D%22cls-1%22%20d%3D%22M12%2C0L6%2C4.787%2C0%2C0V2.212L6%2C7l6-4.79V0Z%22%2F%3E%3C%2Fsvg%3E"); }
 
@@ -119,7 +119,7 @@
 // /* ******* VARIABLES ******* */
 // /* ************************************************ */
 
-@AppVersion: '3.20.7';
+@AppVersion: '3.21.1';
 
 // /* ******* PATH ******* */
 
@@ -1732,7 +1732,7 @@ html {
 
     .app-lt__orders__cell-qty {
         width: 10%;
-        text-align: left;
+        text-align: center;
         vertical-align: middle;
     }
 
@@ -1746,6 +1746,18 @@ html {
         width: 10%;
         text-align: right;
         vertical-align: middle;
+    }
+
+    .app-lt__orders__cell-price-full {
+        width: 15%;
+        text-align: right;
+        vertical-align: middle;
+    }
+
+    .app-lt__orders__cell-total-full {
+        width: 15%;
+        text-align: right;
+        vertical-align: middle
     }
 
     .app-lt__orders__cell-tools {
@@ -2364,6 +2376,7 @@ html {
 
 /* *** PLACEHOLDER *** */
 
+/*
 .app__dashboard__placeholder {
     height: 0;
     position: relative;
@@ -2378,6 +2391,34 @@ html {
         border-radius: @CmBorder-Radius;
         box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.3);
         .mx__position(0, 0, @AppDashboard-Placeholder-Indent, 0);
+    }
+
+    &.is-highlight {
+        &:before {
+            opacity: 1;
+        }
+    }
+
+    &.is-immediately {
+        .cm__transition-none;
+    }
+}
+*/
+
+.app__dashboard__placeholder {
+    height: 0;
+    position: relative;
+    z-index: 100;
+
+    &:before {
+        display: block;
+        position: absolute;
+        opacity: 0;
+        content: '';
+        background: url('@{CmPath-Images}/parts/pattern-diagonal-2x50.png') 0 0 repeat;
+        border: 2px solid @AppZone-Active-BorderColor;
+        border-radius: @CmBorder-Radius;
+        .mx__position(-2px, 0, @AppDashboard-Placeholder-Indent, 0);
     }
 
     &.is-highlight {
@@ -4696,10 +4737,10 @@ html {
     position: relative;
 
     &.is-available {
-        .mx__transition(background-color, @CmUI-Transition-Duration);
+        /*.mx__transition(background-color, @CmUI-Transition-Duration);*/
 
         &:before {
-            .mx__transition(border-color, @CmUI-Transition-Duration);
+            /*.mx__transition(border-color, @CmUI-Transition-Duration);*/
         }
 
         &.is-highlight {

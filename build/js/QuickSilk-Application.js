@@ -1,11 +1,11 @@
-/*! ************ QuickSilk-Application v3.20.7 (2018-05-04 16:42) ************ */
+/*! ************ QuickSilk-Application v3.21.1 (2018-05-22 21:00) ************ */
 
 // /* ************************************************ */
 // /* ******* QUICKSILK: COMMON ******* */
 // /* ************************************************ */
 
 var App = {
-    '_version' : '3.20.7',
+    '_version' : '3.21.1',
     'Elements': {},
     'Nodes' : {},
     'Test' : []
@@ -871,7 +871,7 @@ cm.define('App.Dashboard', {
         'moveDuration' : 200,
         'highlightZones' : true,                     // highlight zones on drag start
         'highlightPlaceholders' : true,
-        'placeholderHeight' : 48,
+        'placeholderHeight' : 0,
         'Com.Overlay' : {
             'container' : 'document.body',
             'duration' : 0,

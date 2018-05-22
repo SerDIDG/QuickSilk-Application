@@ -19,6 +19,7 @@
 
 /* *** PLACEHOLDER *** */
 
+/*
 .app__dashboard__placeholder {
     height: 0;
     position: relative;
@@ -33,6 +34,34 @@
         border-radius: @CmBorder-Radius;
         box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.3);
         .mx__position(0, 0, @AppDashboard-Placeholder-Indent, 0);
+    }
+
+    &.is-highlight {
+        &:before {
+            opacity: 1;
+        }
+    }
+
+    &.is-immediately {
+        .cm__transition-none;
+    }
+}
+*/
+
+.app__dashboard__placeholder {
+    height: 0;
+    position: relative;
+    z-index: 100;
+
+    &:before {
+        display: block;
+        position: absolute;
+        opacity: 0;
+        content: '';
+        background: url('@{CmPath-Images}/parts/pattern-diagonal-2x50.png') 0 0 repeat;
+        border: 2px solid @AppZone-Active-BorderColor;
+        border-radius: @CmBorder-Radius;
+        .mx__position(-2px, 0, @AppDashboard-Placeholder-Indent, 0);
     }
 
     &.is-highlight {
