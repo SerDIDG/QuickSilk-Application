@@ -51,6 +51,7 @@ function(params){
             }
         }
     };
+    that.index = null;
     that.node = null;
     that.zone = null;
     that.zones = [];
@@ -80,6 +81,7 @@ function(params){
             that.params['index'] = parseInt(index);
             that.params['node'].removeAttribute('data-index');
         }
+        that.index = that.params['index'];
     };
 
     var render = function(){
@@ -87,18 +89,14 @@ function(params){
         // Calculate dimensions
         that.getDimensions();
         // Construct
-        new cm.Finder('App.Zone', that.params['zoneName'], null, function(classObject){
-            constructZone(classObject, that.params['index']);
-        });
-        new cm.Finder('App.Editor', that.params['editorName'], null, function(classObject){
-            constructEditor(classObject);
-        }, {'event' : 'onProcessStart'});
+        new cm.Finder('App.Zone', that.params['zoneName'], null, constructZone);
+        new cm.Finder('App.Editor', that.params['editorName'], null, constructEditor, {'event' : 'onProcessStart'});
     };
 
-    var constructZone = function(classObject, index){
+    var constructZone = function(classObject){
         if(classObject){
             that.zone = classObject
-                .addBlock(that, index);
+                .addBlock(that, that.index);
         }
     };
 
@@ -113,7 +111,7 @@ function(params){
     var constructEditor = function(classObject){
         if(classObject){
             that.components['editor'] = classObject
-                .addBlock(that);
+                .addBlock(that, that.index);
         }
     };
 
@@ -139,6 +137,7 @@ function(params){
                 });
             }
             cm.removeClass(that.nodes['block']['container'], 'cm__animate');
+            that.getDimensions();
             cm.customEvent.trigger(that.node, 'enableEditing', {
                 'type' : 'child',
                 'self' : false
@@ -163,6 +162,7 @@ function(params){
                 });
             }
             cm.addClass(that.nodes['block']['container'], 'cm__animate');
+            that.getDimensions();
             cm.customEvent.trigger(that.node, 'disableEditing', {
                 'type' : 'child',
                 'self' : false
@@ -202,8 +202,9 @@ function(params){
     };
 
     that.setZone = function(zone, index){
+        that.index = index;
         destructZone(that.zone);
-        constructZone(zone, index);
+        constructZone(zone);
         return that;
     };
 
@@ -214,7 +215,8 @@ function(params){
 
     that.getIndex = function(){
         if(that.zone){
-            return that.zone.getBlockIndex(that);
+            that.index = that.zone.getBlockIndex(that);
+            return that.index;
         }
         return null;
     };

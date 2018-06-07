@@ -1,11 +1,11 @@
-/*! ************ QuickSilk-Application v3.21.1 (2018-05-22 21:00) ************ */
+/*! ************ QuickSilk-Application v3.21.2 (2018-06-07 20:08) ************ */
 
 // /* ************************************************ */
 // /* ******* QUICKSILK: COMMON ******* */
 // /* ************************************************ */
 
 var App = {
-    '_version' : '3.21.1',
+    '_version' : '3.21.2',
     'Elements': {},
     'Nodes' : {},
     'Test' : []
@@ -631,6 +631,7 @@ function(params){
             }
         }
     };
+    that.index = null;
     that.node = null;
     that.zone = null;
     that.zones = [];
@@ -660,6 +661,7 @@ function(params){
             that.params['index'] = parseInt(index);
             that.params['node'].removeAttribute('data-index');
         }
+        that.index = that.params['index'];
     };
 
     var render = function(){
@@ -667,18 +669,14 @@ function(params){
         // Calculate dimensions
         that.getDimensions();
         // Construct
-        new cm.Finder('App.Zone', that.params['zoneName'], null, function(classObject){
-            constructZone(classObject, that.params['index']);
-        });
-        new cm.Finder('App.Editor', that.params['editorName'], null, function(classObject){
-            constructEditor(classObject);
-        }, {'event' : 'onProcessStart'});
+        new cm.Finder('App.Zone', that.params['zoneName'], null, constructZone);
+        new cm.Finder('App.Editor', that.params['editorName'], null, constructEditor, {'event' : 'onProcessStart'});
     };
 
-    var constructZone = function(classObject, index){
+    var constructZone = function(classObject){
         if(classObject){
             that.zone = classObject
-                .addBlock(that, index);
+                .addBlock(that, that.index);
         }
     };
 
@@ -693,7 +691,7 @@ function(params){
     var constructEditor = function(classObject){
         if(classObject){
             that.components['editor'] = classObject
-                .addBlock(that);
+                .addBlock(that, that.index);
         }
     };
 
@@ -719,6 +717,7 @@ function(params){
                 });
             }
             cm.removeClass(that.nodes['block']['container'], 'cm__animate');
+            that.getDimensions();
             cm.customEvent.trigger(that.node, 'enableEditing', {
                 'type' : 'child',
                 'self' : false
@@ -743,6 +742,7 @@ function(params){
                 });
             }
             cm.addClass(that.nodes['block']['container'], 'cm__animate');
+            that.getDimensions();
             cm.customEvent.trigger(that.node, 'disableEditing', {
                 'type' : 'child',
                 'self' : false
@@ -782,8 +782,9 @@ function(params){
     };
 
     that.setZone = function(zone, index){
+        that.index = index;
         destructZone(that.zone);
-        constructZone(zone, index);
+        constructZone(zone);
         return that;
     };
 
@@ -794,7 +795,8 @@ function(params){
 
     that.getIndex = function(){
         if(that.zone){
-            return that.zone.getBlockIndex(that);
+            that.index = that.zone.getBlockIndex(that);
+            return that.index;
         }
         return null;
     };
@@ -869,7 +871,6 @@ cm.define('App.Dashboard', {
         'useGracefulDegradation' : true,
         'dropDuration' : 400,
         'moveDuration' : 200,
-        'highlightZones' : true,                     // highlight zones on drag start
         'highlightPlaceholders' : true,
         'placeholderHeight' : 0,
         'Com.Overlay' : {
@@ -925,11 +926,7 @@ function(params){
     var validateParams = function(){
         that.params['Com.Overlay']['container'] = that.params['draggableContainer'];
         // Check Graceful Degradation, and turn it to mobile and old ie.
-        if(
-            that.params['useGracefulDegradation']
-            && ((cm.is('IE') && cm.isVersion() < 9)
-            || cm.isMobile())
-        ){
+        if(cm.isMobile()){
             that.isGracefulDegradation = true;
         }
         // Permanent disable animation
@@ -949,12 +946,12 @@ function(params){
     /* *** DRAG AND DROP ** */
 
     var reset = function(){
-        // Unset zone, blocks and placeholder bellow current graggable block
+        // Unset zone, blocks bellow current graggable block
         if(that.currentBellow){
             unsetCurrentBelow();
         }
-        // Remove placeholders
-        removePlaceholders();
+        // Remove placeholder
+        hidePlaceholder();
         // Reset variables
         that.currentZones = [];
         that.currentBlocks = [];
@@ -967,8 +964,7 @@ function(params){
         that.currentBellow = {
             'zone' : null,
             'block' : null,
-            'position' : null,
-            'placeholder' : null
+            'position' : null
         };
         that.isProccess = false;
     };
@@ -1002,13 +998,9 @@ function(params){
         // Prepare widget, get offset, set start position, set widget as current
         prepareBlock(block, params);
         // Highlight zones
-        if(that.params['highlightZones']){
-            highlightCurrentZones();
-        }
+        highlightCurrentZones();
         // Update positions of blocks and zones
-        getCurrentDimensions();
-        // Render placeholders
-        renderPlaceholders();
+        updateCurrentDimensions();
         // Find zone, block and placeholder under current graggable block
         setCurrentBelow(
             getCurrentBelow(params)
@@ -1055,16 +1047,14 @@ function(params){
             });
         }else{
             dropBlock(that.currentBlock, {
-                'index' : that.currentBellow.placeholder.params['index'],
+                'index' : that.currentBellow.index,
                 'zone' : that.currentBellow.zone,
-                'placeholder' : that.currentBellow.placeholder,
+                'placeholder' : that.placeholder,
                 'onEnd' : reset
             });
         }
         // Unhighlight zones
-        if(that.params['highlightZones']){
-            unhighlightCurrentZones();
-        }
+        unhighlightCurrentZones();
         // Hide content blocker
         that.components['overlays'].close();
         cm.removeClass(document.body, 'app__dashboard__body');
@@ -1096,10 +1086,6 @@ function(params){
     /* *** BLOCK *** */
 
     var initBlock = function(item){
-        item.placeholders = {
-            'top' : null,
-            'bottom' : null
-        };
         cm.forEach(item.getDragNodes(), function(node){
             cm.addEvent(node, 'touchstart', function(e){
                 start(e, item);
@@ -1440,89 +1426,32 @@ function(params){
 
     /* *** PLACEHOLDER *** */
 
-    var renderPlaceholders = function(){
-        var placeholder;
-        cm.forEach(that.currentZones, function(zone){
-            zone.placeholders = [];
-            if(!zone['blocks'].length){
-                placeholder = new App.DashboardPlaceholder({
-                    'highlight' : that.params['highlightPlaceholders'],
-                    'animate' : !that.isGracefulDegradation,
-                    'index' : 0,
-                    'container' : zone.node,
-                    'insert' : 'appendChild'
-                });
-                zone.placeholders.push(placeholder);
-            }else{
-                cm.forEach(zone['blocks'], function(block, i){
-                    block.placeholders = {};
-                    if(!i){
-                        placeholder = new App.DashboardPlaceholder({
-                            'highlight' : that.params['highlightPlaceholders'],
-                            'animate' : !that.isGracefulDegradation,
-                            'index' : i,
-                            'container' : block.node,
-                            'insert' : 'insertBefore'
-                        });
-                        zone.placeholders.push(placeholder);
-                    }
-                    placeholder = new App.DashboardPlaceholder({
-                        'highlight' : that.params['highlightPlaceholders'],
-                        'animate' : !that.isGracefulDegradation,
-                        'index' : i + 1,
-                        'container' : block.node,
-                        'insert' : 'insertAfter'
-                    });
-                    zone.placeholders.push(placeholder);
-                    // Associate with block
-                    block.placeholders['top'] = zone.placeholders[i];
-                    block.placeholders['bottom'] = zone.placeholders[i + 1];
-                });
-            }
-        });
+    var showPlaceholder = function(container, insert){
+        if(!that.placeholder){
+            that.placeholder = new App.DashboardPlaceholder({
+                'highlight' : that.params['highlightPlaceholders'],
+                'animate' : !that.isGracefulDegradation
+            });
+        }
+        that.placeholder.embed(container, insert);
+        that.placeholder.show(that.params['placeholderHeight'], that.params['moveDuration']);
     };
 
-    var removePlaceholders = function(){
-        cm.forEach(that.currentZones, function(zone){
-            cm.forEach(zone.placeholders, function(placeholder){
-                placeholder.remove();
-            });
-            zone.placeholders = [];
-        });
+    var hidePlaceholder = function(){
+        if(that.placeholder){
+            that.placeholder.remove();
+        }
     };
 
     /* *** CURRENT *** */
 
-    var getCurrentDimensions = function(){
-        var isPlaceholderShow;
-        if(that.currentBellow.placeholder && (isPlaceholderShow = that.currentBellow.placeholder.isShow)){
-            that.currentBellow.placeholder.hide(0);
-        }
-        cm.forEach(that.currentZones, function(item){
-            item.getDimensions();
-        });
-        cm.forEach(that.currentBlocks, function(item){
-            item.getDimensions();
-        });
-        if(that.currentBellow.placeholder && isPlaceholderShow){
-           that.currentBellow.placeholder.restore(0);
-        }
-    };
-
     var updateCurrentDimensions = function(){
-        var isPlaceholderShow;
-        if(that.currentBellow.placeholder && (isPlaceholderShow = that.currentBellow.placeholder.isShow)){
-            that.currentBellow.placeholder.hide(0);
-        }
         cm.forEach(that.currentZones, function(item){
             item.updateDimensions();
         });
         cm.forEach(that.currentBlocks, function(item){
             item.updateDimensions();
         });
-        if(that.currentBellow.placeholder && isPlaceholderShow){
-            that.currentBellow.placeholder.restore(0);
-        }
     };
 
     var getCurrentZones = function(block){
@@ -1530,8 +1459,8 @@ function(params){
             if(
                 cm.isParent(block.params['node'], zone.params['node'])
                 || zone.params['locked']
-                || (zone.params['type'] != 'remove' && block.params['type'] != zone.params['type'])
-                || (zone.params['type'] == 'remove' && !block.params['removable'])
+                || (zone.params['type'] !== 'remove' && block.params['type'] !== zone.params['type'])
+                || (zone.params['type'] === 'remove' && !block.params['removable'])
             ){
                 return false;
             }
@@ -1543,7 +1472,7 @@ function(params){
         return that.blocks.filter(function(item){
             if(
                 cm.isParent(block.params['node'], item.params['node'])
-                || block.params['type'] != item.params['type']
+                || block.params['type'] !== item.params['type']
             ){
                 return false;
             }
@@ -1553,11 +1482,13 @@ function(params){
 
     var getCurrentBelow = function(params){
         var temp = {
-            'zone' : null,
-            'block' : null,
-            'position' : null,
-            'placeholder' : null
-        };
+                'zone' : null,
+                'block' : null,
+                'index' : 0,
+                'position' : null
+            },
+            firstBlock,
+            lastBlock;
         // Find zone below current graggable block
         cm.forEach(that.currentZones, function(zone){
             if(
@@ -1601,20 +1532,20 @@ function(params){
                 }
             });
             if(!temp.block && temp.zone['blocks'].length){
-                if(params['top'] < temp.zone.dimensions['inner']['top']){
-                    temp.block = temp.zone['blocks'][0];
+                firstBlock = temp.zone['blocks'][0];
+                lastBlock = temp.zone['blocks'][temp.zone['blocks'].length - 1];
+                if(firstBlock && params['top'] < firstBlock.dimensions['outer']['top']){
+                    temp.block = firstBlock;
                     temp.position = 'top';
-                }else{
-                    temp.block = temp.zone['blocks'][temp.zone['blocks'].length - 1];
+                }else if(lastBlock){
+                    temp.block = lastBlock;
                     temp.position = 'bottom';
                 }
             }
         }
-        // Find placeholder
+        // Find index
         if(temp.block){
-            temp.placeholder = temp.block.placeholders[temp.position];
-        }else if(temp.zone){
-            temp.placeholder = temp.zone.placeholders[0];
+            temp.index = temp.position === 'top' ? temp.block.getIndex() : temp.block.getIndex() + 1;
         }
         return temp;
     };
@@ -1628,37 +1559,16 @@ function(params){
         ){
             that.currentBellow.zone.unactive();
         }
-        if(
-            temp.zone
-            && !temp.zone.isActive
-            && temp.zone !== that.currentBellow.placeholder
-        ){
+        if(temp.zone && !temp.zone.isActive){
             temp.zone.active();
         }
         // Unset old placeholder and new new one
-        if(
-            that.currentBellow.placeholder
-            && that.currentBellow.placeholder.isActive
-            && that.currentBellow.placeholder !== temp.placeholder
-        ){
-            that.currentBellow.placeholder.unactive();
-            that.currentBellow.placeholder.hide(that.params['moveDuration']);
-        }
-        if(
-            temp.placeholder
-            && !temp.placeholder.isActive
-            && temp.placeholder !== that.currentBellow.placeholder
-        ){
-            temp.placeholder.active();
-            //temp.placeholder.show(that.currentBlock.dimensions['outer']['height'], that.params['moveDuration']);
-            temp.placeholder.show(that.params['placeholderHeight'], that.params['moveDuration']);
-        }
-        // Update positions of blocks and zones
-        if(
-            that.currentBellow.zone !== temp.zone
-            || that.currentBellow.placeholder !== temp.placeholder
-        ){
-            //updateCurrentDimensions();
+        if(temp.block){
+            showPlaceholder(temp.block.node, temp.position);
+        }else if(temp.zone){
+            showPlaceholder(temp.zone.node, 'last');
+        }else{
+            hidePlaceholder();
         }
         // Set global variables
         that.currentBellow = temp;
@@ -1669,18 +1579,11 @@ function(params){
             that.currentBellow.zone
                 .unactive();
         }
-        if(that.currentBellow.placeholder){
-            that.currentBellow.placeholder
-                .unactive()
-                .hide()
-                .remove();
-        }
     };
 
     /* *** ZONE *** */
 
     var initZone = function(item){
-        item.placeholders = [];
         that.zones.push(item);
     };
 
@@ -1713,7 +1616,7 @@ function(params){
     /* *** HELPERS *** */
 
     var getPosition = function(e){
-        if(e.type == 'scroll'){
+        if(e.type === 'scroll'){
             return cm._clientPosition;
         }
         return cm.getEventClientPosition(e);
@@ -1722,7 +1625,7 @@ function(params){
     var moveScroll = function(speed){
         var duration = 0,
             move = 0;
-        if(speed == 0){
+        if(speed === 0){
             that.isScrollProccess = false;
             that.anim['scroll'].stop();
             return true;
@@ -1787,7 +1690,6 @@ cm.define('App.DashboardPlaceholder', {
     'params' : {
         'highlight' : true,
         'animate' : true,
-        'index' : 0,
         'container' : cm.node('div'),
         'insert' : 'appendChild'        // appendChild, insertBefore, insertAfter
     }
@@ -1797,13 +1699,15 @@ function(params){
 
     that.nodes = {};
     that.node = null;
+    that.container = null;
+    that.insert = null;
     that.styleObject = null;
     that.offsets = null;
     that.dimensions = null;
 
     that.isAnimate = false;
-    that.isActive = false;
     that.isShow = false;
+    that.isEmbed = false;
     that.transitionDurationProperty = null;
     that.height = 0;
 
@@ -1823,58 +1727,75 @@ function(params){
 
     var render = function(){
         // Render structure
-        that.nodes['container'] = cm.node('div', {'class' : 'app__dashboard__placeholder'});
-        cm[that.params['insert']](that.nodes['container'], that.params['container']);
+        that.nodes['container'] = cm.node('div', {'class' : 'app__dashboard__placeholder is-active is-highlight'});
         that.node = that.nodes['container'];
-        // Calculate dimensions
-        that.getDimensions();
+        that.embed(that.params['container'], that.params['insert']);
     };
 
     /* ******* PUBLIC ******* */
 
-    that.active = function(){
-        that.isActive = true;
-        cm.addClass(that.nodes['container'], 'is-active');
-        if(that.params['highlight']){
-            cm.addClass(that.nodes['container'], 'is-highlight');
+    that.embed = function(container, insert){
+        if(cm.isNode(container)){
+            // Validate
+            switch(insert){
+                case 'top':
+                    insert = 'insertBefore';
+                    break;
+                case 'bottom':
+                    insert = 'insertAfter';
+                    break;
+                case 'first':
+                    insert = 'insertFirst';
+                    break;
+                case 'last':
+                default:
+                    insert = 'appendChild';
+                    break;
+            }
+            if(that.container !== container || that.insert !== insert){
+                that.isEmbed = true;
+                that.container = container;
+                that.insert = insert;
+                // Embed
+                cm[that.insert](that.node, that.container);
+                // Calculate dimensions
+                that.getDimensions();
+            }
         }
-        return that;
-    };
-
-    that.unactive = function(){
-        that.isActive = false;
-        cm.removeClass(that.nodes['container'], 'is-active is-highlight');
-        return that;
-    };
-
-    that.show = function(height, duration, animate){
-        animate = typeof animate == 'undefined' ? that.isAnimate : animate;
-        that.isShow = true;
-        if(animate){
-            that.nodes['container'].style[that.transitionDurationProperty] = [duration, 'ms'].join('');
-        }
-        that.height = height;
-        that.nodes['container'].style.height = [height, 'px'].join('');
-        return that;
-    };
-
-    that.hide = function(duration, animate){
-        animate = typeof animate == 'undefined' ? that.isAnimate : animate;
-        that.isShow = false;
-        if(animate){
-            that.nodes['container'].style[that.transitionDurationProperty] = [duration, 'ms'].join('');
-        }
-        that.nodes['container'].style.height = '0px';
-        return that;
-    };
-
-    that.restore = function(duration){
-        that.show(that.height, duration);
         return that;
     };
 
     that.remove = function(){
+        that.isEmbed = false;
+        that.container = null;
+        that.insert = null;
         cm.remove(that.node);
+        return that;
+    };
+
+    that.show = function(height, duration, animate){
+        animate = cm.isUndefined(animate) ? that.isAnimate : animate;
+        if(that.isEmbed && height !== that.height){
+            that.isShow = true;
+            if(animate){
+                that.nodes['container'].style[that.transitionDurationProperty] = [duration, 'ms'].join('');
+            }
+            that.height = height;
+            that.nodes['container'].style.height = [that.height, 'px'].join('');
+        }
+        return that;
+    };
+
+    that.hide = function(duration, animate){
+        animate = cm.isUndefined(animate) ? that.isAnimate : animate;
+        if(that.isEmbed && height !== that.height){
+            that.isShow = false;
+            if(animate){
+                that.nodes['container'].style[that.transitionDurationProperty] = [duration, 'ms'].join('');
+            }
+            that.height = 0;
+            that.nodes['container'].style.height = [that.height, 'px'].join('');
+        }
         return that;
     };
 
@@ -1929,6 +1850,7 @@ function(params){
         'container' : cm.node('div'),
         'dummy' : cm.node('div')
     };
+    that.index = null;
     that.node = null;
     that.zone = null;
 
@@ -1958,10 +1880,10 @@ function(params){
         new cm.Finder('App.Editor', that.params['editorName'], null, constructEditor, {'event' : 'onProcessStart'});
     };
 
-    var constructZone = function(classObject, index){
+    var constructZone = function(classObject){
         if(classObject){
             that.zone = classObject
-                .addBlock(that, index);
+                .addBlock(that, that.index);
         }
     };
 
@@ -1976,7 +1898,7 @@ function(params){
     var constructEditor = function(classObject){
         if(classObject){
             that.components['editor'] = classObject
-                .addBlock(that);
+                .addBlock(that, that.index);
         }
     };
 
@@ -2008,8 +1930,9 @@ function(params){
     };
 
     that.setZone = function(zone, index){
+        that.index = index;
         destructZone(that.zone);
-        constructZone(zone, index);
+        constructZone(zone);
         return that;
     };
 
@@ -2020,7 +1943,8 @@ function(params){
 
     that.getIndex = function(){
         if(that.zone){
-            return that.zone.getBlockIndex(that);
+            that.index = that.zone.getBlockIndex(that);
+            return that.index;
         }
         return null;
     };
@@ -7479,6 +7403,7 @@ function(params){
             if(!that.params['locked']){
                 cm.addClass(that.node, 'is-editable', true);
             }
+            that.getDimensions();
         }
         return that;
     };
@@ -7490,19 +7415,20 @@ function(params){
             if(!that.params['locked']){
                 cm.removeClass(that.node, 'is-editable', true);
             }
+            that.getDimensions();
         }
         return that;
     };
 
     that.addBlock = function(block, index){
         if(block.isDummy){
-            if(typeof index != 'undefined' && cm.isNumber(index)){
+            if(!cm.isUndefined(index) && cm.isNumber(index)){
                 that.dummyBlocks[index] = block;
             }else{
                 that.dummyBlocks.push(block);
             }
         }else{
-            if(typeof index != 'undefined' && cm.isNumber(index)){
+            if(!cm.isUndefined(index) && cm.isNumber(index)){
                 that.blocks.splice(index, 0, block);
             }else{
                 that.blocks.push(block);

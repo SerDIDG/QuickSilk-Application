@@ -117,6 +117,7 @@ function(params){
             if(!that.params['locked']){
                 cm.addClass(that.node, 'is-editable', true);
             }
+            that.getDimensions();
         }
         return that;
     };
@@ -128,19 +129,20 @@ function(params){
             if(!that.params['locked']){
                 cm.removeClass(that.node, 'is-editable', true);
             }
+            that.getDimensions();
         }
         return that;
     };
 
     that.addBlock = function(block, index){
         if(block.isDummy){
-            if(typeof index != 'undefined' && cm.isNumber(index)){
+            if(!cm.isUndefined(index) && cm.isNumber(index)){
                 that.dummyBlocks[index] = block;
             }else{
                 that.dummyBlocks.push(block);
             }
         }else{
-            if(typeof index != 'undefined' && cm.isNumber(index)){
+            if(!cm.isUndefined(index) && cm.isNumber(index)){
                 that.blocks.splice(index, 0, block);
             }else{
                 that.blocks.push(block);

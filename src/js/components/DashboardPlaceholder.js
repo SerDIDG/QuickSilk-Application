@@ -11,7 +11,6 @@ cm.define('App.DashboardPlaceholder', {
     'params' : {
         'highlight' : true,
         'animate' : true,
-        'index' : 0,
         'container' : cm.node('div'),
         'insert' : 'appendChild'        // appendChild, insertBefore, insertAfter
     }
@@ -21,13 +20,15 @@ function(params){
 
     that.nodes = {};
     that.node = null;
+    that.container = null;
+    that.insert = null;
     that.styleObject = null;
     that.offsets = null;
     that.dimensions = null;
 
     that.isAnimate = false;
-    that.isActive = false;
     that.isShow = false;
+    that.isEmbed = false;
     that.transitionDurationProperty = null;
     that.height = 0;
 
@@ -47,58 +48,75 @@ function(params){
 
     var render = function(){
         // Render structure
-        that.nodes['container'] = cm.node('div', {'class' : 'app__dashboard__placeholder'});
-        cm[that.params['insert']](that.nodes['container'], that.params['container']);
+        that.nodes['container'] = cm.node('div', {'class' : 'app__dashboard__placeholder is-active is-highlight'});
         that.node = that.nodes['container'];
-        // Calculate dimensions
-        that.getDimensions();
+        that.embed(that.params['container'], that.params['insert']);
     };
 
     /* ******* PUBLIC ******* */
 
-    that.active = function(){
-        that.isActive = true;
-        cm.addClass(that.nodes['container'], 'is-active');
-        if(that.params['highlight']){
-            cm.addClass(that.nodes['container'], 'is-highlight');
+    that.embed = function(container, insert){
+        if(cm.isNode(container)){
+            // Validate
+            switch(insert){
+                case 'top':
+                    insert = 'insertBefore';
+                    break;
+                case 'bottom':
+                    insert = 'insertAfter';
+                    break;
+                case 'first':
+                    insert = 'insertFirst';
+                    break;
+                case 'last':
+                default:
+                    insert = 'appendChild';
+                    break;
+            }
+            if(that.container !== container || that.insert !== insert){
+                that.isEmbed = true;
+                that.container = container;
+                that.insert = insert;
+                // Embed
+                cm[that.insert](that.node, that.container);
+                // Calculate dimensions
+                that.getDimensions();
+            }
         }
-        return that;
-    };
-
-    that.unactive = function(){
-        that.isActive = false;
-        cm.removeClass(that.nodes['container'], 'is-active is-highlight');
-        return that;
-    };
-
-    that.show = function(height, duration, animate){
-        animate = typeof animate == 'undefined' ? that.isAnimate : animate;
-        that.isShow = true;
-        if(animate){
-            that.nodes['container'].style[that.transitionDurationProperty] = [duration, 'ms'].join('');
-        }
-        that.height = height;
-        that.nodes['container'].style.height = [height, 'px'].join('');
-        return that;
-    };
-
-    that.hide = function(duration, animate){
-        animate = typeof animate == 'undefined' ? that.isAnimate : animate;
-        that.isShow = false;
-        if(animate){
-            that.nodes['container'].style[that.transitionDurationProperty] = [duration, 'ms'].join('');
-        }
-        that.nodes['container'].style.height = '0px';
-        return that;
-    };
-
-    that.restore = function(duration){
-        that.show(that.height, duration);
         return that;
     };
 
     that.remove = function(){
+        that.isEmbed = false;
+        that.container = null;
+        that.insert = null;
         cm.remove(that.node);
+        return that;
+    };
+
+    that.show = function(height, duration, animate){
+        animate = cm.isUndefined(animate) ? that.isAnimate : animate;
+        if(that.isEmbed && height !== that.height){
+            that.isShow = true;
+            if(animate){
+                that.nodes['container'].style[that.transitionDurationProperty] = [duration, 'ms'].join('');
+            }
+            that.height = height;
+            that.nodes['container'].style.height = [that.height, 'px'].join('');
+        }
+        return that;
+    };
+
+    that.hide = function(duration, animate){
+        animate = cm.isUndefined(animate) ? that.isAnimate : animate;
+        if(that.isEmbed && height !== that.height){
+            that.isShow = false;
+            if(animate){
+                that.nodes['container'].style[that.transitionDurationProperty] = [duration, 'ms'].join('');
+            }
+            that.height = 0;
+            that.nodes['container'].style.height = [that.height, 'px'].join('');
+        }
         return that;
     };
 

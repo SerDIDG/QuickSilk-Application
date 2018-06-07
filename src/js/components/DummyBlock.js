@@ -34,6 +34,7 @@ function(params){
         'container' : cm.node('div'),
         'dummy' : cm.node('div')
     };
+    that.index = null;
     that.node = null;
     that.zone = null;
 
@@ -63,10 +64,10 @@ function(params){
         new cm.Finder('App.Editor', that.params['editorName'], null, constructEditor, {'event' : 'onProcessStart'});
     };
 
-    var constructZone = function(classObject, index){
+    var constructZone = function(classObject){
         if(classObject){
             that.zone = classObject
-                .addBlock(that, index);
+                .addBlock(that, that.index);
         }
     };
 
@@ -81,7 +82,7 @@ function(params){
     var constructEditor = function(classObject){
         if(classObject){
             that.components['editor'] = classObject
-                .addBlock(that);
+                .addBlock(that, that.index);
         }
     };
 
@@ -113,8 +114,9 @@ function(params){
     };
 
     that.setZone = function(zone, index){
+        that.index = index;
         destructZone(that.zone);
-        constructZone(zone, index);
+        constructZone(zone);
         return that;
     };
 
@@ -125,7 +127,8 @@ function(params){
 
     that.getIndex = function(){
         if(that.zone){
-            return that.zone.getBlockIndex(that);
+            that.index = that.zone.getBlockIndex(that);
+            return that.index;
         }
         return null;
     };
