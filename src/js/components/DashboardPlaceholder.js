@@ -87,10 +87,12 @@ function(params){
     };
 
     that.remove = function(){
+        cm.remove(that.node);
         that.isEmbed = false;
         that.container = null;
         that.insert = null;
-        cm.remove(that.node);
+        that.height = null;
+        that.nodes['container'].style.height = '0px';
         return that;
     };
 

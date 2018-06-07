@@ -1,11 +1,11 @@
-/*! ************ QuickSilk-Application v3.21.2 (2018-06-07 20:08) ************ */
+/*! ************ QuickSilk-Application v3.21.3 (2018-06-07 20:33) ************ */
 
 // /* ************************************************ */
 // /* ******* QUICKSILK: COMMON ******* */
 // /* ************************************************ */
 
 var App = {
-    '_version' : '3.21.2',
+    '_version' : '3.21.3',
     'Elements': {},
     'Nodes' : {},
     'Test' : []
@@ -1766,10 +1766,12 @@ function(params){
     };
 
     that.remove = function(){
+        cm.remove(that.node);
         that.isEmbed = false;
         that.container = null;
         that.insert = null;
-        cm.remove(that.node);
+        that.height = null;
+        that.nodes['container'].style.height = '0px';
         return that;
     };
 
