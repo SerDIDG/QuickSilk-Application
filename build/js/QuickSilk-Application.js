@@ -1,4 +1,4 @@
-/*! ************ QuickSilk-Application v3.21.4 (2018-06-08 18:13) ************ */
+/*! ************ QuickSilk-Application v3.21.4 (2018-06-08 18:34) ************ */
 
 // /* ************************************************ */
 // /* ******* QUICKSILK: COMMON ******* */
@@ -1466,10 +1466,10 @@ function(params){
     var getCurrentZones = function(block){
         return that.zones.filter(function(zone){
             if(
-                cm.isParent(block.params['node'], zone.params['node'])
-                || zone.params['locked']
-                || (zone.params['type'] !== 'remove' && block.params['type'] !== zone.params['type'])
-                || (zone.params['type'] === 'remove' && !block.params['removable'])
+                cm.isParent(block.params['node'], zone.params['node']) ||
+                zone.params['locked'] ||
+                (zone.params['type'] !== 'remove' && block.params['type'] !== zone.params['type']) ||
+                (zone.params['type'] === 'remove' && !block.params['removable'])
             ){
                 return false;
             }
@@ -1480,8 +1480,8 @@ function(params){
     var getCurrentBlocks = function(block){
         return that.blocks.filter(function(item){
             if(
-                cm.isParent(block.params['node'], item.params['node'])
-                || block.params['type'] !== item.params['type']
+                cm.isParent(block.params['node'], item.params['node']) ||
+                block.params['type'] !== item.params['type']
             ){
                 return false;
             }
@@ -1502,10 +1502,10 @@ function(params){
         // Find zone below current graggable block
         cm.forEach(that.currentZones, function(zone){
             if(
-                params['left'] >= zone.dimensions['offset']['left']
-                && params['left'] < zone.dimensions['offset']['right']
-                && params['top'] >= zone.dimensions['offset']['top']
-                && params['top'] <= zone.dimensions['offset']['bottom']
+                params['left'] >= zone.dimensions['offset']['left'] &&
+                params['left'] < zone.dimensions['offset']['right'] &&
+                params['top'] >= zone.dimensions['offset']['top'] &&
+                params['top'] <= zone.dimensions['offset']['bottom']
             ){
                 if(!temp.zone){
                     temp.zone = zone;
@@ -1529,8 +1529,8 @@ function(params){
         if(temp.zone){
             cm.forEach(temp.zone['blocks'], function(block){
                 if(
-                    params['top'] >= block.dimensions['outer']['top']
-                    && params['top'] <= block.dimensions['outer']['bottom']
+                    params['top'] >= block.dimensions['outer']['top'] &&
+                    params['top'] <= block.dimensions['outer']['bottom']
                 ){
                     temp.block = block;
                     // Find position
@@ -1563,9 +1563,9 @@ function(params){
     var setCurrentBelow = function(temp){
         // Unset old zone and set new one
         if(
-            that.currentBellow.zone
-            && that.currentBellow.zone.isActive
-            && that.currentBellow.zone !== temp.zone
+            that.currentBellow.zone &&
+            that.currentBellow.zone.isActive &&
+            that.currentBellow.zone !== temp.zone
         ){
             that.currentBellow.zone.unactive();
         }
