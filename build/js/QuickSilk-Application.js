@@ -1,11 +1,11 @@
-/*! ************ QuickSilk-Application v3.21.3 (2018-06-07 20:33) ************ */
+/*! ************ QuickSilk-Application v3.21.4 (2018-06-08 18:13) ************ */
 
 // /* ************************************************ */
 // /* ******* QUICKSILK: COMMON ******* */
 // /* ************************************************ */
 
 var App = {
-    '_version' : '3.21.3',
+    '_version' : '3.21.4',
     'Elements': {},
     'Nodes' : {},
     'Test' : []
@@ -970,7 +970,6 @@ function(params){
     };
 
     var start = function(e, block){
-        cm.preventDefault(e);
         // Prevent drag event not on LMB
         if(e.button){
             return;
@@ -983,6 +982,7 @@ function(params){
         that.pointerType = e.type;
         // Variables
         var params = getPosition(e);
+        params['state'] = 'start';
         cm.addClass(document.body, 'app__dashboard__body');
         // Open overlay to prevent lose focus on child iframe
         that.components['overlays'].open();
@@ -1017,12 +1017,13 @@ function(params){
                 break;
         }
         cm.addEvent(window, 'scroll', scroll);
+        cm.preventDefault(e);
     };
 
     var move = function(e){
-        cm.preventDefault(e);
         // Variables
         var params = getPosition(e);
+        params['state'] = 'move';
         // Scroll node
         if(params['top'] + that.params['scrollStep'] > cm._pageSize['winHeight']){
             moveScroll(1);
@@ -1037,6 +1038,7 @@ function(params){
         setCurrentBelow(
             getCurrentBelow(params)
         );
+        cm.preventDefault(e);
     };
 
     var stop = function(){
@@ -1426,14 +1428,21 @@ function(params){
 
     /* *** PLACEHOLDER *** */
 
-    var showPlaceholder = function(container, insert){
+    var showPlaceholder = function(temp){
         if(!that.placeholder){
             that.placeholder = new App.DashboardPlaceholder({
                 'highlight' : that.params['highlightPlaceholders'],
                 'animate' : !that.isGracefulDegradation
             });
         }
-        that.placeholder.embed(container, insert);
+        if(temp.params.state === 'start' && !that.currentBlock.isDummy){
+            that.placeholder.show(that.currentBlock.dimensions['outer']['height']);
+        }
+        if(temp.block){
+            that.placeholder.embed(temp.block.node, temp.position);
+        }else if(temp.zone){
+            that.placeholder.embed(temp.zone.node, 'last');
+        }
         that.placeholder.show(that.params['placeholderHeight'], that.params['moveDuration']);
     };
 
@@ -1485,7 +1494,8 @@ function(params){
                 'zone' : null,
                 'block' : null,
                 'index' : 0,
-                'position' : null
+                'position' : null,
+                'params' : params
             },
             firstBlock,
             lastBlock;
@@ -1563,10 +1573,8 @@ function(params){
             temp.zone.active();
         }
         // Unset old placeholder and new new one
-        if(temp.block){
-            showPlaceholder(temp.block.node, temp.position);
-        }else if(temp.zone){
-            showPlaceholder(temp.zone.node, 'last');
+        if(temp.block || temp.zone){
+            showPlaceholder(temp);
         }else{
             hidePlaceholder();
         }
@@ -1777,7 +1785,7 @@ function(params){
 
     that.show = function(height, duration, animate){
         animate = cm.isUndefined(animate) ? that.isAnimate : animate;
-        if(that.isEmbed && height !== that.height){
+        if(height !== that.height){
             that.isShow = true;
             if(animate){
                 that.nodes['container'].style[that.transitionDurationProperty] = [duration, 'ms'].join('');
@@ -1790,7 +1798,7 @@ function(params){
 
     that.hide = function(duration, animate){
         animate = cm.isUndefined(animate) ? that.isAnimate : animate;
-        if(that.isEmbed && height !== that.height){
+        if(height !== that.height){
             that.isShow = false;
             if(animate){
                 that.nodes['container'].style[that.transitionDurationProperty] = [duration, 'ms'].join('');

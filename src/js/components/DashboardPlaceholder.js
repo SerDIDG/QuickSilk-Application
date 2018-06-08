@@ -98,7 +98,7 @@ function(params){
 
     that.show = function(height, duration, animate){
         animate = cm.isUndefined(animate) ? that.isAnimate : animate;
-        if(that.isEmbed && height !== that.height){
+        if(height !== that.height){
             that.isShow = true;
             if(animate){
                 that.nodes['container'].style[that.transitionDurationProperty] = [duration, 'ms'].join('');
@@ -111,7 +111,7 @@ function(params){
 
     that.hide = function(duration, animate){
         animate = cm.isUndefined(animate) ? that.isAnimate : animate;
-        if(that.isEmbed && height !== that.height){
+        if(height !== that.height){
             that.isShow = false;
             if(animate){
                 that.nodes['container'].style[that.transitionDurationProperty] = [duration, 'ms'].join('');
