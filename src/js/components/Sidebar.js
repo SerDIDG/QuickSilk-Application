@@ -21,7 +21,7 @@ cm.define('App.Sidebar', {
         'onResize'
     ],
     'params' : {
-        'node' : cm.Node('div'),
+        'node' : cm.node('div'),
         'name' : 'app-sidebar',
         'duration' : 'cm._config.animDurationLong',
         'active' : 'template-manager',
@@ -58,6 +58,8 @@ function(params){
     that.components = {};
     that.isExpanded = null;
     that.openInterval = null;
+    that.currentTab = null;
+    that.previousTab = null;
 
     /* *** CLASS FUNCTIONS *** */
 
@@ -123,9 +125,11 @@ function(params){
                     }
                 })
                 .addEvent('onTabHide', function(tabset, item){
+                    that.previousTab = item;
                     that.triggerEvent('onTabHide', item);
                 })
                 .addEvent('onTabShow', function(tabset, item){
+                    that.currentTab = item;
                     that.triggerEvent('onTabShow', item);
                 })
                 .processTabs(that.nodes['tabs'], that.nodes['labels'])
@@ -240,6 +244,13 @@ function(params){
             that.collapse();
         }else{
             that.expand();
+        }
+        return that;
+    };
+
+    that.refresh = function(){
+        if(that.components['tabset']){
+            that.components['tabset'].refresh();
         }
         return that;
     };

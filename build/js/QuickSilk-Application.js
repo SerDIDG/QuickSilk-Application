@@ -1,11 +1,11 @@
-/*! ************ QuickSilk-Application v3.21.4 (2018-06-08 18:34) ************ */
+/*! ************ QuickSilk-Application v3.21.5 (2018-09-10 20:00) ************ */
 
 // /* ************************************************ */
 // /* ******* QUICKSILK: COMMON ******* */
 // /* ************************************************ */
 
 var App = {
-    '_version' : '3.21.4',
+    '_version' : '3.21.5',
     'Elements': {},
     'Nodes' : {},
     'Test' : []
@@ -2188,7 +2188,7 @@ function(params){
     };
 
     var setEditorType = function(type){
-        if(cm.inArray(that.types, type) && type != that.editorType){
+        if(cm.inArray(that.types, type) && type !== that.editorType){
             that.editorType = type;
         }
     };
@@ -2262,7 +2262,8 @@ function(params){
         return that;
     };
 
-    that.place = function(node){
+    // TODO: for placing not exists blocks, unused, can be removed
+    that.place = function(node, block){
         if(node && block){
             node = !cm.isNode(node) ? cm.strToHTML(node) : node;
             that.components['dashboard'].appendBlock(node, {
@@ -6648,7 +6649,7 @@ cm.define('App.Sidebar', {
         'onResize'
     ],
     'params' : {
-        'node' : cm.Node('div'),
+        'node' : cm.node('div'),
         'name' : 'app-sidebar',
         'duration' : 'cm._config.animDurationLong',
         'active' : 'template-manager',
@@ -6685,6 +6686,8 @@ function(params){
     that.components = {};
     that.isExpanded = null;
     that.openInterval = null;
+    that.currentTab = null;
+    that.previousTab = null;
 
     /* *** CLASS FUNCTIONS *** */
 
@@ -6750,9 +6753,11 @@ function(params){
                     }
                 })
                 .addEvent('onTabHide', function(tabset, item){
+                    that.previousTab = item;
                     that.triggerEvent('onTabHide', item);
                 })
                 .addEvent('onTabShow', function(tabset, item){
+                    that.currentTab = item;
                     that.triggerEvent('onTabShow', item);
                 })
                 .processTabs(that.nodes['tabs'], that.nodes['labels'])
@@ -6867,6 +6872,13 @@ function(params){
             that.collapse();
         }else{
             that.expand();
+        }
+        return that;
+    };
+
+    that.refresh = function(){
+        if(that.components['tabset']){
+            that.components['tabset'].refresh();
         }
         return that;
     };

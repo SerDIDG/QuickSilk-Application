@@ -171,7 +171,7 @@ function(params){
     };
 
     var setEditorType = function(type){
-        if(cm.inArray(that.types, type) && type != that.editorType){
+        if(cm.inArray(that.types, type) && type !== that.editorType){
             that.editorType = type;
         }
     };
@@ -245,7 +245,8 @@ function(params){
         return that;
     };
 
-    that.place = function(node){
+    // TODO: for placing not exists blocks, unused, can be removed
+    that.place = function(node, block){
         if(node && block){
             node = !cm.isNode(node) ? cm.strToHTML(node) : node;
             that.components['dashboard'].appendBlock(node, {
