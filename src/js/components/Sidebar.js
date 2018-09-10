@@ -276,6 +276,13 @@ function(params){
         return null;
     };
 
+    that.refreshTab = function(id){
+        if(that.components['tabset']){
+            that.components['tabset'].refreshTab(id);
+        }
+        return that;
+    };
+
     that.getDimensions = function(key){
         var rect = cm.getRect(that.nodes['container']);
         return rect[key] || rect;

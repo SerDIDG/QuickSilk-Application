@@ -1,11 +1,11 @@
-/*! ************ QuickSilk-Application v3.21.5 (2018-09-10 20:00) ************ */
+/*! ************ QuickSilk-Application v3.21.6 (2018-09-10 20:35) ************ */
 
 // /* ************************************************ */
 // /* ******* QUICKSILK: COMMON ******* */
 // /* ************************************************ */
 
 var App = {
-    '_version' : '3.21.5',
+    '_version' : '3.21.6',
     'Elements': {},
     'Nodes' : {},
     'Test' : []
@@ -6902,6 +6902,13 @@ function(params){
             return that.components['tabset'].get();
         }
         return null;
+    };
+
+    that.refreshTab = function(id){
+        if(that.components['tabset']){
+            that.components['tabset'].refreshTab(id);
+        }
+        return that;
     };
 
     that.getDimensions = function(key){
