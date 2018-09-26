@@ -13,6 +13,8 @@ module.exports = function(grunt) {
         },
 
         paths : {
+            modules : 'node_modules',
+            components : 'libs',
             src : 'src',
             build : 'build',
             temp : 'temp'
@@ -33,6 +35,13 @@ module.exports = function(grunt) {
                 fonts : [
                     '<%= components.common.path %>/build/fonts'
                 ]
+            },
+            chartjs : {
+                path : '<%= paths.modules %>/chart.js',
+                dist : '<%= components.chartjs.path %>/dist',
+                scripts : [
+                    '<%= components.chartjs.dist %>/Chart.js'
+                ]
             }
         },
 
@@ -52,6 +61,9 @@ module.exports = function(grunt) {
             ],
             temp : [
                 '<%= paths.temp %>'
+            ],
+            libs : [
+                '<%= paths.build %>/libs/*'
             ]
         },
 
@@ -209,6 +221,14 @@ module.exports = function(grunt) {
                     src : ['**/*.*', '!**/*.json'],
                     dest : '<%= paths.build %>/fonts/'
                 }]
+            },
+            libs : {
+                files : [{
+                    expand : true,
+                    cwd : '<%= components.chartjs.dist %>',
+                    src : ['**/*.*'],
+                    dest : '<%= paths.build %>/libs/chartjs/'
+                }]
             }
         },
 
@@ -241,13 +261,14 @@ module.exports = function(grunt) {
         }
     });
     // Custom Tasks
-    grunt.registerTask('default', ['clean', 'pre', 'scripts', 'styles', 'images', 'fonts']);
+    grunt.registerTask('default', ['clean', 'pre', 'scripts', 'styles', 'images', 'fonts', 'libs']);
     grunt.registerTask('optimize', ['clean:temp', 'default', 'uglify', 'imagemin', 'copy:image_optimize', 'clean:temp']);
 
     grunt.registerTask('scripts', ['concat:scripts', 'replace:scripts', 'copy:scripts']);
     grunt.registerTask('styles', ['variables', 'concat:styles', 'replace:styles', 'copy:styles']);
     grunt.registerTask('images', ['svgcss:build', 'copy:images']);
     grunt.registerTask('fonts', ['copy:fonts']);
+    grunt.registerTask('libs', ['copy:libs']);
     grunt.registerTask('variables', ['concat:variables', 'replace:variables', 'lessvars']);
     grunt.registerTask('pre', ['svgcss:build', 'variables']);
 };
