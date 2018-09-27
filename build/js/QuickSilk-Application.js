@@ -1,17 +1,25 @@
-/*! ************ QuickSilk-Application v3.21.7 (2018-09-26 21:12) ************ */
+/*! ************ QuickSilk-Application v3.21.8 (2018-09-27 19:07) ************ */
 
 // /* ************************************************ */
 // /* ******* QUICKSILK: COMMON ******* */
 // /* ************************************************ */
 
 var App = {
-    '_version' : '3.21.7',
+    '_version' : '3.21.8',
+    '_assetsUrl' : [window.location.protocol, window.location.hostname].join('//'),
     'Elements': {},
     'Nodes' : {},
     'Test' : []
 };
 
 var Module = {};
+
+/* ******* COMMON ******* */
+
+// Add variables
+
+cm._variables['%AppVersion%'] = 'App._version';
+cm._variables['%AppAssetsUrl%'] = 'App._assetsUrl';
 cm.define('App.AbstractModule', {
     'extend' : 'Com.AbstractController',
     'events' : [
@@ -889,7 +897,7 @@ cm.getConstructor('App.Chart', function(classConstructor, className, classProto,
         // Load script
         cm.loadScript({
             'path' : 'Chart',
-            'src' : '%assetsUrl%/libs/chartjs/Chart.min.js?%version%',
+            'src' : '%AppAssetsUrl%/libs/chartjs/Chart.min.js?%version%',
             'callback' : function(path){
                 if(path){
                     that.components['chart'] = new path(that.nodes['canvas'], {

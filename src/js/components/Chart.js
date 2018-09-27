@@ -45,7 +45,7 @@ cm.getConstructor('App.Chart', function(classConstructor, className, classProto,
         // Load script
         cm.loadScript({
             'path' : 'Chart',
-            'src' : '%assetsUrl%/libs/chartjs/Chart.min.js?%version%',
+            'src' : '%AppAssetsUrl%/libs/chartjs/Chart.min.js?%version%',
             'callback' : function(path){
                 if(path){
                     that.components['chart'] = new path(that.nodes['canvas'], {
