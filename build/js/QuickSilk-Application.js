@@ -1,11 +1,11 @@
-/*! ************ QuickSilk-Application v3.21.8 (2018-09-27 19:07) ************ */
+/*! ************ QuickSilk-Application v3.21.9 (2018-10-08 16:58) ************ */
 
 // /* ************************************************ */
 // /* ******* QUICKSILK: COMMON ******* */
 // /* ************************************************ */
 
 var App = {
-    '_version' : '3.21.8',
+    '_version' : '3.21.9',
     '_assetsUrl' : [window.location.protocol, window.location.hostname].join('//'),
     'Elements': {},
     'Nodes' : {},
@@ -897,7 +897,7 @@ cm.getConstructor('App.Chart', function(classConstructor, className, classProto,
         // Load script
         cm.loadScript({
             'path' : 'Chart',
-            'src' : '%AppAssetsUrl%/libs/chartjs/Chart.min.js?%version%',
+            'src' : '%AppAssetsUrl%/libs/chartjs/Chart.min.js?%AppVersion%',
             'callback' : function(path){
                 if(path){
                     that.components['chart'] = new path(that.nodes['canvas'], {
@@ -3834,6 +3834,9 @@ cm.define('App.FontInput', {
         'renderStructure' : true,
         'embedStructureOnRender' : true,
         'embedStructure' : 'replace',
+        'controllerEvents' : true,
+        'setHiddenInput' : true,
+        'setContentInput' : true,
         'className' : 'app__file-input',
         'styles' : {
             'font-family' : [
@@ -3909,26 +3912,17 @@ function(params){
     Com.AbstractInput.apply(that, arguments);
 });
 
-cm.getConstructor('App.FontInput', function(classConstructor, className, classProto){
-    var _inherit = classProto._inherit;
-
-    classProto.construct = function(){
+cm.getConstructor('App.FontInput', function(classConstructor, className, classProto, classInherit){
+    classProto.onConstructStart = function(){
         var that = this;
         // Variables
         that.previousRawValue = null;
         that.rawValue = null;
-        // Bind context to methods
-        that.validateParamsEndHandler = that.validateParamsEnd.bind(that);
-        // Add events
-        that.addEvent('onValidateParamsEnd', that.validateParamsEndHandler);
-        // Call parent method - renderViewModel
-        _inherit.prototype.construct.apply(that, arguments);
-        return that;
     };
 
     /* *** PARAMS *** */
 
-    classProto.validateParamsEnd = function(){
+    classProto.onValidateParamsEnd = function(){
         var that = this;
         // Validate config
         if(cm.isString(that.params['value'])){
@@ -3949,7 +3943,6 @@ cm.getConstructor('App.FontInput', function(classConstructor, className, classPr
                 that.params['controls'][key] = !!(that.params['defaultValue'][key] || that.params['value'][key]);
             });
         }
-        return that;
     };
 
     classProto.validateItemConfig = function(config){
@@ -4033,7 +4026,7 @@ cm.getConstructor('App.FontInput', function(classConstructor, className, classPr
     classProto.renderViewModel = function(){
         var that = this;
         // Call parent method - renderViewModel
-        _inherit.prototype.renderViewModel.apply(that, arguments);
+        classInherit.prototype.renderViewModel.apply(that, arguments);
         // Render Tooltip
         that.renderTooltipControls();
         // Init Tooltip
@@ -4332,10 +4325,8 @@ cm.getConstructor('App.FontInput', function(classConstructor, className, classPr
 
     classProto.validateValue = function(value){
         var that = this;
-        // Validate
         value = cm.isObject(value)? that.validateItemConfig(value) : that.params['defaultValue'];
         value['_type'] = 'font';
-        // Prepare value for safe
         return value;
     };
 
@@ -4359,11 +4350,10 @@ cm.getConstructor('App.FontInput', function(classConstructor, className, classPr
         });
         // Set hidden input
         if(that.params['setHiddenInput']){
-            if(!cm.isEmpty(value)){
-                that.nodes['hidden'].value = JSON.stringify(that.value);
-            }else{
-                that.nodes['hidden'].value = ''
-            }
+            that.saveHiddenValue(that.value);
+        }
+        if(that.params['setContentInput']){
+            that.setData(that.valueText);
         }
         return that;
     };
@@ -4402,19 +4392,6 @@ cm.getConstructor('App.FontInput', function(classConstructor, className, classPr
             // Set preview
             that.nodes['content']['preview'].style[cm.styleStrToKey(key)] = that.value[key];
         });
-        return that;
-    };
-
-    /* *** ACTIONS *** */
-
-    classProto.changeAction = function(triggerEvents){
-        var that = this;
-        triggerEvents = cm.isUndefined(triggerEvents)? true : triggerEvents;
-        var isChanged = JSON.stringify(that.value) !== JSON.stringify(that.previousValue);
-        if(triggerEvents && isChanged){
-            that.triggerEvent('onChange', that.value);
-        }
-        return that;
     };
 });
 cm.define('App.FormStyles', {
