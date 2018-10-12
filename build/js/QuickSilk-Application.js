@@ -1,4 +1,4 @@
-/*! ************ QuickSilk-Application v3.21.10 (2018-10-12 20:53) ************ */
+/*! ************ QuickSilk-Application v3.21.10 (2018-10-12 21:41) ************ */
 
 // /* ************************************************ */
 // /* ******* QUICKSILK: COMMON ******* */
@@ -681,9 +681,10 @@ function(params){
         // Calculate dimensions
         that.getDimensions();
         // Construct
-        //new cm.Finder('App.Zone', that.params['zoneName'], null, constructZone);
-        new cm.Finder('App.Editor', that.params['editorName'], null, constructEditor, {'event' : 'onProcessStart'});
-        //cm.find('App.Editor', that.params['editorName'], null, constructEditor);
+        cm.find('App.Editor', that.params['editorName'], null, function(classObject){
+            new cm.Finder('App.Zone', that.params['zoneName'], null, constructZone);
+            constructEditor(classObject);
+        });
     };
 
     var constructZone = function(classObject){
@@ -702,8 +703,6 @@ function(params){
     };
 
     var constructEditor = function(classObject){
-        var zone = App._Zones[that.params['zoneName']];
-        constructZone(zone);
         if(classObject){
             that.components['editor'] = classObject;
             that.components['editor'].addBlock(that, that.index);
@@ -718,6 +717,13 @@ function(params){
     };
 
     /* ******* PUBLIC ******* */
+
+    that.register = function(classObject){
+        var zone = App._Zones[that.params['zoneName']];
+        constructZone(zone);
+        constructEditor(classObject);
+        return that;
+    };
 
     that.enableEditing = function(){
         if(!cm.isBoolean(that.isEditing) || !that.isEditing){
@@ -1946,6 +1952,8 @@ function(params){
 
     init();
 });
+App._DummyBlocks = {};
+
 cm.define('App.DummyBlock', {
     'modules' : [
         'Params',
@@ -2000,6 +2008,8 @@ function(params){
 
     var validateParams = function(){
         that.params['name'] = [that.params['type'], that.params['keyword']].join('_');
+        // Export
+        App._DummyBlocks[that.params['name']] = that;
     };
 
     var render = function(){
@@ -2009,29 +2019,28 @@ function(params){
         // Calculate dimensions
         that.getDimensions();
         // Construct
-        new cm.Finder('App.Editor', that.params['editorName'], null, constructEditor, {'event' : 'onProcessStart'});
-        //cm.find('App.Editor', that.params['editorName'], null, constructEditor);
+        cm.find('App.Editor', that.params['editorName'], null, constructEditor);
     };
 
     var constructZone = function(classObject){
         if(classObject){
-            that.zone = classObject
-                .addBlock(that, that.index);
+            that.zone = classObject;
+            that.zone.addBlock(that, that.index);
         }
     };
 
     var destructZone = function(classObject){
         if(classObject){
-            that.zone = classObject
-                .removeBlock(that);
+            that.zone = classObject;
+            that.zone.removeBlock(that);
             that.zone = null;
         }
     };
 
     var constructEditor = function(classObject){
         if(classObject){
-            that.components['editor'] = classObject
-                .addBlock(that, that.index);
+            that.components['editor'] = classObject;
+            that.components['editor'].addBlock(that, that.index);
         }
     };
 
@@ -2045,6 +2054,11 @@ function(params){
     };
 
     /* ******* PUBLIC ******* */
+
+    that.register = function(classObject){
+        constructEditor(classObject);
+        return that;
+    };
 
     that.enableEditing = function(){
         if(!cm.isBoolean(that.isEditing) || !that.isEditing){
@@ -2116,6 +2130,7 @@ function(params){
     that.remove = function(){
         if(!that.isRemoved){
             that.isRemoved = true;
+            delete App._DummyBlocks[that.params['name']];
             that.removeFromStack();
             cm.remove(that.node);
             that.triggerEvent('onRemove');
@@ -2249,6 +2264,9 @@ function(params){
 
     var process = function(){
         that.triggerEvent('onProcessStart');
+        processDummyBlocks();
+        processBlocks();
+        processZones();
         cm.addClass(cm.getDocumentHtml(), 'is-editor');
         if(that.components['sidebar']){
             if(that.components['sidebar'].isExpanded){
@@ -2263,6 +2281,24 @@ function(params){
             adminPageAction();
         }
         that.isRendered = true;
+    };
+
+    var processDummyBlocks = function(){
+        cm.forEach(App._DummyBlocks, function(item){
+            item.register(that);
+        });
+    };
+
+    var processBlocks = function(){
+        cm.forEach(App._Blocks, function(item){
+            item.register(that);
+        });
+    };
+
+    var processZones = function(){
+        cm.forEach(App._Zones, function(item){
+            item.register(that);
+        });
     };
 
     var sidebarExpandAction = function(){
@@ -7494,9 +7530,10 @@ function(params){
             cm.addClass(that.node, 'is-available');
         }
         // Construct
-        //new cm.Finder('App.Block', that.params['blockName'], null, constructBlock);
-        new cm.Finder('App.Editor', that.params['editorName'], null, constructEditor, {'event' : 'onProcessStart'});
-        //cm.find('App.Editor', that.params['editorName'], null, constructEditor);
+        cm.find('App.Editor', that.params['editorName'], null, function(classObject){
+            new cm.Finder('App.Block', that.params['blockName'], null, constructBlock);
+            constructEditor(classObject);
+        });
     };
 
     var constructBlock = function(classObject){
@@ -7515,8 +7552,6 @@ function(params){
     };
 
     var constructEditor = function(classObject){
-        var block = App._Blocks[that.params['blockName']];
-        constructBlock(block);
         if(classObject){
             that.components['editor'] = classObject;
             that.components['editor'].addZone(that);
@@ -7531,6 +7566,13 @@ function(params){
     };
 
     /* ******* PUBLIC ******* */
+
+    that.register = function(classObject){
+        var block = App._Blocks[that.params['blockName']];
+        constructBlock(block);
+        constructEditor(classObject);
+        return that;
+    };
 
     that.enableEditing = function(){
         if(!cm.isBoolean(that.isEditing) || !that.isEditing){

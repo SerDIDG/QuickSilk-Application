@@ -79,9 +79,10 @@ function(params){
             cm.addClass(that.node, 'is-available');
         }
         // Construct
-        //new cm.Finder('App.Block', that.params['blockName'], null, constructBlock);
-        new cm.Finder('App.Editor', that.params['editorName'], null, constructEditor, {'event' : 'onProcessStart'});
-        //cm.find('App.Editor', that.params['editorName'], null, constructEditor);
+        cm.find('App.Editor', that.params['editorName'], null, function(classObject){
+            new cm.Finder('App.Block', that.params['blockName'], null, constructBlock);
+            constructEditor(classObject);
+        });
     };
 
     var constructBlock = function(classObject){
@@ -100,8 +101,6 @@ function(params){
     };
 
     var constructEditor = function(classObject){
-        var block = App._Blocks[that.params['blockName']];
-        constructBlock(block);
         if(classObject){
             that.components['editor'] = classObject;
             that.components['editor'].addZone(that);
@@ -116,6 +115,13 @@ function(params){
     };
 
     /* ******* PUBLIC ******* */
+
+    that.register = function(classObject){
+        var block = App._Blocks[that.params['blockName']];
+        constructBlock(block);
+        constructEditor(classObject);
+        return that;
+    };
 
     that.enableEditing = function(){
         if(!cm.isBoolean(that.isEditing) || !that.isEditing){

@@ -93,9 +93,10 @@ function(params){
         // Calculate dimensions
         that.getDimensions();
         // Construct
-        //new cm.Finder('App.Zone', that.params['zoneName'], null, constructZone);
-        new cm.Finder('App.Editor', that.params['editorName'], null, constructEditor, {'event' : 'onProcessStart'});
-        //cm.find('App.Editor', that.params['editorName'], null, constructEditor);
+        cm.find('App.Editor', that.params['editorName'], null, function(classObject){
+            new cm.Finder('App.Zone', that.params['zoneName'], null, constructZone);
+            constructEditor(classObject);
+        });
     };
 
     var constructZone = function(classObject){
@@ -114,8 +115,6 @@ function(params){
     };
 
     var constructEditor = function(classObject){
-        var zone = App._Zones[that.params['zoneName']];
-        constructZone(zone);
         if(classObject){
             that.components['editor'] = classObject;
             that.components['editor'].addBlock(that, that.index);
@@ -130,6 +129,13 @@ function(params){
     };
 
     /* ******* PUBLIC ******* */
+
+    that.register = function(classObject){
+        var zone = App._Zones[that.params['zoneName']];
+        constructZone(zone);
+        constructEditor(classObject);
+        return that;
+    };
 
     that.enableEditing = function(){
         if(!cm.isBoolean(that.isEditing) || !that.isEditing){
