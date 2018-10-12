@@ -191,6 +191,7 @@ function(params){
                 'type' : 'child',
                 'self' : false
             });
+            delete App._Blocks[that.params['name']];
             that.removeFromStack();
             cm.remove(that.node);
             that.triggerEvent('onRemove');

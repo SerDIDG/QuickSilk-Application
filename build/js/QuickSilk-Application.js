@@ -1,4 +1,4 @@
-/*! ************ QuickSilk-Application v3.21.10 (2018-10-12 20:45) ************ */
+/*! ************ QuickSilk-Application v3.21.10 (2018-10-12 20:53) ************ */
 
 // /* ************************************************ */
 // /* ******* QUICKSILK: COMMON ******* */
@@ -779,6 +779,7 @@ function(params){
                 'type' : 'child',
                 'self' : false
             });
+            delete App._Blocks[that.params['name']];
             that.removeFromStack();
             cm.remove(that.node);
             that.triggerEvent('onRemove');
@@ -7631,6 +7632,7 @@ function(params){
             while(that.blocks.length){
                 that.blocks[0].remove();
             }
+            delete App._Zones[that.params['name']];
             that.removeFromStack();
             cm.remove(that.params['node']);
             that.triggerEvent('onRemove');

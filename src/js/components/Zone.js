@@ -217,6 +217,7 @@ function(params){
             while(that.blocks.length){
                 that.blocks[0].remove();
             }
+            delete App._Zones[that.params['name']];
             that.removeFromStack();
             cm.remove(that.params['node']);
             that.triggerEvent('onRemove');
