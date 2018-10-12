@@ -1,3 +1,5 @@
+App._Blocks = {};
+
 cm.define('App.Block', {
     'modules' : [
         'Params',
@@ -82,6 +84,8 @@ function(params){
             that.params['node'].removeAttribute('data-index');
         }
         that.index = that.params['index'];
+        // Export
+        App._Blocks[that.params['name']] = that;
     };
 
     var render = function(){
@@ -89,36 +93,39 @@ function(params){
         // Calculate dimensions
         that.getDimensions();
         // Construct
-        new cm.Finder('App.Zone', that.params['zoneName'], null, constructZone);
+        //new cm.Finder('App.Zone', that.params['zoneName'], null, constructZone);
         new cm.Finder('App.Editor', that.params['editorName'], null, constructEditor, {'event' : 'onProcessStart'});
+        //cm.find('App.Editor', that.params['editorName'], null, constructEditor);
     };
 
     var constructZone = function(classObject){
         if(classObject){
-            that.zone = classObject
-                .addBlock(that, that.index);
+            that.zone = classObject;
+            that.zone.addBlock(that, that.index);
         }
     };
 
     var destructZone = function(classObject){
         if(classObject){
-            that.zone = classObject
-                .removeBlock(that);
+            that.zone = classObject;
+            that.zone.removeBlock(that);
             that.zone = null;
         }
     };
 
     var constructEditor = function(classObject){
+        var zone = App._Zones[that.params['zoneName']];
+        constructZone(zone);
         if(classObject){
-            that.components['editor'] = classObject
-                .addBlock(that, that.index);
+            that.components['editor'] = classObject;
+            that.components['editor'].addBlock(that, that.index);
         }
     };
 
     var destructEditor = function(classObject){
         if(classObject){
-            that.components['editor'] = classObject
-                .removeBlock(that);
+            that.components['editor'] = classObject;
+            that.components['editor'].removeBlock(that);
         }
     };
 

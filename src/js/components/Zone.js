@@ -1,3 +1,5 @@
+App._Zones = {};
+
 cm.define('App.Zone', {
     'modules' : [
         'Params',
@@ -60,6 +62,8 @@ function(params){
         }else{
             that.params['name'] = [that.params['type'], that.params['positionId'], that.params['zone']].join('_');
         }
+        // Export
+        App._Zones[that.params['name']] = that;
     };
 
     var render = function(){
@@ -75,36 +79,39 @@ function(params){
             cm.addClass(that.node, 'is-available');
         }
         // Construct
-        new cm.Finder('App.Block', that.params['blockName'], null, constructBlock);
+        //new cm.Finder('App.Block', that.params['blockName'], null, constructBlock);
         new cm.Finder('App.Editor', that.params['editorName'], null, constructEditor, {'event' : 'onProcessStart'});
+        //cm.find('App.Editor', that.params['editorName'], null, constructEditor);
     };
 
     var constructBlock = function(classObject){
         if(classObject){
-            that.block = classObject
-                .addZone(that);
+            that.block = classObject;
+            that.block.addZone(that);
         }
     };
 
     var destructBlock = function(classObject){
         if(classObject){
-            that.block = classObject
-                .removeZone(that);
+            that.block = classObject;
+            that.block.removeZone(that);
             that.block = null;
         }
     };
 
     var constructEditor = function(classObject){
+        var block = App._Blocks[that.params['blockName']];
+        constructBlock(block);
         if(classObject){
-            that.components['editor'] = classObject
-                .addZone(that);
+            that.components['editor'] = classObject;
+            that.components['editor'].addZone(that);
         }
     };
 
     var destructEditor = function(classObject){
         if(classObject){
-            that.components['editor'] = classObject
-                .removeZone(that);
+            that.components['editor'] = classObject;
+            that.components['editor'].removeZone(that);
         }
     };
 

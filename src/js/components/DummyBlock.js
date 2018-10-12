@@ -62,6 +62,7 @@ function(params){
         that.getDimensions();
         // Construct
         new cm.Finder('App.Editor', that.params['editorName'], null, constructEditor, {'event' : 'onProcessStart'});
+        //cm.find('App.Editor', that.params['editorName'], null, constructEditor);
     };
 
     var constructZone = function(classObject){

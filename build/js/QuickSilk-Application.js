@@ -1,11 +1,11 @@
-/*! ************ QuickSilk-Application v3.21.9 (2018-10-08 16:58) ************ */
+/*! ************ QuickSilk-Application v3.21.10 (2018-10-12 20:45) ************ */
 
 // /* ************************************************ */
 // /* ******* QUICKSILK: COMMON ******* */
 // /* ************************************************ */
 
 var App = {
-    '_version' : '3.21.9',
+    '_version' : '3.21.10',
     '_assetsUrl' : [window.location.protocol, window.location.hostname].join('//'),
     'Elements': {},
     'Nodes' : {},
@@ -586,6 +586,8 @@ App.FlowScenario = [{
         'content' : '<h3>Need Help?</h3><p>Are you stuck, experiencing an issue, found a bug or have a suggestion? Simply click on this link and send us a message. FYI, to assist in the troubleshooting process we automatically collect information on the operating system, browser and browser version you are using. Our goal is to respond to your message within 1 business day.</p>'
     }]
 }];
+App._Blocks = {};
+
 cm.define('App.Block', {
     'modules' : [
         'Params',
@@ -670,6 +672,8 @@ function(params){
             that.params['node'].removeAttribute('data-index');
         }
         that.index = that.params['index'];
+        // Export
+        App._Blocks[that.params['name']] = that;
     };
 
     var render = function(){
@@ -677,36 +681,39 @@ function(params){
         // Calculate dimensions
         that.getDimensions();
         // Construct
-        new cm.Finder('App.Zone', that.params['zoneName'], null, constructZone);
+        //new cm.Finder('App.Zone', that.params['zoneName'], null, constructZone);
         new cm.Finder('App.Editor', that.params['editorName'], null, constructEditor, {'event' : 'onProcessStart'});
+        //cm.find('App.Editor', that.params['editorName'], null, constructEditor);
     };
 
     var constructZone = function(classObject){
         if(classObject){
-            that.zone = classObject
-                .addBlock(that, that.index);
+            that.zone = classObject;
+            that.zone.addBlock(that, that.index);
         }
     };
 
     var destructZone = function(classObject){
         if(classObject){
-            that.zone = classObject
-                .removeBlock(that);
+            that.zone = classObject;
+            that.zone.removeBlock(that);
             that.zone = null;
         }
     };
 
     var constructEditor = function(classObject){
+        var zone = App._Zones[that.params['zoneName']];
+        constructZone(zone);
         if(classObject){
-            that.components['editor'] = classObject
-                .addBlock(that, that.index);
+            that.components['editor'] = classObject;
+            that.components['editor'].addBlock(that, that.index);
         }
     };
 
     var destructEditor = function(classObject){
         if(classObject){
-            that.components['editor'] = classObject
-                .removeBlock(that);
+            that.components['editor'] = classObject;
+            that.components['editor'].removeBlock(that);
         }
     };
 
@@ -2002,6 +2009,7 @@ function(params){
         that.getDimensions();
         // Construct
         new cm.Finder('App.Editor', that.params['editorName'], null, constructEditor, {'event' : 'onProcessStart'});
+        //cm.find('App.Editor', that.params['editorName'], null, constructEditor);
     };
 
     var constructZone = function(classObject){
@@ -7404,6 +7412,8 @@ function(params){
 
     init();
 });
+App._Zones = {};
+
 cm.define('App.Zone', {
     'modules' : [
         'Params',
@@ -7466,6 +7476,8 @@ function(params){
         }else{
             that.params['name'] = [that.params['type'], that.params['positionId'], that.params['zone']].join('_');
         }
+        // Export
+        App._Zones[that.params['name']] = that;
     };
 
     var render = function(){
@@ -7481,36 +7493,39 @@ function(params){
             cm.addClass(that.node, 'is-available');
         }
         // Construct
-        new cm.Finder('App.Block', that.params['blockName'], null, constructBlock);
+        //new cm.Finder('App.Block', that.params['blockName'], null, constructBlock);
         new cm.Finder('App.Editor', that.params['editorName'], null, constructEditor, {'event' : 'onProcessStart'});
+        //cm.find('App.Editor', that.params['editorName'], null, constructEditor);
     };
 
     var constructBlock = function(classObject){
         if(classObject){
-            that.block = classObject
-                .addZone(that);
+            that.block = classObject;
+            that.block.addZone(that);
         }
     };
 
     var destructBlock = function(classObject){
         if(classObject){
-            that.block = classObject
-                .removeZone(that);
+            that.block = classObject;
+            that.block.removeZone(that);
             that.block = null;
         }
     };
 
     var constructEditor = function(classObject){
+        var block = App._Blocks[that.params['blockName']];
+        constructBlock(block);
         if(classObject){
-            that.components['editor'] = classObject
-                .addZone(that);
+            that.components['editor'] = classObject;
+            that.components['editor'].addZone(that);
         }
     };
 
     var destructEditor = function(classObject){
         if(classObject){
-            that.components['editor'] = classObject
-                .removeZone(that);
+            that.components['editor'] = classObject;
+            that.components['editor'].removeZone(that);
         }
     };
 
