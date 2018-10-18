@@ -1,11 +1,11 @@
-/*! ************ QuickSilk-Application v3.21.10 (2018-10-12 21:41) ************ */
+/*! ************ QuickSilk-Application v3.21.11 (2018-10-18 20:52) ************ */
 
 // /* ************************************************ */
 // /* ******* QUICKSILK: COMMON ******* */
 // /* ************************************************ */
 
 var App = {
-    '_version' : '3.21.10',
+    '_version' : '3.21.11',
     '_assetsUrl' : [window.location.protocol, window.location.hostname].join('//'),
     'Elements': {},
     'Nodes' : {},
@@ -2264,9 +2264,17 @@ function(params){
 
     var process = function(){
         that.triggerEvent('onProcessStart');
-        processDummyBlocks();
-        processBlocks();
-        processZones();
+        // Register elements
+        cm.forEach(App._Zones, function(item){
+            item.register(that);
+        });
+        cm.forEach(App._Blocks, function(item){
+            item.register(that);
+        });
+        cm.forEach(App._DummyBlocks, function(item){
+            item.register(that);
+        });
+        // Set states
         cm.addClass(cm.getDocumentHtml(), 'is-editor');
         if(that.components['sidebar']){
             if(that.components['sidebar'].isExpanded){
@@ -2281,24 +2289,6 @@ function(params){
             adminPageAction();
         }
         that.isRendered = true;
-    };
-
-    var processDummyBlocks = function(){
-        cm.forEach(App._DummyBlocks, function(item){
-            item.register(that);
-        });
-    };
-
-    var processBlocks = function(){
-        cm.forEach(App._Blocks, function(item){
-            item.register(that);
-        });
-    };
-
-    var processZones = function(){
-        cm.forEach(App._Zones, function(item){
-            item.register(that);
-        });
     };
 
     var sidebarExpandAction = function(){
@@ -2341,6 +2331,7 @@ function(params){
 
     var adminPageAction = function(){
         // Enable gridlist editable
+        // TODO: needs to be redone
         cm.find('Com.GridlistHelper', null, null, function(classObject){
             classObject.enableEditing();
         });
@@ -8145,6 +8136,7 @@ function(params){
     };
 
     var validateParams = function(){
+        that.params['name'] = that.params['name'].toString();
         that.params['defaultView'] = cm.inArray(['agenda', 'week', 'month'], that.params['defaultView']) ? that.params['defaultView'] : 'month';
         that.params['Com.Overlay']['container'] = that.nodes['container'];
     };
@@ -8338,19 +8330,7 @@ function(params){
             that.isRendering = true;
             temporary = that.callbacks.renderTemporary(that);
             nodes = cm.strToHTML(data);
-            if(!cm.isEmpty(nodes)){
-                if(cm.isNode(nodes)){
-                    temporary.appendChild(nodes);
-                }else{
-                    while(nodes.length){
-                        if(cm.isNode(nodes[0])){
-                            temporary.appendChild(nodes[0]);
-                        }else{
-                            cm.remove(nodes[0]);
-                        }
-                    }
-                }
-            }
+            cm.appendNodes(nodes, temporary);
             that.callbacks.append(that, temporary);
         }
     };
@@ -8611,6 +8591,7 @@ cm.getConstructor('Module.AbstractCalendarView', function(classConstructor, clas
 
     classProto.validateParams = function(){
         var that = this;
+        that.params['name'] = that.params['name'].toString();
         if(that.params['Com.Tooltip']['width'] !== 'auto'){
             that.params['Com.Tooltip']['width'] = cm.strReplace(that.params['Com.Tooltip']['width'], {
                 '%itemShortIndent%' : that.params['itemShortIndent'],

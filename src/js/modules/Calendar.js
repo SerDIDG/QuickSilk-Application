@@ -100,6 +100,7 @@ function(params){
     };
 
     var validateParams = function(){
+        that.params['name'] = that.params['name'].toString();
         that.params['defaultView'] = cm.inArray(['agenda', 'week', 'month'], that.params['defaultView']) ? that.params['defaultView'] : 'month';
         that.params['Com.Overlay']['container'] = that.nodes['container'];
     };
@@ -293,19 +294,7 @@ function(params){
             that.isRendering = true;
             temporary = that.callbacks.renderTemporary(that);
             nodes = cm.strToHTML(data);
-            if(!cm.isEmpty(nodes)){
-                if(cm.isNode(nodes)){
-                    temporary.appendChild(nodes);
-                }else{
-                    while(nodes.length){
-                        if(cm.isNode(nodes[0])){
-                            temporary.appendChild(nodes[0]);
-                        }else{
-                            cm.remove(nodes[0]);
-                        }
-                    }
-                }
-            }
+            cm.appendNodes(nodes, temporary);
             that.callbacks.append(that, temporary);
         }
     };
@@ -566,6 +555,7 @@ cm.getConstructor('Module.AbstractCalendarView', function(classConstructor, clas
 
     classProto.validateParams = function(){
         var that = this;
+        that.params['name'] = that.params['name'].toString();
         if(that.params['Com.Tooltip']['width'] !== 'auto'){
             that.params['Com.Tooltip']['width'] = cm.strReplace(that.params['Com.Tooltip']['width'], {
                 '%itemShortIndent%' : that.params['itemShortIndent'],

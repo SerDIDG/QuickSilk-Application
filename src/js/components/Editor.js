@@ -109,9 +109,17 @@ function(params){
 
     var process = function(){
         that.triggerEvent('onProcessStart');
-        processDummyBlocks();
-        processBlocks();
-        processZones();
+        // Register elements
+        cm.forEach(App._Zones, function(item){
+            item.register(that);
+        });
+        cm.forEach(App._Blocks, function(item){
+            item.register(that);
+        });
+        cm.forEach(App._DummyBlocks, function(item){
+            item.register(that);
+        });
+        // Set states
         cm.addClass(cm.getDocumentHtml(), 'is-editor');
         if(that.components['sidebar']){
             if(that.components['sidebar'].isExpanded){
@@ -126,24 +134,6 @@ function(params){
             adminPageAction();
         }
         that.isRendered = true;
-    };
-
-    var processDummyBlocks = function(){
-        cm.forEach(App._DummyBlocks, function(item){
-            item.register(that);
-        });
-    };
-
-    var processBlocks = function(){
-        cm.forEach(App._Blocks, function(item){
-            item.register(that);
-        });
-    };
-
-    var processZones = function(){
-        cm.forEach(App._Zones, function(item){
-            item.register(that);
-        });
     };
 
     var sidebarExpandAction = function(){
@@ -186,6 +176,7 @@ function(params){
 
     var adminPageAction = function(){
         // Enable gridlist editable
+        // TODO: needs to be redone
         cm.find('Com.GridlistHelper', null, null, function(classObject){
             classObject.enableEditing();
         });
