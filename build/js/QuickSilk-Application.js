@@ -1,11 +1,11 @@
-/*! ************ QuickSilk-Application v3.21.11 (2018-10-18 20:52) ************ */
+/*! ************ QuickSilk-Application v3.21.12 (2018-10-23 17:32) ************ */
 
 // /* ************************************************ */
 // /* ******* QUICKSILK: COMMON ******* */
 // /* ************************************************ */
 
 var App = {
-    '_version' : '3.21.11',
+    '_version' : '3.21.12',
     '_assetsUrl' : [window.location.protocol, window.location.hostname].join('//'),
     'Elements': {},
     'Nodes' : {},
@@ -1952,7 +1952,7 @@ function(params){
 
     init();
 });
-App._DummyBlocks = {};
+App._DummyBlocks = [];
 
 cm.define('App.DummyBlock', {
     'modules' : [
@@ -2009,7 +2009,7 @@ function(params){
     var validateParams = function(){
         that.params['name'] = [that.params['type'], that.params['keyword']].join('_');
         // Export
-        App._DummyBlocks[that.params['name']] = that;
+        App._DummyBlocks.push(that);
     };
 
     var render = function(){
@@ -2130,7 +2130,7 @@ function(params){
     that.remove = function(){
         if(!that.isRemoved){
             that.isRemoved = true;
-            delete App._DummyBlocks[that.params['name']];
+            cm.arrayRemove(App._DummyBlocks, that);
             that.removeFromStack();
             cm.remove(that.node);
             that.triggerEvent('onRemove');

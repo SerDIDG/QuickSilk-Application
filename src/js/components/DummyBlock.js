@@ -1,4 +1,4 @@
-App._DummyBlocks = {};
+App._DummyBlocks = [];
 
 cm.define('App.DummyBlock', {
     'modules' : [
@@ -55,7 +55,7 @@ function(params){
     var validateParams = function(){
         that.params['name'] = [that.params['type'], that.params['keyword']].join('_');
         // Export
-        App._DummyBlocks[that.params['name']] = that;
+        App._DummyBlocks.push(that);
     };
 
     var render = function(){
@@ -176,7 +176,7 @@ function(params){
     that.remove = function(){
         if(!that.isRemoved){
             that.isRemoved = true;
-            delete App._DummyBlocks[that.params['name']];
+            cm.arrayRemove(App._DummyBlocks, that);
             that.removeFromStack();
             cm.remove(that.node);
             that.triggerEvent('onRemove');
