@@ -201,7 +201,7 @@ cm.getConstructor('App.FileUploaderLocal', function(classConstructor, className,
         cm.forEach(data, function(file, i){
             that.components['reader'].read(file, function(item){
                 that.items[i] = item;
-                if(cm.getLength(that.items) === length){
+                if(cm.getCount(that.items) === length){
                     that.finalizeFiles();
                 }
             });

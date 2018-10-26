@@ -190,7 +190,7 @@ cm.getConstructor('App.FileUploader', function(classConstructor, className, clas
             );
             that.components['tabset'].addEvent('onTabShow', function(my, data){
                 that.activeTab = data;
-                if(that.activeTab['id'] == 'fileManager'){
+                if(that.activeTab['id'] === 'fileManager'){
                     that.components['fileManager'] && that.components['fileManager'].load();
                 }
             });

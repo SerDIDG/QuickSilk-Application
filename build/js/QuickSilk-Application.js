@@ -1,11 +1,11 @@
-/*! ************ QuickSilk-Application v3.21.12 (2018-10-23 17:32) ************ */
+/*! ************ QuickSilk-Application v3.21.13 (2018-10-26 19:16) ************ */
 
 // /* ************************************************ */
 // /* ******* QUICKSILK: COMMON ******* */
 // /* ************************************************ */
 
 var App = {
-    '_version' : '3.21.12',
+    '_version' : '3.21.13',
     '_assetsUrl' : [window.location.protocol, window.location.hostname].join('//'),
     'Elements': {},
     'Nodes' : {},
@@ -2751,7 +2751,7 @@ cm.getConstructor('App.FileUploader', function(classConstructor, className, clas
             );
             that.components['tabset'].addEvent('onTabShow', function(my, data){
                 that.activeTab = data;
-                if(that.activeTab['id'] == 'fileManager'){
+                if(that.activeTab['id'] === 'fileManager'){
                     that.components['fileManager'] && that.components['fileManager'].load();
                 }
             });
@@ -3149,7 +3149,7 @@ cm.getConstructor('App.FileUploaderLocal', function(classConstructor, className,
         cm.forEach(data, function(file, i){
             that.components['reader'].read(file, function(item){
                 that.items[i] = item;
-                if(cm.getLength(that.items) === length){
+                if(cm.getCount(that.items) === length){
                     that.finalizeFiles();
                 }
             });
