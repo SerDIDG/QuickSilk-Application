@@ -9,10 +9,12 @@ cm.define('App.TopMenu', {
     'events' : [
         'onRender',
         'onCollapse',
-        'onExpand'
+        'onExpand',
+        'onUndo',
+        'onRedo'
     ],
     'params' : {
-        'node' : cm.Node('div'),
+        'node' : cm.node('div'),
         'name' : 'app-topmenu',
         'target' : 'document.html'
     }
@@ -22,10 +24,10 @@ function(params){
         eventInterval;
 
     that.nodes = {
-        'container': cm.Node('div'),
-        'inner': cm.Node('div'),
-        'button': cm.Node('div'),
-        'target': cm.Node('div'),
+        'container': cm.node('div'),
+        'inner': cm.node('div'),
+        'button': cm.node('div'),
+        'target': cm.node('div'),
         'items' : {}
     };
     that.isExpanded = false;
@@ -42,8 +44,14 @@ function(params){
 
     var render = function(){
         preventMenuBlinking();
-        cm.addEvent(that.nodes['button'], 'click', that.toggle);
         that.isExpanded = cm.isClass(that.nodes['container'], 'is-expanded');
+        cm.addEvent(that.nodes['button'], 'click', that.toggle);
+        if(that.nodes['items']['undo']){
+            cm.addEvent(that.nodes['items']['undo']['link'], 'click', that.undo);
+        }
+        if(that.nodes['items']['redo']){
+            cm.addEvent(that.nodes['items']['redo']['link'], 'click', that.redo);
+        }
         cm.addEvent(window, 'resize', preventMenuBlinking);
     };
 
@@ -56,6 +64,20 @@ function(params){
     };
 
     /* ******* MAIN ******* */
+
+    /* *** REQUESTS *** */
+
+    that.undo = function(){
+        that.triggerEvent('onUndo');
+        return that;
+    };
+
+    that.redo = function(){
+        that.triggerEvent('onRedo');
+        return that;
+    };
+
+    /* *** PUBLIC *** */
 
     that.expand = function(){
         if(!that.isExpanded){
