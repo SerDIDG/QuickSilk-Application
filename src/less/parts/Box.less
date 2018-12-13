@@ -67,8 +67,19 @@
         font-size: 0;
 
         .icon {
+            border-radius: @CmBorder-Radius;
+
             &:first-child {
                 margin-left: 0;
+            }
+        }
+    }
+
+    .pt__line-share {
+        > ul {
+            > li {
+                border-radius: @CmBorder-Radius;
+                overflow: hidden;
             }
         }
     }
@@ -97,6 +108,14 @@
             background: @CmColor-Border;
             content: ' ';
             .mx__flex(1 1 auto);
+        }
+    }
+
+    .pt__buttons {
+        .button {
+            border: @CmBorder-Default;
+            text-align: left;
+            color: @CmColor-Font;
         }
     }
 }

@@ -1,11 +1,11 @@
-/*! ************ QuickSilk-Application v3.21.15 (2018-11-09 19:44) ************ */
+/*! ************ QuickSilk-Application v3.22.0 (2018-12-13 21:29) ************ */
 
 // /* ************************************************ */
 // /* ******* QUICKSILK: COMMON ******* */
 // /* ************************************************ */
 
 var App = {
-    '_version' : '3.21.15',
+    '_version' : '3.22.0',
     '_assetsUrl' : [window.location.protocol, window.location.hostname].join('//'),
     'Elements': {},
     'Nodes' : {},
@@ -7257,7 +7257,7 @@ function(params){
     /* ******* MAIN ******* */
 
     that.redraw = function(triggerEvents){
-        triggerEvents = typeof triggerEvents == 'undefined'? true : triggerEvents;
+        triggerEvents = cm.isUndefined(triggerEvents) ? true : triggerEvents;
         redraw(triggerEvents);
         return that;
     };
@@ -9849,12 +9849,12 @@ cm.getConstructor('Module.Menu', function(classConstructor, className, classProt
         // Set events
         if(!item['sub']['_visible']){
             cm.addEvent(item['container'], 'mouseover', function(e){
-                if(that.params['view'] == 'vertical' && that.params['submenu'] == 'collapsible'){
+                if(that.params['view'] === 'vertical' && that.params['submenu'] === 'collapsible'){
                     that.showSubMenuItemCollapsible(e, item);
                 }
             });
             cm.addEvent(item['container'], 'mouseout', function(e){
-                if(that.params['view'] == 'vertical' && that.params['submenu'] == 'collapsible'){
+                if(that.params['view'] === 'vertical' && that.params['submenu'] === 'collapsible'){
                     that.hideSubMenuItemCollapsible(e, item);
                 }
             });

@@ -206,7 +206,7 @@ function(params){
     /* ******* MAIN ******* */
 
     that.redraw = function(triggerEvents){
-        triggerEvents = typeof triggerEvents == 'undefined'? true : triggerEvents;
+        triggerEvents = cm.isUndefined(triggerEvents) ? true : triggerEvents;
         redraw(triggerEvents);
         return that;
     };

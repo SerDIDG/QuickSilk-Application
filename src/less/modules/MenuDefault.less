@@ -19,6 +19,11 @@
                 }
             }
 
+            .icon {
+                display: none;
+                vertical-align: middle;
+            }
+
             &:first-child {
                 margin: 0;
             }
@@ -125,6 +130,17 @@
 
         &.has-separator {
             .app-mod__menu--has-separator(@AppMod-Menu-Secondary-SeparatorWidth, @AppMod-Menu-Secondary-SeparatorHeight, @AppMod-Menu-Secondary-SeparatorBackground, @AppMod-Menu-Secondary-Indent);
+        }
+    }
+
+    &.languages {
+        .app-mod__menu__indent(@AppMod-Menu-Languages-Indent);
+        .app-mod__menu__select-size(@AppMod-Menu-Languages-SelectSize);
+        .app-mod__menu__select-color(@AppMod-Menu-Languages-SelectColor);
+        .app-mod__menu__select-background(@AppMod-Menu-Languages-SelectBackground);
+
+        &.has-separator {
+            .app-mod__menu--has-separator(@AppMod-Menu-Languages-SeparatorWidth, @AppMod-Menu-Languages-SeparatorHeight, @AppMod-Menu-Languages-SeparatorBackground, @AppMod-Menu-Languages-Indent);
         }
     }
 
@@ -358,13 +374,26 @@
 
     html.is-adaptive {
         .app-mod__menu {
-            &:not(.vertical) {
+            &:not(.vertical),
+            &:not(.languages) {
                 > ul {
                     display: none;
                 }
 
                 .menu-select {
                     display: block;
+                }
+            }
+
+            &.is-adaptive {
+                &.languages {
+                    > ul {
+                        display: none;
+                    }
+
+                    .menu-select {
+                        display: block;
+                    }
                 }
             }
         }

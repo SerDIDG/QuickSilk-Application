@@ -523,25 +523,27 @@ html {
 
     html.is-adaptive {
         .app-mod__rollover-tabs {
-            > .inner {
-                > .tabs__head {
-                    display: none;
-                }
+            &.is-adaptive {
+                > .inner {
+                    > .tabs__head {
+                        display: none;
+                    }
 
-                > .tabs__menu {
-                    display: block;
-                }
+                    > .tabs__menu {
+                        display: block;
+                    }
 
-                > .tabs__content {
-                    position: absolute !important;
-                    left: 0  !important;
-                    right: 0  !important;
-                    top: 100% !important;
-                    bottom: auto !important;
+                    > .tabs__content {
+                        position: absolute !important;
+                        left: 0  !important;
+                        right: 0  !important;
+                        top: 100% !important;
+                        bottom: auto !important;
 
-                    > .inner {
-                        > ul {
-                            .cm__transition-none;
+                        > .inner {
+                            > ul {
+                                .cm__transition-none;
+                            }
                         }
                     }
                 }

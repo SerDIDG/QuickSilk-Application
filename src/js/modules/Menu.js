@@ -65,12 +65,12 @@ cm.getConstructor('Module.Menu', function(classConstructor, className, classProt
         // Set events
         if(!item['sub']['_visible']){
             cm.addEvent(item['container'], 'mouseover', function(e){
-                if(that.params['view'] == 'vertical' && that.params['submenu'] == 'collapsible'){
+                if(that.params['view'] === 'vertical' && that.params['submenu'] === 'collapsible'){
                     that.showSubMenuItemCollapsible(e, item);
                 }
             });
             cm.addEvent(item['container'], 'mouseout', function(e){
-                if(that.params['view'] == 'vertical' && that.params['submenu'] == 'collapsible'){
+                if(that.params['view'] === 'vertical' && that.params['submenu'] === 'collapsible'){
                     that.hideSubMenuItemCollapsible(e, item);
                 }
             });
