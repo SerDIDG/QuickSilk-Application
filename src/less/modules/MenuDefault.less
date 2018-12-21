@@ -40,6 +40,10 @@
                 display: none;
             }
 
+            &.has-icon {
+                .pt__menu__item--icon;
+            }
+
             &:hover {
                 z-index: 2;
             }
@@ -138,6 +142,7 @@
         .app-mod__menu__select-size(@AppMod-Menu-Languages-SelectSize);
         .app-mod__menu__select-color(@AppMod-Menu-Languages-SelectColor);
         .app-mod__menu__select-background(@AppMod-Menu-Languages-SelectBackground);
+        .app-mod__menu__image-size();
 
         &.has-separator {
             .app-mod__menu--has-separator(@AppMod-Menu-Languages-SeparatorWidth, @AppMod-Menu-Languages-SeparatorHeight, @AppMod-Menu-Languages-SeparatorBackground, @AppMod-Menu-Languages-Indent);
@@ -363,6 +368,21 @@
         > li {
             &:after {
                 background: @background;
+            }
+        }
+    }
+}
+
+.app-mod__menu__image-size (@size: @AppMod-Menu-Languages-ImageSize) {
+    > ul {
+        li {
+            &.has-icon {
+                > a {
+                    .image {
+                        width: @size;
+                        height: @size;
+                    }
+                }
             }
         }
     }

@@ -1,11 +1,11 @@
-/*! ************ QuickSilk-Application v3.22.0 (2018-12-13 21:29) ************ */
+/*! ************ QuickSilk-Application v3.22.1 (2018-12-21 21:36) ************ */
 
 // /* ************************************************ */
 // /* ******* QUICKSILK: COMMON ******* */
 // /* ************************************************ */
 
 var App = {
-    '_version' : '3.22.0',
+    '_version' : '3.22.1',
     '_assetsUrl' : [window.location.protocol, window.location.hostname].join('//'),
     'Elements': {},
     'Nodes' : {},
