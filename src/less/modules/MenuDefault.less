@@ -87,7 +87,7 @@
         .mx__position(0, 0, 0, auto);
     }
 
-    &:not(.vertical).pull-justify {
+    &:not(.vertical):not(.languages).pull-justify {
         > ul {
             .display-flex;
             .mx__flex-flow(row wrap);
@@ -394,8 +394,7 @@
 
     html.is-adaptive {
         .app-mod__menu {
-            &:not(.vertical),
-            &:not(.languages) {
+            &:not(.vertical):not(.languages) {
                 > ul {
                     display: none;
                 }
