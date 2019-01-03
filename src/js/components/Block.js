@@ -145,14 +145,14 @@ function(params){
             if(!that.params['locked']){
                 cm.addClass(that.node, 'is-editable');
                 cm.customEvent.trigger(that.node, 'enableEditable', {
-                    'type' : 'child',
+                    'direction' : 'child',
                     'self' : false
                 });
             }
             cm.removeClass(that.nodes['block']['container'], 'cm__animate');
             that.getDimensions();
             cm.customEvent.trigger(that.node, 'enableEditing', {
-                'type' : 'child',
+                'direction' : 'child',
                 'self' : false
             });
             that.triggerEvent('enableEditing');
@@ -170,14 +170,14 @@ function(params){
             if(!that.params['locked']){
                 cm.removeClass(that.node, 'is-editable');
                 cm.customEvent.trigger(that.node, 'disableEditable', {
-                    'type' : 'child',
+                    'direction' : 'child',
                     'self' : false
                 });
             }
             cm.addClass(that.nodes['block']['container'], 'cm__animate');
             that.getDimensions();
             cm.customEvent.trigger(that.node, 'disableEditing', {
-                'type' : 'child',
+                'direction' : 'child',
                 'self' : false
             });
             that.triggerEvent('disableEditing');
@@ -194,7 +194,7 @@ function(params){
                 that.zones[0].remove();
             }
             cm.customEvent.trigger(that.node, 'destruct', {
-                'type' : 'child',
+                'direction' : 'child',
                 'self' : false
             });
             delete App._Blocks[that.params['name']];

@@ -173,6 +173,7 @@ function(params){
                 break;
         }
         cm.addEvent(window, 'scroll', scroll);
+        cm.customEvent.add(window, 'pageSizeChange', scroll);
         cm.preventDefault(e);
     };
 
@@ -228,6 +229,7 @@ function(params){
                 break;
         }
         cm.removeEvent(window, 'scroll', scroll);
+        cm.customEvent.remove(window, 'pageSizeChange', scroll);
     };
 
     var scroll = function(e){
@@ -780,7 +782,7 @@ function(params){
     /* *** HELPERS *** */
 
     var getPosition = function(e){
-        if(e.type === 'scroll'){
+        if(/pageSizeChange|sctoll/.test(e.type)){
             return cm._clientPosition;
         }
         return cm.getEventClientPosition(e);

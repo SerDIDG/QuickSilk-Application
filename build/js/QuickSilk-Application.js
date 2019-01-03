@@ -1,11 +1,11 @@
-/*! ************ QuickSilk-Application v3.22.2 (2018-12-28 18:25) ************ */
+/*! ************ QuickSilk-Application v3.22.3 (2019-01-03 18:27) ************ */
 
 // /* ************************************************ */
 // /* ******* QUICKSILK: COMMON ******* */
 // /* ************************************************ */
 
 var App = {
-    '_version' : '3.22.2',
+    '_version' : '3.22.3',
     '_assetsUrl' : [window.location.protocol, window.location.hostname].join('//'),
     'Elements': {},
     'Nodes' : {},
@@ -733,14 +733,14 @@ function(params){
             if(!that.params['locked']){
                 cm.addClass(that.node, 'is-editable');
                 cm.customEvent.trigger(that.node, 'enableEditable', {
-                    'type' : 'child',
+                    'direction' : 'child',
                     'self' : false
                 });
             }
             cm.removeClass(that.nodes['block']['container'], 'cm__animate');
             that.getDimensions();
             cm.customEvent.trigger(that.node, 'enableEditing', {
-                'type' : 'child',
+                'direction' : 'child',
                 'self' : false
             });
             that.triggerEvent('enableEditing');
@@ -758,14 +758,14 @@ function(params){
             if(!that.params['locked']){
                 cm.removeClass(that.node, 'is-editable');
                 cm.customEvent.trigger(that.node, 'disableEditable', {
-                    'type' : 'child',
+                    'direction' : 'child',
                     'self' : false
                 });
             }
             cm.addClass(that.nodes['block']['container'], 'cm__animate');
             that.getDimensions();
             cm.customEvent.trigger(that.node, 'disableEditing', {
-                'type' : 'child',
+                'direction' : 'child',
                 'self' : false
             });
             that.triggerEvent('disableEditing');
@@ -782,7 +782,7 @@ function(params){
                 that.zones[0].remove();
             }
             cm.customEvent.trigger(that.node, 'destruct', {
-                'type' : 'child',
+                'direction' : 'child',
                 'self' : false
             });
             delete App._Blocks[that.params['name']];
@@ -1145,6 +1145,7 @@ function(params){
                 break;
         }
         cm.addEvent(window, 'scroll', scroll);
+        cm.customEvent.add(window, 'pageSizeChange', scroll);
         cm.preventDefault(e);
     };
 
@@ -1200,6 +1201,7 @@ function(params){
                 break;
         }
         cm.removeEvent(window, 'scroll', scroll);
+        cm.customEvent.remove(window, 'pageSizeChange', scroll);
     };
 
     var scroll = function(e){
@@ -1752,7 +1754,7 @@ function(params){
     /* *** HELPERS *** */
 
     var getPosition = function(e){
-        if(e.type === 'scroll'){
+        if(/pageSizeChange|sctoll/.test(e.type)){
             return cm._clientPosition;
         }
         return cm.getEventClientPosition(e);
@@ -6163,7 +6165,7 @@ cm.getConstructor('App.Panel', function(classConstructor, className, classProto)
                 that.showButton(['close', 'save']);
                 that.params['showButtons'] && that.showButtons(true);
                 cm.customEvent.trigger(that.nodes['contentHolder'], 'redraw', {
-                    'type' : 'child',
+                    'direction' : 'child',
                     'self' : false
                 });
             }
@@ -6273,7 +6275,7 @@ cm.getConstructor('App.Panel', function(classConstructor, className, classProto)
     classProto.setTitle = function(node){
         var that = this;
         cm.customEvent.trigger(that.nodes['label'], 'destruct', {
-            'type' : 'child',
+            'direction' : 'child',
             'self' : false
         });
         cm.clearNode(that.nodes['label']);
@@ -6288,7 +6290,7 @@ cm.getConstructor('App.Panel', function(classConstructor, className, classProto)
     classProto.setContent = function(node){
         var that = this;
         cm.customEvent.trigger(that.nodes['contentHolder'], 'destruct', {
-            'type' : 'child',
+            'direction' : 'child',
             'self' : false
         });
         cm.clearNode(that.nodes['contentHolder']);
@@ -6303,7 +6305,7 @@ cm.getConstructor('App.Panel', function(classConstructor, className, classProto)
     classProto.setPreview = function(node){
         var that = this;
         cm.customEvent.trigger(that.nodes['previewHolder'], 'destruct', {
-            'type' : 'child',
+            'direction' : 'child',
             'self' : false
         });
         cm.clearNode(that.nodes['previewHolder']);
@@ -6417,7 +6419,7 @@ cm.getConstructor('App.Panel', function(classConstructor, className, classProto)
                     })
                     .addEvent('onContentRenderEnd', function(){
                         cm.customEvent.trigger(that.nodes['contentHolder'], 'redraw', {
-                            'type' : 'child',
+                            'direction' : 'child',
                             'self' : false
                         });
                     });

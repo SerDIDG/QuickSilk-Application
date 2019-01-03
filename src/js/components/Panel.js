@@ -214,7 +214,7 @@ cm.getConstructor('App.Panel', function(classConstructor, className, classProto)
                 that.showButton(['close', 'save']);
                 that.params['showButtons'] && that.showButtons(true);
                 cm.customEvent.trigger(that.nodes['contentHolder'], 'redraw', {
-                    'type' : 'child',
+                    'direction' : 'child',
                     'self' : false
                 });
             }
@@ -324,7 +324,7 @@ cm.getConstructor('App.Panel', function(classConstructor, className, classProto)
     classProto.setTitle = function(node){
         var that = this;
         cm.customEvent.trigger(that.nodes['label'], 'destruct', {
-            'type' : 'child',
+            'direction' : 'child',
             'self' : false
         });
         cm.clearNode(that.nodes['label']);
@@ -339,7 +339,7 @@ cm.getConstructor('App.Panel', function(classConstructor, className, classProto)
     classProto.setContent = function(node){
         var that = this;
         cm.customEvent.trigger(that.nodes['contentHolder'], 'destruct', {
-            'type' : 'child',
+            'direction' : 'child',
             'self' : false
         });
         cm.clearNode(that.nodes['contentHolder']);
@@ -354,7 +354,7 @@ cm.getConstructor('App.Panel', function(classConstructor, className, classProto)
     classProto.setPreview = function(node){
         var that = this;
         cm.customEvent.trigger(that.nodes['previewHolder'], 'destruct', {
-            'type' : 'child',
+            'direction' : 'child',
             'self' : false
         });
         cm.clearNode(that.nodes['previewHolder']);
@@ -468,7 +468,7 @@ cm.getConstructor('App.Panel', function(classConstructor, className, classProto)
                     })
                     .addEvent('onContentRenderEnd', function(){
                         cm.customEvent.trigger(that.nodes['contentHolder'], 'redraw', {
-                            'type' : 'child',
+                            'direction' : 'child',
                             'self' : false
                         });
                     });
