@@ -27,16 +27,13 @@ function(params){
     Com.AbstractFileManager.apply(that, arguments);
 });
 
-cm.getConstructor('App.elFinderFileManager', function(classConstructor, className, classProto){
-    var _inherit = classProto._inherit;
-
+cm.getConstructor('App.elFinderFileManager', function(classConstructor, className, classProto, classInherit){
     classProto.construct = function(){
         var that = this;
         // Bind context to methods
         that.getFilesEventHandler = that.getFilesEvent.bind(that);
         // Call parent method
-        _inherit.prototype.construct.apply(that, arguments);
-        return that;
+        classInherit.prototype.construct.apply(that, arguments);
     };
 
     classProto.get = function(){
@@ -45,7 +42,7 @@ cm.getConstructor('App.elFinderFileManager', function(classConstructor, classNam
         if(that.components['controller']){
             that.components['controller'].exec('getfile');
         }else{
-            _inherit.prototype.get.apply(that, arguments);
+            classInherit.prototype.get.apply(that, arguments);
         }
         return that;
     };
@@ -56,7 +53,7 @@ cm.getConstructor('App.elFinderFileManager', function(classConstructor, classNam
         if(that.components['controller']){
             that.components['controller'].exec('getfile');
         }else{
-            _inherit.prototype.complete.apply(that, arguments);
+            classInherit.prototype.complete.apply(that, arguments);
         }
         return that;
     };
@@ -74,7 +71,7 @@ cm.getConstructor('App.elFinderFileManager', function(classConstructor, classNam
         var that = this;
         // Init elFinder
         if(!that.components['controller']){
-            if(!cm.isUndefined(elFinder)){
+            if(typeof elFinder !== 'undefined'){
                 that.isLoaded = true;
                 that.components['controller'] = new elFinder(that.nodes['holder']['inner'],
                     cm.merge(that.params['config'], {
@@ -109,13 +106,13 @@ cm.getConstructor('App.elFinderFileManager', function(classConstructor, classNam
         // Callbacks
         switch(that.getFilesProcessType){
             case 'get':
-                _inherit.prototype.get.call(that);
+                classInherit.prototype.get.call(that);
                 break;
             case 'complete':
-                _inherit.prototype.complete.call(that);
+                classInherit.prototype.complete.call(that);
                 break;
             default:
-                _inherit.prototype.complete.call(that);
+                classInherit.prototype.complete.call(that);
                 break;
 
         }

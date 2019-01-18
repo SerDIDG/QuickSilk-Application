@@ -1,11 +1,11 @@
-/*! ************ QuickSilk-Application v3.22.3 (2019-01-03 18:27) ************ */
+/*! ************ QuickSilk-Application v3.22.5 (2019-01-18 19:34) ************ */
 
 // /* ************************************************ */
 // /* ******* QUICKSILK: COMMON ******* */
 // /* ************************************************ */
 
 var App = {
-    '_version' : '3.22.3',
+    '_version' : '3.22.5',
     '_assetsUrl' : [window.location.protocol, window.location.hostname].join('//'),
     'Elements': {},
     'Nodes' : {},
@@ -2586,6 +2586,12 @@ cm.define('App.FileUploader', {
             'showStats' : false,
             'fullSize' : true
         },
+        'stock' : false,
+        'stockConstructor' : 'App.shutterStockManager',
+        'stockParams' : {
+            'embedStructure' : 'append',
+            'fullSize' : true
+        },
         'Com.Tabset' : {
             'embedStructure' : 'append',
             'toggleOnHashChange' : false,
@@ -2600,6 +2606,7 @@ cm.define('App.FileUploader', {
     'strings' : {
         'tab_local' : 'Select From PC',
         'tab_filemanager' : 'File Manager',
+        'tab_stock' : 'Shutterstock',
         'browse_local_single' : 'Choose file',
         'browse_local_multiple' : 'Choose files',
         'or' : 'or',
@@ -2616,17 +2623,14 @@ function(params){
     Com.AbstractController.apply(that, arguments);
 });
 
-cm.getConstructor('App.FileUploader', function(classConstructor, className, classProto){
-    var _inherit = classProto._inherit;
-
+cm.getConstructor('App.FileUploader', function(classConstructor, className, classProto, classInherit){
     classProto.construct = function(){
         var that = this;
         // Bind context to methods
         that.completeHandler = that.complete.bind(that);
         // Add events
         // Call parent method
-        _inherit.prototype.construct.apply(that, arguments);
-        return that;
+        classInherit.prototype.construct.apply(that, arguments);
     };
 
     classProto.get = function(){
@@ -2658,6 +2662,9 @@ cm.getConstructor('App.FileUploader', function(classConstructor, className, clas
                 case 'fileManager':
                     that.components['fileManager'].complete();
                     break;
+                case 'stock':
+                    that.components['stock'].complete();
+                    break;
             }
         }
         return that;
@@ -2669,6 +2676,8 @@ cm.getConstructor('App.FileUploader', function(classConstructor, className, clas
         that.params['localParams']['max'] = that.params['max'];
         that.params['fileManagerParams']['max'] = that.params['max'];
         that.params['fileManagerParams']['lazy'] = that.params['fileManagerLazy'];
+        that.params['stock']['max'] = that.params['max'];
+        that.params['stock']['lazy'] = that.params['fileManagerLazy'];
         return that;
     };
 
@@ -2688,6 +2697,10 @@ cm.getConstructor('App.FileUploader', function(classConstructor, className, clas
         // File Manager
         if(that.params['fileManager']){
             that.nodes['fileManager'] = that.renderFileManager();
+        }
+        // File Manager
+        if(that.params['stock']){
+            that.nodes['stock'] = that.renderStock();
         }
         // Events
         that.triggerEvent('onRenderViewProcess');
@@ -2728,6 +2741,22 @@ cm.getConstructor('App.FileUploader', function(classConstructor, className, clas
                 });
             });
         }
+        // Init Stock
+        if(that.params['stock']){
+            cm.getConstructor(that.params['stockConstructor'], function(classObject){
+                that.components['stock'] = new classObject(
+                    cm.merge(that.params['stockParams'], {
+                        'node' : that.nodes['stock']['holder']
+                    })
+                );
+                that.components['stock'].addEvent('onGet', function(my, data){
+                    that.afterGet(data);
+                });
+                that.components['stock'].addEvent('onComplete', function(my, data){
+                    that.afterComplete(data);
+                });
+            });
+        }
         // Init Tabset
         that.renderTabset();
         // Init Stats
@@ -2753,27 +2782,55 @@ cm.getConstructor('App.FileUploader', function(classConstructor, className, clas
             );
             that.components['tabset'].addEvent('onTabShow', function(my, data){
                 that.activeTab = data;
-                if(that.activeTab['id'] === 'fileManager'){
-                    that.components['fileManager'] && that.components['fileManager'].load();
+                switch(that.activeTab['id']){
+                    case 'fileManager':
+                        that.components['fileManager'] && that.components['fileManager'].load();
+                        break;
+                    case 'stock':
+                        that.components['stock'] && that.components['stock'].load();
+                        break;
                 }
             });
-            if(that.params['local']){
-                that.components['tabset'].addTab({
-                    'id' : 'local',
-                    'title' : that.lang('tab_local'),
-                    'content' : that.nodes['local']['li']
-                });
-            }
-            if(that.params['fileManager']){
-                that.components['tabset'].addTab({
-                    'id' : 'fileManager',
-                    'title' : that.lang('tab_filemanager'),
-                    'content' : that.nodes['fileManager']['li']
-                });
-            }
-            that.components['tabset'].set(that.params['local'] ? 'local' : 'fileManager');
+            that.renderTabs();
         });
         return that;
+    };
+
+    classProto.renderTabs = function(){
+        var that = this,
+            initialTab;
+        if(that.params['local']){
+            that.components['tabset'].addTab({
+                'id' : 'local',
+                'title' : that.lang('tab_local'),
+                'content' : that.nodes['local']['li']
+            });
+            if(cm.isEmpty(initialTab)){
+                initialTab = 'local'
+            }
+        }
+        if(that.params['fileManager']){
+            that.components['tabset'].addTab({
+                'id' : 'fileManager',
+                'title' : that.lang('tab_filemanager'),
+                'content' : that.nodes['fileManager']['li']
+            });
+            if(cm.isEmpty(initialTab)){
+                initialTab = 'fileManager';
+            }
+        }
+        if(that.params['stock']){
+            that.components['tabset'].addTab({
+                'id' : 'stock',
+                'title' : that.lang('tab_stock'),
+                'content' : that.nodes['stock']['li']
+            });
+            if(cm.isEmpty(initialTab)){
+                initialTab = 'stock';
+            }
+        }
+        // Set initial tab
+        that.components['tabset'].set(initialTab);
     };
 
     classProto.renderLocal = function(){
@@ -2794,6 +2851,18 @@ cm.getConstructor('App.FileUploader', function(classConstructor, className, clas
         // Structure
         nodes['li'] = cm.node('li',
             nodes['container'] = cm.node('div', {'class' : 'app__file-uploader__file-manager is-fullsize'},
+                nodes['holder'] = cm.node('div', {'class' : 'app__file-uploader__holder'})
+            )
+        );
+        return nodes;
+    };
+
+    classProto.renderStock = function(){
+        var that = this,
+            nodes = {};
+        // Structure
+        nodes['li'] = cm.node('li',
+            nodes['container'] = cm.node('div', {'class' : 'app__file-uploader__stock is-fullsize'},
                 nodes['holder'] = cm.node('div', {'class' : 'app__file-uploader__holder'})
             )
         );
@@ -2830,7 +2899,7 @@ cm.define('App.FileUploaderContainer', {
         'placeholderParams' : {
             'renderButtons' : true,
             'params' : {
-                'width' : 900
+                'width' : '1000'
             }
         }
     },
@@ -2848,9 +2917,7 @@ function(params){
 });
 
 
-cm.getConstructor('App.FileUploaderContainer', function(classConstructor, className, classProto){
-    var _inherit = classProto._inherit;
-
+cm.getConstructor('App.FileUploaderContainer', function(classConstructor, className, classProto, classInherit){
     classProto.construct = function(){
         var that = this;
         // Variables
@@ -2861,14 +2928,13 @@ cm.getConstructor('App.FileUploaderContainer', function(classConstructor, classN
         that.afterCompleteHandler = that.afterComplete.bind(that);
         // Add events
         // Call parent method
-        _inherit.prototype.construct.apply(that, arguments);
-        return that;
+        classInherit.prototype.construct.apply(that, arguments);
     };
 
     classProto.validateParams = function(){
         var that = this;
         // Call parent method
-        _inherit.prototype.validateParams.apply(that, arguments);
+        classInherit.prototype.validateParams.apply(that, arguments);
         // Validate Request
         that.isRequest = !cm.isEmpty(that.params['action']) && window.Request && window.Request.send;
         // Validate Language Strings
@@ -2896,7 +2962,7 @@ cm.getConstructor('App.FileUploaderContainer', function(classConstructor, classN
     classProto.renderControllerEvents = function(){
         var that = this;
         // Call parent method
-        _inherit.prototype.renderControllerEvents.apply(that, arguments);
+        classInherit.prototype.renderControllerEvents.apply(that, arguments);
         // Add specific events
         that.components['controller'].addEvent('onGet', function(my, data){
             that.afterGet(data);
@@ -2996,9 +3062,7 @@ function(params){
     Com.AbstractController.apply(that, arguments);
 });
 
-cm.getConstructor('App.FileUploaderLocal', function(classConstructor, className, classProto){
-    var _inherit = classProto._inherit;
-
+cm.getConstructor('App.FileUploaderLocal', function(classConstructor, className, classProto, classInherit){
     classProto.construct = function(){
         var that = this;
         // Variables
@@ -3013,8 +3077,7 @@ cm.getConstructor('App.FileUploaderLocal', function(classConstructor, className,
         that.processFilesHandler = that.processFiles.bind(that);
         // Add events
         // Call parent method
-        _inherit.prototype.construct.apply(that, arguments);
-        return that;
+        classInherit.prototype.construct.apply(that, arguments);
     };
 
     classProto.get = function(){
@@ -3069,7 +3132,6 @@ cm.getConstructor('App.FileUploaderLocal', function(classConstructor, className,
         that.triggerEvent('onRenderViewProcess');
         cm.addEvent(that.nodes['input'], 'change', that.browseActionHandler);
         that.triggerEvent('onRenderViewEnd');
-        return that;
     };
 
     classProto.renderViewModel = function(){
@@ -3119,7 +3181,6 @@ cm.getConstructor('App.FileUploaderLocal', function(classConstructor, className,
                 });
             });
         }
-        return that;
     };
 
     /* *** PROCESS FILES *** */
@@ -5364,6 +5425,7 @@ cm.define('App.LoginBox', {
             'preventClickEvent' : true,
             'adaptiveX' : true,
             'adaptiveY' : true,
+            'scroll' : false,
             'left' : '(targetWidth - selfWidth) / 2',
             'top' : 'targetHeight + 8',
             'className' : 'app-pt__box-login__tooltip'
@@ -6755,6 +6817,105 @@ function(params){
 
     init();
 });
+cm.define('App.shutterStockManager', {
+    'extend' : 'Com.AbstractFileManager',
+    'params' : {
+        'lazy' : false,
+        'toolbarConstructor' : 'Com.Toolbar',
+        'toolbarParams' : {
+            'embedStructure' : 'append'
+        },
+        'searchConstructor' : 'Com.Input',
+        'searchParams' : {
+            'embedStructure' : 'append'
+        },
+        'categoriesConstructor' : 'Com.Tabset',
+        'categoriesParams' : {
+            'tabsPosition' : 'left',
+            'embedStructure' : 'append'
+        }
+    }
+},
+function(params){
+    var that = this;
+    that.getFilesProcessType = null;
+    that.isLoaded = false;
+    // Call parent class construct
+    Com.AbstractFileManager.apply(that, arguments);
+});
+
+cm.getConstructor('App.shutterStockManager', function(classConstructor, className, classProto, classInherit){
+    classProto.tabs = [{
+        'title' : 'All',
+        'id' : 'all'
+    },{
+        'title' : 'All 1',
+        'id' : 'all1'
+    },{
+        'title' : 'All 2',
+        'id' : 'all2'
+    },{
+        'title' : 'All 3',
+        'id' : 'all3'
+    },{
+        'title' : 'All 4',
+        'id' : 'all4'
+    },{
+        'title' : 'All 5',
+        'id' : 'all5'
+    },{
+        'title' : 'All 6',
+        'id' : 'all6'
+    },{
+        'title' : 'All 7',
+        'id' : 'all7'
+    },{
+        'title' : 'All 8',
+        'id' : 'all8'
+    },{
+        'title' : 'All 9',
+        'id' : 'all9'
+    },{
+        'title' : 'All 10',
+        'id' : 'all10'
+    }];
+
+    classProto.renderViewModel = function(){
+        var that = this;
+        // Render toolbar
+        cm.getConstructor(that.params['toolbarConstructor'], function(classObject){
+            that.components['toolbar'] = new classObject(
+                cm.merge(that.params['toolbarParams'], {
+                    'container' : that.nodes['holder']['inner']
+                })
+            );
+            that.components['toolbar'].addGroup({
+                'name' : 'all',
+                'position' : 'justify',
+                'adaptive' : false,
+                'flex' : true
+            });
+            that.components['toolbar'].addField({
+                'name' : 'search',
+                'group' : 'all',
+                'constructor' : that.params['searchConstructor'],
+                'constructorParams' : that.params['searchParams']
+            });
+        });
+        // Render categories
+        cm.getConstructor(that.params['categoriesConstructor'], function(classObject){
+            that.components['categories'] = new classObject(
+                cm.merge(that.params['categoriesParams'], {
+                    'container' : that.nodes['holder']['inner']
+                })
+            );
+            that.components['categories'].addTabs(that.tabs);
+            that.components['categories'].set('all');
+        });
+        // Show
+        cm.removeClass(that.nodes['holder']['container'], 'is-hidden', true);
+    };
+});
 cm.define('App.Sidebar', {
     'modules' : [
         'Params',
@@ -7085,7 +7246,9 @@ cm.define('App.Template', {
             'fixed' : false,
             'overlapping' : false,
             'sticky' : false,           // Not implemented
-            'transformed' : false
+            'transformed' : false,
+            'mobileFixed' : null,
+            'mobileOverlapping' : null
         },
         'content' : {
             'editableIndent' : 0
@@ -7122,16 +7285,25 @@ function(params){
         that.convertEvents(that.params['events']);
         that.getDataNodes(that.params['node']);
         that.getDataConfig(that.params['node']);
+        validateParams();
         that.addToStack(that.params['node']);
         that.triggerEvent('onRenderStart');
         render();
-        setState();
         redraw(true);
         that.triggerEvent('onRender');
     };
 
     var getLESSVariables = function(){
         that.params['content']['editableIndent'] = cm.getLESSVariable('AppTpl-Content-EditableIndent', that.params['content']['editableIndent'], true);
+    };
+
+    var validateParams = function(){
+        if(!cm.isBoolean(that.params['header']['mobileOverlapping'])){
+            that.params['header']['mobileOverlapping'] = that.params['header']['overlapping'];
+        }
+        if(!cm.isBoolean(that.params['header']['mobileFixed'])){
+            that.params['header']['mobileFixed'] = that.params['header']['fixed'];
+        }
     };
 
     var render = function(){
@@ -7166,14 +7338,26 @@ function(params){
     };
 
     var setState = function(){
-        if(that.params['header']['overlapping']){
-            cm.addClass(that.nodes['headerContainer'], 'is-overlapping');
-        }
-        if(that.params['header']['fixed']){
-            cm.addClass(that.nodes['headerContainer'], 'is-fixed');
-        }
-        if(that.params['header']['fixed'] && !that.params['header']['overlapping']){
-            cm.addClass(that.nodes['headerSpace'], 'is-show');
+        if(cm.getPageSize('winWidth') <= cm._config.screenTabletPortrait){
+            if(that.params['header']['mobileOverlapping']){
+                cm.addClass(that.nodes['headerContainer'], 'is-overlapping');
+            }
+            if(that.params['header']['mobileFixed']){
+                cm.addClass(that.nodes['headerContainer'], 'is-fixed');
+            }
+            if(that.params['header']['mobileFixed'] && !that.params['header']['mobileOverlapping']){
+                cm.addClass(that.nodes['headerSpace'], 'is-show');
+            }
+        }else{
+            if(that.params['header']['overlapping']){
+                cm.addClass(that.nodes['headerContainer'], 'is-overlapping');
+            }
+            if(that.params['header']['fixed']){
+                cm.addClass(that.nodes['headerContainer'], 'is-fixed');
+            }
+            if(that.params['header']['fixed'] && !that.params['header']['overlapping']){
+                cm.addClass(that.nodes['headerSpace'], 'is-show');
+            }
         }
         cm.addClass(that.nodes['headerTransformed'], 'is-fixed');
         cm.removeClass(that.nodes['headerTransformed'], 'is-show');
@@ -7188,7 +7372,15 @@ function(params){
         }
     };
 
+    var stateHelper = function(){
+        unsetState();
+        if(!that.isEditing || cm.getPageSize('winWidth') <= cm._config.screenTabletPortrait){
+            setState();
+        }
+    };
+
     var redraw = function(triggerEvents){
+        stateHelper();
         getOffsets();
         resizeContent();
         setHeaderTransformed();
@@ -7268,7 +7460,6 @@ function(params){
         if(!cm.isBoolean(that.isEditing) || !that.isEditing){
             that.isEditing = true;
             cm.addClass(that.nodes['container'], 'is-editing');
-            unsetState();
             that.redraw();
             that.triggerEvent('enableEditing');
         }
@@ -7279,7 +7470,6 @@ function(params){
         if(!cm.isBoolean(that.isEditing) || that.isEditing){
             that.isEditing = false;
             cm.removeClass(that.nodes['container'], 'is-editing');
-            setState();
             that.redraw();
             that.triggerEvent('disableEditing');
         }
@@ -7741,16 +7931,13 @@ function(params){
     Com.AbstractFileManager.apply(that, arguments);
 });
 
-cm.getConstructor('App.elFinderFileManager', function(classConstructor, className, classProto){
-    var _inherit = classProto._inherit;
-
+cm.getConstructor('App.elFinderFileManager', function(classConstructor, className, classProto, classInherit){
     classProto.construct = function(){
         var that = this;
         // Bind context to methods
         that.getFilesEventHandler = that.getFilesEvent.bind(that);
         // Call parent method
-        _inherit.prototype.construct.apply(that, arguments);
-        return that;
+        classInherit.prototype.construct.apply(that, arguments);
     };
 
     classProto.get = function(){
@@ -7759,7 +7946,7 @@ cm.getConstructor('App.elFinderFileManager', function(classConstructor, classNam
         if(that.components['controller']){
             that.components['controller'].exec('getfile');
         }else{
-            _inherit.prototype.get.apply(that, arguments);
+            classInherit.prototype.get.apply(that, arguments);
         }
         return that;
     };
@@ -7770,7 +7957,7 @@ cm.getConstructor('App.elFinderFileManager', function(classConstructor, classNam
         if(that.components['controller']){
             that.components['controller'].exec('getfile');
         }else{
-            _inherit.prototype.complete.apply(that, arguments);
+            classInherit.prototype.complete.apply(that, arguments);
         }
         return that;
     };
@@ -7788,7 +7975,7 @@ cm.getConstructor('App.elFinderFileManager', function(classConstructor, classNam
         var that = this;
         // Init elFinder
         if(!that.components['controller']){
-            if(!cm.isUndefined(elFinder)){
+            if(typeof elFinder !== 'undefined'){
                 that.isLoaded = true;
                 that.components['controller'] = new elFinder(that.nodes['holder']['inner'],
                     cm.merge(that.params['config'], {
@@ -7823,13 +8010,13 @@ cm.getConstructor('App.elFinderFileManager', function(classConstructor, classNam
         // Callbacks
         switch(that.getFilesProcessType){
             case 'get':
-                _inherit.prototype.get.call(that);
+                classInherit.prototype.get.call(that);
                 break;
             case 'complete':
-                _inherit.prototype.complete.call(that);
+                classInherit.prototype.complete.call(that);
                 break;
             default:
-                _inherit.prototype.complete.call(that);
+                classInherit.prototype.complete.call(that);
                 break;
 
         }

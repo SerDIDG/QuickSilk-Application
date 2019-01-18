@@ -46,9 +46,7 @@ function(params){
     Com.AbstractController.apply(that, arguments);
 });
 
-cm.getConstructor('App.FileUploaderLocal', function(classConstructor, className, classProto){
-    var _inherit = classProto._inherit;
-
+cm.getConstructor('App.FileUploaderLocal', function(classConstructor, className, classProto, classInherit){
     classProto.construct = function(){
         var that = this;
         // Variables
@@ -63,8 +61,7 @@ cm.getConstructor('App.FileUploaderLocal', function(classConstructor, className,
         that.processFilesHandler = that.processFiles.bind(that);
         // Add events
         // Call parent method
-        _inherit.prototype.construct.apply(that, arguments);
-        return that;
+        classInherit.prototype.construct.apply(that, arguments);
     };
 
     classProto.get = function(){
@@ -119,7 +116,6 @@ cm.getConstructor('App.FileUploaderLocal', function(classConstructor, className,
         that.triggerEvent('onRenderViewProcess');
         cm.addEvent(that.nodes['input'], 'change', that.browseActionHandler);
         that.triggerEvent('onRenderViewEnd');
-        return that;
     };
 
     classProto.renderViewModel = function(){
@@ -169,7 +165,6 @@ cm.getConstructor('App.FileUploaderLocal', function(classConstructor, className,
                 });
             });
         }
-        return that;
     };
 
     /* *** PROCESS FILES *** */

@@ -32,7 +32,9 @@ cm.define('App.Template', {
             'fixed' : false,
             'overlapping' : false,
             'sticky' : false,           // Not implemented
-            'transformed' : false
+            'transformed' : false,
+            'mobileFixed' : null,
+            'mobileOverlapping' : null
         },
         'content' : {
             'editableIndent' : 0
@@ -69,16 +71,25 @@ function(params){
         that.convertEvents(that.params['events']);
         that.getDataNodes(that.params['node']);
         that.getDataConfig(that.params['node']);
+        validateParams();
         that.addToStack(that.params['node']);
         that.triggerEvent('onRenderStart');
         render();
-        setState();
         redraw(true);
         that.triggerEvent('onRender');
     };
 
     var getLESSVariables = function(){
         that.params['content']['editableIndent'] = cm.getLESSVariable('AppTpl-Content-EditableIndent', that.params['content']['editableIndent'], true);
+    };
+
+    var validateParams = function(){
+        if(!cm.isBoolean(that.params['header']['mobileOverlapping'])){
+            that.params['header']['mobileOverlapping'] = that.params['header']['overlapping'];
+        }
+        if(!cm.isBoolean(that.params['header']['mobileFixed'])){
+            that.params['header']['mobileFixed'] = that.params['header']['fixed'];
+        }
     };
 
     var render = function(){
@@ -113,14 +124,26 @@ function(params){
     };
 
     var setState = function(){
-        if(that.params['header']['overlapping']){
-            cm.addClass(that.nodes['headerContainer'], 'is-overlapping');
-        }
-        if(that.params['header']['fixed']){
-            cm.addClass(that.nodes['headerContainer'], 'is-fixed');
-        }
-        if(that.params['header']['fixed'] && !that.params['header']['overlapping']){
-            cm.addClass(that.nodes['headerSpace'], 'is-show');
+        if(cm.getPageSize('winWidth') <= cm._config.screenTabletPortrait){
+            if(that.params['header']['mobileOverlapping']){
+                cm.addClass(that.nodes['headerContainer'], 'is-overlapping');
+            }
+            if(that.params['header']['mobileFixed']){
+                cm.addClass(that.nodes['headerContainer'], 'is-fixed');
+            }
+            if(that.params['header']['mobileFixed'] && !that.params['header']['mobileOverlapping']){
+                cm.addClass(that.nodes['headerSpace'], 'is-show');
+            }
+        }else{
+            if(that.params['header']['overlapping']){
+                cm.addClass(that.nodes['headerContainer'], 'is-overlapping');
+            }
+            if(that.params['header']['fixed']){
+                cm.addClass(that.nodes['headerContainer'], 'is-fixed');
+            }
+            if(that.params['header']['fixed'] && !that.params['header']['overlapping']){
+                cm.addClass(that.nodes['headerSpace'], 'is-show');
+            }
         }
         cm.addClass(that.nodes['headerTransformed'], 'is-fixed');
         cm.removeClass(that.nodes['headerTransformed'], 'is-show');
@@ -135,7 +158,15 @@ function(params){
         }
     };
 
+    var stateHelper = function(){
+        unsetState();
+        if(!that.isEditing || cm.getPageSize('winWidth') <= cm._config.screenTabletPortrait){
+            setState();
+        }
+    };
+
     var redraw = function(triggerEvents){
+        stateHelper();
         getOffsets();
         resizeContent();
         setHeaderTransformed();
@@ -215,7 +246,6 @@ function(params){
         if(!cm.isBoolean(that.isEditing) || !that.isEditing){
             that.isEditing = true;
             cm.addClass(that.nodes['container'], 'is-editing');
-            unsetState();
             that.redraw();
             that.triggerEvent('enableEditing');
         }
@@ -226,7 +256,6 @@ function(params){
         if(!cm.isBoolean(that.isEditing) || that.isEditing){
             that.isEditing = false;
             cm.removeClass(that.nodes['container'], 'is-editing');
-            setState();
             that.redraw();
             that.triggerEvent('disableEditing');
         }

@@ -12,7 +12,7 @@ cm.define('App.FileUploaderContainer', {
         'placeholderParams' : {
             'renderButtons' : true,
             'params' : {
-                'width' : 900
+                'width' : '1000'
             }
         }
     },
@@ -30,9 +30,7 @@ function(params){
 });
 
 
-cm.getConstructor('App.FileUploaderContainer', function(classConstructor, className, classProto){
-    var _inherit = classProto._inherit;
-
+cm.getConstructor('App.FileUploaderContainer', function(classConstructor, className, classProto, classInherit){
     classProto.construct = function(){
         var that = this;
         // Variables
@@ -43,14 +41,13 @@ cm.getConstructor('App.FileUploaderContainer', function(classConstructor, classN
         that.afterCompleteHandler = that.afterComplete.bind(that);
         // Add events
         // Call parent method
-        _inherit.prototype.construct.apply(that, arguments);
-        return that;
+        classInherit.prototype.construct.apply(that, arguments);
     };
 
     classProto.validateParams = function(){
         var that = this;
         // Call parent method
-        _inherit.prototype.validateParams.apply(that, arguments);
+        classInherit.prototype.validateParams.apply(that, arguments);
         // Validate Request
         that.isRequest = !cm.isEmpty(that.params['action']) && window.Request && window.Request.send;
         // Validate Language Strings
@@ -78,7 +75,7 @@ cm.getConstructor('App.FileUploaderContainer', function(classConstructor, classN
     classProto.renderControllerEvents = function(){
         var that = this;
         // Call parent method
-        _inherit.prototype.renderControllerEvents.apply(that, arguments);
+        classInherit.prototype.renderControllerEvents.apply(that, arguments);
         // Add specific events
         that.components['controller'].addEvent('onGet', function(my, data){
             that.afterGet(data);

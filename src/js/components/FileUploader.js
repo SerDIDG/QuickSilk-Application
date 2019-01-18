@@ -23,6 +23,12 @@ cm.define('App.FileUploader', {
             'showStats' : false,
             'fullSize' : true
         },
+        'stock' : false,
+        'stockConstructor' : 'App.shutterStockManager',
+        'stockParams' : {
+            'embedStructure' : 'append',
+            'fullSize' : true
+        },
         'Com.Tabset' : {
             'embedStructure' : 'append',
             'toggleOnHashChange' : false,
@@ -37,6 +43,7 @@ cm.define('App.FileUploader', {
     'strings' : {
         'tab_local' : 'Select From PC',
         'tab_filemanager' : 'File Manager',
+        'tab_stock' : 'Shutterstock',
         'browse_local_single' : 'Choose file',
         'browse_local_multiple' : 'Choose files',
         'or' : 'or',
@@ -53,17 +60,14 @@ function(params){
     Com.AbstractController.apply(that, arguments);
 });
 
-cm.getConstructor('App.FileUploader', function(classConstructor, className, classProto){
-    var _inherit = classProto._inherit;
-
+cm.getConstructor('App.FileUploader', function(classConstructor, className, classProto, classInherit){
     classProto.construct = function(){
         var that = this;
         // Bind context to methods
         that.completeHandler = that.complete.bind(that);
         // Add events
         // Call parent method
-        _inherit.prototype.construct.apply(that, arguments);
-        return that;
+        classInherit.prototype.construct.apply(that, arguments);
     };
 
     classProto.get = function(){
@@ -95,6 +99,9 @@ cm.getConstructor('App.FileUploader', function(classConstructor, className, clas
                 case 'fileManager':
                     that.components['fileManager'].complete();
                     break;
+                case 'stock':
+                    that.components['stock'].complete();
+                    break;
             }
         }
         return that;
@@ -106,6 +113,8 @@ cm.getConstructor('App.FileUploader', function(classConstructor, className, clas
         that.params['localParams']['max'] = that.params['max'];
         that.params['fileManagerParams']['max'] = that.params['max'];
         that.params['fileManagerParams']['lazy'] = that.params['fileManagerLazy'];
+        that.params['stock']['max'] = that.params['max'];
+        that.params['stock']['lazy'] = that.params['fileManagerLazy'];
         return that;
     };
 
@@ -125,6 +134,10 @@ cm.getConstructor('App.FileUploader', function(classConstructor, className, clas
         // File Manager
         if(that.params['fileManager']){
             that.nodes['fileManager'] = that.renderFileManager();
+        }
+        // File Manager
+        if(that.params['stock']){
+            that.nodes['stock'] = that.renderStock();
         }
         // Events
         that.triggerEvent('onRenderViewProcess');
@@ -165,6 +178,22 @@ cm.getConstructor('App.FileUploader', function(classConstructor, className, clas
                 });
             });
         }
+        // Init Stock
+        if(that.params['stock']){
+            cm.getConstructor(that.params['stockConstructor'], function(classObject){
+                that.components['stock'] = new classObject(
+                    cm.merge(that.params['stockParams'], {
+                        'node' : that.nodes['stock']['holder']
+                    })
+                );
+                that.components['stock'].addEvent('onGet', function(my, data){
+                    that.afterGet(data);
+                });
+                that.components['stock'].addEvent('onComplete', function(my, data){
+                    that.afterComplete(data);
+                });
+            });
+        }
         // Init Tabset
         that.renderTabset();
         // Init Stats
@@ -190,27 +219,55 @@ cm.getConstructor('App.FileUploader', function(classConstructor, className, clas
             );
             that.components['tabset'].addEvent('onTabShow', function(my, data){
                 that.activeTab = data;
-                if(that.activeTab['id'] === 'fileManager'){
-                    that.components['fileManager'] && that.components['fileManager'].load();
+                switch(that.activeTab['id']){
+                    case 'fileManager':
+                        that.components['fileManager'] && that.components['fileManager'].load();
+                        break;
+                    case 'stock':
+                        that.components['stock'] && that.components['stock'].load();
+                        break;
                 }
             });
-            if(that.params['local']){
-                that.components['tabset'].addTab({
-                    'id' : 'local',
-                    'title' : that.lang('tab_local'),
-                    'content' : that.nodes['local']['li']
-                });
-            }
-            if(that.params['fileManager']){
-                that.components['tabset'].addTab({
-                    'id' : 'fileManager',
-                    'title' : that.lang('tab_filemanager'),
-                    'content' : that.nodes['fileManager']['li']
-                });
-            }
-            that.components['tabset'].set(that.params['local'] ? 'local' : 'fileManager');
+            that.renderTabs();
         });
         return that;
+    };
+
+    classProto.renderTabs = function(){
+        var that = this,
+            initialTab;
+        if(that.params['local']){
+            that.components['tabset'].addTab({
+                'id' : 'local',
+                'title' : that.lang('tab_local'),
+                'content' : that.nodes['local']['li']
+            });
+            if(cm.isEmpty(initialTab)){
+                initialTab = 'local'
+            }
+        }
+        if(that.params['fileManager']){
+            that.components['tabset'].addTab({
+                'id' : 'fileManager',
+                'title' : that.lang('tab_filemanager'),
+                'content' : that.nodes['fileManager']['li']
+            });
+            if(cm.isEmpty(initialTab)){
+                initialTab = 'fileManager';
+            }
+        }
+        if(that.params['stock']){
+            that.components['tabset'].addTab({
+                'id' : 'stock',
+                'title' : that.lang('tab_stock'),
+                'content' : that.nodes['stock']['li']
+            });
+            if(cm.isEmpty(initialTab)){
+                initialTab = 'stock';
+            }
+        }
+        // Set initial tab
+        that.components['tabset'].set(initialTab);
     };
 
     classProto.renderLocal = function(){
@@ -231,6 +288,18 @@ cm.getConstructor('App.FileUploader', function(classConstructor, className, clas
         // Structure
         nodes['li'] = cm.node('li',
             nodes['container'] = cm.node('div', {'class' : 'app__file-uploader__file-manager is-fullsize'},
+                nodes['holder'] = cm.node('div', {'class' : 'app__file-uploader__holder'})
+            )
+        );
+        return nodes;
+    };
+
+    classProto.renderStock = function(){
+        var that = this,
+            nodes = {};
+        // Structure
+        nodes['li'] = cm.node('li',
+            nodes['container'] = cm.node('div', {'class' : 'app__file-uploader__stock is-fullsize'},
                 nodes['holder'] = cm.node('div', {'class' : 'app__file-uploader__holder'})
             )
         );
