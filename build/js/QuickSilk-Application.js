@@ -1,11 +1,11 @@
-/*! ************ QuickSilk-Application v3.23.0 (2019-02-11 20:44) ************ */
+/*! ************ QuickSilk-Application v3.23.1 (2019-02-11 21:03) ************ */
 
 // /* ************************************************ */
 // /* ******* QUICKSILK: COMMON ******* */
 // /* ************************************************ */
 
 var App = {
-    '_version' : '3.23.0',
+    '_version' : '3.23.1',
     '_assetsUrl' : [window.location.protocol, window.location.hostname].join('//'),
     'Elements': {},
     'Nodes' : {},
@@ -7045,13 +7045,15 @@ cm.getConstructor('App.ShutterstockManager', function(classConstructor, classNam
 
     classProto.renderListError = function(){
         var that = this;
-        // Render structure
-        if(!that.nodes['categories']['error']){
-            that.nodes['categories']['error'] = cm.node('div', {'class' : 'cm__empty'}, that.lang('server_error'));
+        if(cm.isEmpty(that.components['pagination'].currentPage)){
+            // Render structure
+            if(!that.nodes['categories']['error']){
+                that.nodes['categories']['error'] = cm.node('div', {'class' : 'cm__empty'}, that.lang('server_error'));
+            }
+            // Embed
+            cm.insertFirst(that.nodes['categories']['error'], that.nodes['categories']['listHolder']);
+            cm.addClass(that.nodes['categories']['error'], 'is-show', true);
         }
-        // Embed
-        cm.insertFirst(that.nodes['categories']['error'], that.nodes['categories']['listHolder']);
-        cm.addClass(that.nodes['categories']['error'], 'is-show', true);
     };
 
     classProto.removeListError = function(){
