@@ -1,11 +1,11 @@
-/*! ************ QuickSilk-Application v3.23.1 (2019-02-11 21:03) ************ */
+/*! ************ QuickSilk-Application v3.23.2 (2019-02-12 21:17) ************ */
 
 // /* ************************************************ */
 // /* ******* QUICKSILK: COMMON ******* */
 // /* ************************************************ */
 
 var App = {
-    '_version' : '3.23.1',
+    '_version' : '3.23.2',
     '_assetsUrl' : [window.location.protocol, window.location.hostname].join('//'),
     'Elements': {},
     'Nodes' : {},
@@ -2586,7 +2586,7 @@ cm.define('App.FileUploader', {
             'showStats' : false,
             'fullSize' : true
         },
-        'stock' : true,
+        'stock' : false,
         'stockConstructor' : 'App.ShutterstockManager',
         'stockParams' : {
             'embedStructure' : 'append',
@@ -6849,7 +6849,7 @@ cm.define('App.ShutterstockManager', {
         'paginationParams' : {
             'embedStructure' : 'append',
             'showButton' : 'once',
-            'perPage' : 30,
+            'perPage' : 25,
             'columns' : 5,
             'responseCountKey' : 'total_count',
             'responseHTML' : false,

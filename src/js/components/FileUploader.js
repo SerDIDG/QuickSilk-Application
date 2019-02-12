@@ -23,7 +23,7 @@ cm.define('App.FileUploader', {
             'showStats' : false,
             'fullSize' : true
         },
-        'stock' : true,
+        'stock' : false,
         'stockConstructor' : 'App.ShutterstockManager',
         'stockParams' : {
             'embedStructure' : 'append',
