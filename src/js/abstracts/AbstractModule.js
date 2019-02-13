@@ -21,9 +21,7 @@ function(params){
     Com.AbstractController.apply(that, arguments);
 });
 
-cm.getConstructor('App.AbstractModule', function(classConstructor, className, classProto){
-    var _inherit = classProto._inherit;
-
+cm.getConstructor('App.AbstractModule', function(classConstructor, className, classProto, classInherit){
     classProto.construct = function(){
         var that = this;
         // Variables
@@ -32,7 +30,7 @@ cm.getConstructor('App.AbstractModule', function(classConstructor, className, cl
         that.enableEditingHandler = that.enableEditing.bind(that);
         that.disableEditingHandler = that.disableEditing.bind(that);
         // Call parent method
-        _inherit.prototype.construct.apply(that, arguments);
+        classInherit.prototype.construct.apply(that, arguments);
     };
 
     classProto.onSetCustomEvents = function(){

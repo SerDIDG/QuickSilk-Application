@@ -2,7 +2,8 @@ cm.define('Mod.ElementMultiField', {
     'extend' : 'App.AbstractModuleElement',
     'params' : {
         'targetController' : 'Com.MultiField',
-        'memorable' : false
+        'memorable' : false,
+        'demo' : false
     }
 },
 function(params){
@@ -11,24 +12,25 @@ function(params){
     App.AbstractModuleElement.apply(that, arguments);
 });
 
-cm.getConstructor('Mod.ElementMultiField', function(classConstructor, className, classProto){
-    var _inherit = classProto._inherit;
-
+cm.getConstructor('Mod.ElementMultiField', function(classConstructor, className, classProto, classInherit){
     classProto.onEnableEditing = function(){
         var that = this;
-        if(that.components['controller']){
-            that.components['controller']
-                .clear();
+        if(that.params['demo']){
+            if(that.components['controller']){
+                that.components['controller']
+                    .clear();
+            }
         }
     };
 
     classProto.onDisableEditing = function(){
         var that = this;
-        cm.log(that.components['controller']);
-        if(that.components['controller']){
-            that.components['controller']
-                .clear()
-                .setTemplate(that.nodes['content']['templateInner']);
+        if(that.params['demo']){
+            if(that.components['controller']){
+                that.components['controller']
+                    .clear()
+                    .setTemplate(that.nodes['content']['templateInner']);
+            }
         }
     };
 });

@@ -21,15 +21,13 @@ function(params){
     App.AbstractModule.apply(that, arguments);
 });
 
-cm.getConstructor('App.AbstractModuleElement', function(classConstructor, className, classProto){
-    var _inherit = classProto._inherit;
-
+cm.getConstructor('App.AbstractModuleElement', function(classConstructor, className, classProto, classInherit){
     classProto.construct = function(){
         var that = this;
         // Bind
         that.changeEventHandler = that.changeEvent.bind(that);
         // Call parent method
-        _inherit.prototype.construct.apply(that, arguments);
+        classInherit.prototype.construct.apply(that, arguments);
     };
 
     classProto.onConstructEnd = function(){
@@ -41,7 +39,7 @@ cm.getConstructor('App.AbstractModuleElement', function(classConstructor, classN
     classProto.renderViewModel = function(){
         var that = this;
         // Call parent method
-        _inherit.prototype.renderViewModel.apply(that, arguments);
+        classInherit.prototype.renderViewModel.apply(that, arguments);
         // Get controller
         if(that.params['targetController']){
             that.renderController();

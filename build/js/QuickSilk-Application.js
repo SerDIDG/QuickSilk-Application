@@ -1,11 +1,11 @@
-/*! ************ QuickSilk-Application v3.23.3 (2019-02-13 19:13) ************ */
+/*! ************ QuickSilk-Application v3.23.4 (2019-02-13 21:32) ************ */
 
 // /* ************************************************ */
 // /* ******* QUICKSILK: COMMON ******* */
 // /* ************************************************ */
 
 var App = {
-    '_version' : '3.23.3',
+    '_version' : '3.23.4',
     '_assetsUrl' : [window.location.protocol, window.location.hostname].join('//'),
     'Elements': {},
     'Nodes' : {},
@@ -43,9 +43,7 @@ function(params){
     Com.AbstractController.apply(that, arguments);
 });
 
-cm.getConstructor('App.AbstractModule', function(classConstructor, className, classProto){
-    var _inherit = classProto._inherit;
-
+cm.getConstructor('App.AbstractModule', function(classConstructor, className, classProto, classInherit){
     classProto.construct = function(){
         var that = this;
         // Variables
@@ -54,7 +52,7 @@ cm.getConstructor('App.AbstractModule', function(classConstructor, className, cl
         that.enableEditingHandler = that.enableEditing.bind(that);
         that.disableEditingHandler = that.disableEditing.bind(that);
         // Call parent method
-        _inherit.prototype.construct.apply(that, arguments);
+        classInherit.prototype.construct.apply(that, arguments);
     };
 
     classProto.onSetCustomEvents = function(){
@@ -126,15 +124,13 @@ function(params){
     App.AbstractModule.apply(that, arguments);
 });
 
-cm.getConstructor('App.AbstractModuleElement', function(classConstructor, className, classProto){
-    var _inherit = classProto._inherit;
-
+cm.getConstructor('App.AbstractModuleElement', function(classConstructor, className, classProto, classInherit){
     classProto.construct = function(){
         var that = this;
         // Bind
         that.changeEventHandler = that.changeEvent.bind(that);
         // Call parent method
-        _inherit.prototype.construct.apply(that, arguments);
+        classInherit.prototype.construct.apply(that, arguments);
     };
 
     classProto.onConstructEnd = function(){
@@ -146,7 +142,7 @@ cm.getConstructor('App.AbstractModuleElement', function(classConstructor, classN
     classProto.renderViewModel = function(){
         var that = this;
         // Call parent method
-        _inherit.prototype.renderViewModel.apply(that, arguments);
+        classInherit.prototype.renderViewModel.apply(that, arguments);
         // Get controller
         if(that.params['targetController']){
             that.renderController();
@@ -9436,7 +9432,8 @@ cm.define('Mod.ElementMultiField', {
     'extend' : 'App.AbstractModuleElement',
     'params' : {
         'targetController' : 'Com.MultiField',
-        'memorable' : false
+        'memorable' : false,
+        'demo' : false
     }
 },
 function(params){
@@ -9445,24 +9442,25 @@ function(params){
     App.AbstractModuleElement.apply(that, arguments);
 });
 
-cm.getConstructor('Mod.ElementMultiField', function(classConstructor, className, classProto){
-    var _inherit = classProto._inherit;
-
+cm.getConstructor('Mod.ElementMultiField', function(classConstructor, className, classProto, classInherit){
     classProto.onEnableEditing = function(){
         var that = this;
-        if(that.components['controller']){
-            that.components['controller']
-                .clear();
+        if(that.params['demo']){
+            if(that.components['controller']){
+                that.components['controller']
+                    .clear();
+            }
         }
     };
 
     classProto.onDisableEditing = function(){
         var that = this;
-        cm.log(that.components['controller']);
-        if(that.components['controller']){
-            that.components['controller']
-                .clear()
-                .setTemplate(that.nodes['content']['templateInner']);
+        if(that.params['demo']){
+            if(that.components['controller']){
+                that.components['controller']
+                    .clear()
+                    .setTemplate(that.nodes['content']['templateInner']);
+            }
         }
     };
 });
