@@ -1,11 +1,11 @@
-/*! ************ QuickSilk-Application v3.23.4 (2019-02-13 21:32) ************ */
+/*! ************ QuickSilk-Application v3.23.5 (2019-02-14 19:07) ************ */
 
 // /* ************************************************ */
 // /* ******* QUICKSILK: COMMON ******* */
 // /* ************************************************ */
 
 var App = {
-    '_version' : '3.23.4',
+    '_version' : '3.23.5',
     '_assetsUrl' : [window.location.protocol, window.location.hostname].join('//'),
     'Elements': {},
     'Nodes' : {},
@@ -7144,9 +7144,12 @@ cm.getConstructor('App.ShutterstockManager', function(classConstructor, classNam
         return {
             'value' : data['assets']['preview']['url'],
             'name' : data['description'],
+            'description' : data['description'],
             'mime' : data['media_type'],
             'size' : null,
-            'url' : data['assets']['preview']['url']
+            'url' : data['assets']['preview']['url'],
+            'id' : data['id'],
+            'source' : 'shutterstock_preview'
         }
     };
 });
@@ -8267,7 +8270,8 @@ cm.getConstructor('App.elFinderFileManager', function(classConstructor, classNam
             'name' : data['name'],
             'mime' : data['mime'],
             'size' : data['size'],
-            'url' : data['url']
+            'url' : data['url'],
+            'source' : 'elFinder'
         }
     };
 });

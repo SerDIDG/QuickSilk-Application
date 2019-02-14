@@ -329,9 +329,12 @@ cm.getConstructor('App.ShutterstockManager', function(classConstructor, classNam
         return {
             'value' : data['assets']['preview']['url'],
             'name' : data['description'],
+            'description' : data['description'],
             'mime' : data['media_type'],
             'size' : null,
-            'url' : data['assets']['preview']['url']
+            'url' : data['assets']['preview']['url'],
+            'id' : data['id'],
+            'source' : 'shutterstock_preview'
         }
     };
 });

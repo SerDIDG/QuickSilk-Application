@@ -1,6 +1,6 @@
 {
   "name": "QuickSilk-Application",
-  "version": "3.23.4",
+  "version": "3.23.5",
   "license": "CC-BY-NC-SA-4.0",
   "dependencies": {
     "chart.js": "^2.4.0",

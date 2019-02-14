@@ -129,7 +129,8 @@ cm.getConstructor('App.elFinderFileManager', function(classConstructor, classNam
             'name' : data['name'],
             'mime' : data['mime'],
             'size' : data['size'],
-            'url' : data['url']
+            'url' : data['url'],
+            'source' : 'elFinder'
         }
     };
 });
