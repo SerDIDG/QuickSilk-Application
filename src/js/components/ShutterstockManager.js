@@ -326,9 +326,11 @@ cm.getConstructor('App.ShutterstockManager', function(classConstructor, classNam
     /* *** PROCESS FILES *** */
 
     classProto.convertFile = function(data){
+        var name = data['assets']['preview']['url'].split('/').pop();
+        // Return converted data
         return {
             'value' : data['assets']['preview']['url'],
-            'name' : data['description'],
+            'name' : name,
             'description' : data['description'],
             'mime' : data['media_type'],
             'size' : null,

@@ -1,11 +1,11 @@
-/*! ************ QuickSilk-Application v3.23.5 (2019-02-14 19:07) ************ */
+/*! ************ QuickSilk-Application v3.23.6 (2019-02-15 21:17) ************ */
 
 // /* ************************************************ */
 // /* ******* QUICKSILK: COMMON ******* */
 // /* ************************************************ */
 
 var App = {
-    '_version' : '3.23.5',
+    '_version' : '3.23.6',
     '_assetsUrl' : [window.location.protocol, window.location.hostname].join('//'),
     'Elements': {},
     'Nodes' : {},
@@ -7141,9 +7141,11 @@ cm.getConstructor('App.ShutterstockManager', function(classConstructor, classNam
     /* *** PROCESS FILES *** */
 
     classProto.convertFile = function(data){
+        var name = data['assets']['preview']['url'].split('/').pop();
+        // Return converted data
         return {
             'value' : data['assets']['preview']['url'],
-            'name' : data['description'],
+            'name' : name,
             'description' : data['description'],
             'mime' : data['media_type'],
             'size' : null,
