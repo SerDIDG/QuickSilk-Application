@@ -20,6 +20,7 @@ cm.define('App.Zone', {
         'layerId' : 0,
         'link' : false,                         // {'positionId' : 0, 'layerId' : 0, type' : ''}
         'locked' : false,
+        'disallow' : [],
         'editorName' : 'app-editor'
     }
 },

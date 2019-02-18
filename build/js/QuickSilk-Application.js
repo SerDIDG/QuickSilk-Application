@@ -1,11 +1,11 @@
-/*! ************ QuickSilk-Application v3.23.6 (2019-02-15 21:17) ************ */
+/*! ************ QuickSilk-Application v3.23.7 (2019-02-18 20:48) ************ */
 
 // /* ************************************************ */
 // /* ******* QUICKSILK: COMMON ******* */
 // /* ************************************************ */
 
 var App = {
-    '_version' : '3.23.6',
+    '_version' : '3.23.7',
     '_assetsUrl' : [window.location.protocol, window.location.hostname].join('//'),
     'Elements': {},
     'Nodes' : {},
@@ -1592,10 +1592,11 @@ function(params){
     var getCurrentZones = function(block){
         return that.zones.filter(function(zone){
             if(
-                cm.isParent(block.params['node'], zone.params['node']) ||
                 zone.params['locked'] ||
                 (zone.params['type'] !== 'remove' && block.params['type'] !== zone.params['type']) ||
-                (zone.params['type'] === 'remove' && !block.params['removable'])
+                (zone.params['type'] === 'remove' && !block.params['removable']) ||
+                cm.inArray(zone.params['disallow'], block.params['keyword']) ||
+                cm.isParent(block.params['node'], zone.params['node'])
             ){
                 return false;
             }
@@ -7915,6 +7916,7 @@ cm.define('App.Zone', {
         'layerId' : 0,
         'link' : false,                         // {'positionId' : 0, 'layerId' : 0, type' : ''}
         'locked' : false,
+        'disallow' : [],
         'editorName' : 'app-editor'
     }
 },

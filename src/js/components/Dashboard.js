@@ -624,10 +624,11 @@ function(params){
     var getCurrentZones = function(block){
         return that.zones.filter(function(zone){
             if(
-                cm.isParent(block.params['node'], zone.params['node']) ||
                 zone.params['locked'] ||
                 (zone.params['type'] !== 'remove' && block.params['type'] !== zone.params['type']) ||
-                (zone.params['type'] === 'remove' && !block.params['removable'])
+                (zone.params['type'] === 'remove' && !block.params['removable']) ||
+                cm.inArray(zone.params['disallow'], block.params['keyword']) ||
+                cm.isParent(block.params['node'], zone.params['node'])
             ){
                 return false;
             }
