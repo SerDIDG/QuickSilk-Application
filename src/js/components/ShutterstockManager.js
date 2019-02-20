@@ -30,6 +30,7 @@ cm.define('App.ShutterstockManager', {
         'paginationParams' : {
             'embedStructure' : 'append',
             'showButton' : 'once',
+            'gridClass' : 'pt__grid--files',
             'perPage' : 25,
             'columns' : 5,
             'responseCountKey' : 'total_count',

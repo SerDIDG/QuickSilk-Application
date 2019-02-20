@@ -1,11 +1,11 @@
-/*! ************ QuickSilk-Application v3.23.7 (2019-02-18 20:48) ************ */
+/*! ************ QuickSilk-Application v3.24.0 (2019-02-20 19:41) ************ */
 
 // /* ************************************************ */
 // /* ******* QUICKSILK: COMMON ******* */
 // /* ************************************************ */
 
 var App = {
-    '_version' : '3.23.7',
+    '_version' : '3.24.0',
     '_assetsUrl' : [window.location.protocol, window.location.hostname].join('//'),
     'Elements': {},
     'Nodes' : {},
@@ -1236,12 +1236,10 @@ function(params){
         that.currentBlockOffset['left'] = params['left'] - dimensions['outer']['left'];
         // Clone dummy block or unset area from block
         if(block.isDummy){
-            that.currentBlock = block
-                .clone();
+            that.currentBlock = block.clone();
         }else{
             that.currentBlockZone = block.zone;
-            that.currentBlock = block
-                .unsetZone();
+            that.currentBlock = block.unsetZone();
         }
         // Insert widget to body
         cm.appendChild(that.currentBlock.node, that.params['draggableContainer']);
@@ -1331,8 +1329,7 @@ function(params){
             // Remove temporary node
             cm.remove(node);
             // Remove block
-            block.unsetZone()
-                 .remove();
+            block.unsetZone().remove();
             if(params['triggerEvent']){
                 that.triggerEvent('onRemove', block);
                 that.triggerEvent('onRemoveEnd', block);
@@ -1519,9 +1516,7 @@ function(params){
         // After animation event
         setTimeout(function(){
             if(params.block){
-                params.block
-                    .unsetZone()
-                    .remove();
+                params.block.unsetZone().remove();
             }
             cm.removeClass(node, 'is-replacing');
             cm.insertAfter(node, temporaryNode);
@@ -1607,8 +1602,8 @@ function(params){
     var getCurrentBlocks = function(block){
         return that.blocks.filter(function(item){
             if(
-                cm.isParent(block.params['node'], item.params['node']) ||
-                block.params['type'] !== item.params['type']
+                block.params['type'] !== item.params['type'] ||
+                cm.isParent(block.params['node'], item.params['node'])
             ){
                 return false;
             }
@@ -1637,8 +1632,8 @@ function(params){
                 if(!temp.zone){
                     temp.zone = zone;
                 }else if(
-                    zone.dimensions['offset']['width'] < temp.zone.dimensions['offset']['width']
-                    || zone.dimensions['offset']['height'] < temp.zone.dimensions['offset']['height']
+                    zone.dimensions['offset']['width'] < temp.zone.dimensions['offset']['width'] ||
+                    zone.dimensions['offset']['height'] < temp.zone.dimensions['offset']['height']
                 ){
                     temp.zone = zone;
                 }
@@ -1711,8 +1706,7 @@ function(params){
 
     var unsetCurrentBelow = function(){
         if(that.currentBellow.zone){
-            that.currentBellow.zone
-                .unactive();
+            that.currentBellow.zone.unactive();
         }
     };
 
@@ -6846,6 +6840,7 @@ cm.define('App.ShutterstockManager', {
         'paginationParams' : {
             'embedStructure' : 'append',
             'showButton' : 'once',
+            'gridClass' : 'pt__grid--files',
             'perPage' : 25,
             'columns' : 5,
             'responseCountKey' : 'total_count',
