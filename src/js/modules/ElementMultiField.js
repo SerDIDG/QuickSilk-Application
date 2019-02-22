@@ -15,6 +15,7 @@ function(params){
 cm.getConstructor('Mod.ElementMultiField', function(classConstructor, className, classProto, classInherit){
     classProto.onEnableEditing = function(){
         var that = this;
+        cm.appendChild(that.nodes['content']['templateInner'], that.nodes['content']['templateContainer']);
         if(that.params['demo']){
             if(that.components['controller']){
                 that.components['controller']
@@ -25,6 +26,7 @@ cm.getConstructor('Mod.ElementMultiField', function(classConstructor, className,
 
     classProto.onDisableEditing = function(){
         var that = this;
+        cm.remove(that.nodes['content']['templateInner']);
         if(that.params['demo']){
             if(that.components['controller']){
                 that.components['controller']

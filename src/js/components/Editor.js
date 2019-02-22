@@ -22,6 +22,7 @@ cm.define('App.Editor', {
         'delete',
         'update',
         'duplicate',
+        'copy',
 
         'createRequest',
         'replaceRequest',
@@ -29,6 +30,7 @@ cm.define('App.Editor', {
         'deleteRequest',
         'updateRequest',
         'duplicateRequest',
+        'copyRequest',
 
         'onProcessEnd'
     ],
@@ -238,6 +240,11 @@ function(params){
         return that;
     };
 
+    that.copyRequest = function(block){
+        that.triggerEvent('copyRequest', block);
+        return that;
+    };
+
     /* *** ACTIONS *** */
 
     that.create = function(node, block){
@@ -257,7 +264,7 @@ function(params){
         return that;
     };
 
-    // TODO: for placing not exists blocks, unused, can be removed
+    // TODO: for placing not exists blocks, unused, can be removed or user for help tour
     that.place = function(node, block){
         if(node && block){
             node = !cm.isNode(node) ? cm.strToHTML(node) : node;
@@ -320,6 +327,16 @@ function(params){
         return that;
     };
 
+    that.copy = function(node, block){
+        if(node && block){
+            node = !cm.isNode(node) ? cm.strToHTML(node) : node;
+            that.triggerEvent('copy', node);
+            that.triggerEvent('onProcessEnd', node);
+            that.components['template'].redraw();
+        }
+        return that;
+    };
+
     that.update = function(node, block){
         if(node && block){
             node = !cm.isNode(node) ? cm.strToHTML(node) : node;
@@ -365,6 +382,9 @@ function(params){
             });
             cm.addEvent(menu['delete'], 'click', function(){
                 that.deleteRequest(block);
+            });
+            cm.addEvent(menu['copy'], 'click', function(){
+                that.copyRequest(block);
             });
             that.blocks.push(block);
         }

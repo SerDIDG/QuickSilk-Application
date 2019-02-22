@@ -10,6 +10,7 @@ cm.define('App.ShutterstockManager', {
         'searchConstructor' : 'Com.Input',
         'searchParams' : {
             'embedStructure' : 'append',
+            'defaultValue' : null,
             'lazy' : true,
             'icon' : 'icon small search linked'
         },
@@ -38,7 +39,8 @@ cm.define('App.ShutterstockManager', {
             'ajax' : {
                 'type' : 'json',
                 'method' : 'get',
-                'url' : '/shutterstock-api/images/search/%page%'
+                'url' : '/shutterstock-api/images/search/%page%',
+                'urlPurchased' : '/shutterstock-api/images/src'
             }
         },
         'overlayConstructor' : 'Com.Overlay',
@@ -49,7 +51,10 @@ cm.define('App.ShutterstockManager', {
         }
     },
     'strings' : {
-        'all' : 'All',
+        'categories' : {
+            '_all' : 'All',
+            '_purchased' : 'My Purchased Images'
+        },
         'server_error' : 'An unexpected error has occurred. Please try again later.'
     }
 },
@@ -66,8 +71,11 @@ cm.getConstructor('App.ShutterstockManager', function(classConstructor, classNam
         var that = this;
         // Variables
         that.categories = [{
-            'id' : 'all',
-            'name' : that.lang('all')
+            'id' : '_purchased',
+            'name' : that.lang('categories._purchased')
+        },{
+            'id' : '_all',
+            'name' : that.lang('categories._all')
         }];
         that.currentCategory = null;
         that.currentQuery = null;
@@ -158,10 +166,16 @@ cm.getConstructor('App.ShutterstockManager', function(classConstructor, classNam
         );
         // Embed
         cm.appendChild(nodes['container'], that.nodes['categories']['tabsHolder']);
+        // Separator
+        if(item['id'] === '_purchased'){
+            nodes['sep'] = cm.node('li', {'class' : 'sep'});
+            cm.appendChild(nodes['sep'], that.nodes['categories']['tabsHolder']);
+        }
     };
 
     classProto.renderCategoriesViewModel = function(){
-        var that = this;
+        var that = this,
+            toolbarSearchField;
         // Render toolbar
         cm.getConstructor(that.params['toolbarConstructor'], function(classConstructor){
             that.components['toolbar'] = new classConstructor(
@@ -185,6 +199,8 @@ cm.getConstructor('App.ShutterstockManager', function(classConstructor, classNam
                     }
                 })
             });
+            toolbarSearchField = that.components['toolbar'].getField('search', 'all');
+            that.components['search'] = toolbarSearchField['controller'];
         });
         // Init tabset helper
         cm.getConstructor(that.params['categoriesConstructor'], function(classConstructor){
@@ -194,7 +210,7 @@ cm.getConstructor('App.ShutterstockManager', function(classConstructor, classNam
                 })
             );
             that.components['tabset'].addEvent('onTabShowStart', that.setListCategoryHandler);
-            that.components['tabset'].set('all');
+            that.components['tabset'].set('_all');
         });
         // Init overlay
         cm.getConstructor(that.params['overlayConstructor'], function(classConstructor){
@@ -282,32 +298,46 @@ cm.getConstructor('App.ShutterstockManager', function(classConstructor, classNam
     };
 
     classProto.setListCategory = function(tabset, tab){
-        var that = this;
+        var that = this,
+            urlType,
+            category;
         that.currentCategory = tab['id'];
         // Update pagination action
         if(that.components['pagination']){
             that.components['overlay'].open();
-            // Set category
+            // Set search
+            if(that.currentCategory === '_purchased'){
+                that.components['search'].reset();
+                that.components['search'].disable();
+            }else{
+                that.components['search'].enable();
+            }
+            // Set ajax parameters
+            urlType = that.currentCategory === '_purchased' ? 'urlPurchased' : 'url';
+            category = /^_/.test(that.currentCategory) ? null : that.currentCategory;
             that.components['pagination'].setAction({
+                'url' : that.params['paginationParams']['ajax'][urlType],
                 'params' : {
-                    'category' : that.currentCategory === 'all' ? null : that.currentCategory
+                    'category' : category
                 }
             });
         }
     };
 
     classProto.setListQuery = function(input, value){
-        var that = this;
+        var that = this,
+            rebuild;
         that.currentQuery = value;
         // Update pagination action
         if(that.components['pagination']){
             that.components['overlay'].open();
-            // Set query
+            // Set ajax parameters
+            rebuild = that.currentCategory !== '_purchased';
             that.components['pagination'].setAction({
                 'params' : {
                     'query' : that.currentQuery
                 }
-            });
+            }, null, null, rebuild);
         }
     };
 

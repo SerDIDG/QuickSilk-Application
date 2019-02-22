@@ -1,11 +1,11 @@
-/*! ************ QuickSilk-Application v3.24.1 (2019-02-22 20:51) ************ */
+/*! ************ QuickSilk-Application v3.24.2 (2019-02-22 22:55) ************ */
 
 // /* ************************************************ */
 // /* ******* QUICKSILK: COMMON ******* */
 // /* ************************************************ */
 
 var App = {
-    '_version' : '3.24.1',
+    '_version' : '3.24.2',
     '_assetsUrl' : [window.location.protocol, window.location.hostname].join('//'),
     'Elements': {},
     'Nodes' : {},
@@ -2170,6 +2170,7 @@ cm.define('App.Editor', {
         'delete',
         'update',
         'duplicate',
+        'copy',
 
         'createRequest',
         'replaceRequest',
@@ -2177,6 +2178,7 @@ cm.define('App.Editor', {
         'deleteRequest',
         'updateRequest',
         'duplicateRequest',
+        'copyRequest',
 
         'onProcessEnd'
     ],
@@ -2386,6 +2388,11 @@ function(params){
         return that;
     };
 
+    that.copyRequest = function(block){
+        that.triggerEvent('copyRequest', block);
+        return that;
+    };
+
     /* *** ACTIONS *** */
 
     that.create = function(node, block){
@@ -2405,7 +2412,7 @@ function(params){
         return that;
     };
 
-    // TODO: for placing not exists blocks, unused, can be removed
+    // TODO: for placing not exists blocks, unused, can be removed or user for help tour
     that.place = function(node, block){
         if(node && block){
             node = !cm.isNode(node) ? cm.strToHTML(node) : node;
@@ -2468,6 +2475,16 @@ function(params){
         return that;
     };
 
+    that.copy = function(node, block){
+        if(node && block){
+            node = !cm.isNode(node) ? cm.strToHTML(node) : node;
+            that.triggerEvent('copy', node);
+            that.triggerEvent('onProcessEnd', node);
+            that.components['template'].redraw();
+        }
+        return that;
+    };
+
     that.update = function(node, block){
         if(node && block){
             node = !cm.isNode(node) ? cm.strToHTML(node) : node;
@@ -2513,6 +2530,9 @@ function(params){
             });
             cm.addEvent(menu['delete'], 'click', function(){
                 that.deleteRequest(block);
+            });
+            cm.addEvent(menu['copy'], 'click', function(){
+                that.copyRequest(block);
             });
             that.blocks.push(block);
         }
@@ -6820,6 +6840,7 @@ cm.define('App.ShutterstockManager', {
         'searchConstructor' : 'Com.Input',
         'searchParams' : {
             'embedStructure' : 'append',
+            'defaultValue' : null,
             'lazy' : true,
             'icon' : 'icon small search linked'
         },
@@ -6848,7 +6869,8 @@ cm.define('App.ShutterstockManager', {
             'ajax' : {
                 'type' : 'json',
                 'method' : 'get',
-                'url' : '/shutterstock-api/images/search/%page%'
+                'url' : '/shutterstock-api/images/search/%page%',
+                'urlPurchased' : '/shutterstock-api/images/src'
             }
         },
         'overlayConstructor' : 'Com.Overlay',
@@ -6859,7 +6881,10 @@ cm.define('App.ShutterstockManager', {
         }
     },
     'strings' : {
-        'all' : 'All',
+        'categories' : {
+            '_all' : 'All',
+            '_purchased' : 'My Purchased Images'
+        },
         'server_error' : 'An unexpected error has occurred. Please try again later.'
     }
 },
@@ -6876,8 +6901,11 @@ cm.getConstructor('App.ShutterstockManager', function(classConstructor, classNam
         var that = this;
         // Variables
         that.categories = [{
-            'id' : 'all',
-            'name' : that.lang('all')
+            'id' : '_purchased',
+            'name' : that.lang('categories._purchased')
+        },{
+            'id' : '_all',
+            'name' : that.lang('categories._all')
         }];
         that.currentCategory = null;
         that.currentQuery = null;
@@ -6968,10 +6996,16 @@ cm.getConstructor('App.ShutterstockManager', function(classConstructor, classNam
         );
         // Embed
         cm.appendChild(nodes['container'], that.nodes['categories']['tabsHolder']);
+        // Separator
+        if(item['id'] === '_purchased'){
+            nodes['sep'] = cm.node('li', {'class' : 'sep'});
+            cm.appendChild(nodes['sep'], that.nodes['categories']['tabsHolder']);
+        }
     };
 
     classProto.renderCategoriesViewModel = function(){
-        var that = this;
+        var that = this,
+            toolbarSearchField;
         // Render toolbar
         cm.getConstructor(that.params['toolbarConstructor'], function(classConstructor){
             that.components['toolbar'] = new classConstructor(
@@ -6995,6 +7029,8 @@ cm.getConstructor('App.ShutterstockManager', function(classConstructor, classNam
                     }
                 })
             });
+            toolbarSearchField = that.components['toolbar'].getField('search', 'all');
+            that.components['search'] = toolbarSearchField['controller'];
         });
         // Init tabset helper
         cm.getConstructor(that.params['categoriesConstructor'], function(classConstructor){
@@ -7004,7 +7040,7 @@ cm.getConstructor('App.ShutterstockManager', function(classConstructor, classNam
                 })
             );
             that.components['tabset'].addEvent('onTabShowStart', that.setListCategoryHandler);
-            that.components['tabset'].set('all');
+            that.components['tabset'].set('_all');
         });
         // Init overlay
         cm.getConstructor(that.params['overlayConstructor'], function(classConstructor){
@@ -7092,32 +7128,46 @@ cm.getConstructor('App.ShutterstockManager', function(classConstructor, classNam
     };
 
     classProto.setListCategory = function(tabset, tab){
-        var that = this;
+        var that = this,
+            urlType,
+            category;
         that.currentCategory = tab['id'];
         // Update pagination action
         if(that.components['pagination']){
             that.components['overlay'].open();
-            // Set category
+            // Set search
+            if(that.currentCategory === '_purchased'){
+                that.components['search'].reset();
+                that.components['search'].disable();
+            }else{
+                that.components['search'].enable();
+            }
+            // Set ajax parameters
+            urlType = that.currentCategory === '_purchased' ? 'urlPurchased' : 'url';
+            category = /^_/.test(that.currentCategory) ? null : that.currentCategory;
             that.components['pagination'].setAction({
+                'url' : that.params['paginationParams']['ajax'][urlType],
                 'params' : {
-                    'category' : that.currentCategory === 'all' ? null : that.currentCategory
+                    'category' : category
                 }
             });
         }
     };
 
     classProto.setListQuery = function(input, value){
-        var that = this;
+        var that = this,
+            rebuild;
         that.currentQuery = value;
         // Update pagination action
         if(that.components['pagination']){
             that.components['overlay'].open();
-            // Set query
+            // Set ajax parameters
+            rebuild = that.currentCategory !== '_purchased';
             that.components['pagination'].setAction({
                 'params' : {
                     'query' : that.currentQuery
                 }
-            });
+            }, null, null, rebuild);
         }
     };
 
@@ -9448,6 +9498,7 @@ function(params){
 cm.getConstructor('Mod.ElementMultiField', function(classConstructor, className, classProto, classInherit){
     classProto.onEnableEditing = function(){
         var that = this;
+        cm.appendChild(that.nodes['content']['templateInner'], that.nodes['content']['templateContainer']);
         if(that.params['demo']){
             if(that.components['controller']){
                 that.components['controller']
@@ -9458,6 +9509,7 @@ cm.getConstructor('Mod.ElementMultiField', function(classConstructor, className,
 
     classProto.onDisableEditing = function(){
         var that = this;
+        cm.remove(that.nodes['content']['templateInner']);
         if(that.params['demo']){
             if(that.components['controller']){
                 that.components['controller']
