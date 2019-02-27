@@ -11,12 +11,13 @@ cm.define('App.Block', {
     'events' : [
         'onRenderStart',
         'onRender',
+        'onRedraw',
         'onRemove',
         'enableEditing',
         'disableEditing'
     ],
     'params' : {
-        'node' : cm.Node('div'),
+        'node' : cm.node('div'),
         'type' : 'template-manager',            // template-manager | form-manager | mail
         'instanceId' : false,
         'positionId' : 0,
@@ -27,7 +28,9 @@ cm.define('App.Block', {
         'locked' : false,
         'visible' : true,
         'removable' : true,
-        'editorName' : 'app-editor'
+        'sticky' : false,
+        'editorName' : 'app-editor',
+        'templateName' : 'app-template'
     }
 },
 function(params){
@@ -90,13 +93,17 @@ function(params){
 
     var render = function(){
         that.node = that.params['node'];
-        // Calculate dimensions
-        that.getDimensions();
         // Construct
+        cm.find('App.Template', that.params['templateName'], null, function(classObject){
+            that.components['template'] = classObject;
+        });
         cm.find('App.Editor', that.params['editorName'], null, function(classObject){
             new cm.Finder('App.Zone', that.params['zoneName'], null, constructZone);
             constructEditor(classObject);
         });
+        // Set events
+        cm.addEvent(window, 'resize', that.redraw);
+        cm.customEvent.add(that.node, 'redraw', that.redraw);
     };
 
     var constructZone = function(classObject){
@@ -130,6 +137,38 @@ function(params){
 
     /* ******* PUBLIC ******* */
 
+    that.redraw = function(){
+        var heightIndent, topIndent, bottomIndent;
+        // Update dimensions
+        that.getDimensions();
+        // Editing states
+        if(!that.isEditing){
+            if(that.params['sticky']){
+                heightIndent =
+                    cm.getPageSize('winHeight') -
+                    that.dimensions['margin']['top'] -
+                    that.dimensions['margin']['bottom'] -
+                    (that.components['template'].getTopMenuDimensions('height') || 0) -
+                    (that.components['template'].getFixedHeaderHeight() || 0);
+                topIndent =
+                    that.dimensions['margin']['top'] +
+                    (that.components['template'].getTopMenuDimensions('height') || 0) +
+                    (that.components['template'].getFixedHeaderHeight() || 0);
+                bottomIndent = that.dimensions['margin']['bottom'];
+                // Set
+                that.node.style.top = topIndent + 'px';
+                that.node.style.bottomIndent = bottomIndent + 'px';
+                that.nodes['block']['container'].style.maxHeight = heightIndent + 'px';
+            }
+        }else{
+            if(that.params['sticky']){
+                that.node.style.top = '';
+                that.node.style.bottom = '';
+                that.nodes['block']['container'].style.maxHeight = '';
+            }
+        }
+    };
+
     that.register = function(classObject){
         var zone = App._Zones[that.params['zoneName']];
         constructZone(zone);
@@ -149,8 +188,10 @@ function(params){
                     'self' : false
                 });
             }
+            cm.removeClass(that.node, 'is-sticky');
             cm.removeClass(that.nodes['block']['container'], 'cm__animate');
-            that.getDimensions();
+            // Redraw
+            that.redraw();
             cm.customEvent.trigger(that.node, 'enableEditing', {
                 'direction' : 'child',
                 'self' : false
@@ -174,8 +215,12 @@ function(params){
                     'self' : false
                 });
             }
+            if(that.params['sticky']){
+                cm.addClass(that.node, 'is-sticky');
+            }
             cm.addClass(that.nodes['block']['container'], 'cm__animate');
-            that.getDimensions();
+            // Redraw
+            that.redraw();
             cm.customEvent.trigger(that.node, 'disableEditing', {
                 'direction' : 'child',
                 'self' : false
@@ -188,6 +233,10 @@ function(params){
     that.remove = function(){
         if(!that.isRemoved){
             that.isRemoved = true;
+            // Unset events
+            cm.removeEvent(window, 'resize', that.redraw);
+            cm.customEvent.remove(that.node, 'redraw', that.redraw);
+            // Unset block from zone and editor
             destructZone(that.zone);
             destructEditor(that.components['editor']);
             while(that.zones.length){
@@ -197,6 +246,7 @@ function(params){
                 'direction' : 'child',
                 'self' : false
             });
+            // Delete
             delete App._Blocks[that.params['name']];
             that.removeFromStack();
             cm.remove(that.node);

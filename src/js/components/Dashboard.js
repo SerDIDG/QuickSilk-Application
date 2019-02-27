@@ -585,7 +585,10 @@ function(params){
         if(!that.placeholder){
             that.placeholder = new App.DashboardPlaceholder({
                 'highlight' : that.params['highlightPlaceholders'],
-                'animate' : !that.isGracefulDegradation
+                'animate' : !that.isGracefulDegradation,
+                'events' : {
+                    'onShowEnd' :  updateCurrentDimensions
+                }
             });
         }
         if(temp.params.state === 'start' && !that.currentBlock.isDummy){

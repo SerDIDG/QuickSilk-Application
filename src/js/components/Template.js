@@ -15,7 +15,7 @@ cm.define('App.Template', {
         'disableEditing'
     ],
     'params' : {
-        'node' : cm.Node('div'),
+        'node' : cm.node('div'),
         'name' : 'app-template',
         'scrollNode' : 'document.body',
         'scrollDuration' : 1000,
@@ -48,15 +48,15 @@ function(params){
     var that = this;
 
     that.nodes = {
-        'container' : cm.Node('div'),
-        'inner' : cm.Node('div'),
-        'headerContainer' : cm.Node('div'),
-        'headerTransformed' : cm.Node('div'),
-        'header' : cm.Node('div'),
-        'header2' : cm.Node('div'),
-        'content' : cm.Node('div'),
-        'footer' : cm.Node('div'),
-        'buttonUp' : cm.Node('div'),
+        'container' : cm.node('div'),
+        'inner' : cm.node('div'),
+        'headerContainer' : cm.node('div'),
+        'headerTransformed' : cm.node('div'),
+        'header' : cm.node('div'),
+        'header2' : cm.node('div'),
+        'content' : cm.node('div'),
+        'footer' : cm.node('div'),
+        'buttonUp' : cm.node('div'),
         'buttonsUp' : []
     };
 
@@ -195,14 +195,16 @@ function(params){
         that.nodes['inner'].style.minHeight = that.offsets['height'] + 'px';
         if(that.isEditing){
             if(that.params['footer']['sticky']){
-                that.offsets['contentHeightCalc'] = that.offsets['height']
-                    - that.offsets['header']
-                    - that.offsets['footer']
-                    - (that.params['content']['editableIndent'] * 2);
+                that.offsets['contentHeightCalc'] =
+                    that.offsets['height'] -
+                    that.offsets['header'] -
+                    that.offsets['footer'] -
+                    (that.params['content']['editableIndent'] * 2);
                 if(that.params['header']['transformed']){
-                    that.offsets['contentHeightCalc'] = that.offsets['contentHeightCalc']
-                        - that.offsets['header2']
-                        - that.params['content']['editableIndent'];
+                    that.offsets['contentHeightCalc'] =
+                        that.offsets['contentHeightCalc'] -
+                        that.offsets['header2'] -
+                        that.params['content']['editableIndent'];
                 }
                 that.nodes['content'].style.minHeight = Math.max(that.offsets['contentHeightCalc'], 0) + 'px';
             }
@@ -277,14 +279,30 @@ function(params){
         return that;
     };
 
+    that.getTopMenuDimensions = function(key){
+        return that.components['topMenu'] ? that.components['topMenu'].getDimensions(key) : null;
+    };
+
     that.getHeaderDimensions = function(key){
         var rect = cm.getRect(that.nodes['header']);
-        return rect[key] || rect;
+        return key ? rect[key] : rect;
+    };
+
+    that.getHeader2Dimensions = function(key){
+        var rect = cm.getRect(that.nodes['header2']);
+        return key ? rect[key] : rect;
+    };
+
+    that.getFixedHeaderHeight = function(){
+        return Math.max(
+            (that.params['header']['fixed'] ? that.getHeaderDimensions('height') : 0),
+            (that.params['header']['transformed'] ? that.getHeader2Dimensions('height') : 0)
+        );
     };
 
     that.getFooterDimensions = function(key){
         var rect = cm.getRect(that.nodes['footer']);
-        return rect[key] || rect;
+        return key ? rect[key] : rect;
     };
 
     that.getNodes = function(key){

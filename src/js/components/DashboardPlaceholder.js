@@ -6,7 +6,9 @@ cm.define('App.DashboardPlaceholder', {
     ],
     'events' : [
         'onRenderStart',
-        'onRender'
+        'onRender',
+        'onShowEnd',
+        'onHideEnd'
     ],
     'params' : {
         'highlight' : true,
@@ -29,6 +31,7 @@ function(params){
     that.isAnimate = false;
     that.isShow = false;
     that.isEmbed = false;
+    that.transitionInterval = null;
     that.transitionDurationProperty = null;
     that.height = 0;
 
@@ -105,6 +108,11 @@ function(params){
             }
             that.height = height;
             that.nodes['container'].style.height = [that.height, 'px'].join('');
+            // Event
+            that.transitionInterval && clearTimeout(that.transitionInterval);
+            that.transitionInterval = setTimeout(function(){
+                that.triggerEvent('onShowEnd');
+            }, duration + 30);
         }
         return that;
     };
@@ -118,6 +126,11 @@ function(params){
             }
             that.height = 0;
             that.nodes['container'].style.height = [that.height, 'px'].join('');
+            // Event
+            that.transitionInterval && clearTimeout(that.transitionInterval);
+            that.transitionInterval = setTimeout(function(){
+            that.triggerEvent('onHideEnd');
+            }, duration + 30);
         }
         return that;
     };

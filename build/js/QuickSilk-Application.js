@@ -1,11 +1,11 @@
-/*! ************ QuickSilk-Application v3.24.2 (2019-02-22 22:55) ************ */
+/*! ************ QuickSilk-Application v3.25.0 (2019-02-27 19:04) ************ */
 
 // /* ************************************************ */
 // /* ******* QUICKSILK: COMMON ******* */
 // /* ************************************************ */
 
 var App = {
-    '_version' : '3.24.2',
+    '_version' : '3.25.0',
     '_assetsUrl' : [window.location.protocol, window.location.hostname].join('//'),
     'Elements': {},
     'Nodes' : {},
@@ -595,12 +595,13 @@ cm.define('App.Block', {
     'events' : [
         'onRenderStart',
         'onRender',
+        'onRedraw',
         'onRemove',
         'enableEditing',
         'disableEditing'
     ],
     'params' : {
-        'node' : cm.Node('div'),
+        'node' : cm.node('div'),
         'type' : 'template-manager',            // template-manager | form-manager | mail
         'instanceId' : false,
         'positionId' : 0,
@@ -611,7 +612,9 @@ cm.define('App.Block', {
         'locked' : false,
         'visible' : true,
         'removable' : true,
-        'editorName' : 'app-editor'
+        'sticky' : false,
+        'editorName' : 'app-editor',
+        'templateName' : 'app-template'
     }
 },
 function(params){
@@ -674,13 +677,17 @@ function(params){
 
     var render = function(){
         that.node = that.params['node'];
-        // Calculate dimensions
-        that.getDimensions();
         // Construct
+        cm.find('App.Template', that.params['templateName'], null, function(classObject){
+            that.components['template'] = classObject;
+        });
         cm.find('App.Editor', that.params['editorName'], null, function(classObject){
             new cm.Finder('App.Zone', that.params['zoneName'], null, constructZone);
             constructEditor(classObject);
         });
+        // Set events
+        cm.addEvent(window, 'resize', that.redraw);
+        cm.customEvent.add(that.node, 'redraw', that.redraw);
     };
 
     var constructZone = function(classObject){
@@ -714,6 +721,38 @@ function(params){
 
     /* ******* PUBLIC ******* */
 
+    that.redraw = function(){
+        var heightIndent, topIndent, bottomIndent;
+        // Update dimensions
+        that.getDimensions();
+        // Editing states
+        if(!that.isEditing){
+            if(that.params['sticky']){
+                heightIndent =
+                    cm.getPageSize('winHeight') -
+                    that.dimensions['margin']['top'] -
+                    that.dimensions['margin']['bottom'] -
+                    (that.components['template'].getTopMenuDimensions('height') || 0) -
+                    (that.components['template'].getFixedHeaderHeight() || 0);
+                topIndent =
+                    that.dimensions['margin']['top'] +
+                    (that.components['template'].getTopMenuDimensions('height') || 0) +
+                    (that.components['template'].getFixedHeaderHeight() || 0);
+                bottomIndent = that.dimensions['margin']['bottom'];
+                // Set
+                that.node.style.top = topIndent + 'px';
+                that.node.style.bottomIndent = bottomIndent + 'px';
+                that.nodes['block']['container'].style.maxHeight = heightIndent + 'px';
+            }
+        }else{
+            if(that.params['sticky']){
+                that.node.style.top = '';
+                that.node.style.bottom = '';
+                that.nodes['block']['container'].style.maxHeight = '';
+            }
+        }
+    };
+
     that.register = function(classObject){
         var zone = App._Zones[that.params['zoneName']];
         constructZone(zone);
@@ -733,8 +772,10 @@ function(params){
                     'self' : false
                 });
             }
+            cm.removeClass(that.node, 'is-sticky');
             cm.removeClass(that.nodes['block']['container'], 'cm__animate');
-            that.getDimensions();
+            // Redraw
+            that.redraw();
             cm.customEvent.trigger(that.node, 'enableEditing', {
                 'direction' : 'child',
                 'self' : false
@@ -758,8 +799,12 @@ function(params){
                     'self' : false
                 });
             }
+            if(that.params['sticky']){
+                cm.addClass(that.node, 'is-sticky');
+            }
             cm.addClass(that.nodes['block']['container'], 'cm__animate');
-            that.getDimensions();
+            // Redraw
+            that.redraw();
             cm.customEvent.trigger(that.node, 'disableEditing', {
                 'direction' : 'child',
                 'self' : false
@@ -772,6 +817,10 @@ function(params){
     that.remove = function(){
         if(!that.isRemoved){
             that.isRemoved = true;
+            // Unset events
+            cm.removeEvent(window, 'resize', that.redraw);
+            cm.customEvent.remove(that.node, 'redraw', that.redraw);
+            // Unset block from zone and editor
             destructZone(that.zone);
             destructEditor(that.components['editor']);
             while(that.zones.length){
@@ -781,6 +830,7 @@ function(params){
                 'direction' : 'child',
                 'self' : false
             });
+            // Delete
             delete App._Blocks[that.params['name']];
             that.removeFromStack();
             cm.remove(that.node);
@@ -1553,7 +1603,10 @@ function(params){
         if(!that.placeholder){
             that.placeholder = new App.DashboardPlaceholder({
                 'highlight' : that.params['highlightPlaceholders'],
-                'animate' : !that.isGracefulDegradation
+                'animate' : !that.isGracefulDegradation,
+                'events' : {
+                    'onShowEnd' :  updateCurrentDimensions
+                }
             });
         }
         if(temp.params.state === 'start' && !that.currentBlock.isDummy){
@@ -1814,7 +1867,9 @@ cm.define('App.DashboardPlaceholder', {
     ],
     'events' : [
         'onRenderStart',
-        'onRender'
+        'onRender',
+        'onShowEnd',
+        'onHideEnd'
     ],
     'params' : {
         'highlight' : true,
@@ -1837,6 +1892,7 @@ function(params){
     that.isAnimate = false;
     that.isShow = false;
     that.isEmbed = false;
+    that.transitionInterval = null;
     that.transitionDurationProperty = null;
     that.height = 0;
 
@@ -1913,6 +1969,11 @@ function(params){
             }
             that.height = height;
             that.nodes['container'].style.height = [that.height, 'px'].join('');
+            // Event
+            that.transitionInterval && clearTimeout(that.transitionInterval);
+            that.transitionInterval = setTimeout(function(){
+                that.triggerEvent('onShowEnd');
+            }, duration + 30);
         }
         return that;
     };
@@ -1926,6 +1987,11 @@ function(params){
             }
             that.height = 0;
             that.nodes['container'].style.height = [that.height, 'px'].join('');
+            // Event
+            that.transitionInterval && clearTimeout(that.transitionInterval);
+            that.transitionInterval = setTimeout(function(){
+            that.triggerEvent('onHideEnd');
+            }, duration + 30);
         }
         return that;
     };
@@ -7514,7 +7580,7 @@ cm.define('App.Template', {
         'disableEditing'
     ],
     'params' : {
-        'node' : cm.Node('div'),
+        'node' : cm.node('div'),
         'name' : 'app-template',
         'scrollNode' : 'document.body',
         'scrollDuration' : 1000,
@@ -7547,15 +7613,15 @@ function(params){
     var that = this;
 
     that.nodes = {
-        'container' : cm.Node('div'),
-        'inner' : cm.Node('div'),
-        'headerContainer' : cm.Node('div'),
-        'headerTransformed' : cm.Node('div'),
-        'header' : cm.Node('div'),
-        'header2' : cm.Node('div'),
-        'content' : cm.Node('div'),
-        'footer' : cm.Node('div'),
-        'buttonUp' : cm.Node('div'),
+        'container' : cm.node('div'),
+        'inner' : cm.node('div'),
+        'headerContainer' : cm.node('div'),
+        'headerTransformed' : cm.node('div'),
+        'header' : cm.node('div'),
+        'header2' : cm.node('div'),
+        'content' : cm.node('div'),
+        'footer' : cm.node('div'),
+        'buttonUp' : cm.node('div'),
         'buttonsUp' : []
     };
 
@@ -7694,14 +7760,16 @@ function(params){
         that.nodes['inner'].style.minHeight = that.offsets['height'] + 'px';
         if(that.isEditing){
             if(that.params['footer']['sticky']){
-                that.offsets['contentHeightCalc'] = that.offsets['height']
-                    - that.offsets['header']
-                    - that.offsets['footer']
-                    - (that.params['content']['editableIndent'] * 2);
+                that.offsets['contentHeightCalc'] =
+                    that.offsets['height'] -
+                    that.offsets['header'] -
+                    that.offsets['footer'] -
+                    (that.params['content']['editableIndent'] * 2);
                 if(that.params['header']['transformed']){
-                    that.offsets['contentHeightCalc'] = that.offsets['contentHeightCalc']
-                        - that.offsets['header2']
-                        - that.params['content']['editableIndent'];
+                    that.offsets['contentHeightCalc'] =
+                        that.offsets['contentHeightCalc'] -
+                        that.offsets['header2'] -
+                        that.params['content']['editableIndent'];
                 }
                 that.nodes['content'].style.minHeight = Math.max(that.offsets['contentHeightCalc'], 0) + 'px';
             }
@@ -7776,14 +7844,30 @@ function(params){
         return that;
     };
 
+    that.getTopMenuDimensions = function(key){
+        return that.components['topMenu'] ? that.components['topMenu'].getDimensions(key) : null;
+    };
+
     that.getHeaderDimensions = function(key){
         var rect = cm.getRect(that.nodes['header']);
-        return rect[key] || rect;
+        return key ? rect[key] : rect;
+    };
+
+    that.getHeader2Dimensions = function(key){
+        var rect = cm.getRect(that.nodes['header2']);
+        return key ? rect[key] : rect;
+    };
+
+    that.getFixedHeaderHeight = function(){
+        return Math.max(
+            (that.params['header']['fixed'] ? that.getHeaderDimensions('height') : 0),
+            (that.params['header']['transformed'] ? that.getHeader2Dimensions('height') : 0)
+        );
     };
 
     that.getFooterDimensions = function(key){
         var rect = cm.getRect(that.nodes['footer']);
-        return rect[key] || rect;
+        return key ? rect[key] : rect;
     };
 
     that.getNodes = function(key){

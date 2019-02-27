@@ -39,6 +39,17 @@
         }
     }
 
+    &.is-sticky {
+        position: sticky;
+        top: 0;
+        bottom: 0;
+
+        > .app__block {
+            .cm__scroll-y-a;
+            max-height: 100vh;
+        }
+    }
+
     &.is-editing {
         margin: 0 0 @AppBlock-Indent;
 
@@ -327,6 +338,22 @@
 }
 
 /* ******* COMPONENTS: BLOCK: ADAPTIVE ******* */
+
+@media only screen and (max-width : @CmUI-AdaptiveFrom) {
+    html.is-adaptive {
+        .app__block-container {
+            &.is-sticky {
+                position: relative !important;
+                top: 0 !important;
+                bottom: 0 !important;
+
+                > .app__block {
+                    max-height: none !important;
+                }
+            }
+        }
+    }
+}
 
 @media only screen and (max-width : @CmScreen-Mobile) {
     .app__block {

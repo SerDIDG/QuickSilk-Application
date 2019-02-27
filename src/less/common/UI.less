@@ -33,6 +33,16 @@ html {
         .tpl__header__transformed {
             top: @AppTopMenu-Height;
         }
+
+        .app__block-container {
+            &.is-sticky {
+                top: @AppTopMenu-Height;
+
+                > .app__block {
+                    max-height: ~'calc(100vh - @{AppTopMenu-Height})';
+                }
+            }
+        }
     }
 
     &.is-topmenu--expanded {
