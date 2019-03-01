@@ -1,11 +1,11 @@
-/*! ************ QuickSilk-Application v3.25.1 (2019-03-01 19:06) ************ */
+/*! ************ QuickSilk-Application v3.25.2 (2019-03-01 19:34) ************ */
 
 // /* ************************************************ */
 // /* ******* QUICKSILK: COMMON ******* */
 // /* ************************************************ */
 
 var App = {
-    '_version' : '3.25.1',
+    '_version' : '3.25.2',
     '_assetsUrl' : [window.location.protocol, window.location.hostname].join('//'),
     'Elements': {},
     'Nodes' : {},
@@ -620,6 +620,7 @@ cm.define('App.Block', {
 function(params){
     var that = this;
 
+    that.isTemplateRequired = false;
     that.isDummy = false;
     that.isRemoved = false;
     that.isEditing = null;
@@ -659,6 +660,8 @@ function(params){
 
     var validateParams = function(){
         var index;
+        that.isTemplateRequired = that.params['sticky'];
+        // Find parent zone
         if(cm.isNumber(that.params['instanceId']) || cm.isString(that.params['instanceId'])){
             that.params['name'] = [that.params['type'], that.params['instanceId'], that.params['positionId']].join('_');
             that.params['zoneName'] = [that.params['type'], that.params['instanceId'], that.params['parentPositionId'], that.params['zone']].join('_');
@@ -678,10 +681,8 @@ function(params){
     var render = function(){
         that.node = that.params['node'];
         // Construct
-        if(that.params['sticky']){
-            new cm.Finder('App.Template', that.params['templateName'], null, function(classObject){
-                that.components['template'] = classObject;
-            });
+        if(that.isTemplateRequired){
+            new cm.Finder('App.Template', that.params['templateName'], null, constructTemplate);
         }
         cm.find('App.Editor', that.params['editorName'], null, function(classObject){
             new cm.Finder('App.Zone', that.params['zoneName'], null, constructZone);
@@ -721,6 +722,12 @@ function(params){
         }
     };
 
+    var constructTemplate = function(classObject){
+        if(classObject){
+            that.components['template'] = classObject;
+        }
+    };
+
     /* ******* PUBLIC ******* */
 
     that.redraw = function(){
@@ -729,7 +736,7 @@ function(params){
         that.getDimensions();
         // Editing states
         if(!that.isEditing){
-            if(that.params['sticky']){
+            if(that.params['sticky'] && that.components['template']){
                 heightIndent =
                     cm.getPageSize('winHeight') -
                     that.dimensions['margin']['top'] -
