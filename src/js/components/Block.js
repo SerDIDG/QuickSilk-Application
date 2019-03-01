@@ -94,9 +94,11 @@ function(params){
     var render = function(){
         that.node = that.params['node'];
         // Construct
-        cm.find('App.Template', that.params['templateName'], null, function(classObject){
-            that.components['template'] = classObject;
-        });
+        if(that.params['sticky']){
+            new cm.Finder('App.Template', that.params['templateName'], null, function(classObject){
+                that.components['template'] = classObject;
+            });
+        }
         cm.find('App.Editor', that.params['editorName'], null, function(classObject){
             new cm.Finder('App.Zone', that.params['zoneName'], null, constructZone);
             constructEditor(classObject);

@@ -1,11 +1,11 @@
-/*! ************ QuickSilk-Application v3.25.0 (2019-02-27 19:04) ************ */
+/*! ************ QuickSilk-Application v3.25.1 (2019-03-01 19:06) ************ */
 
 // /* ************************************************ */
 // /* ******* QUICKSILK: COMMON ******* */
 // /* ************************************************ */
 
 var App = {
-    '_version' : '3.25.0',
+    '_version' : '3.25.1',
     '_assetsUrl' : [window.location.protocol, window.location.hostname].join('//'),
     'Elements': {},
     'Nodes' : {},
@@ -678,9 +678,11 @@ function(params){
     var render = function(){
         that.node = that.params['node'];
         // Construct
-        cm.find('App.Template', that.params['templateName'], null, function(classObject){
-            that.components['template'] = classObject;
-        });
+        if(that.params['sticky']){
+            new cm.Finder('App.Template', that.params['templateName'], null, function(classObject){
+                that.components['template'] = classObject;
+            });
+        }
         cm.find('App.Editor', that.params['editorName'], null, function(classObject){
             new cm.Finder('App.Zone', that.params['zoneName'], null, constructZone);
             constructEditor(classObject);
