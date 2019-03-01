@@ -1,11 +1,11 @@
-/*! ************ QuickSilk-Application v3.25.2 (2019-03-01 19:34) ************ */
+/*! ************ QuickSilk-Application v3.25.3 (2019-03-01 21:14) ************ */
 
 // /* ************************************************ */
 // /* ******* QUICKSILK: COMMON ******* */
 // /* ************************************************ */
 
 var App = {
-    '_version' : '3.25.2',
+    '_version' : '3.25.3',
     '_assetsUrl' : [window.location.protocol, window.location.hostname].join('//'),
     'Elements': {},
     'Nodes' : {},
@@ -728,15 +728,13 @@ function(params){
         }
     };
 
-    /* ******* PUBLIC ******* */
-
-    that.redraw = function(){
+    var redrawOnNormal = function(){
         var heightIndent, topIndent, bottomIndent;
-        // Update dimensions
-        that.getDimensions();
-        // Editing states
-        if(!that.isEditing){
-            if(that.params['sticky'] && that.components['template']){
+        // Sticky block
+        if(that.params['sticky']){
+            cm.addClass(that.node, 'is-sticky');
+            // Calculate
+            if(that.components['template']){
                 heightIndent =
                     cm.getPageSize('winHeight') -
                     that.dimensions['margin']['top'] -
@@ -753,12 +751,30 @@ function(params){
                 that.node.style.bottomIndent = bottomIndent + 'px';
                 that.nodes['block']['container'].style.maxHeight = heightIndent + 'px';
             }
+        }
+    };
+
+    var redrawOnEditing = function(){
+        // Sticky block
+        if(that.params['sticky']){
+            cm.removeClass(that.node, 'is-sticky');
+            // Clear
+            that.node.style.top = '';
+            that.node.style.bottom = '';
+            that.nodes['block']['container'].style.maxHeight = '';
+        }
+    };
+
+    /* ******* PUBLIC ******* */
+
+    that.redraw = function(){
+        // Update dimensions
+        that.getDimensions();
+        // Editing states
+        if(that.isEditing){
+            redrawOnEditing();
         }else{
-            if(that.params['sticky']){
-                that.node.style.top = '';
-                that.node.style.bottom = '';
-                that.nodes['block']['container'].style.maxHeight = '';
-            }
+            redrawOnNormal();
         }
     };
 
@@ -781,7 +797,6 @@ function(params){
                     'self' : false
                 });
             }
-            cm.removeClass(that.node, 'is-sticky');
             cm.removeClass(that.nodes['block']['container'], 'cm__animate');
             // Redraw
             that.redraw();
@@ -807,9 +822,6 @@ function(params){
                     'direction' : 'child',
                     'self' : false
                 });
-            }
-            if(that.params['sticky']){
-                cm.addClass(that.node, 'is-sticky');
             }
             cm.addClass(that.nodes['block']['container'], 'cm__animate');
             // Redraw
