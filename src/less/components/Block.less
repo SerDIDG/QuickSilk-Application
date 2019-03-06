@@ -40,11 +40,13 @@
     }
 
     &.is-sticky {
+        position: -webkit-sticky;
         position: sticky;
         top: 0;
         bottom: 0;
 
         > .app__block {
+            .cm__scrollbar;
             .cm__scroll-y-a;
             max-height: 100vh;
         }

@@ -7,12 +7,12 @@ cm.define('App.FileUploader', {
     ],
     'params' : {
         'max' : 0,
-        'showStats' : true,
         'completeOnSelect' : true,
         'local' : true,
         'localConstructor' : 'App.FileUploaderLocal',
         'localParams' : {
             'embedStructure' : 'append',
+            'showStats' : true,
             'fileList' : false
         },
         'fileManagerLazy' : true,
@@ -20,24 +20,27 @@ cm.define('App.FileUploader', {
         'fileManagerConstructor' : 'App.elFinderFileManager',
         'fileManagerParams' : {
             'embedStructure' : 'append',
-            'showStats' : false,
+            'showStats' : true,
             'fullSize' : true
         },
         'stock' : false,
         'stockConstructor' : 'App.ShutterstockManager',
         'stockParams' : {
             'embedStructure' : 'append',
+            'showStats' : true,
             'fullSize' : true
+        },
+        'showStats' : false,
+        'statsConstructor' : 'Com.FileStats',
+        'statsParams' : {
+            'embedStructure' : 'append',
+            'toggleBox' : false,
+            'inline' : true
         },
         'Com.Tabset' : {
             'embedStructure' : 'append',
             'toggleOnHashChange' : false,
             'calculateMaxHeight' : true
-        },
-        'Com.FileStats' : {
-            'embedStructure' : 'append',
-            'toggleBox' : false,
-            'inline' : true
         }
     },
     'strings' : {
@@ -198,9 +201,9 @@ cm.getConstructor('App.FileUploader', function(classConstructor, className, clas
         that.renderTabset();
         // Init Stats
         if(that.params['showStats']){
-            cm.getConstructor('Com.FileStats', function(classObject, className){
+            cm.getConstructor(that.params['statsConstructor'], function(classObject){
                 that.components['stats'] = new classObject(
-                    cm.merge(that.params[className], {
+                    cm.merge(that.params['statsParams'], {
                         'container' : that.nodes['content']
                     })
                 );

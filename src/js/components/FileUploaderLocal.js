@@ -19,7 +19,7 @@ cm.define('App.FileUploaderLocal', {
         'dropzoneParams' : {
             'embedStructure' : 'append',
             'rollover' : false,
-            'height' : 256
+            'height' : 300
         },
         'showOverlay' : true,
         'overlayDelay' : 'cm._config.loadDelay',
@@ -30,6 +30,13 @@ cm.define('App.FileUploaderLocal', {
             'showContent' : false,
             'position' : 'absolute',
             'theme' : 'light'
+        },
+        'showStats' : true,
+        'statsConstructor' : 'Com.FileStats',
+        'statsParams' : {
+            'embedStructure' : 'append',
+            'toggleBox' : false,
+            'inline' : true
         },
         'Com.FileReader' : {}
     },
@@ -128,6 +135,16 @@ cm.getConstructor('App.FileUploaderLocal', function(classConstructor, className,
                 })
             );
         });
+        // Show disk space usage statistics
+        if(that.params['showStats']){
+            cm.getConstructor(that.params['statsConstructor'], function(classObject){
+                that.components['stats'] = new classObject(
+                    cm.merge(that.params['statsParams'], {
+                        'container' : that.nodes['container']
+                    })
+                );
+            });
+        }
         // Init FilerReader
         cm.getConstructor('Com.FileReader', function(classObject, className){
             that.components['reader'] = new classObject(that.params[className]);

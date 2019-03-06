@@ -2,7 +2,9 @@ cm.define('App.ShutterstockManager', {
     'extend' : 'Com.AbstractFileManager',
     'params' : {
         'lazy' : true,
-        'showStats' : false,
+        'showStats' : true,
+        'statsConstructor' : 'App.ShutterstockStats',
+        'statsParams' : {},
         'toolbarConstructor' : 'Com.Toolbar',
         'toolbarParams' : {
             'embedStructure' : 'first'
@@ -25,8 +27,7 @@ cm.define('App.ShutterstockManager', {
             }
         },
         'categoriesConstructor' : 'Com.TabsetHelper',
-        'categoriesParams' : {
-        },
+        'categoriesParams' : {},
         'paginationConstructor' : 'Com.GalleryScrollPagination',
         'paginationParams' : {
             'embedStructure' : 'append',
@@ -55,7 +56,8 @@ cm.define('App.ShutterstockManager', {
             '_all' : 'All',
             '_purchased' : 'My Purchased Images'
         },
-        'server_error' : 'An unexpected error has occurred. Please try again later.'
+        'server_error' : 'An unexpected error has occurred. Please try again later.',
+        'empty' : 'There are no items to show.'
     }
 },
 function(params){
@@ -85,6 +87,7 @@ cm.getConstructor('App.ShutterstockManager', function(classConstructor, classNam
         that.renderCategoriesErrorHandler = that.renderCategoriesError.bind(that);
         that.renderListPageHandler = that.renderListPage.bind(that);
         that.renderListErrorHandler = that.renderListError.bind(that);
+        that.renderListEmptyHandler = that.renderListEmpty.bind(that);
         that.setListCategoryHandler = that.setListCategory.bind(that);
         that.setListQueryHandler = that.setListQuery.bind(that);
     };
@@ -107,9 +110,10 @@ cm.getConstructor('App.ShutterstockManager', function(classConstructor, classNam
 
     /* *** CATEGORIES *** */
 
-    classProto.renderCategoriesError = function(){
+    classProto.renderCategoriesError = function(request, response){
         var that = this,
-            node = cm.node('div', {'class' : 'cm__empty is-show'}, that.lang('server_error'));
+            message = !cm.isEmpty(response['message']) ? response['message'] : 'server_error',
+            node = cm.node('div', {'class' : 'cm__empty is-show'}, that.lang(message));
         // Embed
         cm.clearNode(that.nodes['holder']['inner']);
         cm.appendChild(node, that.nodes['holder']['inner']);
@@ -158,7 +162,7 @@ cm.getConstructor('App.ShutterstockManager', function(classConstructor, classNam
         var that = this,
             nodes = {};
         // Validate
-        item['title'] = item['name'];
+        item['title'] = item['name'].replace('/', ' / ');
         item['label'] = nodes;
         // Structure
         nodes['container'] = cm.node('li',
@@ -229,13 +233,14 @@ cm.getConstructor('App.ShutterstockManager', function(classConstructor, classNam
                 })
             );
             that.components['pagination'].addEvent('onStart', function(){
-                that.removeListError();
+                that.removeListErrors();
             });
             that.components['pagination'].addEvent('onEnd', function(){
                 that.components['overlay'].close();
             });
             that.components['pagination'].addEvent('onPageRenderEnd', that.renderListPageHandler);
             that.components['pagination'].addEvent('onError', that.renderListErrorHandler);
+            that.components['pagination'].addEvent('onEmpty', that.renderListEmptyHandler);
         });
     };
 
@@ -254,10 +259,26 @@ cm.getConstructor('App.ShutterstockManager', function(classConstructor, classNam
         }
     };
 
-    classProto.removeListError = function(){
+    classProto.renderListEmpty = function(){
+        var that = this;
+        if(that.components['pagination'].currentPage === 1){
+            that.components['pagination'].clear();
+            // Render structure
+            if(!that.nodes['categories']['empty']){
+                that.nodes['categories']['empty'] = cm.node('div', {'class' : 'cm__empty'}, that.lang('empty'));
+            }
+            // Embed
+            cm.insertFirst(that.nodes['categories']['empty'], that.nodes['categories']['listHolder']);
+            cm.addClass(that.nodes['categories']['empty'], 'is-show', true);
+        }
+    };
+
+    classProto.removeListErrors = function(){
         var that = this;
         cm.removeClass(that.nodes['categories']['error'], 'is-show');
         cm.remove(that.nodes['categories']['error']);
+        cm.removeClass(that.nodes['categories']['empty'], 'is-show');
+        cm.remove(that.nodes['categories']['empty']);
     };
 
     classProto.renderListPage = function(pagination, page){
@@ -271,6 +292,7 @@ cm.getConstructor('App.ShutterstockManager', function(classConstructor, classNam
     classProto.renderListItem = function(item, container){
         var that = this,
             nodes = {};
+        item = cm.merge(item, that.convertFile(item));
         item['nodes'] = nodes;
         // Structure
         nodes['container'] = cm.node('li',
@@ -280,9 +302,9 @@ cm.getConstructor('App.ShutterstockManager', function(classConstructor, classNam
                 )
             )
         );
-        nodes['descr'].style.backgroundImage = cm.URLToCSSURL(item['assets']['huge_thumb']['url']);
+        nodes['descr'].style.backgroundImage = cm.URLToCSSURL(item['thumbnail']);
         // Load
-        cm.onImageLoad(item['assets']['huge_thumb']['url'], function(){
+        cm.onImageLoad(item['thumbnail'], function(){
             cm.addClass(nodes['link'], 'is-loaded', true);
         });
         // Events
@@ -298,47 +320,17 @@ cm.getConstructor('App.ShutterstockManager', function(classConstructor, classNam
     };
 
     classProto.setListCategory = function(tabset, tab){
-        var that = this,
-            urlType,
-            category;
+        var that = this;
         that.currentCategory = tab['id'];
         // Update pagination action
-        if(that.components['pagination']){
-            that.components['overlay'].open();
-            // Set search
-            if(that.currentCategory === '_purchased'){
-                that.components['search'].reset();
-                that.components['search'].disable();
-            }else{
-                that.components['search'].enable();
-            }
-            // Set ajax parameters
-            urlType = that.currentCategory === '_purchased' ? 'urlPurchased' : 'url';
-            category = /^_/.test(that.currentCategory) ? null : that.currentCategory;
-            that.components['pagination'].setAction({
-                'url' : that.params['paginationParams']['ajax'][urlType],
-                'params' : {
-                    'category' : category
-                }
-            });
-        }
+        that.setPagination();
     };
 
     classProto.setListQuery = function(input, value){
-        var that = this,
-            rebuild;
+        var that = this;
         that.currentQuery = value;
         // Update pagination action
-        if(that.components['pagination']){
-            that.components['overlay'].open();
-            // Set ajax parameters
-            rebuild = that.currentCategory !== '_purchased';
-            that.components['pagination'].setAction({
-                'params' : {
-                    'query' : that.currentQuery
-                }
-            }, null, null, rebuild);
-        }
+        that.setPagination();
     };
 
     classProto.setListItem = function(item){
@@ -354,20 +346,62 @@ cm.getConstructor('App.ShutterstockManager', function(classConstructor, classNam
         that.processFiles(item);
     };
 
+    classProto.setPagination = function(){
+        var that = this,
+            pageCount = that.currentCategory === '_purchased' ? 1 : 0,
+            urlType = that.currentCategory === '_purchased' ? 'urlPurchased' : 'url',
+            category = /^_/.test(that.currentCategory) ? null : that.currentCategory,
+            query = that.currentCategory === '_purchased' ? null : that.currentQuery;
+        // Set search
+        if(that.currentCategory === '_purchased'){
+            that.components['search'].disable();
+        }else{
+            that.components['search'].enable();
+        }
+        // Set pagination
+        if(that.components['pagination']){
+            that.components['overlay'].open();
+            that.components['pagination'].setParams({
+                'pageCount' : pageCount
+            });
+            that.components['pagination'].setAction({
+                'url' : that.params['paginationParams']['ajax'][urlType],
+                'params' : {
+                    'category' : category,
+                    'query' : query
+                }
+            });
+        }
+    };
+
     /* *** PROCESS FILES *** */
 
     classProto.convertFile = function(data){
-        var name = data['assets']['preview']['url'].split('/').pop();
         // Return converted data
-        return {
-            'value' : data['assets']['preview']['url'],
-            'name' : name,
-            'description' : data['description'],
-            'mime' : data['media_type'],
-            'size' : null,
-            'url' : data['assets']['preview']['url'],
-            'id' : data['id'],
-            'source' : 'shutterstock_preview'
+        if(data['assets']){
+            return {
+                'value' : data['assets']['preview']['url'],
+                'name' : data['assets']['preview']['url'].split('/').pop(),
+                'description' : data['description'],
+                'mime' : data['media_type'],
+                'size' : null,
+                'url' : data['assets']['preview']['url'],
+                'thumbnail' : data['assets']['huge_thumb']['url'],
+                'id' : data['id'],
+                'source' : 'shutterstock_preview'
+            }
+        }else{
+            return {
+                'value' : data['src'],
+                'name' : data['src'].split('/').pop(),
+                'description' : '',
+                'mime' : null,
+                'size' : null,
+                'url' : data['src'],
+                'thumbnail' : data['src'],
+                'id' : data['id'],
+                'source' : 'shutterstock_purchased'
+            }
         }
     };
 });

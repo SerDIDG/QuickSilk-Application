@@ -30,7 +30,8 @@ cm.define('App.Block', {
         'removable' : true,
         'sticky' : false,
         'editorName' : 'app-editor',
-        'templateName' : 'app-template'
+        'templateName' : 'app-template',
+        'templateController' : 'Template'
     }
 },
 function(params){
@@ -76,7 +77,6 @@ function(params){
 
     var validateParams = function(){
         var index;
-        that.isTemplateRequired = that.params['sticky'];
         // Find parent zone
         if(cm.isNumber(that.params['instanceId']) || cm.isString(that.params['instanceId'])){
             that.params['name'] = [that.params['type'], that.params['instanceId'], that.params['positionId']].join('_');
@@ -96,10 +96,9 @@ function(params){
 
     var render = function(){
         that.node = that.params['node'];
-        // Construct
-        if(that.isTemplateRequired){
-            new cm.Finder('App.Template', that.params['templateName'], null, constructTemplate);
-        }
+        // Process Template
+        getTemplate();
+        // Process Editor and parent zone
         cm.find('App.Editor', that.params['editorName'], null, function(classObject){
             new cm.Finder('App.Zone', that.params['zoneName'], null, constructZone);
             constructEditor(classObject);
@@ -138,9 +137,14 @@ function(params){
         }
     };
 
-    var constructTemplate = function(classObject){
-        if(classObject){
-            that.components['template'] = classObject;
+    var getTemplate = function(){
+        if(!that.components['template']){
+            that.components['template']= cm.reducePath(that.params['templateController'], window);
+            if(!that.components['template']){
+                cm.find('App.Template', that.params['templateName'], null, function(classObject){
+                    that.components['template'] = classObject;
+                });
+            }
         }
     };
 
@@ -149,6 +153,8 @@ function(params){
         // Sticky block
         if(that.params['sticky']){
             cm.addClass(that.node, 'is-sticky');
+            // Get template controller
+            getTemplate();
             // Calculate
             if(that.components['template']){
                 heightIndent =

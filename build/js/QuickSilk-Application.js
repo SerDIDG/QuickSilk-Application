@@ -1,11 +1,11 @@
-/*! ************ QuickSilk-Application v3.25.3 (2019-03-01 21:14) ************ */
+/*! ************ QuickSilk-Application v3.25.4 (2019-03-06 20:16) ************ */
 
 // /* ************************************************ */
 // /* ******* QUICKSILK: COMMON ******* */
 // /* ************************************************ */
 
 var App = {
-    '_version' : '3.25.3',
+    '_version' : '3.25.4',
     '_assetsUrl' : [window.location.protocol, window.location.hostname].join('//'),
     'Elements': {},
     'Nodes' : {},
@@ -614,7 +614,8 @@ cm.define('App.Block', {
         'removable' : true,
         'sticky' : false,
         'editorName' : 'app-editor',
-        'templateName' : 'app-template'
+        'templateName' : 'app-template',
+        'templateController' : 'Template'
     }
 },
 function(params){
@@ -660,7 +661,6 @@ function(params){
 
     var validateParams = function(){
         var index;
-        that.isTemplateRequired = that.params['sticky'];
         // Find parent zone
         if(cm.isNumber(that.params['instanceId']) || cm.isString(that.params['instanceId'])){
             that.params['name'] = [that.params['type'], that.params['instanceId'], that.params['positionId']].join('_');
@@ -680,10 +680,9 @@ function(params){
 
     var render = function(){
         that.node = that.params['node'];
-        // Construct
-        if(that.isTemplateRequired){
-            new cm.Finder('App.Template', that.params['templateName'], null, constructTemplate);
-        }
+        // Process Template
+        getTemplate();
+        // Process Editor and parent zone
         cm.find('App.Editor', that.params['editorName'], null, function(classObject){
             new cm.Finder('App.Zone', that.params['zoneName'], null, constructZone);
             constructEditor(classObject);
@@ -722,9 +721,14 @@ function(params){
         }
     };
 
-    var constructTemplate = function(classObject){
-        if(classObject){
-            that.components['template'] = classObject;
+    var getTemplate = function(){
+        if(!that.components['template']){
+            that.components['template']= cm.reducePath(that.params['templateController'], window);
+            if(!that.components['template']){
+                cm.find('App.Template', that.params['templateName'], null, function(classObject){
+                    that.components['template'] = classObject;
+                });
+            }
         }
     };
 
@@ -733,6 +737,8 @@ function(params){
         // Sticky block
         if(that.params['sticky']){
             cm.addClass(that.node, 'is-sticky');
+            // Get template controller
+            getTemplate();
             // Calculate
             if(that.components['template']){
                 heightIndent =
@@ -2668,12 +2674,12 @@ cm.define('App.FileUploader', {
     ],
     'params' : {
         'max' : 0,
-        'showStats' : true,
         'completeOnSelect' : true,
         'local' : true,
         'localConstructor' : 'App.FileUploaderLocal',
         'localParams' : {
             'embedStructure' : 'append',
+            'showStats' : true,
             'fileList' : false
         },
         'fileManagerLazy' : true,
@@ -2681,24 +2687,27 @@ cm.define('App.FileUploader', {
         'fileManagerConstructor' : 'App.elFinderFileManager',
         'fileManagerParams' : {
             'embedStructure' : 'append',
-            'showStats' : false,
+            'showStats' : true,
             'fullSize' : true
         },
         'stock' : false,
         'stockConstructor' : 'App.ShutterstockManager',
         'stockParams' : {
             'embedStructure' : 'append',
+            'showStats' : true,
             'fullSize' : true
+        },
+        'showStats' : false,
+        'statsConstructor' : 'Com.FileStats',
+        'statsParams' : {
+            'embedStructure' : 'append',
+            'toggleBox' : false,
+            'inline' : true
         },
         'Com.Tabset' : {
             'embedStructure' : 'append',
             'toggleOnHashChange' : false,
             'calculateMaxHeight' : true
-        },
-        'Com.FileStats' : {
-            'embedStructure' : 'append',
-            'toggleBox' : false,
-            'inline' : true
         }
     },
     'strings' : {
@@ -2859,9 +2868,9 @@ cm.getConstructor('App.FileUploader', function(classConstructor, className, clas
         that.renderTabset();
         // Init Stats
         if(that.params['showStats']){
-            cm.getConstructor('Com.FileStats', function(classObject, className){
+            cm.getConstructor(that.params['statsConstructor'], function(classObject){
                 that.components['stats'] = new classObject(
-                    cm.merge(that.params[className], {
+                    cm.merge(that.params['statsParams'], {
                         'container' : that.nodes['content']
                     })
                 );
@@ -3133,7 +3142,7 @@ cm.define('App.FileUploaderLocal', {
         'dropzoneParams' : {
             'embedStructure' : 'append',
             'rollover' : false,
-            'height' : 256
+            'height' : 300
         },
         'showOverlay' : true,
         'overlayDelay' : 'cm._config.loadDelay',
@@ -3144,6 +3153,13 @@ cm.define('App.FileUploaderLocal', {
             'showContent' : false,
             'position' : 'absolute',
             'theme' : 'light'
+        },
+        'showStats' : true,
+        'statsConstructor' : 'Com.FileStats',
+        'statsParams' : {
+            'embedStructure' : 'append',
+            'toggleBox' : false,
+            'inline' : true
         },
         'Com.FileReader' : {}
     },
@@ -3242,6 +3258,16 @@ cm.getConstructor('App.FileUploaderLocal', function(classConstructor, className,
                 })
             );
         });
+        // Show disk space usage statistics
+        if(that.params['showStats']){
+            cm.getConstructor(that.params['statsConstructor'], function(classObject){
+                that.components['stats'] = new classObject(
+                    cm.merge(that.params['statsParams'], {
+                        'container' : that.nodes['container']
+                    })
+                );
+            });
+        }
         // Init FilerReader
         cm.getConstructor('Com.FileReader', function(classObject, className){
             that.components['reader'] = new classObject(that.params[className]);
@@ -6919,7 +6945,9 @@ cm.define('App.ShutterstockManager', {
     'extend' : 'Com.AbstractFileManager',
     'params' : {
         'lazy' : true,
-        'showStats' : false,
+        'showStats' : true,
+        'statsConstructor' : 'App.ShutterstockStats',
+        'statsParams' : {},
         'toolbarConstructor' : 'Com.Toolbar',
         'toolbarParams' : {
             'embedStructure' : 'first'
@@ -6942,8 +6970,7 @@ cm.define('App.ShutterstockManager', {
             }
         },
         'categoriesConstructor' : 'Com.TabsetHelper',
-        'categoriesParams' : {
-        },
+        'categoriesParams' : {},
         'paginationConstructor' : 'Com.GalleryScrollPagination',
         'paginationParams' : {
             'embedStructure' : 'append',
@@ -6972,7 +6999,8 @@ cm.define('App.ShutterstockManager', {
             '_all' : 'All',
             '_purchased' : 'My Purchased Images'
         },
-        'server_error' : 'An unexpected error has occurred. Please try again later.'
+        'server_error' : 'An unexpected error has occurred. Please try again later.',
+        'empty' : 'There are no items to show.'
     }
 },
 function(params){
@@ -7002,6 +7030,7 @@ cm.getConstructor('App.ShutterstockManager', function(classConstructor, classNam
         that.renderCategoriesErrorHandler = that.renderCategoriesError.bind(that);
         that.renderListPageHandler = that.renderListPage.bind(that);
         that.renderListErrorHandler = that.renderListError.bind(that);
+        that.renderListEmptyHandler = that.renderListEmpty.bind(that);
         that.setListCategoryHandler = that.setListCategory.bind(that);
         that.setListQueryHandler = that.setListQuery.bind(that);
     };
@@ -7024,9 +7053,10 @@ cm.getConstructor('App.ShutterstockManager', function(classConstructor, classNam
 
     /* *** CATEGORIES *** */
 
-    classProto.renderCategoriesError = function(){
+    classProto.renderCategoriesError = function(request, response){
         var that = this,
-            node = cm.node('div', {'class' : 'cm__empty is-show'}, that.lang('server_error'));
+            message = !cm.isEmpty(response['message']) ? response['message'] : 'server_error',
+            node = cm.node('div', {'class' : 'cm__empty is-show'}, that.lang(message));
         // Embed
         cm.clearNode(that.nodes['holder']['inner']);
         cm.appendChild(node, that.nodes['holder']['inner']);
@@ -7075,7 +7105,7 @@ cm.getConstructor('App.ShutterstockManager', function(classConstructor, classNam
         var that = this,
             nodes = {};
         // Validate
-        item['title'] = item['name'];
+        item['title'] = item['name'].replace('/', ' / ');
         item['label'] = nodes;
         // Structure
         nodes['container'] = cm.node('li',
@@ -7146,13 +7176,14 @@ cm.getConstructor('App.ShutterstockManager', function(classConstructor, classNam
                 })
             );
             that.components['pagination'].addEvent('onStart', function(){
-                that.removeListError();
+                that.removeListErrors();
             });
             that.components['pagination'].addEvent('onEnd', function(){
                 that.components['overlay'].close();
             });
             that.components['pagination'].addEvent('onPageRenderEnd', that.renderListPageHandler);
             that.components['pagination'].addEvent('onError', that.renderListErrorHandler);
+            that.components['pagination'].addEvent('onEmpty', that.renderListEmptyHandler);
         });
     };
 
@@ -7171,10 +7202,26 @@ cm.getConstructor('App.ShutterstockManager', function(classConstructor, classNam
         }
     };
 
-    classProto.removeListError = function(){
+    classProto.renderListEmpty = function(){
+        var that = this;
+        if(that.components['pagination'].currentPage === 1){
+            that.components['pagination'].clear();
+            // Render structure
+            if(!that.nodes['categories']['empty']){
+                that.nodes['categories']['empty'] = cm.node('div', {'class' : 'cm__empty'}, that.lang('empty'));
+            }
+            // Embed
+            cm.insertFirst(that.nodes['categories']['empty'], that.nodes['categories']['listHolder']);
+            cm.addClass(that.nodes['categories']['empty'], 'is-show', true);
+        }
+    };
+
+    classProto.removeListErrors = function(){
         var that = this;
         cm.removeClass(that.nodes['categories']['error'], 'is-show');
         cm.remove(that.nodes['categories']['error']);
+        cm.removeClass(that.nodes['categories']['empty'], 'is-show');
+        cm.remove(that.nodes['categories']['empty']);
     };
 
     classProto.renderListPage = function(pagination, page){
@@ -7188,6 +7235,7 @@ cm.getConstructor('App.ShutterstockManager', function(classConstructor, classNam
     classProto.renderListItem = function(item, container){
         var that = this,
             nodes = {};
+        item = cm.merge(item, that.convertFile(item));
         item['nodes'] = nodes;
         // Structure
         nodes['container'] = cm.node('li',
@@ -7197,9 +7245,9 @@ cm.getConstructor('App.ShutterstockManager', function(classConstructor, classNam
                 )
             )
         );
-        nodes['descr'].style.backgroundImage = cm.URLToCSSURL(item['assets']['huge_thumb']['url']);
+        nodes['descr'].style.backgroundImage = cm.URLToCSSURL(item['thumbnail']);
         // Load
-        cm.onImageLoad(item['assets']['huge_thumb']['url'], function(){
+        cm.onImageLoad(item['thumbnail'], function(){
             cm.addClass(nodes['link'], 'is-loaded', true);
         });
         // Events
@@ -7215,47 +7263,17 @@ cm.getConstructor('App.ShutterstockManager', function(classConstructor, classNam
     };
 
     classProto.setListCategory = function(tabset, tab){
-        var that = this,
-            urlType,
-            category;
+        var that = this;
         that.currentCategory = tab['id'];
         // Update pagination action
-        if(that.components['pagination']){
-            that.components['overlay'].open();
-            // Set search
-            if(that.currentCategory === '_purchased'){
-                that.components['search'].reset();
-                that.components['search'].disable();
-            }else{
-                that.components['search'].enable();
-            }
-            // Set ajax parameters
-            urlType = that.currentCategory === '_purchased' ? 'urlPurchased' : 'url';
-            category = /^_/.test(that.currentCategory) ? null : that.currentCategory;
-            that.components['pagination'].setAction({
-                'url' : that.params['paginationParams']['ajax'][urlType],
-                'params' : {
-                    'category' : category
-                }
-            });
-        }
+        that.setPagination();
     };
 
     classProto.setListQuery = function(input, value){
-        var that = this,
-            rebuild;
+        var that = this;
         that.currentQuery = value;
         // Update pagination action
-        if(that.components['pagination']){
-            that.components['overlay'].open();
-            // Set ajax parameters
-            rebuild = that.currentCategory !== '_purchased';
-            that.components['pagination'].setAction({
-                'params' : {
-                    'query' : that.currentQuery
-                }
-            }, null, null, rebuild);
-        }
+        that.setPagination();
     };
 
     classProto.setListItem = function(item){
@@ -7271,21 +7289,113 @@ cm.getConstructor('App.ShutterstockManager', function(classConstructor, classNam
         that.processFiles(item);
     };
 
+    classProto.setPagination = function(){
+        var that = this,
+            pageCount = that.currentCategory === '_purchased' ? 1 : 0,
+            urlType = that.currentCategory === '_purchased' ? 'urlPurchased' : 'url',
+            category = /^_/.test(that.currentCategory) ? null : that.currentCategory,
+            query = that.currentCategory === '_purchased' ? null : that.currentQuery;
+        // Set search
+        if(that.currentCategory === '_purchased'){
+            that.components['search'].disable();
+        }else{
+            that.components['search'].enable();
+        }
+        // Set pagination
+        if(that.components['pagination']){
+            that.components['overlay'].open();
+            that.components['pagination'].setParams({
+                'pageCount' : pageCount
+            });
+            that.components['pagination'].setAction({
+                'url' : that.params['paginationParams']['ajax'][urlType],
+                'params' : {
+                    'category' : category,
+                    'query' : query
+                }
+            });
+        }
+    };
+
     /* *** PROCESS FILES *** */
 
     classProto.convertFile = function(data){
-        var name = data['assets']['preview']['url'].split('/').pop();
         // Return converted data
-        return {
-            'value' : data['assets']['preview']['url'],
-            'name' : name,
-            'description' : data['description'],
-            'mime' : data['media_type'],
-            'size' : null,
-            'url' : data['assets']['preview']['url'],
-            'id' : data['id'],
-            'source' : 'shutterstock_preview'
+        if(data['assets']){
+            return {
+                'value' : data['assets']['preview']['url'],
+                'name' : data['assets']['preview']['url'].split('/').pop(),
+                'description' : data['description'],
+                'mime' : data['media_type'],
+                'size' : null,
+                'url' : data['assets']['preview']['url'],
+                'thumbnail' : data['assets']['huge_thumb']['url'],
+                'id' : data['id'],
+                'source' : 'shutterstock_preview'
+            }
+        }else{
+            return {
+                'value' : data['src'],
+                'name' : data['src'].split('/').pop(),
+                'description' : '',
+                'mime' : null,
+                'size' : null,
+                'url' : data['src'],
+                'thumbnail' : data['src'],
+                'id' : data['id'],
+                'source' : 'shutterstock_purchased'
+            }
         }
+    };
+});
+cm.define('App.ShutterstockStats', {
+    'extend' : 'Com.AbstractController',
+    'params' : {
+        'tooltipConstructor' : 'Com.HelpBubble',
+        'tooltipParams' : {
+            'renderStructure' : true,
+            'showLabel' : true
+        }
+    },
+    'strings' : {
+        'title' : 'Terms of Use',
+        'content' :
+            '<div>' +
+            '   <p>Images are for digital use within QuickSilk only and may not be used for print.</p>' +
+            '   <p>You may not use the image as a trademark or logo for a business.</p>' +
+            '   <p>You may not portray a person in a way that may be offensive, including: in connection with adult-oriented services or ads for dating services; in connection with political endorsements; with pornographic, defamatory, unlawful, offensive or immoral content; and as suffering from, or being treated for, a physical or mental ailment.</p>' +
+            '   <p>You may only use the image for campaigns and content created on QuickSilk, and not with other website or content services. Downloading of the standalone image file outside of QuickSilk is prohibited.</p>' +
+            '</div>'
+    }
+},
+function(params){
+    var that = this;
+    // Call parent class construct
+    Com.AbstractController.apply(that, arguments);
+});
+
+cm.getConstructor('App.ShutterstockStats', function(classConstructor, className, classProto, classInherit){
+    classProto.renderView = function(){
+        var that = this;
+        that.triggerEvent('onRenderViewStart');
+        // Structure
+        that.nodes['container'] = cm.node('div', {'class' : 'com__file-stats'});
+        // Events
+        that.triggerEvent('onRenderViewProcess');
+        that.triggerEvent('onRenderViewEnd');
+    };
+
+    classProto.renderViewModel = function(){
+        var that = this;
+        cm.getConstructor(that.params['tooltipConstructor'], function(classObject){
+            that.components['tooltip'] = new classObject(
+                cm.merge(that.params['tooltipParams'], {
+                    'container' : that.nodes['container'],
+                    'title' : that.lang('title'),
+                    'content' : that.lang('content')
+                })
+            );
+        });
     };
 });
 cm.define('App.Sidebar', {
