@@ -4,10 +4,14 @@ cm.define('App.ShutterstockStats', {
         'tooltipConstructor' : 'Com.HelpBubble',
         'tooltipParams' : {
             'renderStructure' : true,
-            'showLabel' : true
+            'embedStructureOnRender' : true,
+            'showLabel' : true,
+            'showIcon' : false,
+            'type' : 'container'
         }
     },
     'strings' : {
+        'message' : 'Intro text stating about watermarks and necessity to buy original images from Shutterstock module - and a link to it.',
         'title' : 'Terms of Use',
         'content' :
             '<div>' +
@@ -29,7 +33,15 @@ cm.getConstructor('App.ShutterstockStats', function(classConstructor, className,
         var that = this;
         that.triggerEvent('onRenderViewStart');
         // Structure
-        that.nodes['container'] = cm.node('div', {'class' : 'com__file-stats'});
+        that.nodes['container'] = cm.node('div', {'class' : 'com__file-stats'},
+            that.nodes['content'] = cm.node('div', {'class' : 'com__file-stats__list is-inline'},
+                that.nodes['list'] = cm.node('ul',
+                    cm.node('li', {'class' : 'icon small info'}),
+                    cm.node('li', that.lang('message')),
+                    that.nodes['terms'] = cm.node('li')
+                )
+            )
+        );
         // Events
         that.triggerEvent('onRenderViewProcess');
         that.triggerEvent('onRenderViewEnd');
@@ -40,7 +52,7 @@ cm.getConstructor('App.ShutterstockStats', function(classConstructor, className,
         cm.getConstructor(that.params['tooltipConstructor'], function(classObject){
             that.components['tooltip'] = new classObject(
                 cm.merge(that.params['tooltipParams'], {
-                    'container' : that.nodes['container'],
+                    'container' : that.nodes['terms'],
                     'title' : that.lang('title'),
                     'content' : that.lang('content')
                 })
