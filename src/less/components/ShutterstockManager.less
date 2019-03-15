@@ -7,10 +7,19 @@
             height: 100%;
 
             .com__file-manager__holder {
+                overflow: hidden;
+
                 > .inner {
                     .display-flex;
                     .mx__flex-flow(column nowrap);
                     .mx__justify-content(center);
+                    .mx__transition(all, @CmUI-Transition-DurationLong);
+                }
+
+                &.is-blur {
+                    > .inner {
+                        .mx__filter(blur(12px));
+                    }
                 }
             }
 
@@ -25,34 +34,54 @@
                     opacity: 1;
                 }
             }
+        }
+    }
 
-            .stock__view {
-                .display-flex;
-                overflow: hidden;
+    .stock__view {
+        .display-flex;
+        overflow: hidden;
 
-                .stock__tabs {
-                    width: 25%;
-                    position: relative;
-                    flex: 0 1 auto;
-                    margin: 0 @CmIndent-Medium 0 0;
+        .stock__tabs {
+            width: 25%;
+            position: relative;
+            flex: 0 1 auto;
+            margin: 0 @CmIndent-Medium 0 0;
 
-                    > .inner {
-                        .cm__scrollbar;
-                        .cm__scroll--y-auto;
-                        height: 100%;
-                    }
-                }
+            > .inner {
+                .cm__scrollbar;
+                .cm__scroll--y-auto;
+                height: 100%;
+            }
+        }
 
-                .stock__list {
-                    position: relative;
-                    flex: auto;
+        .stock__list {
+            position: relative;
+            flex: auto;
 
-                    > .inner {
-                        .cm__scrollbar;
-                        .cm__scroll--y-auto;
-                        height: 100%;
-                    }
-                }
+            > .inner {
+                .cm__scrollbar;
+                .cm__scroll--y-auto;
+                height: 100%;
+            }
+        }
+    }
+
+    .stock__tour {
+        .display-flex;
+        .cm__flex--center;
+        .cm__scroll-y-a;
+        width: 100%;
+        height: 100%;
+        position: relative;
+        .mx__flex-flow(column wrap);
+
+        > .inner {
+            max-width: 480px;
+        }
+
+        .pt__buttons {
+            .com__input {
+                margin: 6px;
             }
         }
     }

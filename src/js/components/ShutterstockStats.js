@@ -1,6 +1,7 @@
 cm.define('App.ShutterstockStats', {
     'extend' : 'Com.AbstractController',
     'params' : {
+        'adminLink' : '/admin/shutterstock/',
         'tooltipConstructor' : 'Com.HelpBubble',
         'tooltipParams' : {
             'renderStructure' : true,
@@ -11,7 +12,7 @@ cm.define('App.ShutterstockStats', {
         }
     },
     'strings' : {
-        'message' : 'Intro text stating about watermarks and necessity to buy original images from Shutterstock module - and a link to it.',
+        'message' : 'Intro text stating about watermarks and necessity to buy original images from <a href="%adminLink%" target="_blank">Shutterstock module</a> - and a link to it.',
         'title' : 'Terms of Use',
         'content' :
             '<div>' +
@@ -37,7 +38,11 @@ cm.getConstructor('App.ShutterstockStats', function(classConstructor, className,
             that.nodes['content'] = cm.node('div', {'class' : 'com__file-stats__list is-inline'},
                 that.nodes['list'] = cm.node('ul',
                     cm.node('li', {'class' : 'icon small info'}),
-                    cm.node('li', that.lang('message')),
+                    cm.node('li', {
+                        'innerHTML' : that.lang('message', {
+                            '%adminLink%' : that.params['adminLink']
+                        })
+                    }),
                     that.nodes['terms'] = cm.node('li')
                 )
             )
@@ -54,7 +59,9 @@ cm.getConstructor('App.ShutterstockStats', function(classConstructor, className,
                 cm.merge(that.params['tooltipParams'], {
                     'container' : that.nodes['terms'],
                     'title' : that.lang('title'),
-                    'content' : that.lang('content')
+                    'content' : that.lang('content', {
+                        '%adminLink%' : that.params['adminLink']
+                    })
                 })
             );
         });

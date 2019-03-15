@@ -1,11 +1,11 @@
-/*! ************ QuickSilk-Application v3.25.5 (2019-03-07 20:31) ************ */
+/*! ************ QuickSilk-Application v3.25.6 (2019-03-15 21:43) ************ */
 
 // /* ************************************************ */
 // /* ******* QUICKSILK: COMMON ******* */
 // /* ************************************************ */
 
 var App = {
-    '_version' : '3.25.5',
+    '_version' : '3.25.6',
     '_assetsUrl' : [window.location.protocol, window.location.hostname].join('//'),
     'Elements': {},
     'Nodes' : {},
@@ -6944,6 +6944,7 @@ function(params){
 cm.define('App.ShutterstockManager', {
     'extend' : 'Com.AbstractFileManager',
     'params' : {
+        'name' : 'shutterstock-manager',
         'lazy' : true,
         'showStats' : true,
         'statsConstructor' : 'App.ShutterstockStats',
@@ -6992,6 +6993,14 @@ cm.define('App.ShutterstockManager', {
             'autoOpen' : false,
             'lazy' : true,
             'position' : 'absolute'
+        },
+        'tourConstructor' : 'Com.Overlay',
+        'tourParams' : {
+            'autoOpen' : false,
+            'lazy' : true,
+            'showSpinner' : false,
+            'showContent' : true,
+            'position' : 'absolute'
         }
     },
     'strings' : {
@@ -7000,7 +7009,12 @@ cm.define('App.ShutterstockManager', {
             '_purchased' : 'My Purchased Images'
         },
         'server_error' : 'An unexpected error has occurred. Please try again later.',
-        'empty' : 'There are no items to show.'
+        'empty' : 'There are no items to show.',
+        'tour' : {
+            'content' : '<p>In order to Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean malesuada risus at leo mattis maximus. Sed quis erat enim. Cras consequat facilisis nunc id malesuada. Nam scelerisque velit et feugiat pretium. Interdum et malesuada fames ac ante ipsum primis in faucibus. Integer metus nisl, volutpat eget viverra eget, interdum vel odio.</p>',
+            'confirm' : 'Yes, I agree',
+            'check' : 'Don\'t show this message again'
+        }
     }
 },
 function(params){
@@ -7033,6 +7047,8 @@ cm.getConstructor('App.ShutterstockManager', function(classConstructor, classNam
         that.renderListEmptyHandler = that.renderListEmpty.bind(that);
         that.setListCategoryHandler = that.setListCategory.bind(that);
         that.setListQueryHandler = that.setListQuery.bind(that);
+        that.showTourHandler = that.showTour.bind(that);
+        that.hideTourHandler = that.hideTour.bind(that);
     };
 
     classProto.renderController = function(){
@@ -7073,6 +7089,8 @@ cm.getConstructor('App.ShutterstockManager', function(classConstructor, classNam
         that.renderCategoriesViewModel();
         // Show
         cm.removeClass(that.nodes['holder']['container'], 'is-hidden', true);
+        // Show tour
+        that.showTour();
     };
 
     classProto.renderCategoriesView = function(){
@@ -7184,6 +7202,20 @@ cm.getConstructor('App.ShutterstockManager', function(classConstructor, classNam
             that.components['pagination'].addEvent('onPageRenderEnd', that.renderListPageHandler);
             that.components['pagination'].addEvent('onError', that.renderListErrorHandler);
             that.components['pagination'].addEvent('onEmpty', that.renderListEmptyHandler);
+        });
+        // Init tour
+        cm.getConstructor(that.params['tourConstructor'], function(classConstructor){
+            that.components['tour'] = new classConstructor(
+                cm.merge(that.params['tourParams'], {
+                    'container' : that.nodes['inner']
+                })
+            );
+            that.components['tour'].addEvent('onOpenStart', function(){
+                cm.addClass(that.nodes['holder']['container'], 'is-blur');
+            });
+            that.components['tour'].addEvent('onCloseStart', function(){
+                cm.removeClass(that.nodes['holder']['container'], 'is-blur');
+            });
         });
     };
 
@@ -7317,6 +7349,57 @@ cm.getConstructor('App.ShutterstockManager', function(classConstructor, classNam
         }
     };
 
+    /* *** TOUR *** */
+
+    classProto.renderTourView = function(){
+        var that = this,
+            nodes = {};
+        that.nodes['tour'] = nodes;
+        // Structure
+        nodes['container'] = cm.node('div', {'class' : 'stock__tour'},
+            cm.node('div', {'class' : 'inner'},
+                cm.node('div', {'class' : 'stock__tour__content', 'innerHTML' : that.lang('tour.content')}),
+                cm.node('div', {'class' : 'pt__buttons'},
+                    nodes['buttonsInner'] = cm.node('div', {'class' : 'inner'},
+                        nodes['buttonsLeft'] = cm.node('div', {'class' : 'left'}),
+                        nodes['buttonsRight'] = cm.node('div', {'class' : 'right'},
+                            nodes['confirm'] = cm.node('div', {'class' : 'button button-primary'}, that.lang('tour.confirm'))
+                        )
+                    )
+                )
+            )
+        );
+        // Components
+        cm.getConstructor('Com.Check', function(classConstructor){
+            that.components['tourCheck'] = new classConstructor({
+                'placeholder' : that.lang('tour.check'),
+                'container' : nodes['buttonsLeft']
+            });
+        });
+        // Events
+        cm.addEvent(nodes['confirm'], 'click', that.hideTourHandler);
+        // Set content
+        that.components['tour'].setContent(nodes['container']);
+    };
+
+    classProto.showTour = function(){
+        var that = this,
+            isConfirmed = that.storageRead('tourConfirmed') === 'yes';
+        if(!isConfirmed){
+            that.renderTourView();
+            that.components['tour'].open();
+        }
+    };
+
+    classProto.hideTour = function(){
+        var that = this,
+            isChecked = that.components['tourCheck'].get();
+        if(isChecked){
+            that.storageWrite('tourConfirmed', 'yes');
+        }
+        that.components['tour'].close();
+    };
+
     /* *** PROCESS FILES *** */
 
     classProto.convertFile = function(data){
@@ -7351,6 +7434,7 @@ cm.getConstructor('App.ShutterstockManager', function(classConstructor, classNam
 cm.define('App.ShutterstockStats', {
     'extend' : 'Com.AbstractController',
     'params' : {
+        'adminLink' : '/admin/shutterstock/',
         'tooltipConstructor' : 'Com.HelpBubble',
         'tooltipParams' : {
             'renderStructure' : true,
@@ -7361,7 +7445,7 @@ cm.define('App.ShutterstockStats', {
         }
     },
     'strings' : {
-        'message' : 'Intro text stating about watermarks and necessity to buy original images from Shutterstock module - and a link to it.',
+        'message' : 'Intro text stating about watermarks and necessity to buy original images from <a href="%adminLink%" target="_blank">Shutterstock module</a> - and a link to it.',
         'title' : 'Terms of Use',
         'content' :
             '<div>' +
@@ -7387,7 +7471,11 @@ cm.getConstructor('App.ShutterstockStats', function(classConstructor, className,
             that.nodes['content'] = cm.node('div', {'class' : 'com__file-stats__list is-inline'},
                 that.nodes['list'] = cm.node('ul',
                     cm.node('li', {'class' : 'icon small info'}),
-                    cm.node('li', that.lang('message')),
+                    cm.node('li', {
+                        'innerHTML' : that.lang('message', {
+                            '%adminLink%' : that.params['adminLink']
+                        })
+                    }),
                     that.nodes['terms'] = cm.node('li')
                 )
             )
@@ -7404,7 +7492,9 @@ cm.getConstructor('App.ShutterstockStats', function(classConstructor, className,
                 cm.merge(that.params['tooltipParams'], {
                     'container' : that.nodes['terms'],
                     'title' : that.lang('title'),
-                    'content' : that.lang('content')
+                    'content' : that.lang('content', {
+                        '%adminLink%' : that.params['adminLink']
+                    })
                 })
             );
         });
