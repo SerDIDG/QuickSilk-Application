@@ -6,6 +6,20 @@
         .app__file-uploader__holder {
             height: 100%;
 
+            .com__file-manager {
+                overflow: hidden;
+
+                > .inner {
+                    .mx__transition(all, @CmUI-Transition-DurationLong);
+                }
+
+                &.is-blur {
+                    > .inner {
+                        .mx__filter(blur(8px));
+                    }
+                }
+            }
+
             .com__file-manager__holder {
                 overflow: hidden;
 
@@ -13,13 +27,6 @@
                     .display-flex;
                     .mx__flex-flow(column nowrap);
                     .mx__justify-content(center);
-                    .mx__transition(all, @CmUI-Transition-DurationLong);
-                }
-
-                &.is-blur {
-                    > .inner {
-                        .mx__filter(blur(12px));
-                    }
                 }
             }
 
@@ -73,6 +80,7 @@
         width: 100%;
         height: 100%;
         position: relative;
+        background: rgba(255, 255, 255, 0.3);
         .mx__flex-flow(column wrap);
 
         > .inner {

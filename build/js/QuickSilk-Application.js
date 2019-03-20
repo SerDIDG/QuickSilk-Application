@@ -1,11 +1,11 @@
-/*! ************ QuickSilk-Application v3.25.6 (2019-03-15 21:43) ************ */
+/*! ************ QuickSilk-Application v3.25.7 (2019-03-20 19:47) ************ */
 
 // /* ************************************************ */
 // /* ******* QUICKSILK: COMMON ******* */
 // /* ************************************************ */
 
 var App = {
-    '_version' : '3.25.6',
+    '_version' : '3.25.7',
     '_assetsUrl' : [window.location.protocol, window.location.hostname].join('//'),
     'Elements': {},
     'Nodes' : {},
@@ -7011,7 +7011,7 @@ cm.define('App.ShutterstockManager', {
         'server_error' : 'An unexpected error has occurred. Please try again later.',
         'empty' : 'There are no items to show.',
         'tour' : {
-            'content' : '<p>In order to Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean malesuada risus at leo mattis maximus. Sed quis erat enim. Cras consequat facilisis nunc id malesuada. Nam scelerisque velit et feugiat pretium. Interdum et malesuada fames ac ante ipsum primis in faucibus. Integer metus nisl, volutpat eget viverra eget, interdum vel odio.</p>',
+            'content' : '<p>Images are watermarked and can be used only on a temporary basis, and for evaluation purposes. To remove the watermark and obtain the usage rights to use the image on your website (only) you must purchase a license. A list of all temporary images you’ve downloaded, as well as the ability to purchase a use license - can be found in Modules > Manage > Shutterstock.</p>',
             'confirm' : 'Yes, I agree',
             'check' : 'Don\'t show this message again'
         }
@@ -7207,14 +7207,14 @@ cm.getConstructor('App.ShutterstockManager', function(classConstructor, classNam
         cm.getConstructor(that.params['tourConstructor'], function(classConstructor){
             that.components['tour'] = new classConstructor(
                 cm.merge(that.params['tourParams'], {
-                    'container' : that.nodes['inner']
+                    'container' : that.nodes['container']
                 })
             );
             that.components['tour'].addEvent('onOpenStart', function(){
-                cm.addClass(that.nodes['holder']['container'], 'is-blur');
+                cm.addClass(that.nodes['container'], 'is-blur');
             });
             that.components['tour'].addEvent('onCloseStart', function(){
-                cm.removeClass(that.nodes['holder']['container'], 'is-blur');
+                cm.removeClass(that.nodes['container'], 'is-blur');
             });
         });
     };
@@ -7445,15 +7445,7 @@ cm.define('App.ShutterstockStats', {
         }
     },
     'strings' : {
-        'message' : 'Intro text stating about watermarks and necessity to buy original images from <a href="%adminLink%" target="_blank">Shutterstock module</a> - and a link to it.',
-        'title' : 'Terms of Use',
-        'content' :
-            '<div>' +
-            '   <p>Images are for digital use within QuickSilk only and may not be used for print.</p>' +
-            '   <p>You may not use the image as a trademark or logo for a business.</p>' +
-            '   <p>You may not portray a person in a way that may be offensive, including: in connection with adult-oriented services or ads for dating services; in connection with political endorsements; with pornographic, defamatory, unlawful, offensive or immoral content; and as suffering from, or being treated for, a physical or mental ailment.</p>' +
-            '   <p>You may only use the image for campaigns and content created on QuickSilk, and not with other website or content services. Downloading of the standalone image file outside of QuickSilk is prohibited.</p>' +
-            '</div>'
+        'message' : 'Images are watermarked and can be used only on a temporary basis, and for evaluation purposes. To remove the watermark and obtain the usage rights to use the image on your website (only) you must purchase a license. A list of all temporary images you’ve downloaded, as well as the ability to purchase a use license - can be found in Modules > Manage > Shutterstock. <a href="%adminLink%" target="_blank">Click here</a> to go to the module.'
     }
 },
 function(params){
@@ -7470,13 +7462,11 @@ cm.getConstructor('App.ShutterstockStats', function(classConstructor, className,
         that.nodes['container'] = cm.node('div', {'class' : 'com__file-stats'},
             that.nodes['content'] = cm.node('div', {'class' : 'com__file-stats__list is-inline'},
                 that.nodes['list'] = cm.node('ul',
-                    cm.node('li', {'class' : 'icon small info'}),
                     cm.node('li', {
                         'innerHTML' : that.lang('message', {
                             '%adminLink%' : that.params['adminLink']
                         })
-                    }),
-                    that.nodes['terms'] = cm.node('li')
+                    })
                 )
             )
         );
@@ -7487,17 +7477,6 @@ cm.getConstructor('App.ShutterstockStats', function(classConstructor, className,
 
     classProto.renderViewModel = function(){
         var that = this;
-        cm.getConstructor(that.params['tooltipConstructor'], function(classObject){
-            that.components['tooltip'] = new classObject(
-                cm.merge(that.params['tooltipParams'], {
-                    'container' : that.nodes['terms'],
-                    'title' : that.lang('title'),
-                    'content' : that.lang('content', {
-                        '%adminLink%' : that.params['adminLink']
-                    })
-                })
-            );
-        });
     };
 });
 cm.define('App.Sidebar', {

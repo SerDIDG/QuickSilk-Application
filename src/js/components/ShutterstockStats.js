@@ -12,15 +12,7 @@ cm.define('App.ShutterstockStats', {
         }
     },
     'strings' : {
-        'message' : 'Intro text stating about watermarks and necessity to buy original images from <a href="%adminLink%" target="_blank">Shutterstock module</a> - and a link to it.',
-        'title' : 'Terms of Use',
-        'content' :
-            '<div>' +
-            '   <p>Images are for digital use within QuickSilk only and may not be used for print.</p>' +
-            '   <p>You may not use the image as a trademark or logo for a business.</p>' +
-            '   <p>You may not portray a person in a way that may be offensive, including: in connection with adult-oriented services or ads for dating services; in connection with political endorsements; with pornographic, defamatory, unlawful, offensive or immoral content; and as suffering from, or being treated for, a physical or mental ailment.</p>' +
-            '   <p>You may only use the image for campaigns and content created on QuickSilk, and not with other website or content services. Downloading of the standalone image file outside of QuickSilk is prohibited.</p>' +
-            '</div>'
+        'message' : 'Images are watermarked and can be used only on a temporary basis, and for evaluation purposes. To remove the watermark and obtain the usage rights to use the image on your website (only) you must purchase a license. A list of all temporary images you’ve downloaded, as well as the ability to purchase a use license - can be found in Modules > Manage > Shutterstock. <a href="%adminLink%" target="_blank">Click here</a> to go to the module.'
     }
 },
 function(params){
@@ -37,13 +29,11 @@ cm.getConstructor('App.ShutterstockStats', function(classConstructor, className,
         that.nodes['container'] = cm.node('div', {'class' : 'com__file-stats'},
             that.nodes['content'] = cm.node('div', {'class' : 'com__file-stats__list is-inline'},
                 that.nodes['list'] = cm.node('ul',
-                    cm.node('li', {'class' : 'icon small info'}),
                     cm.node('li', {
                         'innerHTML' : that.lang('message', {
                             '%adminLink%' : that.params['adminLink']
                         })
-                    }),
-                    that.nodes['terms'] = cm.node('li')
+                    })
                 )
             )
         );
@@ -54,16 +44,5 @@ cm.getConstructor('App.ShutterstockStats', function(classConstructor, className,
 
     classProto.renderViewModel = function(){
         var that = this;
-        cm.getConstructor(that.params['tooltipConstructor'], function(classObject){
-            that.components['tooltip'] = new classObject(
-                cm.merge(that.params['tooltipParams'], {
-                    'container' : that.nodes['terms'],
-                    'title' : that.lang('title'),
-                    'content' : that.lang('content', {
-                        '%adminLink%' : that.params['adminLink']
-                    })
-                })
-            );
-        });
     };
 });

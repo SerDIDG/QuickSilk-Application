@@ -68,7 +68,7 @@ cm.define('App.ShutterstockManager', {
         'server_error' : 'An unexpected error has occurred. Please try again later.',
         'empty' : 'There are no items to show.',
         'tour' : {
-            'content' : '<p>In order to Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean malesuada risus at leo mattis maximus. Sed quis erat enim. Cras consequat facilisis nunc id malesuada. Nam scelerisque velit et feugiat pretium. Interdum et malesuada fames ac ante ipsum primis in faucibus. Integer metus nisl, volutpat eget viverra eget, interdum vel odio.</p>',
+            'content' : '<p>Images are watermarked and can be used only on a temporary basis, and for evaluation purposes. To remove the watermark and obtain the usage rights to use the image on your website (only) you must purchase a license. A list of all temporary images you’ve downloaded, as well as the ability to purchase a use license - can be found in Modules > Manage > Shutterstock.</p>',
             'confirm' : 'Yes, I agree',
             'check' : 'Don\'t show this message again'
         }
@@ -264,14 +264,14 @@ cm.getConstructor('App.ShutterstockManager', function(classConstructor, classNam
         cm.getConstructor(that.params['tourConstructor'], function(classConstructor){
             that.components['tour'] = new classConstructor(
                 cm.merge(that.params['tourParams'], {
-                    'container' : that.nodes['inner']
+                    'container' : that.nodes['container']
                 })
             );
             that.components['tour'].addEvent('onOpenStart', function(){
-                cm.addClass(that.nodes['holder']['container'], 'is-blur');
+                cm.addClass(that.nodes['container'], 'is-blur');
             });
             that.components['tour'].addEvent('onCloseStart', function(){
-                cm.removeClass(that.nodes['holder']['container'], 'is-blur');
+                cm.removeClass(that.nodes['container'], 'is-blur');
             });
         });
     };
