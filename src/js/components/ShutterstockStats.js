@@ -12,7 +12,7 @@ cm.define('App.ShutterstockStats', {
         }
     },
     'strings' : {
-        'message' : 'Images are watermarked and can be used only on a temporary basis, and for evaluation purposes. To remove the watermark and obtain the usage rights to use the image on your website (only) you must purchase a license. A list of all temporary images you’ve downloaded, as well as the ability to purchase a use license - can be found in Modules > Manage > Shutterstock. <a href="%adminLink%" target="_blank">Click here</a> to go to the module.'
+        'message' : 'A list of all temporary images you’ve downloaded, as well as the ability to purchase a use license - can be found <a href="%adminLink%" target="_blank">here</a>.'
     }
 },
 function(params){
@@ -29,6 +29,7 @@ cm.getConstructor('App.ShutterstockStats', function(classConstructor, className,
         that.nodes['container'] = cm.node('div', {'class' : 'com__file-stats'},
             that.nodes['content'] = cm.node('div', {'class' : 'com__file-stats__list is-inline'},
                 that.nodes['list'] = cm.node('ul',
+                    cm.node('li', {'class' : 'icon small info'}),
                     cm.node('li', {
                         'innerHTML' : that.lang('message', {
                             '%adminLink%' : that.params['adminLink']

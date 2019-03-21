@@ -57,7 +57,8 @@ cm.define('App.ShutterstockManager', {
             'lazy' : true,
             'showSpinner' : false,
             'showContent' : true,
-            'position' : 'absolute'
+            'position' : 'absolute',
+            'theme' : 'transparent'
         }
     },
     'strings' : {

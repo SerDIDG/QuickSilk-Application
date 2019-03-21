@@ -1,11 +1,11 @@
-/*! ************ QuickSilk-Application v3.25.7 (2019-03-20 19:47) ************ */
+/*! ************ QuickSilk-Application v3.25.8 (2019-03-21 18:55) ************ */
 
 // /* ************************************************ */
 // /* ******* QUICKSILK: COMMON ******* */
 // /* ************************************************ */
 
 var App = {
-    '_version' : '3.25.7',
+    '_version' : '3.25.8',
     '_assetsUrl' : [window.location.protocol, window.location.hostname].join('//'),
     'Elements': {},
     'Nodes' : {},
@@ -3142,7 +3142,7 @@ cm.define('App.FileUploaderLocal', {
         'dropzoneParams' : {
             'embedStructure' : 'append',
             'rollover' : false,
-            'height' : 300
+            'height' : 350
         },
         'showOverlay' : true,
         'overlayDelay' : 'cm._config.loadDelay',
@@ -6299,7 +6299,7 @@ cm.getConstructor('App.Panel', function(classConstructor, className, classProto)
         var that = this;
         that.triggerEvent('onValidateParamsStart');
         that.triggerEvent('onValidateParamsProcess');
-        that.params['Com.Request']['Com.Overlay'] = that.params['Com.Overlay'];
+        that.params['Com.Request']['overlayParams'] = that.params['Com.Overlay'];
         that.params['Com.Request']['showOverlay'] = that.params['showOverlay'];
         that.params['Com.Request']['overlayDelay'] = that.params['overlayDelay'];
         that.params['Com.Request']['responseKey'] = that.params['responseKey'];
@@ -7000,7 +7000,8 @@ cm.define('App.ShutterstockManager', {
             'lazy' : true,
             'showSpinner' : false,
             'showContent' : true,
-            'position' : 'absolute'
+            'position' : 'absolute',
+            'theme' : 'transparent'
         }
     },
     'strings' : {
@@ -7445,7 +7446,7 @@ cm.define('App.ShutterstockStats', {
         }
     },
     'strings' : {
-        'message' : 'Images are watermarked and can be used only on a temporary basis, and for evaluation purposes. To remove the watermark and obtain the usage rights to use the image on your website (only) you must purchase a license. A list of all temporary images you’ve downloaded, as well as the ability to purchase a use license - can be found in Modules > Manage > Shutterstock. <a href="%adminLink%" target="_blank">Click here</a> to go to the module.'
+        'message' : 'A list of all temporary images you’ve downloaded, as well as the ability to purchase a use license - can be found <a href="%adminLink%" target="_blank">here</a>.'
     }
 },
 function(params){
@@ -7462,6 +7463,7 @@ cm.getConstructor('App.ShutterstockStats', function(classConstructor, className,
         that.nodes['container'] = cm.node('div', {'class' : 'com__file-stats'},
             that.nodes['content'] = cm.node('div', {'class' : 'com__file-stats__list is-inline'},
                 that.nodes['list'] = cm.node('ul',
+                    cm.node('li', {'class' : 'icon small info'}),
                     cm.node('li', {
                         'innerHTML' : that.lang('message', {
                             '%adminLink%' : that.params['adminLink']

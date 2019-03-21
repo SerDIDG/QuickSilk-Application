@@ -19,7 +19,7 @@ cm.define('App.FileUploaderLocal', {
         'dropzoneParams' : {
             'embedStructure' : 'append',
             'rollover' : false,
-            'height' : 300
+            'height' : 350
         },
         'showOverlay' : true,
         'overlayDelay' : 'cm._config.loadDelay',

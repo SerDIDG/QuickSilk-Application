@@ -6,9 +6,13 @@
         .app__file-uploader__holder {
             height: 100%;
 
-            .com__file-manager {
-                overflow: hidden;
+            .com__overlay {
+                &.theme-transparent {
+                    margin: -@ComTabset-Content-Padding;
+                }
+            }
 
+            .com__file-manager {
                 > .inner {
                     .mx__transition(all, @CmUI-Transition-DurationLong);
                 }
@@ -80,7 +84,7 @@
         width: 100%;
         height: 100%;
         position: relative;
-        background: rgba(255, 255, 255, 0.3);
+        background: rgba(255, 255, 255, 0.8);
         .mx__flex-flow(column wrap);
 
         > .inner {

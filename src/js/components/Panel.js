@@ -162,7 +162,7 @@ cm.getConstructor('App.Panel', function(classConstructor, className, classProto)
         var that = this;
         that.triggerEvent('onValidateParamsStart');
         that.triggerEvent('onValidateParamsProcess');
-        that.params['Com.Request']['Com.Overlay'] = that.params['Com.Overlay'];
+        that.params['Com.Request']['overlayParams'] = that.params['Com.Overlay'];
         that.params['Com.Request']['showOverlay'] = that.params['showOverlay'];
         that.params['Com.Request']['overlayDelay'] = that.params['overlayDelay'];
         that.params['Com.Request']['responseKey'] = that.params['responseKey'];
