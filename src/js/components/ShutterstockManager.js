@@ -59,6 +59,10 @@ cm.define('App.ShutterstockManager', {
             'showContent' : true,
             'position' : 'absolute',
             'theme' : 'transparent'
+        },
+        'optimizeConstructor' : 'App.ShutterstockOptimizeContainer',
+        'optimizeParams' : {
+            'autoOpen' : false
         }
     },
     'strings' : {
@@ -72,6 +76,9 @@ cm.define('App.ShutterstockManager', {
             'content' : '<p>Images are watermarked and can be used only on a temporary basis, and for evaluation purposes. To remove the watermark and obtain the usage rights to use the image on your website (only) you must purchase a license. A list of all temporary images you’ve downloaded, as well as the ability to purchase a use license - can be found in Modules > Manage > Shutterstock.</p>',
             'confirm' : 'Yes, I agree',
             'check' : 'Don\'t show this message again'
+        },
+        'item' : {
+            'optimize' : 'Optimize'
         }
     }
 },
@@ -97,6 +104,7 @@ cm.getConstructor('App.ShutterstockManager', function(classConstructor, classNam
         that.currentCategory = null;
         that.currentQuery = null;
         that.currentItem = null;
+        that.optimizeItem = null;
         // Binds
         that.renderCategoriesResponseHandler = that.renderCategoriesResponse.bind(that);
         that.renderCategoriesErrorHandler = that.renderCategoriesError.bind(that);
@@ -107,6 +115,13 @@ cm.getConstructor('App.ShutterstockManager', function(classConstructor, classNam
         that.setListQueryHandler = that.setListQuery.bind(that);
         that.showTourHandler = that.showTour.bind(that);
         that.hideTourHandler = that.hideTour.bind(that);
+    };
+
+    classProto.onDestruct = function(){
+        var that = this;
+        cm.forEach(that.components, function(item){
+            item.destruct && item.destruct();
+        });
     };
 
     classProto.renderController = function(){
@@ -275,6 +290,13 @@ cm.getConstructor('App.ShutterstockManager', function(classConstructor, classNam
                 cm.removeClass(that.nodes['container'], 'is-blur');
             });
         });
+        // Init optimize
+        cm.getConstructor(that.params['optimizeConstructor'], function(classConstructor){
+            that.components['optimize'] = new classConstructor(that.params['optimizeParams']);
+            that.components['optimize'].addEvent('onComplete', function(controller, item){
+                that.completeOptimizeItem(item);
+            });
+        });
     };
 
     /* *** LIST *** */
@@ -336,11 +358,27 @@ cm.getConstructor('App.ShutterstockManager', function(classConstructor, classNam
             )
         );
         nodes['descr'].style.backgroundImage = cm.URLToCSSURL(item['thumbnail']);
+        // Buttons
+        if(item['source'] === 'shutterstock_purchased'){
+            nodes['buttons'] = cm.node('div', {'class' : 'pt__buttons is-box'},
+                cm.node('div', {'class' : 'inner'},
+                    nodes['optimize'] = cm.node('div', {'class' : 'button button-primary'}, that.lang('item.optimize'))
+                )
+            );
+            cm.appendChild(nodes['buttons'], nodes['link']);
+        }
         // Load
-        cm.onImageLoad(item['thumbnail'], function(){
+        cm.onImageLoad(item['thumbnail'], function(node){
+            if(!item['width'] && !item['height']){
+                item['width'] = node.naturalWidth;
+                item['height'] = node.naturalHeight;
+            }
             cm.addClass(nodes['link'], 'is-loaded', true);
         });
         // Events
+        cm.addEvent(nodes['optimize'], 'click', function(){
+            that.setOptimizeItem(item);
+        });
         cm.addEvent(nodes['link'], 'click', function(){
             that.setListItem(item);
         });
@@ -407,6 +445,24 @@ cm.getConstructor('App.ShutterstockManager', function(classConstructor, classNam
         }
     };
 
+    /* *** OPTIMIZE *** */
+
+    classProto.setOptimizeItem = function(item){
+        var that = this;
+        that.optimizeItem = item;
+        that.components['optimize'].set({
+            'width' : item['filters']['width'] || item['width'],
+            'height' : item['filters']['height'] || item['height']
+        });
+        that.components['optimize'].open();
+    };
+
+    classProto.completeOptimizeItem = function(item){
+        var that = this;
+        that.optimizeItem['filters']['width'] = item['width'];
+        that.optimizeItem['filters']['height'] = item['height'];
+    };
+
     /* *** TOUR *** */
 
     classProto.renderTourView = function(){
@@ -467,10 +523,13 @@ cm.getConstructor('App.ShutterstockManager', function(classConstructor, classNam
                 'value' : data['assets']['preview']['url'],
                 'name' : data['assets']['preview']['url'].split('/').pop(),
                 'description' : data['description'],
-                'mime' : data['media_type'],
-                'size' : null,
                 'url' : data['assets']['preview']['url'],
                 'thumbnail' : data['assets']['huge_thumb']['url'],
+                'mime' : data['media_type'],
+                'size' : null,
+                'width' : data['assets']['preview']['width'],
+                'height' : data['assets']['preview']['height'],
+                'filters' : data['filters'] || {},
                 'id' : data['id'],
                 'source' : 'shutterstock_preview'
             }
@@ -479,10 +538,13 @@ cm.getConstructor('App.ShutterstockManager', function(classConstructor, classNam
                 'value' : data['src'],
                 'name' : data['src'].split('/').pop(),
                 'description' : '',
+                'url' : data['src'],
+                'thumbnail' : data['thumbnail'] || data['src'],
                 'mime' : null,
                 'size' : null,
-                'url' : data['src'],
-                'thumbnail' : data['src'],
+                'width' : data['width'] || 0,
+                'height' : data['height'] || 0,
+                'filters' : data['filters'] || {},
                 'id' : data['id'],
                 'source' : 'shutterstock_purchased'
             }

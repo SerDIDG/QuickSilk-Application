@@ -1,11 +1,11 @@
-/*! ************ QuickSilk-Application v3.25.8 (2019-03-21 18:55) ************ */
+/*! ************ QuickSilk-Application v3.26.0 (2019-04-03 21:01) ************ */
 
 // /* ************************************************ */
 // /* ******* QUICKSILK: COMMON ******* */
 // /* ************************************************ */
 
 var App = {
-    '_version' : '3.25.8',
+    '_version' : '3.26.0',
     '_assetsUrl' : [window.location.protocol, window.location.hostname].join('//'),
     'Elements': {},
     'Nodes' : {},
@@ -7002,6 +7002,10 @@ cm.define('App.ShutterstockManager', {
             'showContent' : true,
             'position' : 'absolute',
             'theme' : 'transparent'
+        },
+        'optimizeConstructor' : 'App.ShutterstockOptimizeContainer',
+        'optimizeParams' : {
+            'autoOpen' : false
         }
     },
     'strings' : {
@@ -7015,6 +7019,9 @@ cm.define('App.ShutterstockManager', {
             'content' : '<p>Images are watermarked and can be used only on a temporary basis, and for evaluation purposes. To remove the watermark and obtain the usage rights to use the image on your website (only) you must purchase a license. A list of all temporary images you’ve downloaded, as well as the ability to purchase a use license - can be found in Modules > Manage > Shutterstock.</p>',
             'confirm' : 'Yes, I agree',
             'check' : 'Don\'t show this message again'
+        },
+        'item' : {
+            'optimize' : 'Optimize'
         }
     }
 },
@@ -7040,6 +7047,7 @@ cm.getConstructor('App.ShutterstockManager', function(classConstructor, classNam
         that.currentCategory = null;
         that.currentQuery = null;
         that.currentItem = null;
+        that.optimizeItem = null;
         // Binds
         that.renderCategoriesResponseHandler = that.renderCategoriesResponse.bind(that);
         that.renderCategoriesErrorHandler = that.renderCategoriesError.bind(that);
@@ -7050,6 +7058,13 @@ cm.getConstructor('App.ShutterstockManager', function(classConstructor, classNam
         that.setListQueryHandler = that.setListQuery.bind(that);
         that.showTourHandler = that.showTour.bind(that);
         that.hideTourHandler = that.hideTour.bind(that);
+    };
+
+    classProto.onDestruct = function(){
+        var that = this;
+        cm.forEach(that.components, function(item){
+            item.destruct && item.destruct();
+        });
     };
 
     classProto.renderController = function(){
@@ -7218,6 +7233,13 @@ cm.getConstructor('App.ShutterstockManager', function(classConstructor, classNam
                 cm.removeClass(that.nodes['container'], 'is-blur');
             });
         });
+        // Init optimize
+        cm.getConstructor(that.params['optimizeConstructor'], function(classConstructor){
+            that.components['optimize'] = new classConstructor(that.params['optimizeParams']);
+            that.components['optimize'].addEvent('onComplete', function(controller, item){
+                that.completeOptimizeItem(item);
+            });
+        });
     };
 
     /* *** LIST *** */
@@ -7279,11 +7301,27 @@ cm.getConstructor('App.ShutterstockManager', function(classConstructor, classNam
             )
         );
         nodes['descr'].style.backgroundImage = cm.URLToCSSURL(item['thumbnail']);
+        // Buttons
+        if(item['source'] === 'shutterstock_purchased'){
+            nodes['buttons'] = cm.node('div', {'class' : 'pt__buttons is-box'},
+                cm.node('div', {'class' : 'inner'},
+                    nodes['optimize'] = cm.node('div', {'class' : 'button button-primary'}, that.lang('item.optimize'))
+                )
+            );
+            cm.appendChild(nodes['buttons'], nodes['link']);
+        }
         // Load
-        cm.onImageLoad(item['thumbnail'], function(){
+        cm.onImageLoad(item['thumbnail'], function(node){
+            if(!item['width'] && !item['height']){
+                item['width'] = node.naturalWidth;
+                item['height'] = node.naturalHeight;
+            }
             cm.addClass(nodes['link'], 'is-loaded', true);
         });
         // Events
+        cm.addEvent(nodes['optimize'], 'click', function(){
+            that.setOptimizeItem(item);
+        });
         cm.addEvent(nodes['link'], 'click', function(){
             that.setListItem(item);
         });
@@ -7350,6 +7388,24 @@ cm.getConstructor('App.ShutterstockManager', function(classConstructor, classNam
         }
     };
 
+    /* *** OPTIMIZE *** */
+
+    classProto.setOptimizeItem = function(item){
+        var that = this;
+        that.optimizeItem = item;
+        that.components['optimize'].set({
+            'width' : item['filters']['width'] || item['width'],
+            'height' : item['filters']['height'] || item['height']
+        });
+        that.components['optimize'].open();
+    };
+
+    classProto.completeOptimizeItem = function(item){
+        var that = this;
+        that.optimizeItem['filters']['width'] = item['width'];
+        that.optimizeItem['filters']['height'] = item['height'];
+    };
+
     /* *** TOUR *** */
 
     classProto.renderTourView = function(){
@@ -7410,10 +7466,13 @@ cm.getConstructor('App.ShutterstockManager', function(classConstructor, classNam
                 'value' : data['assets']['preview']['url'],
                 'name' : data['assets']['preview']['url'].split('/').pop(),
                 'description' : data['description'],
-                'mime' : data['media_type'],
-                'size' : null,
                 'url' : data['assets']['preview']['url'],
                 'thumbnail' : data['assets']['huge_thumb']['url'],
+                'mime' : data['media_type'],
+                'size' : null,
+                'width' : data['assets']['preview']['width'],
+                'height' : data['assets']['preview']['height'],
+                'filters' : data['filters'] || {},
                 'id' : data['id'],
                 'source' : 'shutterstock_preview'
             }
@@ -7422,14 +7481,249 @@ cm.getConstructor('App.ShutterstockManager', function(classConstructor, classNam
                 'value' : data['src'],
                 'name' : data['src'].split('/').pop(),
                 'description' : '',
+                'url' : data['src'],
+                'thumbnail' : data['thumbnail'] || data['src'],
                 'mime' : null,
                 'size' : null,
-                'url' : data['src'],
-                'thumbnail' : data['src'],
+                'width' : data['width'] || 0,
+                'height' : data['height'] || 0,
+                'filters' : data['filters'] || {},
                 'id' : data['id'],
                 'source' : 'shutterstock_purchased'
             }
         }
+    };
+});
+cm.define('App.ShutterstockOptimize', {
+    'extend' : 'Com.AbstractController',
+    'params' : {
+        'renderStructure' : true,
+        'embedStructureOnRender' : true,
+        'controllerEvents' : true,
+        'item' : {},
+        'formConstructor' : 'Com.Form',
+        'formParams' : {
+            'embedStructure' : 'append',
+            'validate' : false,
+            'renderButtons' : false,
+            'renderButtonsSeparator' : false
+        }
+    },
+    'strings' : {
+        'hint' : 'Constraint aspect ratio',
+        'form' : {
+            'width' : 'Width:',
+            'height' : 'Height:'
+        }
+    }
+},
+function(params){
+    var that = this;
+    // Call parent class construct in current context
+    Com.AbstractController.apply(that, arguments);
+});
+
+cm.getConstructor('App.ShutterstockOptimize', function(classConstructor, className, classProto, classInherit){
+    classProto.onConstructStart = function(){
+        var that = this;
+        that.item = null;
+        that.aspect = null;
+        // Binds
+        that.setWidthHandler = that.setWidth.bind(that);
+        that.setHeightHandler = that.setHeight.bind(that);
+        that.changeInputsHandler = that.changeInputs.bind(that);
+    };
+
+    classProto.onConstructEnd = function(){
+        var that = this;
+        that.set(that.params['item']);
+    };
+
+    classProto.renderView = function(){
+        var that = this;
+        // Structure
+        that.nodes['container'] = cm.node('div', {'class' : 'app__shutterstock-optimize'});
+        // Hint
+        that.nodes['hint'] = cm.node('div', {'class' : 'com__file-stats'},
+            cm.node('div', {'class' : 'com__file-stats__list is-inline'},
+                cm.node('ul',
+                    cm.node('li', {'class' : 'icon small info'}),
+                    cm.node('li', {
+                        'innerHTML' : that.lang('hint')
+                    })
+                )
+            )
+        );
+    };
+
+    classProto.renderViewModel = function(){
+        var that = this;
+        // Call parent method - renderViewModel
+        classInherit.prototype.renderViewModel.apply(that, arguments);
+        // Render form
+        cm.getConstructor(that.params['formConstructor'], function(classConstructor){
+            that.components['form'] = new classConstructor(
+                cm.merge(that.params['formParams'], {
+                    'container' : that.nodes['container']
+                })
+            );
+            that.renderFormFields();
+        });
+    };
+
+    classProto.renderFormFields = function(){
+        var that = this;
+        // Add Fields
+        that.components['form']
+            .add('integer', {
+                'name' : 'width',
+                'label' : that.lang('form.width'),
+                'maxLength' : 9,
+                'constructorParams' : {
+                    'events' : {
+                        'onInput' : that.setWidthHandler,
+                        'onChange' : that.changeInputsHandler
+                    }
+                }
+            })
+            .add('integer', {
+                'name' : 'height',
+                'label' : that.lang('form.height'),
+                'maxLength' : 9,
+                'constructorParams' : {
+                    'events' : {
+                        'onInput' : that.setHeightHandler,
+                        'onChange' : that.changeInputsHandler
+                    }
+                }
+            })
+            .appendChild(that.nodes['hint']);
+    };
+
+    classProto.setWidth = function(input, value){
+        var that = this,
+            height = Math.round(value / that.aspect),
+            heightField = that.components['form'].getField('height');
+        if(that.aspect){
+            heightField.fieldController.set(height, false);
+        }
+    };
+
+    classProto.setHeight = function(input, value){
+        var that = this,
+            width = Math.round(value * that.aspect),
+            widthField = that.components['form'].getField('width');
+        if(that.aspect){
+            widthField.fieldController.set(width, false);
+        }
+    };
+
+    classProto.changeInputs = function(){
+        var that = this,
+            widthField = that.components['form'].getField('width'),
+            heightField = that.components['form'].getField('height'),
+            width = widthField.fieldController.get(),
+            height = heightField.fieldController.get();
+        if(!width){
+            widthField.fieldController.set(that.item['width'], false);
+        }
+        if(!height){
+            heightField.fieldController.set(that.item['height'], false);
+        }
+    };
+
+    /******* PUBLIC *******/
+
+    classProto.set = function(item){
+        var that = this;
+        that.item = item;
+        that.aspect = that.item['width'] / that.item['height'];
+        that.components['form'].set(that.item, false);
+    };
+
+    classProto.get = function(){
+        var that = this;
+        return that.components['form'].get();
+    };
+});
+cm.define('App.ShutterstockOptimizeContainer', {
+    'extend' : 'Com.AbstractContainer',
+    'events' : [
+        'onComplete'
+    ],
+    'params' : {
+        'item' : {},
+        'constructor' : 'App.ShutterstockOptimize',
+        'params' : {
+            'embedStructure' : 'append'
+        },
+        'placeholder' : true,
+        'placeholderConstructor' : 'Com.DialogContainer',
+        'placeholderParams' : {
+            'renderButtons' : true,
+            'params' : {
+                'width' : 400
+            }
+        }
+    },
+    'strings' : {
+        'title' : 'Optimize image',
+        'close' : 'Cancel',
+        'save' : 'Save'
+    }
+},
+function(params){
+    var that = this;
+    // Call parent class construct
+    Com.AbstractContainer.apply(that, arguments);
+});
+
+cm.getConstructor('App.ShutterstockOptimizeContainer', function(classConstructor, className, classProto, classInherit){
+    classProto.construct = function(){
+        var that = this;
+        // Bind context to methods
+        that.completeHandler = that.complete.bind(that);
+        // Call parent method
+        classInherit.prototype.construct.apply(that, arguments);
+    };
+
+    classProto.renderPlaceholderButtons = function(){
+        var that = this;
+        that.components['placeholder'].addButton({
+            'name' : 'close',
+            'label' : that.lang('close'),
+            'style' : 'button-transparent',
+            'callback' : that.closeHandler
+        });
+        that.components['placeholder'].addButton({
+            'name' : 'save',
+            'label' : that.lang('save'),
+            'style' : 'button-primary',
+            'callback' : that.completeHandler
+        });
+    };
+
+    /******* PUBLIC *******/
+
+    classProto.set = function(item){
+        var that = this;
+        that.params['params']['item'] = item;
+        if(that.components['controller']){
+            that.components['controller'].set(item);
+        }
+        return that;
+    };
+
+    classProto.get = function(){
+        var that = this;
+        return that.components['controller'] && that.components['controller'].get && that.components['controller'].get();
+    };
+
+    classProto.complete = function(){
+        var that = this;
+        that.triggerEvent('onComplete', that.get());
+        that.close();
+        return that;
     };
 });
 cm.define('App.ShutterstockStats', {
