@@ -14,7 +14,7 @@ cm.define('App.ShutterstockOptimize', {
         }
     },
     'strings' : {
-        'hint' : 'Constraint aspect ratio',
+        'hint' : 'Aspect ratio is reserved',
         'form' : {
             'width' : 'Width:',
             'height' : 'Height:'
@@ -48,15 +48,12 @@ cm.getConstructor('App.ShutterstockOptimize', function(classConstructor, classNa
         // Structure
         that.nodes['container'] = cm.node('div', {'class' : 'app__shutterstock-optimize'});
         // Hint
-        that.nodes['hint'] = cm.node('div', {'class' : 'com__file-stats'},
-            cm.node('div', {'class' : 'com__file-stats__list is-inline'},
-                cm.node('ul',
-                    cm.node('li', {'class' : 'icon small info'}),
-                    cm.node('li', {
-                        'innerHTML' : that.lang('hint')
-                    })
-                )
-            )
+        that.nodes['hint'] = cm.node('div', {'class' : 'pt__line-info'},
+            cm.node('div', {'class' : 'icon small info'}),
+            cm.node('div', {
+                'class' : 'item',
+                'innerHTML' : that.lang('hint')
+            })
         );
     };
 

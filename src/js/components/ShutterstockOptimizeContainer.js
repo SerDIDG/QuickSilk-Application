@@ -14,7 +14,8 @@ cm.define('App.ShutterstockOptimizeContainer', {
         'placeholderParams' : {
             'renderButtons' : true,
             'params' : {
-                'width' : 400
+                'width' : 350,
+                'theme' : 'theme-compact'
             }
         }
     },

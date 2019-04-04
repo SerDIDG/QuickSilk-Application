@@ -1,11 +1,11 @@
-/*! ************ QuickSilk-Application v3.26.0 (2019-04-03 21:01) ************ */
+/*! ************ QuickSilk-Application v3.26.1 (2019-04-04 19:44) ************ */
 
 // /* ************************************************ */
 // /* ******* QUICKSILK: COMMON ******* */
 // /* ************************************************ */
 
 var App = {
-    '_version' : '3.26.0',
+    '_version' : '3.26.1',
     '_assetsUrl' : [window.location.protocol, window.location.hostname].join('//'),
     'Elements': {},
     'Nodes' : {},
@@ -7510,7 +7510,7 @@ cm.define('App.ShutterstockOptimize', {
         }
     },
     'strings' : {
-        'hint' : 'Constraint aspect ratio',
+        'hint' : 'Aspect ratio is reserved',
         'form' : {
             'width' : 'Width:',
             'height' : 'Height:'
@@ -7544,15 +7544,12 @@ cm.getConstructor('App.ShutterstockOptimize', function(classConstructor, classNa
         // Structure
         that.nodes['container'] = cm.node('div', {'class' : 'app__shutterstock-optimize'});
         // Hint
-        that.nodes['hint'] = cm.node('div', {'class' : 'com__file-stats'},
-            cm.node('div', {'class' : 'com__file-stats__list is-inline'},
-                cm.node('ul',
-                    cm.node('li', {'class' : 'icon small info'}),
-                    cm.node('li', {
-                        'innerHTML' : that.lang('hint')
-                    })
-                )
-            )
+        that.nodes['hint'] = cm.node('div', {'class' : 'pt__line-info'},
+            cm.node('div', {'class' : 'icon small info'}),
+            cm.node('div', {
+                'class' : 'item',
+                'innerHTML' : that.lang('hint')
+            })
         );
     };
 
@@ -7662,7 +7659,8 @@ cm.define('App.ShutterstockOptimizeContainer', {
         'placeholderParams' : {
             'renderButtons' : true,
             'params' : {
-                'width' : 400
+                'width' : 350,
+                'theme' : 'theme-compact'
             }
         }
     },
@@ -7729,15 +7727,7 @@ cm.getConstructor('App.ShutterstockOptimizeContainer', function(classConstructor
 cm.define('App.ShutterstockStats', {
     'extend' : 'Com.AbstractController',
     'params' : {
-        'adminLink' : '/admin/shutterstock/',
-        'tooltipConstructor' : 'Com.HelpBubble',
-        'tooltipParams' : {
-            'renderStructure' : true,
-            'embedStructureOnRender' : true,
-            'showLabel' : true,
-            'showIcon' : false,
-            'type' : 'container'
-        }
+        'adminLink' : '/admin/shutterstock/'
     },
     'strings' : {
         'message' : 'A list of all temporary images you’ve downloaded, as well as the ability to purchase a use license - can be found <a href="%adminLink%" target="_blank">here</a>.'
@@ -7755,24 +7745,19 @@ cm.getConstructor('App.ShutterstockStats', function(classConstructor, className,
         that.triggerEvent('onRenderViewStart');
         // Structure
         that.nodes['container'] = cm.node('div', {'class' : 'com__file-stats'},
-            that.nodes['content'] = cm.node('div', {'class' : 'com__file-stats__list is-inline'},
-                that.nodes['list'] = cm.node('ul',
-                    cm.node('li', {'class' : 'icon small info'}),
-                    cm.node('li', {
-                        'innerHTML' : that.lang('message', {
-                            '%adminLink%' : that.params['adminLink']
-                        })
+            that.nodes['content'] = cm.node('div', {'class' : 'pt__line-info'},
+                cm.node('div', {'class' : 'icon small info'}),
+                cm.node('div', {
+                    'class' : 'item',
+                    'innerHTML' : that.lang('message', {
+                        '%adminLink%' : that.params['adminLink']
                     })
-                )
+                })
             )
         );
         // Events
         that.triggerEvent('onRenderViewProcess');
         that.triggerEvent('onRenderViewEnd');
-    };
-
-    classProto.renderViewModel = function(){
-        var that = this;
     };
 });
 cm.define('App.Sidebar', {
