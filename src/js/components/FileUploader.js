@@ -118,7 +118,6 @@ cm.getConstructor('App.FileUploader', function(classConstructor, className, clas
         that.params['fileManagerParams']['lazy'] = that.params['fileManagerLazy'];
         that.params['stock']['max'] = that.params['max'];
         that.params['stock']['lazy'] = that.params['fileManagerLazy'];
-        return that;
     };
 
     classProto.renderView = function(){

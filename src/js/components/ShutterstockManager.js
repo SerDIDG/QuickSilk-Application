@@ -105,6 +105,7 @@ cm.getConstructor('App.ShutterstockManager', function(classConstructor, classNam
         that.currentQuery = null;
         that.currentItem = null;
         that.optimizeItem = null;
+        that.state = 'initial';
         // Binds
         that.renderCategoriesResponseHandler = that.renderCategoriesResponse.bind(that);
         that.renderCategoriesErrorHandler = that.renderCategoriesError.bind(that);
@@ -124,6 +125,18 @@ cm.getConstructor('App.ShutterstockManager', function(classConstructor, classNam
         });
     };
 
+    classProto.complete = function(){
+        var that = this;
+        if(that.currentItem && that.currentCategory === '_purchased' && that.state !== 'optimized'){
+            that.setOptimizeItem(that.currentItem);
+        }else{
+            classInherit.prototype.complete.apply(that, arguments);
+        }
+        return that;
+    };
+
+    /******* VIEW / MODEL *******/
+
     classProto.renderController = function(){
         var that = this;
         that.isLoaded = true;
@@ -140,7 +153,7 @@ cm.getConstructor('App.ShutterstockManager', function(classConstructor, classNam
         });
     };
 
-    /* *** CATEGORIES *** */
+    /*** CATEGORIES ***/
 
     classProto.renderCategoriesError = function(request, response){
         var that = this,
@@ -212,8 +225,7 @@ cm.getConstructor('App.ShutterstockManager', function(classConstructor, classNam
     };
 
     classProto.renderCategoriesViewModel = function(){
-        var that = this,
-            toolbarSearchField;
+        var that = this;
         // Render toolbar
         cm.getConstructor(that.params['toolbarConstructor'], function(classConstructor){
             that.components['toolbar'] = new classConstructor(
@@ -221,24 +233,7 @@ cm.getConstructor('App.ShutterstockManager', function(classConstructor, classNam
                     'container' : that.nodes['holder']['inner']
                 })
             );
-            that.components['toolbar'].addGroup({
-                'name' : 'all',
-                'position' : 'justify',
-                'adaptive' : false,
-                'flex' : true
-            });
-            that.components['toolbar'].addField({
-                'name' : 'search',
-                'group' : 'all',
-                'constructor' : that.params['searchConstructor'],
-                'constructorParams' : cm.merge(that.params['searchParams'], {
-                    'events' : {
-                        'onChange' : that.setListQueryHandler
-                    }
-                })
-            });
-            toolbarSearchField = that.components['toolbar'].getField('search', 'all');
-            that.components['search'] = toolbarSearchField['controller'];
+            that.renderToolbar();
         });
         // Init tabset helper
         cm.getConstructor(that.params['categoriesConstructor'], function(classConstructor){
@@ -296,10 +291,40 @@ cm.getConstructor('App.ShutterstockManager', function(classConstructor, classNam
             that.components['optimize'].addEvent('onComplete', function(controller, item){
                 that.completeOptimizeItem(item);
             });
+            that.components['optimize'].addEvent('onClose', function(controller, item){
+                if(that.components['optimize'].state !== 'complete'){
+                    that.cancelOptimizeItem(item);
+                }
+            });
         });
     };
 
-    /* *** LIST *** */
+    /*** TOOLBAR ***/
+
+    classProto.renderToolbar = function(){
+        var that = this,
+            toolbarSearchField;
+        that.components['toolbar'].addGroup({
+            'name' : 'all',
+            'position' : 'justify',
+            'adaptive' : false,
+            'flex' : true
+        });
+        that.components['toolbar'].addField({
+            'name' : 'search',
+            'group' : 'all',
+            'constructor' : that.params['searchConstructor'],
+            'constructorParams' : cm.merge(that.params['searchParams'], {
+                'events' : {
+                    'onChange' : that.setListQueryHandler
+                }
+            })
+        });
+        toolbarSearchField = that.components['toolbar'].getField('search', 'all');
+        that.components['search'] = toolbarSearchField['controller'];
+    };
+
+    /*** LIST ***/
 
     classProto.renderListError = function(){
         var that = this;
@@ -358,15 +383,6 @@ cm.getConstructor('App.ShutterstockManager', function(classConstructor, classNam
             )
         );
         nodes['descr'].style.backgroundImage = cm.URLToCSSURL(item['thumbnail']);
-        // Buttons
-        if(item['source'] === 'shutterstock_purchased'){
-            nodes['buttons'] = cm.node('div', {'class' : 'pt__buttons is-box'},
-                cm.node('div', {'class' : 'inner'},
-                    nodes['optimize'] = cm.node('div', {'class' : 'button button-primary'}, that.lang('item.optimize'))
-                )
-            );
-            cm.appendChild(nodes['buttons'], nodes['link']);
-        }
         // Load
         cm.onImageLoad(item['thumbnail'], function(node){
             if(!item['width'] && !item['height']){
@@ -376,9 +392,6 @@ cm.getConstructor('App.ShutterstockManager', function(classConstructor, classNam
             cm.addClass(nodes['link'], 'is-loaded', true);
         });
         // Events
-        cm.addEvent(nodes['optimize'], 'click', function(){
-            that.setOptimizeItem(item);
-        });
         cm.addEvent(nodes['link'], 'click', function(){
             that.setListItem(item);
         });
@@ -445,10 +458,11 @@ cm.getConstructor('App.ShutterstockManager', function(classConstructor, classNam
         }
     };
 
-    /* *** OPTIMIZE *** */
+    /*** OPTIMIZE ***/
 
     classProto.setOptimizeItem = function(item){
         var that = this;
+        that.state = 'optimizing';
         that.optimizeItem = item;
         that.components['optimize'].set({
             'width' : item['filters']['width'] || item['width'],
@@ -459,11 +473,20 @@ cm.getConstructor('App.ShutterstockManager', function(classConstructor, classNam
 
     classProto.completeOptimizeItem = function(item){
         var that = this;
+        that.state = 'optimized';
         that.optimizeItem['filters']['width'] = item['width'];
         that.optimizeItem['filters']['height'] = item['height'];
+        that.processFiles(that.optimizeItem);
+        that.complete();
     };
 
-    /* *** TOUR *** */
+    classProto.cancelOptimizeItem = function(){
+        var that = this;
+        that.state = 'initial';
+        that.optimizeItem = null;
+    };
+
+    /*** TOUR ***/
 
     classProto.renderTourView = function(){
         var that = this,
@@ -514,7 +537,7 @@ cm.getConstructor('App.ShutterstockManager', function(classConstructor, classNam
         that.components['tour'].close();
     };
 
-    /* *** PROCESS FILES *** */
+    /******* PROCESS FILES *******/
 
     classProto.convertFile = function(data){
         // Return converted data

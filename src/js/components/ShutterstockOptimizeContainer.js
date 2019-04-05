@@ -1,7 +1,8 @@
 cm.define('App.ShutterstockOptimizeContainer', {
     'extend' : 'Com.AbstractContainer',
     'events' : [
-        'onComplete'
+        'onComplete',
+        'onCancel'
     ],
     'params' : {
         'item' : {},
@@ -22,7 +23,7 @@ cm.define('App.ShutterstockOptimizeContainer', {
     'strings' : {
         'title' : 'Optimize image',
         'close' : 'Cancel',
-        'save' : 'Save'
+        'save' : 'Select'
     }
 },
 function(params){
@@ -34,6 +35,8 @@ function(params){
 cm.getConstructor('App.ShutterstockOptimizeContainer', function(classConstructor, className, classProto, classInherit){
     classProto.construct = function(){
         var that = this;
+        // Variables
+        that.state = 'initial';
         // Bind context to methods
         that.completeHandler = that.complete.bind(that);
         // Call parent method
@@ -74,6 +77,7 @@ cm.getConstructor('App.ShutterstockOptimizeContainer', function(classConstructor
 
     classProto.complete = function(){
         var that = this;
+        that.state = 'complete';
         that.triggerEvent('onComplete', that.get());
         that.close();
         return that;
