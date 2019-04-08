@@ -15,13 +15,12 @@ cm.define('App.ShutterstockOptimizeContainer', {
         'placeholderParams' : {
             'renderButtons' : true,
             'params' : {
-                'width' : 350,
-                'theme' : 'theme-compact'
+                'width' : 500
             }
         }
     },
     'strings' : {
-        'title' : 'Optimize image',
+        'title' : 'Select Image Size',
         'close' : 'Cancel',
         'save' : 'Select'
     }

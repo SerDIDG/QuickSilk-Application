@@ -1,11 +1,11 @@
-/*! ************ QuickSilk-Application v3.26.2 (2019-04-05 20:10) ************ */
+/*! ************ QuickSilk-Application v3.26.3 (2019-04-08 19:24) ************ */
 
 // /* ************************************************ */
 // /* ******* QUICKSILK: COMMON ******* */
 // /* ************************************************ */
 
 var App = {
-    '_version' : '3.26.2',
+    '_version' : '3.26.3',
     '_assetsUrl' : [window.location.protocol, window.location.hostname].join('//'),
     'Elements': {},
     'Nodes' : {},
@@ -7140,14 +7140,14 @@ cm.getConstructor('App.ShutterstockManager', function(classConstructor, classNam
         );
         // Render tabs
         cm.forEach(that.categories, function(item){
-            that.renderTab(item);
+            that.renderCategoryTab(item);
         });
         // Embed
         cm.clearNode(that.nodes['holder']['inner']);
         cm.appendChild(nodes['container'], that.nodes['holder']['inner']);
     };
 
-    classProto.renderTab = function(item){
+    classProto.renderCategoryTab = function(item){
         var that = this,
             nodes = {};
         // Validate
@@ -7532,7 +7532,14 @@ cm.define('App.ShutterstockOptimize', {
         }
     },
     'strings' : {
-        'hint' : 'Aspect ratio is reserved',
+        'help' :
+            '<ul>' +
+                '<li>Shutterstock images are too large to be uploaded to your website in their default size. Doing so will slow down the load time of your web page.</li>' +
+                '<li>You can re-size the image width and height using the fields below, in order to optimize the image for your web page.</li>' +
+                '<li>1600-2000px width is good for the images that are used as backgrounds, or header images.</li>' +
+                '<li>600-1000px width will work fine for the images that are used in the content.</li>' +
+                '<li>The width/height aspect ratio is locked, so your image will not distort after resizing.</li>' +
+            '</ul>',
         'form' : {
             'width' : 'Width:',
             'height' : 'Height:'
@@ -7566,13 +7573,7 @@ cm.getConstructor('App.ShutterstockOptimize', function(classConstructor, classNa
         // Structure
         that.nodes['container'] = cm.node('div', {'class' : 'app__shutterstock-optimize'});
         // Hint
-        that.nodes['hint'] = cm.node('div', {'class' : 'pt__line-info'},
-            cm.node('div', {'class' : 'icon small info'}),
-            cm.node('div', {
-                'class' : 'item',
-                'innerHTML' : that.lang('hint')
-            })
-        );
+        that.nodes['help'] = cm.node('div', {'class' : 'pt__listing-clear', 'innerHTML' : that.lang('help')});
     };
 
     classProto.renderViewModel = function(){
@@ -7594,10 +7595,12 @@ cm.getConstructor('App.ShutterstockOptimize', function(classConstructor, classNa
         var that = this;
         // Add Fields
         that.components['form']
-            .add('integer', {
+            .appendChild(that.nodes['help'])
+            .add('indent', {
                 'name' : 'width',
                 'label' : that.lang('form.width'),
                 'maxLength' : 9,
+                'defaultValue' : 0,
                 'constructorParams' : {
                     'events' : {
                         'onInput' : that.setWidthHandler,
@@ -7605,33 +7608,37 @@ cm.getConstructor('App.ShutterstockOptimize', function(classConstructor, classNa
                     }
                 }
             })
-            .add('integer', {
+            .add('indent', {
                 'name' : 'height',
                 'label' : that.lang('form.height'),
                 'maxLength' : 9,
+                'defaultValue' : 0,
                 'constructorParams' : {
                     'events' : {
                         'onInput' : that.setHeightHandler,
                         'onChange' : that.changeInputsHandler
                     }
                 }
-            })
-            .appendChild(that.nodes['hint']);
+            });
     };
 
-    classProto.setWidth = function(input, value){
+    classProto.setWidth = function(){
         var that = this,
-            height = Math.round(value / that.aspect),
-            heightField = that.components['form'].getField('height');
+            widthField = that.components['form'].getField('width'),
+            heightField = that.components['form'].getField('height'),
+            width = widthField.fieldController.getRaw(),
+            height = Math.round(parseFloat(width) / that.aspect);
         if(that.aspect){
             heightField.fieldController.set(height, false);
         }
     };
 
-    classProto.setHeight = function(input, value){
+    classProto.setHeight = function(){
         var that = this,
-            width = Math.round(value * that.aspect),
-            widthField = that.components['form'].getField('width');
+            heightField = that.components['form'].getField('height'),
+            widthField = that.components['form'].getField('width'),
+            height = heightField.fieldController.getRaw(),
+            width = Math.round(parseFloat(height) * that.aspect);
         if(that.aspect){
             widthField.fieldController.set(width, false);
         }
@@ -7641,12 +7648,12 @@ cm.getConstructor('App.ShutterstockOptimize', function(classConstructor, classNa
         var that = this,
             widthField = that.components['form'].getField('width'),
             heightField = that.components['form'].getField('height'),
-            width = widthField.fieldController.get(),
-            height = heightField.fieldController.get();
-        if(!width){
+            width = widthField.fieldController.getRaw(),
+            height = heightField.fieldController.getRaw();
+        if(!width || width === '0px'){
             widthField.fieldController.set(that.item['width'], false);
         }
-        if(!height){
+        if(!height || height === '0px'){
             heightField.fieldController.set(that.item['height'], false);
         }
     };
@@ -7682,13 +7689,12 @@ cm.define('App.ShutterstockOptimizeContainer', {
         'placeholderParams' : {
             'renderButtons' : true,
             'params' : {
-                'width' : 350,
-                'theme' : 'theme-compact'
+                'width' : 500
             }
         }
     },
     'strings' : {
-        'title' : 'Optimize image',
+        'title' : 'Select Image Size',
         'close' : 'Cancel',
         'save' : 'Select'
     }

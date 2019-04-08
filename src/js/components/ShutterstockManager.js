@@ -198,14 +198,14 @@ cm.getConstructor('App.ShutterstockManager', function(classConstructor, classNam
         );
         // Render tabs
         cm.forEach(that.categories, function(item){
-            that.renderTab(item);
+            that.renderCategoryTab(item);
         });
         // Embed
         cm.clearNode(that.nodes['holder']['inner']);
         cm.appendChild(nodes['container'], that.nodes['holder']['inner']);
     };
 
-    classProto.renderTab = function(item){
+    classProto.renderCategoryTab = function(item){
         var that = this,
             nodes = {};
         // Validate
