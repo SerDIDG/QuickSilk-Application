@@ -1,11 +1,11 @@
-/*! ************ QuickSilk-Application v3.26.3 (2019-04-08 19:24) ************ */
+/*! ************ QuickSilk-Application v3.26.4 (2019-04-09 03:18) ************ */
 
 // /* ************************************************ */
 // /* ******* QUICKSILK: COMMON ******* */
 // /* ************************************************ */
 
 var App = {
-    '_version' : '3.26.3',
+    '_version' : '3.26.4',
     '_assetsUrl' : [window.location.protocol, window.location.hostname].join('//'),
     'Elements': {},
     'Nodes' : {},
@@ -7532,14 +7532,6 @@ cm.define('App.ShutterstockOptimize', {
         }
     },
     'strings' : {
-        'help' :
-            '<ul>' +
-                '<li>Shutterstock images are too large to be uploaded to your website in their default size. Doing so will slow down the load time of your web page.</li>' +
-                '<li>You can re-size the image width and height using the fields below, in order to optimize the image for your web page.</li>' +
-                '<li>1600-2000px width is good for the images that are used as backgrounds, or header images.</li>' +
-                '<li>600-1000px width will work fine for the images that are used in the content.</li>' +
-                '<li>The width/height aspect ratio is locked, so your image will not distort after resizing.</li>' +
-            '</ul>',
         'form' : {
             'width' : 'Width:',
             'height' : 'Height:'
@@ -7572,8 +7564,6 @@ cm.getConstructor('App.ShutterstockOptimize', function(classConstructor, classNa
         var that = this;
         // Structure
         that.nodes['container'] = cm.node('div', {'class' : 'app__shutterstock-optimize'});
-        // Hint
-        that.nodes['help'] = cm.node('div', {'class' : 'pt__listing-clear', 'innerHTML' : that.lang('help')});
     };
 
     classProto.renderViewModel = function(){
@@ -7595,7 +7585,6 @@ cm.getConstructor('App.ShutterstockOptimize', function(classConstructor, classNa
         var that = this;
         // Add Fields
         that.components['form']
-            .appendChild(that.nodes['help'])
             .add('indent', {
                 'name' : 'width',
                 'label' : that.lang('form.width'),
@@ -7688,6 +7677,7 @@ cm.define('App.ShutterstockOptimizeContainer', {
         'placeholderConstructor' : 'Com.DialogContainer',
         'placeholderParams' : {
             'renderButtons' : true,
+            'renderHelp' : true,
             'params' : {
                 'width' : 500
             }
@@ -7696,7 +7686,17 @@ cm.define('App.ShutterstockOptimizeContainer', {
     'strings' : {
         'title' : 'Select Image Size',
         'close' : 'Cancel',
-        'save' : 'Select'
+        'save' : 'Select',
+        'help' :
+            '<div class="pt__listing-clear">' +
+                '<ul>' +
+                    '<li>Shutterstock images are too large to be uploaded to your website in their default size. Doing so will slow down the load time of your web page.</li>' +
+                    '<li>You can re-size the image width and height using the fields below, in order to optimize the image for your web page.</li>' +
+                    '<li>1600-2000px width is good for the images that are used as backgrounds, or header images.</li>' +
+                    '<li>600-1000px width will work fine for the images that are used in the content.</li>' +
+                    '<li>The width/height aspect ratio is locked, so your image will not distort after resizing.</li>' +
+                '</ul>' +
+            '</div>',
     }
 },
 function(params){

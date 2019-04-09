@@ -14,6 +14,7 @@ cm.define('App.ShutterstockOptimizeContainer', {
         'placeholderConstructor' : 'Com.DialogContainer',
         'placeholderParams' : {
             'renderButtons' : true,
+            'renderHelp' : true,
             'params' : {
                 'width' : 500
             }
@@ -22,7 +23,17 @@ cm.define('App.ShutterstockOptimizeContainer', {
     'strings' : {
         'title' : 'Select Image Size',
         'close' : 'Cancel',
-        'save' : 'Select'
+        'save' : 'Select',
+        'help' :
+            '<div class="pt__listing-clear">' +
+                '<ul>' +
+                    '<li>Shutterstock images are too large to be uploaded to your website in their default size. Doing so will slow down the load time of your web page.</li>' +
+                    '<li>You can re-size the image width and height using the fields below, in order to optimize the image for your web page.</li>' +
+                    '<li>1600-2000px width is good for the images that are used as backgrounds, or header images.</li>' +
+                    '<li>600-1000px width will work fine for the images that are used in the content.</li>' +
+                    '<li>The width/height aspect ratio is locked, so your image will not distort after resizing.</li>' +
+                '</ul>' +
+            '</div>',
     }
 },
 function(params){
