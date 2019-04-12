@@ -1,11 +1,11 @@
-/*! ************ QuickSilk-Application v3.26.4 (2019-04-09 03:18) ************ */
+/*! ************ QuickSilk-Application v3.26.5 (2019-04-12 19:36) ************ */
 
 // /* ************************************************ */
 // /* ******* QUICKSILK: COMMON ******* */
 // /* ************************************************ */
 
 var App = {
-    '_version' : '3.26.4',
+    '_version' : '3.26.5',
     '_assetsUrl' : [window.location.protocol, window.location.hostname].join('//'),
     'Elements': {},
     'Nodes' : {},
@@ -7440,7 +7440,7 @@ cm.getConstructor('App.ShutterstockManager', function(classConstructor, classNam
                 cm.node('div', {'class' : 'stock__tour__content', 'innerHTML' : that.lang('tour.content')}),
                 cm.node('div', {'class' : 'pt__buttons'},
                     nodes['buttonsInner'] = cm.node('div', {'class' : 'inner'},
-                        nodes['buttonsLeft'] = cm.node('div', {'class' : 'left'}),
+                        nodes['buttonsLeft'] = cm.node('div', {'class' : 'left column--auto'}),
                         nodes['buttonsRight'] = cm.node('div', {'class' : 'right'},
                             nodes['confirm'] = cm.node('div', {'class' : 'button button-primary'}, that.lang('tour.confirm'))
                         )
@@ -7777,7 +7777,7 @@ cm.getConstructor('App.ShutterstockStats', function(classConstructor, className,
         that.triggerEvent('onRenderViewStart');
         // Structure
         that.nodes['container'] = cm.node('div', {'class' : 'com__file-stats'},
-            that.nodes['content'] = cm.node('div', {'class' : 'pt__line-info'},
+            that.nodes['content'] = cm.node('div', {'class' : 'pt__line-info is-nowrap'},
                 cm.node('div', {'class' : 'icon small info'}),
                 cm.node('div', {
                     'class' : 'item',

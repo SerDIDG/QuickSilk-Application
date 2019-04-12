@@ -498,7 +498,7 @@ cm.getConstructor('App.ShutterstockManager', function(classConstructor, classNam
                 cm.node('div', {'class' : 'stock__tour__content', 'innerHTML' : that.lang('tour.content')}),
                 cm.node('div', {'class' : 'pt__buttons'},
                     nodes['buttonsInner'] = cm.node('div', {'class' : 'inner'},
-                        nodes['buttonsLeft'] = cm.node('div', {'class' : 'left'}),
+                        nodes['buttonsLeft'] = cm.node('div', {'class' : 'left column--auto'}),
                         nodes['buttonsRight'] = cm.node('div', {'class' : 'right'},
                             nodes['confirm'] = cm.node('div', {'class' : 'button button-primary'}, that.lang('tour.confirm'))
                         )

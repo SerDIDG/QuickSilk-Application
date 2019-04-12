@@ -19,7 +19,7 @@ cm.getConstructor('App.ShutterstockStats', function(classConstructor, className,
         that.triggerEvent('onRenderViewStart');
         // Structure
         that.nodes['container'] = cm.node('div', {'class' : 'com__file-stats'},
-            that.nodes['content'] = cm.node('div', {'class' : 'pt__line-info'},
+            that.nodes['content'] = cm.node('div', {'class' : 'pt__line-info is-nowrap'},
                 cm.node('div', {'class' : 'icon small info'}),
                 cm.node('div', {
                     'class' : 'item',
