@@ -6,6 +6,7 @@
     position: fixed;
     z-index: 200;
     overflow: hidden;
+    background-color: @AppSidebar-Background;
     .mx__position(0, auto, 0, 0);
     .mx__backface-visibility(hidden);
     .mx__transition(width, @AppSidebar-Duration, @CmUI-MotionAsymmetric);
@@ -27,7 +28,6 @@
             .cm__list-clear;
 
             > li {
-                .app__sidebar-tag__menu-item;
                 margin: @CmIndent-XXXSmall 0 0 0;
                 .mx__transition(all, @CmUI-Transition-Duration);
 
@@ -58,6 +58,7 @@
 
                         &:after {
                             .mx__transition(background, @CmUI-Transition-DurationReverse);
+                            background-color: @AppSidebar-Background;
                         }
                     }
                 }
@@ -70,6 +71,11 @@
                 &.active {
                     opacity: 1;
                     visibility: visible;
+
+                    > a {
+                        background-color: @AppSidebar-Background;
+                        color: @AppSidebar-Color;
+                    }
                 }
 
                 &.is-immediately {
@@ -204,6 +210,7 @@
         z-index: 2;
         text-align: left;
         line-height: @AppSidebar-Title-Height;
+        color: @AppSidebar-Color;
         .mx__position(0, 0, auto, 0);
         .mx__user-select(none);
 
@@ -211,6 +218,7 @@
             .icon.linked;
             position: absolute;
             cursor: pointer;
+            color: @AppSidebar-Color;
             .cm-i__size(@CmSize-Medium);
             .cm-i__b-size(@AppSidebar-Title-Height);
             .mx__position(0, 0, auto, auto);
@@ -218,8 +226,8 @@
     }
 
     .sidebar__content__descr {
-        .cm__scrollbar;
         .cm__scroll-y;
+        .cm__scrollbar--light;
         padding: 0 !important;
         position: absolute;
         z-index: 1;
@@ -232,11 +240,57 @@
 
     .sidebar__content__text {
         .cm__box;
+
+        .cm__links {
+            color: @AppSidebar-Color;
+        }
+
+        .cm__inherit {
+            color: @AppSidebar-Color;
+        }
     }
+
+    .sidebar__overlay {
+        background-color: fade(@AppSidebar-Background, 70%);
+    }
+
+    // /*** COMPONENTS ***/
 
     .app__block-container {
         margin: 0;
     }
+
+    .pt__toolbar {
+        .button {
+            .button.button-white;
+        }
+    }
+
+    .pt__listing-items {
+        > ul {
+            > li {
+                > a {
+                    color: @AppSidebar-Color;
+
+                    &:hover {
+                        color: @AppSidebar-Background;
+                    }
+                }
+
+                &.active {
+                    > a {
+                        color: @AppSidebar-Background;
+                    }
+                }
+            }
+        }
+    }
+
+    .com__togglebox {
+        .com__togglebox__theme(Dark);
+    }
+
+    // /*** STATES ***/
 
     &.is-expanded {
         width: @AppSidebar-WidthExpanded;
@@ -260,121 +314,11 @@
             }
         }
     }
-
-    .app__sidebar__theme(@AppSidebar-Theme);
 }
 
 /* *** FONT *** */
 
 .app__sidebar-font {
-
-}
-
-// /* *** MIXINS *** */
-
-.app__sidebar__theme (@theme) when (@theme = Light) {
-
-}
-
-.app__sidebar__theme (@theme) when (@theme = Dark) {
-    @background: @AppSidebar-ThemeDark-Background;
-    @color: @AppSidebar-ThemeDark-Color;
-
-    .pt__toolbar {
-        .button {
-            .button.button-white;
-        }
-    }
-
-    .pt__listing-items {
-        > ul {
-            > li {
-                > a {
-                    color: @color;
-
-                    &:hover {
-                        color: @background;
-                    }
-                }
-
-                &.active {
-                    > a {
-                        color: @background;
-                    }
-                }
-            }
-        }
-    }
-
-    .sidebar__overlay {
-        &.theme-dark {
-            background-color: fade(@background, 70%);
-        }
-    }
-}
-
-.app__sidebar__theme (@theme) {
-    .app__sidebar__background(~"@{AppSidebar-Theme@{theme}-Background}");
-    .app__sidebar__color(~"@{AppSidebar-Theme@{theme}-Color}");
-
-    .com__togglebox {
-        .com__togglebox__theme(@theme);
-    }
-}
-
-.app__sidebar__background (@background) {
-    background-color: @background;
-
-    .app__sidebar-tag__menu-item {
-        > a {
-            &:hover {
-                &:after {
-                    background-color: @background;
-                }
-            }
-        }
-
-        &.active {
-            > a {
-                background-color: @background;
-            }
-        }
-    }
-    // Fix of blinking background in Firefox
-    .app__blocks-category__background(@background);
-}
-
-.app__sidebar__color (@color) {
-    .app__sidebar-tag__menu-item {
-        &.active {
-            > a {
-                color: @color;
-            }
-        }
-    }
-
-    .sidebar__content__title {
-        color: @color;
-
-        .icon {
-            color: @color;
-        }
-    }
-
-    .sidebar__content__text {
-        .cm__links {
-            color: ~"@{AppSidebar-Theme@{theme}-Color}";
-        }
-
-        .cm__inherit {
-            color: ~"@{AppSidebar-Theme@{theme}-Color}";
-        }
-    }
-}
-
-// /* *** SHORT TAGS *** */
-
-.app__sidebar-tag__menu-item () {
 
 }
 
@@ -384,11 +328,9 @@
 @media only screen and (max-width : @CmUI-AdaptiveFrom) {
 
     html.is-adaptive {
-
         .app__sidebar {
             display: none;
         }
-
     }
 
 }

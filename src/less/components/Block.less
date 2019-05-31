@@ -17,20 +17,12 @@
         z-index: 10;
         .mx__transition(z-index, @CmUI-Transition-DurationReverse);
         .mx__transition-delay(0ms);
-
-        > .app__block-dummy {
-            &:extend(.app__block-dummy--hover all);
-        }
     }
 
     &.is-active {
         z-index: 10;
         .mx__transition(z-index, @CmUI-Transition-DurationReverse);
         .mx__transition-delay(0ms);
-
-        > .app__block-dummy {
-            &:extend(.app__block-dummy--active all);
-        }
     }
 
     &.is-indent-auto {
@@ -171,6 +163,8 @@
         margin: 0 auto;
         border-radius: @AppBlock-Dummy-IconBorderRadius;
         background-repeat: no-repeat;
+        background-image: url("@{AppPath-Images}/components/block/Dark.svg");
+        background-position: 50% @AppIcon-Block-default;
         .mx__transition(background-color, @CmUI-Transition-Duration);
     }
 
@@ -195,18 +189,49 @@
     }
 }
 
-.app__block-dummy--hover {
-    .icon {
-        .mx__transition(background-color, @CmUI-Transition-DurationReverse);
+.app__block-container {
+    > .app__block-dummy {
+        background-color: @AppBlock-Dummy-BackgroundNormal;
+
+        .caption {
+            color: @AppBlock-Dummy-ColorNormal;
+        }
+
+        .icon {
+            background-color: @AppBlock-Dummy-IconBackgroundNormal;
+        }
     }
-}
 
-.app__block-dummy--active {
-    box-shadow: 0 1px 5px rgba(0,0,0,0.2);
-    .mx__transition(background-color box-shadow, @CmUI-Transition-DurationReverse);
+    &:hover {
+        > .app__block-dummy {
+            background-color: @AppBlock-Dummy-BackgroundHover;
 
-    .icon {
-        .mx__transition(background-color, @CmUI-Transition-DurationReverse);
+            .caption {
+                color: @AppBlock-Dummy-ColorHover;
+            }
+
+            .icon {
+                background-color: @AppBlock-Dummy-IconBackgroundHover;
+                .mx__transition(background-color, @CmUI-Transition-DurationReverse);
+            }
+        }
+    }
+
+    &.is-active {
+        > .app__block-dummy {
+            box-shadow: 0 1px 5px rgba(0,0,0,0.2);
+            background-color: @AppBlock-Dummy-BackgroundActive;
+            .mx__transition(background-color box-shadow, @CmUI-Transition-DurationReverse);
+
+            .caption {
+                color: @AppBlock-Dummy-ColorActive;
+            }
+
+            .icon {
+                background-color: @AppBlock-Dummy-IconBackgroundActive;
+                .mx__transition(background-color, @CmUI-Transition-DurationReverse);
+            }
+        }
     }
 }
 
@@ -221,6 +246,7 @@
 
     > dd {
         margin: 0 -@AppBlock-Dummy-Padding;
+        background-color: @AppBlock-Category-Background;
         font-size: 0;
     }
 
@@ -231,107 +257,6 @@
         margin: 0 !important;
     }
 }
-
-// /* *** MIXINS **** */
-
-.app__block-dummy__theme (@theme) {
-    .app__block-dummy__background(~"@{AppBlock-Dummy-Theme@{theme}-BackgroundNormal}", ~"@{AppBlock-Dummy-Theme@{theme}-BackgroundHover}", ~"@{AppBlock-Dummy-Theme@{theme}-BackgroundActive}");
-    .app__block-dummy__icon-background(~"@{AppBlock-Dummy-Theme@{theme}-IconBackgroundNormal}", ~"@{AppBlock-Dummy-Theme@{theme}-IconBackgroundHover}", ~"@{AppBlock-Dummy-Theme@{theme}-IconBackgroundActive}");
-    .app__block-dummy__icons(@theme);
-    .app__block-dummy__caption-color(~"@{AppBlock-Dummy-Theme@{theme}-ColorNormal}", ~"@{AppBlock-Dummy-Theme@{theme}-ColorHover}", ~"@{AppBlock-Dummy-Theme@{theme}-ColorActive}");
-}
-
-.app__block-dummy__background (@normal, @hover, @active){
-    .app__block-container {
-        > .app__block-dummy {
-            background-color: @normal;
-        }
-
-        &:hover {
-            > .app__block-dummy {
-                background-color: @hover;
-            }
-        }
-
-        &.is-active {
-            > .app__block-dummy {
-                background-color: @active;
-            }
-        }
-    }
-}
-
-.app__block-dummy__icons (@theme) {
-    .app__block-dummy {
-        .icon {
-            background-image: url("@{AppPath-Images}/components/block/@{theme}.svg");
-            background-position: 50% @AppIcon-Block-default;
-        }
-    }
-}
-
-.app__block-dummy__icon-background (@normal, @hover, @active) {
-    .app__block-container {
-        > .app__block-dummy {
-            .icon {
-                //background-color: @normal;
-            }
-        }
-
-        &:hover {
-            > .app__block-dummy {
-                .icon {
-                    background-color: @hover;
-                }
-            }
-        }
-
-        &.is-active {
-            > .app__block-dummy {
-                .icon {
-                    background-color: @active;
-                }
-            }
-        }
-    }
-}
-
-.app__block-dummy__caption-color (@normal, @hover, @active) {
-    .app__block-container {
-        > .app__block-dummy {
-            .caption {
-                color: @normal;
-            }
-        }
-
-        &:hover {
-            > .app__block-dummy {
-                .caption {
-                    color: @hover;
-                }
-            }
-        }
-
-        &.is-active {
-            > .app__block-dummy {
-                .caption {
-                    color: @active;
-                }
-            }
-        }
-    }
-}
-
-.app__blocks-category__background (@color){
-    .app__blocks-category {
-        > dd {
-            background-color: @color;
-        }
-    }
-}
-
-.app__block-dummy__theme(@AppBlock-Dummy-Theme);
-.app__blocks-category__background(@AppBlock-Category-Background);
 
 /* *** HELPERS *** */
 

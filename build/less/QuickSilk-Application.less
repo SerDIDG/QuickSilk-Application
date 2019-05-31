@@ -1,4 +1,4 @@
-/*! ************ QuickSilk-Application v3.26.5 (2019-04-12 19:36) ************ */
+/*! ************ QuickSilk-Application v3.27.0 (2019-05-31 19:32) ************ */
 .svg__app__logo { background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20id%3D%22logo.svg%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2250%22%20height%3D%2224%22%20viewBox%3D%220%200%2050%2024%22%3E%20%20%3Cdefs%3E%20%20%20%20%3Cstyle%3E%20%20%20%20%20%20.cls-1%20%7B%20%20%20%20%20%20%20%20fill%3A%20%23F27C21%3B%20%20%20%20%20%20%7D%20%20%20%20%20%20.cls-1%2C%20.cls-2%20%7B%20%20%20%20%20%20%20%20fill-rule%3A%20evenodd%3B%20%20%20%20%20%20%7D%20%20%20%20%20%20.cls-2%20%7B%20%20%20%20%20%20%20%20fill%3A%20%23fff%3B%20%20%20%20%20%20%7D%20%20%20%20%3C%2Fstyle%3E%20%20%3C%2Fdefs%3E%20%20%3Cpath%20id%3D%22_3%22%20data-name%3D%223%22%20class%3D%22cls-1%22%20d%3D%22M35%2C24l8.58-12L35%2C0h6.429L50%2C12l-8.58%2C12H35Z%22%2F%3E%20%20%3Cpath%20id%3D%22_2%22%20data-name%3D%222%22%20class%3D%22cls-2%22%20d%3D%22M28%2C24L19.425%2C12%2C28%2C0H21.575L13%2C12l8.58%2C12H28Z%22%2F%3E%20%20%3Cpath%20id%3D%22_1%22%20data-name%3D%221%22%20class%3D%22cls-2%22%20d%3D%22M15%2C24L6.425%2C12%2C15%2C0H8.575L0%2C12l8.58%2C12H15Z%22%2F%3E%3C%2Fsvg%3E"); }
 .svg__app__menu-dropdown { background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20id%3D%22menu-dropdown.svg%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2212%22%20height%3D%227%22%20viewBox%3D%220%200%2012%207%22%3E%20%20%3Cdefs%3E%20%20%20%20%3Cstyle%3E%20%20%20%20%20%20.cls-1%20%7B%20%20%20%20%20%20%20%20fill%3A%20%23fff%3B%20%20%20%20%20%20%20%20fill-rule%3A%20evenodd%3B%20%20%20%20%20%20%7D%20%20%20%20%3C%2Fstyle%3E%20%20%3C%2Fdefs%3E%20%20%3Cpath%20class%3D%22cls-1%22%20d%3D%22M12%2C0L6%2C4.787%2C0%2C0V2.212L6%2C7l6-4.79V0Z%22%2F%3E%3C%2Fsvg%3E"); }
 
@@ -121,7 +121,7 @@
 // /* ******* VARIABLES ******* */
 // /* ************************************************ */
 
-@AppVersion: '3.26.5';
+@AppVersion: '3.27.0';
 
 // /* ******* PATH ******* */
 
@@ -296,12 +296,8 @@
 @AppSidebar-WidthCollapsed: @AppSidebar-Menu-Width;
 @AppSidebar-Duration: @CmUI-Transition-DurationLong;
 @AppSidebar-Overlay: @CmUI-Overlay;
-
-@AppSidebar-Theme: 'Dark';
-@AppSidebar-ThemeDark-Color: @CmColor-Font-Opposite;
-@AppSidebar-ThemeDark-Background: @CmColor-Primary-DarkDefault;
-@AppSidebar-ThemeLight-Color: @CmColor-Font;
-@AppSidebar-ThemeLight-Background: #ffffff;
+@AppSidebar-Color: @CmColor-Font-Opposite;
+@AppSidebar-Background: @CmColor-Primary-DarkDefault;
 
 // /* ******* NOTIFICATION ******* */
 
@@ -331,32 +327,21 @@
 
 @AppBlock-Category-Background: transparent;
 
-@AppBlock-Dummy-Theme: @AppSidebar-Theme;
 @AppBlock-Dummy-Width: 94px;
 @AppBlock-Dummy-Padding: 2px;
 @AppBlock-Dummy-BorderRadius: @CmBorder-Radius;
 @AppBlock-Dummy-IconBorderRadius: 0px;
 @AppBlock-Dummy-IconSize: 90px;
 
-@AppBlock-Dummy-ThemeDark-ColorNormal: @CmColor-Font-Opposite;
-@AppBlock-Dummy-ThemeDark-ColorHover: @CmColor-Font-Opposite;
-@AppBlock-Dummy-ThemeDark-ColorActive: @CmColor-Font;
-@AppBlock-Dummy-ThemeDark-BackgroundNormal: trannsparent;
-@AppBlock-Dummy-ThemeDark-BackgroundHover: trannsparent;
-@AppBlock-Dummy-ThemeDark-BackgroundActive: @CmColor-Background;
-@AppBlock-Dummy-ThemeDark-IconBackgroundNormal: rgba(255, 255, 255, 0.2);
-@AppBlock-Dummy-ThemeDark-IconBackgroundHover: rgba(255, 255, 255, 0.5);
-@AppBlock-Dummy-ThemeDark-IconBackgroundActive: @CmColor-Primary-DarkDefault;
-
-@AppBlock-Dummy-ThemeLight-ColorNormal: @CmColor-Font;
-@AppBlock-Dummy-ThemeLight-ColorHover: @CmColor-Font;
-@AppBlock-Dummy-ThemeLight-ColorActive: @CmColor-Font;
-@AppBlock-Dummy-ThemeLight-BackgroundNormal: trannsparent;
-@AppBlock-Dummy-ThemeLight-BackgroundHover: trannsparent;
-@AppBlock-Dummy-ThemeLight-BackgroundActive: @CmColor-Background;
-@AppBlock-Dummy-ThemeLight-IconBackgroundNormal: @CmColor-Secondary-LightHover;
-@AppBlock-Dummy-ThemeLight-IconBackgroundHover: @CmColor-Primary-LightActive;
-@AppBlock-Dummy-ThemeLight-IconBackgroundActive: @CmColor-Primary-LightActive;
+@AppBlock-Dummy-ColorNormal: @CmColor-Font-Opposite;
+@AppBlock-Dummy-ColorHover: @CmColor-Font-Opposite;
+@AppBlock-Dummy-ColorActive: @CmColor-Font;
+@AppBlock-Dummy-BackgroundNormal: trannsparent;
+@AppBlock-Dummy-BackgroundHover: trannsparent;
+@AppBlock-Dummy-BackgroundActive: @CmColor-Background;
+@AppBlock-Dummy-IconBackgroundNormal: transparent;
+@AppBlock-Dummy-IconBackgroundHover: rgba(255, 255, 255, 0.5);
+@AppBlock-Dummy-IconBackgroundActive: @CmColor-Primary-DarkDefault;
 
 // /* ******* DASHBOARD ******* */
 
@@ -2063,20 +2048,12 @@ html {
         z-index: 10;
         .mx__transition(z-index, @CmUI-Transition-DurationReverse);
         .mx__transition-delay(0ms);
-
-        > .app__block-dummy {
-            &:extend(.app__block-dummy--hover all);
-        }
     }
 
     &.is-active {
         z-index: 10;
         .mx__transition(z-index, @CmUI-Transition-DurationReverse);
         .mx__transition-delay(0ms);
-
-        > .app__block-dummy {
-            &:extend(.app__block-dummy--active all);
-        }
     }
 
     &.is-indent-auto {
@@ -2217,6 +2194,8 @@ html {
         margin: 0 auto;
         border-radius: @AppBlock-Dummy-IconBorderRadius;
         background-repeat: no-repeat;
+        background-image: url("@{AppPath-Images}/components/block/Dark.svg");
+        background-position: 50% @AppIcon-Block-default;
         .mx__transition(background-color, @CmUI-Transition-Duration);
     }
 
@@ -2241,18 +2220,49 @@ html {
     }
 }
 
-.app__block-dummy--hover {
-    .icon {
-        .mx__transition(background-color, @CmUI-Transition-DurationReverse);
+.app__block-container {
+    > .app__block-dummy {
+        background-color: @AppBlock-Dummy-BackgroundNormal;
+
+        .caption {
+            color: @AppBlock-Dummy-ColorNormal;
+        }
+
+        .icon {
+            background-color: @AppBlock-Dummy-IconBackgroundNormal;
+        }
     }
-}
 
-.app__block-dummy--active {
-    box-shadow: 0 1px 5px rgba(0,0,0,0.2);
-    .mx__transition(background-color box-shadow, @CmUI-Transition-DurationReverse);
+    &:hover {
+        > .app__block-dummy {
+            background-color: @AppBlock-Dummy-BackgroundHover;
 
-    .icon {
-        .mx__transition(background-color, @CmUI-Transition-DurationReverse);
+            .caption {
+                color: @AppBlock-Dummy-ColorHover;
+            }
+
+            .icon {
+                background-color: @AppBlock-Dummy-IconBackgroundHover;
+                .mx__transition(background-color, @CmUI-Transition-DurationReverse);
+            }
+        }
+    }
+
+    &.is-active {
+        > .app__block-dummy {
+            box-shadow: 0 1px 5px rgba(0,0,0,0.2);
+            background-color: @AppBlock-Dummy-BackgroundActive;
+            .mx__transition(background-color box-shadow, @CmUI-Transition-DurationReverse);
+
+            .caption {
+                color: @AppBlock-Dummy-ColorActive;
+            }
+
+            .icon {
+                background-color: @AppBlock-Dummy-IconBackgroundActive;
+                .mx__transition(background-color, @CmUI-Transition-DurationReverse);
+            }
+        }
     }
 }
 
@@ -2267,6 +2277,7 @@ html {
 
     > dd {
         margin: 0 -@AppBlock-Dummy-Padding;
+        background-color: @AppBlock-Category-Background;
         font-size: 0;
     }
 
@@ -2277,107 +2288,6 @@ html {
         margin: 0 !important;
     }
 }
-
-// /* *** MIXINS **** */
-
-.app__block-dummy__theme (@theme) {
-    .app__block-dummy__background(~"@{AppBlock-Dummy-Theme@{theme}-BackgroundNormal}", ~"@{AppBlock-Dummy-Theme@{theme}-BackgroundHover}", ~"@{AppBlock-Dummy-Theme@{theme}-BackgroundActive}");
-    .app__block-dummy__icon-background(~"@{AppBlock-Dummy-Theme@{theme}-IconBackgroundNormal}", ~"@{AppBlock-Dummy-Theme@{theme}-IconBackgroundHover}", ~"@{AppBlock-Dummy-Theme@{theme}-IconBackgroundActive}");
-    .app__block-dummy__icons(@theme);
-    .app__block-dummy__caption-color(~"@{AppBlock-Dummy-Theme@{theme}-ColorNormal}", ~"@{AppBlock-Dummy-Theme@{theme}-ColorHover}", ~"@{AppBlock-Dummy-Theme@{theme}-ColorActive}");
-}
-
-.app__block-dummy__background (@normal, @hover, @active){
-    .app__block-container {
-        > .app__block-dummy {
-            background-color: @normal;
-        }
-
-        &:hover {
-            > .app__block-dummy {
-                background-color: @hover;
-            }
-        }
-
-        &.is-active {
-            > .app__block-dummy {
-                background-color: @active;
-            }
-        }
-    }
-}
-
-.app__block-dummy__icons (@theme) {
-    .app__block-dummy {
-        .icon {
-            background-image: url("@{AppPath-Images}/components/block/@{theme}.svg");
-            background-position: 50% @AppIcon-Block-default;
-        }
-    }
-}
-
-.app__block-dummy__icon-background (@normal, @hover, @active) {
-    .app__block-container {
-        > .app__block-dummy {
-            .icon {
-                //background-color: @normal;
-            }
-        }
-
-        &:hover {
-            > .app__block-dummy {
-                .icon {
-                    background-color: @hover;
-                }
-            }
-        }
-
-        &.is-active {
-            > .app__block-dummy {
-                .icon {
-                    background-color: @active;
-                }
-            }
-        }
-    }
-}
-
-.app__block-dummy__caption-color (@normal, @hover, @active) {
-    .app__block-container {
-        > .app__block-dummy {
-            .caption {
-                color: @normal;
-            }
-        }
-
-        &:hover {
-            > .app__block-dummy {
-                .caption {
-                    color: @hover;
-                }
-            }
-        }
-
-        &.is-active {
-            > .app__block-dummy {
-                .caption {
-                    color: @active;
-                }
-            }
-        }
-    }
-}
-
-.app__blocks-category__background (@color){
-    .app__blocks-category {
-        > dd {
-            background-color: @color;
-        }
-    }
-}
-
-.app__block-dummy__theme(@AppBlock-Dummy-Theme);
-.app__blocks-category__background(@AppBlock-Category-Background);
 
 /* *** HELPERS *** */
 
@@ -3753,6 +3663,7 @@ html {
     position: fixed;
     z-index: 200;
     overflow: hidden;
+    background-color: @AppSidebar-Background;
     .mx__position(0, auto, 0, 0);
     .mx__backface-visibility(hidden);
     .mx__transition(width, @AppSidebar-Duration, @CmUI-MotionAsymmetric);
@@ -3774,7 +3685,6 @@ html {
             .cm__list-clear;
 
             > li {
-                .app__sidebar-tag__menu-item;
                 margin: @CmIndent-XXXSmall 0 0 0;
                 .mx__transition(all, @CmUI-Transition-Duration);
 
@@ -3805,6 +3715,7 @@ html {
 
                         &:after {
                             .mx__transition(background, @CmUI-Transition-DurationReverse);
+                            background-color: @AppSidebar-Background;
                         }
                     }
                 }
@@ -3817,6 +3728,11 @@ html {
                 &.active {
                     opacity: 1;
                     visibility: visible;
+
+                    > a {
+                        background-color: @AppSidebar-Background;
+                        color: @AppSidebar-Color;
+                    }
                 }
 
                 &.is-immediately {
@@ -3951,6 +3867,7 @@ html {
         z-index: 2;
         text-align: left;
         line-height: @AppSidebar-Title-Height;
+        color: @AppSidebar-Color;
         .mx__position(0, 0, auto, 0);
         .mx__user-select(none);
 
@@ -3958,6 +3875,7 @@ html {
             .icon.linked;
             position: absolute;
             cursor: pointer;
+            color: @AppSidebar-Color;
             .cm-i__size(@CmSize-Medium);
             .cm-i__b-size(@AppSidebar-Title-Height);
             .mx__position(0, 0, auto, auto);
@@ -3965,8 +3883,8 @@ html {
     }
 
     .sidebar__content__descr {
-        .cm__scrollbar;
         .cm__scroll-y;
+        .cm__scrollbar--light;
         padding: 0 !important;
         position: absolute;
         z-index: 1;
@@ -3979,11 +3897,57 @@ html {
 
     .sidebar__content__text {
         .cm__box;
+
+        .cm__links {
+            color: @AppSidebar-Color;
+        }
+
+        .cm__inherit {
+            color: @AppSidebar-Color;
+        }
     }
+
+    .sidebar__overlay {
+        background-color: fade(@AppSidebar-Background, 70%);
+    }
+
+    // /*** COMPONENTS ***/
 
     .app__block-container {
         margin: 0;
     }
+
+    .pt__toolbar {
+        .button {
+            .button.button-white;
+        }
+    }
+
+    .pt__listing-items {
+        > ul {
+            > li {
+                > a {
+                    color: @AppSidebar-Color;
+
+                    &:hover {
+                        color: @AppSidebar-Background;
+                    }
+                }
+
+                &.active {
+                    > a {
+                        color: @AppSidebar-Background;
+                    }
+                }
+            }
+        }
+    }
+
+    .com__togglebox {
+        .com__togglebox__theme(Dark);
+    }
+
+    // /*** STATES ***/
 
     &.is-expanded {
         width: @AppSidebar-WidthExpanded;
@@ -4007,121 +3971,11 @@ html {
             }
         }
     }
-
-    .app__sidebar__theme(@AppSidebar-Theme);
 }
 
 /* *** FONT *** */
 
 .app__sidebar-font {
-
-}
-
-// /* *** MIXINS *** */
-
-.app__sidebar__theme (@theme) when (@theme = Light) {
-
-}
-
-.app__sidebar__theme (@theme) when (@theme = Dark) {
-    @background: @AppSidebar-ThemeDark-Background;
-    @color: @AppSidebar-ThemeDark-Color;
-
-    .pt__toolbar {
-        .button {
-            .button.button-white;
-        }
-    }
-
-    .pt__listing-items {
-        > ul {
-            > li {
-                > a {
-                    color: @color;
-
-                    &:hover {
-                        color: @background;
-                    }
-                }
-
-                &.active {
-                    > a {
-                        color: @background;
-                    }
-                }
-            }
-        }
-    }
-
-    .sidebar__overlay {
-        &.theme-dark {
-            background-color: fade(@background, 70%);
-        }
-    }
-}
-
-.app__sidebar__theme (@theme) {
-    .app__sidebar__background(~"@{AppSidebar-Theme@{theme}-Background}");
-    .app__sidebar__color(~"@{AppSidebar-Theme@{theme}-Color}");
-
-    .com__togglebox {
-        .com__togglebox__theme(@theme);
-    }
-}
-
-.app__sidebar__background (@background) {
-    background-color: @background;
-
-    .app__sidebar-tag__menu-item {
-        > a {
-            &:hover {
-                &:after {
-                    background-color: @background;
-                }
-            }
-        }
-
-        &.active {
-            > a {
-                background-color: @background;
-            }
-        }
-    }
-    // Fix of blinking background in Firefox
-    .app__blocks-category__background(@background);
-}
-
-.app__sidebar__color (@color) {
-    .app__sidebar-tag__menu-item {
-        &.active {
-            > a {
-                color: @color;
-            }
-        }
-    }
-
-    .sidebar__content__title {
-        color: @color;
-
-        .icon {
-            color: @color;
-        }
-    }
-
-    .sidebar__content__text {
-        .cm__links {
-            color: ~"@{AppSidebar-Theme@{theme}-Color}";
-        }
-
-        .cm__inherit {
-            color: ~"@{AppSidebar-Theme@{theme}-Color}";
-        }
-    }
-}
-
-// /* *** SHORT TAGS *** */
-
-.app__sidebar-tag__menu-item () {
 
 }
 
@@ -4131,11 +3985,9 @@ html {
 @media only screen and (max-width : @CmUI-AdaptiveFrom) {
 
     html.is-adaptive {
-
         .app__sidebar {
             display: none;
         }
-
     }
 
 }
@@ -8653,6 +8505,90 @@ html {
 /* ******* PAGES: GROUP PROFILE ******* */
 
 .app-page__groupprofile {
+
+}
+.page__guestbook {
+    .lt__post {
+        .post-info {
+            .cm__font;
+        }
+    }
+}
+
+.page__guestbook-events {
+    .lt__post {
+        .post-info {
+            .display-flex;
+            .cm__font;
+
+            dt, dd {
+                padding: 0;
+                margin: 0;
+                overflow: hidden;
+                clear: both;
+            }
+
+            dt {
+                margin: 0 0 @CmIndent-XXSmall;
+                font-weight: @CmFont-Base-BoldWeight;
+            }
+        }
+
+        .post-address {
+            .mx__flex(0 1 40%);
+            margin: 0 @CmIndent-Small 0 0;
+        }
+
+        .post-events {
+            .mx__flex(auto);
+
+            dd:after {
+                height: @CmFont-Base-LineHeight - 4px;
+                display: block;
+                overflow: hidden;
+                border-bottom: 2px dotted @CmColor-Border;
+                content: '';
+            }
+
+            .date {
+                margin: 0 @CmIndent-XSmall 0 0;
+                float: left;
+                color: @CmFont-Base-Color;
+            }
+
+            .time {
+                margin: 0 0 0 @CmIndent-XSmall;
+                float: right;
+                color: @CmFont-Base-Color;
+            }
+        }
+
+        .lt__post__image-size(228px);
+    }
+}
+
+/* ******* ADAPTIVE ******* */
+
+@media only screen and (max-width: @CmUI-AdaptiveFrom) {
+
+    html.is-adaptive {
+        .page__guestbook-events {
+            .lt__post {
+                .post-info {
+                    display: block;
+                }
+
+                .post-address,
+                .post-events {
+                    margin: 0 0 @CmIndent-XSmall;
+
+                    &:last-child {
+                        margin-bottom: 0;
+                    }
+                }
+            }
+        }
+    }
 
 }
 /* ******* PAGES: MEMBER PROFILE ******* */
