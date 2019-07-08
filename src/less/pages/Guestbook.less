@@ -1,6 +1,7 @@
 .module__guestbook-posts {
     .lt__post {
         > .l {
+            width: 228px;
             order: 2;
             margin: 0 0 0 @LtPost-Image-Indent;
         }
@@ -8,8 +9,6 @@
         .post-info {
             .cm__font;
         }
-
-        .lt__post__image-size(228px);
     }
 }
 
@@ -70,6 +69,14 @@
 @media only screen and (max-width: @CmUI-AdaptiveFrom) {
 
     html.is-adaptive {
+        .module__guestbook-posts {
+            .lt__post {
+                > .l {
+                    width: auto;
+                }
+            }
+        }
+
         .module__guestbook-events {
             .lt__post {
                 .post-info {
