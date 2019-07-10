@@ -12,6 +12,22 @@
     }
 }
 
+.module__guestbook-posts-widget {
+    .lt__post {
+        text-align: center;
+
+        .post-info {
+            .cm__font;
+        }
+
+        .post-abstract {
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+    }
+}
+
 .module__guestbook-events {
     .lt__post {
         .post-info {
@@ -61,6 +77,54 @@
         }
 
         .lt__post__image-size(228px);
+    }
+}
+
+.module__guestbook-events-widget {
+    .lt__post {
+        text-align: center;
+
+        .post-info {
+            .cm__font;
+
+            dt, dd {
+                padding: 0;
+                margin: 0;
+                overflow: hidden;
+                clear: both;
+            }
+
+            dt {
+                margin: 0 0 @CmIndent-XXSmall;
+                font-weight: @CmFont-Base-BoldWeight;
+            }
+        }
+
+        .post-events {
+            max-width: 300px;
+            margin-left: auto;
+            margin-right: auto;
+
+            dd:after {
+                height: @CmFont-Base-LineHeight - 4px;
+                display: block;
+                overflow: hidden;
+                border-bottom: 2px dotted @CmColor-Border;
+                content: '';
+            }
+
+            .date {
+                margin: 0 @CmIndent-XSmall 0 0;
+                float: left;
+                color: @CmFont-Base-Color;
+            }
+
+            .time {
+                margin: 0 0 0 @CmIndent-XSmall;
+                float: right;
+                color: @CmFont-Base-Color;
+            }
+        }
     }
 }
 
