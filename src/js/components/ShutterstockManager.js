@@ -17,6 +17,10 @@ cm.define('App.ShutterstockManager', {
             'lazy' : true,
             'icon' : 'icon small search linked'
         },
+        'searchTypeConstructor' : 'Com.Select',
+        'searchTypeParams' : {
+            'embedStructure' : 'append'
+        },
         'categoriesRequestConstructor' : 'Com.Request',
         'categoriesRequestParams' : {
             'autoSend' : false,
@@ -79,7 +83,19 @@ cm.define('App.ShutterstockManager', {
         },
         'item' : {
             'optimize' : 'Optimize'
-        }
+        },
+        'searchTypes' : [
+            {
+                'value' : 'data',
+                'text' : 'by image data'
+            },{
+                'value' : 'id',
+                'text' : 'by image id'
+            },{
+                'value' : 'author',
+                'text' : 'by author'
+            }
+        ]
     }
 },
 function(params){
@@ -103,6 +119,7 @@ cm.getConstructor('App.ShutterstockManager', function(classConstructor, classNam
         }];
         that.currentCategory = null;
         that.currentQuery = null;
+        that.currentQueryType = null;
         that.currentItem = null;
         that.optimizeItem = null;
         that.state = 'initial';
@@ -114,6 +131,7 @@ cm.getConstructor('App.ShutterstockManager', function(classConstructor, classNam
         that.renderListEmptyHandler = that.renderListEmpty.bind(that);
         that.setListCategoryHandler = that.setListCategory.bind(that);
         that.setListQueryHandler = that.setListQuery.bind(that);
+        that.setListQueryTypeHandler = that.setListQueryType.bind(that);
         that.showTourHandler = that.showTour.bind(that);
         that.hideTourHandler = that.hideTour.bind(that);
     };
@@ -303,7 +321,8 @@ cm.getConstructor('App.ShutterstockManager', function(classConstructor, classNam
 
     classProto.renderToolbar = function(){
         var that = this,
-            toolbarSearchField;
+            toolbarSearchField,
+            toolbarSearchTypeField;
         that.components['toolbar'].addGroup({
             'name' : 'all',
             'position' : 'justify',
@@ -313,6 +332,7 @@ cm.getConstructor('App.ShutterstockManager', function(classConstructor, classNam
         that.components['toolbar'].addField({
             'name' : 'search',
             'group' : 'all',
+            'size' : 'is-prime',
             'constructor' : that.params['searchConstructor'],
             'constructorParams' : cm.merge(that.params['searchParams'], {
                 'events' : {
@@ -320,8 +340,22 @@ cm.getConstructor('App.ShutterstockManager', function(classConstructor, classNam
                 }
             })
         });
+        that.components['toolbar'].addField({
+            'name' : 'type',
+            'group' : 'all',
+            'size' : 'medium',
+            'constructor' : that.params['searchTypeConstructor'],
+            'constructorParams' : cm.merge(that.params['searchTypeParams'], {
+                'options' : that.langObject('searchTypes'),
+                'events' : {
+                    'onChange' : that.setListQueryTypeHandler
+                }
+            })
+        });
         toolbarSearchField = that.components['toolbar'].getField('search', 'all');
+        toolbarSearchTypeField = that.components['toolbar'].getField('type', 'all');
         that.components['search'] = toolbarSearchField['controller'];
+        that.components['searchType'] = toolbarSearchTypeField['controller'];
     };
 
     /*** LIST ***/
@@ -417,6 +451,13 @@ cm.getConstructor('App.ShutterstockManager', function(classConstructor, classNam
         that.setPagination();
     };
 
+    classProto.setListQueryType = function(input, value){
+        var that = this;
+        that.currentQueryType = value;
+        // Update pagination action
+        that.setPagination();
+    };
+
     classProto.setListItem = function(item){
         var that = this;
         // Unset previous
@@ -435,12 +476,15 @@ cm.getConstructor('App.ShutterstockManager', function(classConstructor, classNam
             pageCount = that.currentCategory === '_purchased' ? 1 : 0,
             urlType = that.currentCategory === '_purchased' ? 'urlPurchased' : 'url',
             category = /^_/.test(that.currentCategory) ? null : that.currentCategory,
-            query = that.currentCategory === '_purchased' ? null : that.currentQuery;
+            query = that.currentCategory === '_purchased' ? null : that.currentQuery,
+            type = that.currentCategory === '_purchased' ? null : that.currentQueryType;
         // Set search
         if(that.currentCategory === '_purchased'){
             that.components['search'].disable();
+            that.components['searchType'].disable();
         }else{
             that.components['search'].enable();
+            that.components['searchType'].enable();
         }
         // Set pagination
         if(that.components['pagination']){
@@ -452,7 +496,8 @@ cm.getConstructor('App.ShutterstockManager', function(classConstructor, classNam
                 'url' : that.params['paginationParams']['ajax'][urlType],
                 'params' : {
                     'category' : category,
-                    'query' : query
+                    'query' : query,
+                    'type' : type
                 }
             });
         }
