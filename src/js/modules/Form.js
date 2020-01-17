@@ -2,10 +2,12 @@ cm.define('Mod.Form', {
     'extend' : 'App.AbstractModule',
     'events' : [
         'onSubmit',
-        'onReset'
+        'onReset',
+        'onValidate'
     ],
     'params' : {
         'remember' : false,
+        'validate' : true,
         'local' : false,
         'unload' : false,
         'action' : null,
@@ -103,7 +105,9 @@ cm.getConstructor('Mod.Form', function(classConstructor, className, classProto){
                 item['value'] = that.values[item['name']];
             }
             // Set value
-            item['controller'].set(item['value']);
+            if(!cm.isEmpty(item['value'])){
+                item['controller'].set(item['value']);
+            }
             // Events
             item['controller'].addEvent('onChange', function(my, data){
                 item['value'] = item['controller'].get();
@@ -156,6 +160,11 @@ cm.getConstructor('Mod.Form', function(classConstructor, className, classProto){
         that.storageWrite('items', that.values);
     };
 
+    classProto.clearStoredItems = function(){
+        var that = this;
+        that.storageClear('items');
+    };
+
     /*** EVENTS ***/
 
     classProto.unloadEvent = function(){
@@ -183,36 +192,76 @@ cm.getConstructor('Mod.Form', function(classConstructor, className, classProto){
     };
 
     classProto.submitEvent = function(e){
-        var that = this,
-            data;
+        var that = this;
         cm.preventDefault(e);
-        // Submit
-        data = new FormData(that.nodes['form']);
-        that.triggerEvent('onSubmit', {
-            'form' : that.nodes['form'],
-            'data' : data,
-            'action' : that.params['action']
-        });
-        that.clear();
+        that.submit();
     };
 
     classProto.resetEvent = function(e){
         var that = this;
-        var data = new FormData(that.nodes['form']);
         cm.preventDefault(e);
-        that.triggerEvent('onReset', {
-            'form' : that.nodes['form'],
-            'data' : data,
-            'action' : that.params['action']
-        });
         that.clear();
     };
 
     /******* PUBLIC *******/
 
+    classProto.validate = function(){
+        var that = this,
+            data = new FormData(that.nodes['form']),
+            isValid = true,
+            findOptions = {
+                'childs' : true
+            };
+        cm.find('App.AbstractModuleElement', null, that.nodes['form'], function(classObject){
+            if(cm.isFunction(classObject.validate)){
+                if(!classObject.validate()){
+                    isValid = false;
+                }
+            }
+        }, findOptions);
+        that.triggerEvent('onValidate', {
+            'form' : that.nodes['form'],
+            'data' : data,
+            'action' : that.params['action'],
+            'isValid' : isValid
+        });
+        return isValid;
+    };
+
+    classProto.submit = function(){
+        var that = this,
+            data = new FormData(that.nodes['form']),
+            isValid = true;
+        // Validate
+        if(that.params['validate']){
+            isValid = that.validate();
+        }
+        if(isValid){
+            that.clearStoredItems();
+            that.triggerEvent('onSubmit', {
+                'form' : that.nodes['form'],
+                'data' : data,
+                'action' : that.params['action']
+            });
+        }
+        return that;
+    };
+
     classProto.clear = function(){
-        var that = this;
-        that.storageClear('items');
+        var that = this,
+            data = new FormData(that.nodes['form']),
+            findOptions = {
+                'childs' : true
+            };
+        cm.find('App.AbstractModuleElement', null, that.nodes['form'], function(classObject){
+            cm.isFunction(classObject.clear) && classObject.clear();
+        }, findOptions);
+        that.clearStoredItems();
+        that.triggerEvent('onReset', {
+            'form' : that.nodes['form'],
+            'data' : data,
+            'action' : that.params['action']
+        });
         return that;
     };
 });

@@ -1,11 +1,11 @@
-/*! ************ QuickSilk-Application v3.27.9 (2019-11-14 18:54) ************ */
+/*! ************ QuickSilk-Application v3.27.10 (2020-01-17 19:50) ************ */
 
 // /* ************************************************ */
 // /* ******* QUICKSILK: COMMON ******* */
 // /* ************************************************ */
 
 var App = {
-    '_version' : '3.27.9',
+    '_version' : '3.27.10',
     '_assetsUrl' : [window.location.protocol, window.location.hostname].join('//'),
     'Elements': {},
     'Nodes' : {},
@@ -109,12 +109,13 @@ cm.define('App.AbstractModuleElement', {
     'params' : {
         'renderStructure' : false,
         'embedStructureOnRender' : false,
+        'validate' : false,
         'required' : false,
-        'pattern' : /^\s*$/g,
+        'pattern' : '^\\s*$',
         'match' : false,
         'targetController' : false,
-        'memorable' : true,
-        'remember' : false,
+        'memorable' : true,             // prevent saving for elements like files or captcha
+        'remember' : false,             // save sel value lo local storage
         'inputEvent' : 'input'
     }
 },
@@ -139,6 +140,13 @@ cm.getConstructor('App.AbstractModuleElement', function(classConstructor, classN
         that.restoreLocalValue();
     };
 
+    classProto.onValidateParams = function(){
+        var that = this;
+        if(!cm.isEmpty(that.params['pattern'])){
+            that.params['pattern'] = new RegExp(that.params['pattern']);
+        }
+    };
+
     classProto.renderViewModel = function(){
         var that = this;
         // Call parent method
@@ -148,7 +156,7 @@ cm.getConstructor('App.AbstractModuleElement', function(classConstructor, classN
             that.renderController();
         }else if(!cm.isEmpty(that.nodes['inputs'])){
             that.renderInputs();
-        }else{
+        }else if(that.nodes['input']){
             that.renderInput(that.nodes['input']);
         }
     };
@@ -196,7 +204,9 @@ cm.getConstructor('App.AbstractModuleElement', function(classConstructor, classN
         var that = this;
         if(that.params['memorable'] && that.params['remember']){
             var value = that.storageRead('value');
-            that.set(value);
+            if(!cm.isEmpty(value)){
+                that.set(value);
+            }
         }
     };
 
@@ -224,16 +234,34 @@ cm.getConstructor('App.AbstractModuleElement', function(classConstructor, classN
         var that = this,
             value = that.get(),
             test;
-        if(cm.isRegExp(that.params['pattern'])){
-            if(cm.isEmpty(value)){
-                test = true;
-            }else{
-                test = that.params['pattern'].test(value);
-            }
-        }else{
-            test = that.params['pattern'] === value;
+        if(that.params['required'] && cm.isEmpty(value)){
+            return false;
         }
-        return that.params['match']? test : !test;
+        if(that.params['validate'] && !cm.isEmpty(value)){
+            if(cm.isRegExp(that.params['pattern'])){
+                test = that.params['pattern'].test(value);
+            }else{
+                test = that.params['pattern'] === value;
+            }
+            return that.params['match']? test : !test;
+        }
+        return true;
+    };
+
+    /*** ERRORS ***/
+
+    classProto.showError = function(){
+        var that = this;
+        cm.addClass(that.nodes['field'], 'error');
+        cm.removeClass(that.nodes['errors'], 'hidden');
+        return that;
+    };
+
+    classProto.hideError = function(){
+        var that = this;
+        cm.removeClass(that.nodes['field'], 'error');
+        cm.addClass(that.nodes['errors'], 'hidden');
+        return that;
     };
 
     /******* PUBLIC *******/
@@ -264,17 +292,23 @@ cm.getConstructor('App.AbstractModuleElement', function(classConstructor, classN
     classProto.validate = function(){
         var that = this,
             isValid = true;
-        if(that.params['required']){
+        if(!that.params['required'] && !that.params['validate']){
+            isValid = true;
+        }else{
             isValid = that.validateValue();
             if(isValid){
-                cm.removeClass(that.nodes['field'], 'error');
-                cm.addClass(that.nodes['errors'], 'hidden');
+                that.hideError();
             }else{
-                cm.addClass(that.nodes['field'], 'error');
-                cm.removeClass(that.nodes['errors'], 'hidden');
+                that.showError();
             }
         }
         return isValid;
+    };
+
+    classProto.clear = function(){
+        var that = this;
+        that.hideError();
+        return that;
     };
 });
 App.FlowScenario = [{
@@ -10511,10 +10545,12 @@ cm.define('Mod.Form', {
     'extend' : 'App.AbstractModule',
     'events' : [
         'onSubmit',
-        'onReset'
+        'onReset',
+        'onValidate'
     ],
     'params' : {
         'remember' : false,
+        'validate' : true,
         'local' : false,
         'unload' : false,
         'action' : null,
@@ -10612,7 +10648,9 @@ cm.getConstructor('Mod.Form', function(classConstructor, className, classProto){
                 item['value'] = that.values[item['name']];
             }
             // Set value
-            item['controller'].set(item['value']);
+            if(!cm.isEmpty(item['value'])){
+                item['controller'].set(item['value']);
+            }
             // Events
             item['controller'].addEvent('onChange', function(my, data){
                 item['value'] = item['controller'].get();
@@ -10665,6 +10703,11 @@ cm.getConstructor('Mod.Form', function(classConstructor, className, classProto){
         that.storageWrite('items', that.values);
     };
 
+    classProto.clearStoredItems = function(){
+        var that = this;
+        that.storageClear('items');
+    };
+
     /*** EVENTS ***/
 
     classProto.unloadEvent = function(){
@@ -10692,36 +10735,76 @@ cm.getConstructor('Mod.Form', function(classConstructor, className, classProto){
     };
 
     classProto.submitEvent = function(e){
-        var that = this,
-            data;
+        var that = this;
         cm.preventDefault(e);
-        // Submit
-        data = new FormData(that.nodes['form']);
-        that.triggerEvent('onSubmit', {
-            'form' : that.nodes['form'],
-            'data' : data,
-            'action' : that.params['action']
-        });
-        that.clear();
+        that.submit();
     };
 
     classProto.resetEvent = function(e){
         var that = this;
-        var data = new FormData(that.nodes['form']);
         cm.preventDefault(e);
-        that.triggerEvent('onReset', {
-            'form' : that.nodes['form'],
-            'data' : data,
-            'action' : that.params['action']
-        });
         that.clear();
     };
 
     /******* PUBLIC *******/
 
+    classProto.validate = function(){
+        var that = this,
+            data = new FormData(that.nodes['form']),
+            isValid = true,
+            findOptions = {
+                'childs' : true
+            };
+        cm.find('App.AbstractModuleElement', null, that.nodes['form'], function(classObject){
+            if(cm.isFunction(classObject.validate)){
+                if(!classObject.validate()){
+                    isValid = false;
+                }
+            }
+        }, findOptions);
+        that.triggerEvent('onValidate', {
+            'form' : that.nodes['form'],
+            'data' : data,
+            'action' : that.params['action'],
+            'isValid' : isValid
+        });
+        return isValid;
+    };
+
+    classProto.submit = function(){
+        var that = this,
+            data = new FormData(that.nodes['form']),
+            isValid = true;
+        // Validate
+        if(that.params['validate']){
+            isValid = that.validate();
+        }
+        if(isValid){
+            that.clearStoredItems();
+            that.triggerEvent('onSubmit', {
+                'form' : that.nodes['form'],
+                'data' : data,
+                'action' : that.params['action']
+            });
+        }
+        return that;
+    };
+
     classProto.clear = function(){
-        var that = this;
-        that.storageClear('items');
+        var that = this,
+            data = new FormData(that.nodes['form']),
+            findOptions = {
+                'childs' : true
+            };
+        cm.find('App.AbstractModuleElement', null, that.nodes['form'], function(classObject){
+            cm.isFunction(classObject.clear) && classObject.clear();
+        }, findOptions);
+        that.clearStoredItems();
+        that.triggerEvent('onReset', {
+            'form' : that.nodes['form'],
+            'data' : data,
+            'action' : that.params['action']
+        });
         return that;
     };
 });

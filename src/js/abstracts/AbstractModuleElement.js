@@ -6,12 +6,13 @@ cm.define('App.AbstractModuleElement', {
     'params' : {
         'renderStructure' : false,
         'embedStructureOnRender' : false,
+        'validate' : false,
         'required' : false,
-        'pattern' : /^\s*$/g,
+        'pattern' : '^\\s*$',
         'match' : false,
         'targetController' : false,
-        'memorable' : true,
-        'remember' : false,
+        'memorable' : true,             // prevent saving for elements like files or captcha
+        'remember' : false,             // save sel value lo local storage
         'inputEvent' : 'input'
     }
 },
@@ -36,6 +37,13 @@ cm.getConstructor('App.AbstractModuleElement', function(classConstructor, classN
         that.restoreLocalValue();
     };
 
+    classProto.onValidateParams = function(){
+        var that = this;
+        if(!cm.isEmpty(that.params['pattern'])){
+            that.params['pattern'] = new RegExp(that.params['pattern']);
+        }
+    };
+
     classProto.renderViewModel = function(){
         var that = this;
         // Call parent method
@@ -45,7 +53,7 @@ cm.getConstructor('App.AbstractModuleElement', function(classConstructor, classN
             that.renderController();
         }else if(!cm.isEmpty(that.nodes['inputs'])){
             that.renderInputs();
-        }else{
+        }else if(that.nodes['input']){
             that.renderInput(that.nodes['input']);
         }
     };
@@ -93,7 +101,9 @@ cm.getConstructor('App.AbstractModuleElement', function(classConstructor, classN
         var that = this;
         if(that.params['memorable'] && that.params['remember']){
             var value = that.storageRead('value');
-            that.set(value);
+            if(!cm.isEmpty(value)){
+                that.set(value);
+            }
         }
     };
 
@@ -121,16 +131,34 @@ cm.getConstructor('App.AbstractModuleElement', function(classConstructor, classN
         var that = this,
             value = that.get(),
             test;
-        if(cm.isRegExp(that.params['pattern'])){
-            if(cm.isEmpty(value)){
-                test = true;
-            }else{
-                test = that.params['pattern'].test(value);
-            }
-        }else{
-            test = that.params['pattern'] === value;
+        if(that.params['required'] && cm.isEmpty(value)){
+            return false;
         }
-        return that.params['match']? test : !test;
+        if(that.params['validate'] && !cm.isEmpty(value)){
+            if(cm.isRegExp(that.params['pattern'])){
+                test = that.params['pattern'].test(value);
+            }else{
+                test = that.params['pattern'] === value;
+            }
+            return that.params['match']? test : !test;
+        }
+        return true;
+    };
+
+    /*** ERRORS ***/
+
+    classProto.showError = function(){
+        var that = this;
+        cm.addClass(that.nodes['field'], 'error');
+        cm.removeClass(that.nodes['errors'], 'hidden');
+        return that;
+    };
+
+    classProto.hideError = function(){
+        var that = this;
+        cm.removeClass(that.nodes['field'], 'error');
+        cm.addClass(that.nodes['errors'], 'hidden');
+        return that;
     };
 
     /******* PUBLIC *******/
@@ -161,16 +189,22 @@ cm.getConstructor('App.AbstractModuleElement', function(classConstructor, classN
     classProto.validate = function(){
         var that = this,
             isValid = true;
-        if(that.params['required']){
+        if(!that.params['required'] && !that.params['validate']){
+            isValid = true;
+        }else{
             isValid = that.validateValue();
             if(isValid){
-                cm.removeClass(that.nodes['field'], 'error');
-                cm.addClass(that.nodes['errors'], 'hidden');
+                that.hideError();
             }else{
-                cm.addClass(that.nodes['field'], 'error');
-                cm.removeClass(that.nodes['errors'], 'hidden');
+                that.showError();
             }
         }
         return isValid;
+    };
+
+    classProto.clear = function(){
+        var that = this;
+        that.hideError();
+        return that;
     };
 });
