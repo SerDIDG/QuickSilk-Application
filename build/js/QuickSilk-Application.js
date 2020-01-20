@@ -1,11 +1,11 @@
-/*! ************ QuickSilk-Application v3.27.10 (2020-01-17 19:50) ************ */
+/*! ************ QuickSilk-Application v3.27.11 (2020-01-20 20:10) ************ */
 
 // /* ************************************************ */
 // /* ******* QUICKSILK: COMMON ******* */
 // /* ************************************************ */
 
 var App = {
-    '_version' : '3.27.10',
+    '_version' : '3.27.11',
     '_assetsUrl' : [window.location.protocol, window.location.hostname].join('//'),
     'Elements': {},
     'Nodes' : {},
@@ -104,7 +104,8 @@ function(params){
 cm.define('App.AbstractModuleElement', {
     'extend' : 'App.AbstractModule',
     'events' : [
-        'onChange'
+        'onChange',
+        'onValidate'
     ],
     'params' : {
         'renderStructure' : false,
@@ -232,35 +233,54 @@ cm.getConstructor('App.AbstractModuleElement', function(classConstructor, classN
 
     classProto.validateValue = function(){
         var that = this,
-            value = that.get(),
+            data = {
+                'valid' : true,
+                'type' : null,
+                'value' : that.get()
+            },
             test;
-        if(that.params['required'] && cm.isEmpty(value)){
-            return false;
+        if(that.params['required'] && cm.isEmpty(data['value'])){
+            data['valid'] = false;
+            data['type'] = 'required';
+            return data;
         }
-        if(that.params['validate'] && !cm.isEmpty(value)){
+        if(that.params['validate'] && !cm.isEmpty(data['value'])){
             if(cm.isRegExp(that.params['pattern'])){
-                test = that.params['pattern'].test(value);
+                test = that.params['pattern'].test(data['value']);
             }else{
-                test = that.params['pattern'] === value;
+                test = that.params['pattern'] === data['value'];
             }
-            return that.params['match']? test : !test;
+            data['valid'] = that.params['match']? test : !test;
+            data['type'] = that.params['pattern'];
+            return data;
         }
-        return true;
+        return data;
     };
 
     /*** ERRORS ***/
 
-    classProto.showError = function(){
+    classProto.showError = function(type){
         var that = this;
         cm.addClass(that.nodes['field'], 'error');
-        cm.removeClass(that.nodes['errors'], 'hidden');
+        cm.removeClass(that.nodes['errors']['container'], 'hidden');
+        cm.forEach(that.nodes['errors']['items'], function(item){
+            item['type'] = cm.getData(item['message'], 'type');
+            if(type === item['type']){
+                cm.removeClass(item['message'], 'hidden');
+            }else{
+                cm.addClass(item['message'], 'hidden');
+            }
+        });
         return that;
     };
 
     classProto.hideError = function(){
         var that = this;
         cm.removeClass(that.nodes['field'], 'error');
-        cm.addClass(that.nodes['errors'], 'hidden');
+        cm.addClass(that.nodes['errors']['container'], 'hidden');
+        cm.forEach(that.nodes['errors']['items'], function(item){
+            cm.addClass(item['message'], 'hidden');
+        });
         return that;
     };
 
@@ -291,18 +311,18 @@ cm.getConstructor('App.AbstractModuleElement', function(classConstructor, classN
 
     classProto.validate = function(){
         var that = this,
-            isValid = true;
+            data;
         if(!that.params['required'] && !that.params['validate']){
-            isValid = true;
-        }else{
-            isValid = that.validateValue();
-            if(isValid){
-                that.hideError();
-            }else{
-                that.showError();
-            }
+            return true;
         }
-        return isValid;
+        data = that.validateValue();
+        if(data['valid']){
+            that.hideError();
+        }else{
+            that.showError(data['type']);
+        }
+        that.triggerEvent('onValidate', data);
+        return data['valid'];
     };
 
     classProto.clear = function(){
