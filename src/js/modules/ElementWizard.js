@@ -181,11 +181,24 @@ cm.getConstructor('Mod.ElementWizard', function(classConstructor, className, cla
 
     /*** TABS ***/
 
-    classProto.validateTab = function(){
+    classProto.validate = function(){
         var that = this,
             isValid = true;
+        cm.forEach(that.tabs, function(item){
+            if(isValid && !that.validateTab(item)){
+                that.setTabByIndex(item['index']);
+                isValid = false;
+            }
+        });
+        return isValid;
+    };
+
+    classProto.validateTab = function(item){
+        var that = this,
+            tab = cm.isUndefined(item) ? that.currentTab : item,
+            isValid = true;
         if(!that.isEditing){
-            cm.find('App.AbstractModuleElement', null, that.currentTab['tab']['inner'], function(classObject){
+            cm.find('App.AbstractModuleElement', null, tab['tab']['inner'], function(classObject){
                 if(cm.isFunction(classObject.validate)){
                     if(!classObject.validate()){
                         isValid = false;
@@ -216,8 +229,11 @@ cm.getConstructor('Mod.ElementWizard', function(classConstructor, className, cla
 
     classProto.doneTab = function(e){
         var that = this;
-        if(!that.validateTab()){
+        if(!that.validate()){
             cm.preventDefault(e);
+            that.showError();
+        }else{
+            that.hideError();
         }
     };
 
@@ -234,5 +250,19 @@ cm.getConstructor('Mod.ElementWizard', function(classConstructor, className, cla
     classProto.getCurrentTab = function(){
         var that = this;
         return that.currentTab;
+    };
+
+    /*** ERRORS ***/
+
+    classProto.showError = function(){
+        var that = this;
+        cm.removeClass(that.nodes['notifications'], 'is-hidden');
+        return that;
+    };
+
+    classProto.hideError = function(){
+        var that = this;
+        cm.addClass(that.nodes['notifications'], 'is-hidden');
+        return that;
     };
 });
