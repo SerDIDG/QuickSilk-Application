@@ -3,7 +3,8 @@ cm.define('Mod.ElementWizard', {
     'events' : [
         'onTabShow',
         'onTabHide',
-        'onTabChange'
+        'onTabChange',
+        'onValidate'
     ],
     'params' : {
         'duration' : 'cm._config.animDuration',
@@ -181,18 +182,6 @@ cm.getConstructor('Mod.ElementWizard', function(classConstructor, className, cla
 
     /*** TABS ***/
 
-    classProto.validate = function(){
-        var that = this,
-            isValid = true;
-        cm.forEach(that.tabs, function(item){
-            if(isValid && !that.validateTab(item)){
-                that.setTabByIndex(item['index']);
-                isValid = false;
-            }
-        });
-        return isValid;
-    };
-
     classProto.validateTab = function(item){
         var that = this,
             tab = cm.isUndefined(item) ? that.currentTab : item,
@@ -264,5 +253,22 @@ cm.getConstructor('Mod.ElementWizard', function(classConstructor, className, cla
         var that = this;
         cm.addClass(that.nodes['notifications'], 'is-hidden');
         return that;
+    };
+
+    /******* PUBLIC *******/
+
+    classProto.validate = function(){
+        var that = this,
+            isValid = true;
+        cm.forEach(that.tabs, function(item){
+            if(isValid && !that.validateTab(item)){
+                that.setTabByIndex(item['index']);
+                isValid = false;
+            }
+        });
+        that.triggerEvent('onValidate', {
+            'valid' : isValid
+        });
+        return isValid;
     };
 });

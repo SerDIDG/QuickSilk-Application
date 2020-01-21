@@ -38,13 +38,6 @@ cm.getConstructor('App.AbstractModuleElement', function(classConstructor, classN
         that.restoreLocalValue();
     };
 
-    classProto.onValidateParams = function(){
-        var that = this;
-        if(!cm.isEmpty(that.params['pattern'])){
-            that.params['pattern'] = new RegExp(that.params['pattern']);
-        }
-    };
-
     classProto.renderViewModel = function(){
         var that = this;
         // Call parent method
@@ -57,6 +50,11 @@ cm.getConstructor('App.AbstractModuleElement', function(classConstructor, classN
         }else if(that.nodes['input']){
             that.renderInput(that.nodes['input']);
         }
+        // Prepare errors
+        cm.forEach(that.nodes['errors']['items'], function(item){
+            item['type'] = cm.getData(item['message'], 'type');
+            cm.addClass(item['message'], 'hidden margin-none');
+        });
     };
 
     classProto.renderController = function(){
@@ -131,24 +129,20 @@ cm.getConstructor('App.AbstractModuleElement', function(classConstructor, classN
     classProto.validateValue = function(){
         var that = this,
             data = {
-                'valid' : true,
+                'value' : that.get(),
                 'type' : null,
-                'value' : that.get()
-            },
-            test;
+                'valid' : true
+            };
         if(that.params['required'] && cm.isEmpty(data['value'])){
-            data['valid'] = false;
             data['type'] = 'required';
+            data['valid'] = false;
             return data;
         }
-        if(that.params['validate'] && !cm.isEmpty(data['value'])){
-            if(cm.isRegExp(that.params['pattern'])){
-                test = that.params['pattern'].test(data['value']);
-            }else{
-                test = that.params['pattern'] === data['value'];
-            }
-            data['valid'] = that.params['match']? test : !test;
+        if(that.params['validate'] && !cm.isEmpty(data['value']) && !cm.isEmpty(that.params['pattern'])){
             data['type'] = that.params['pattern'];
+            data['regexp'] = new RegExp(that.params['pattern']);
+            data['valid'] = data['regexp'].test(data['value']);
+            data['valid'] = that.params['match']? data['valid'] : !data['valid'];
             return data;
         }
         return data;
@@ -161,7 +155,6 @@ cm.getConstructor('App.AbstractModuleElement', function(classConstructor, classN
         cm.addClass(that.nodes['field'], 'error');
         cm.removeClass(that.nodes['errors']['container'], 'hidden');
         cm.forEach(that.nodes['errors']['items'], function(item){
-            item['type'] = cm.getData(item['message'], 'type');
             if(type === item['type']){
                 cm.removeClass(item['message'], 'hidden');
             }else{

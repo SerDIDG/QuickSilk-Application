@@ -1,11 +1,11 @@
-/*! ************ QuickSilk-Application v3.27.12 (2020-01-21 19:34) ************ */
+/*! ************ QuickSilk-Application v3.27.13 (2020-01-21 20:28) ************ */
 
 // /* ************************************************ */
 // /* ******* QUICKSILK: COMMON ******* */
 // /* ************************************************ */
 
 var App = {
-    '_version' : '3.27.12',
+    '_version' : '3.27.13',
     '_assetsUrl' : [window.location.protocol, window.location.hostname].join('//'),
     'Elements': {},
     'Nodes' : {},
@@ -141,13 +141,6 @@ cm.getConstructor('App.AbstractModuleElement', function(classConstructor, classN
         that.restoreLocalValue();
     };
 
-    classProto.onValidateParams = function(){
-        var that = this;
-        if(!cm.isEmpty(that.params['pattern'])){
-            that.params['pattern'] = new RegExp(that.params['pattern']);
-        }
-    };
-
     classProto.renderViewModel = function(){
         var that = this;
         // Call parent method
@@ -160,6 +153,11 @@ cm.getConstructor('App.AbstractModuleElement', function(classConstructor, classN
         }else if(that.nodes['input']){
             that.renderInput(that.nodes['input']);
         }
+        // Prepare errors
+        cm.forEach(that.nodes['errors']['items'], function(item){
+            item['type'] = cm.getData(item['message'], 'type');
+            cm.addClass(item['message'], 'hidden margin-none');
+        });
     };
 
     classProto.renderController = function(){
@@ -234,24 +232,20 @@ cm.getConstructor('App.AbstractModuleElement', function(classConstructor, classN
     classProto.validateValue = function(){
         var that = this,
             data = {
-                'valid' : true,
+                'value' : that.get(),
                 'type' : null,
-                'value' : that.get()
-            },
-            test;
+                'valid' : true
+            };
         if(that.params['required'] && cm.isEmpty(data['value'])){
-            data['valid'] = false;
             data['type'] = 'required';
+            data['valid'] = false;
             return data;
         }
-        if(that.params['validate'] && !cm.isEmpty(data['value'])){
-            if(cm.isRegExp(that.params['pattern'])){
-                test = that.params['pattern'].test(data['value']);
-            }else{
-                test = that.params['pattern'] === data['value'];
-            }
-            data['valid'] = that.params['match']? test : !test;
+        if(that.params['validate'] && !cm.isEmpty(data['value']) && !cm.isEmpty(that.params['pattern'])){
             data['type'] = that.params['pattern'];
+            data['regexp'] = new RegExp(that.params['pattern']);
+            data['valid'] = data['regexp'].test(data['value']);
+            data['valid'] = that.params['match']? data['valid'] : !data['valid'];
             return data;
         }
         return data;
@@ -264,7 +258,6 @@ cm.getConstructor('App.AbstractModuleElement', function(classConstructor, classN
         cm.addClass(that.nodes['field'], 'error');
         cm.removeClass(that.nodes['errors']['container'], 'hidden');
         cm.forEach(that.nodes['errors']['items'], function(item){
-            item['type'] = cm.getData(item['message'], 'type');
             if(type === item['type']){
                 cm.removeClass(item['message'], 'hidden');
             }else{
@@ -10318,7 +10311,8 @@ cm.define('Mod.ElementWizard', {
     'events' : [
         'onTabShow',
         'onTabHide',
-        'onTabChange'
+        'onTabChange',
+        'onValidate'
     ],
     'params' : {
         'duration' : 'cm._config.animDuration',
@@ -10496,18 +10490,6 @@ cm.getConstructor('Mod.ElementWizard', function(classConstructor, className, cla
 
     /*** TABS ***/
 
-    classProto.validate = function(){
-        var that = this,
-            isValid = true;
-        cm.forEach(that.tabs, function(item){
-            if(isValid && !that.validateTab(item)){
-                that.setTabByIndex(item['index']);
-                isValid = false;
-            }
-        });
-        return isValid;
-    };
-
     classProto.validateTab = function(item){
         var that = this,
             tab = cm.isUndefined(item) ? that.currentTab : item,
@@ -10579,6 +10561,23 @@ cm.getConstructor('Mod.ElementWizard', function(classConstructor, className, cla
         var that = this;
         cm.addClass(that.nodes['notifications'], 'is-hidden');
         return that;
+    };
+
+    /******* PUBLIC *******/
+
+    classProto.validate = function(){
+        var that = this,
+            isValid = true;
+        cm.forEach(that.tabs, function(item){
+            if(isValid && !that.validateTab(item)){
+                that.setTabByIndex(item['index']);
+                isValid = false;
+            }
+        });
+        that.triggerEvent('onValidate', {
+            'valid' : isValid
+        });
+        return isValid;
     };
 });
 cm.define('Mod.ElementWysiwyg', {
