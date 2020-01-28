@@ -26,6 +26,10 @@ function(params){
 cm.getConstructor('App.AbstractModuleElement', function(classConstructor, className, classProto, classInherit){
     classProto.construct = function(){
         var that = this;
+        // Variables
+        that.nodes = {
+            'errors' : {}
+        };
         // Bind
         that.changeEventHandler = that.changeEvent.bind(that);
         // Call parent method

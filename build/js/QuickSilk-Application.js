@@ -1,11 +1,11 @@
-/*! ************ QuickSilk-Application v3.27.13 (2020-01-21 20:28) ************ */
+/*! ************ QuickSilk-Application v3.27.14 (2020-01-28 20:55) ************ */
 
 // /* ************************************************ */
 // /* ******* QUICKSILK: COMMON ******* */
 // /* ************************************************ */
 
 var App = {
-    '_version' : '3.27.13',
+    '_version' : '3.27.14',
     '_assetsUrl' : [window.location.protocol, window.location.hostname].join('//'),
     'Elements': {},
     'Nodes' : {},
@@ -129,6 +129,10 @@ function(params){
 cm.getConstructor('App.AbstractModuleElement', function(classConstructor, className, classProto, classInherit){
     classProto.construct = function(){
         var that = this;
+        // Variables
+        that.nodes = {
+            'errors' : {}
+        };
         // Bind
         that.changeEventHandler = that.changeEvent.bind(that);
         // Call parent method
@@ -10617,9 +10621,7 @@ function(params){
     App.AbstractModule.apply(that, arguments);
 });
 
-cm.getConstructor('Mod.Form', function(classConstructor, className, classProto){
-    var _inherit = classProto._inherit;
-
+cm.getConstructor('Mod.Form', function(classConstructor, className, classProto, classInherit){
     classProto.onConstructStart = function(){
         var that = this;
         // Variables
@@ -10660,7 +10662,7 @@ cm.getConstructor('Mod.Form', function(classConstructor, className, classProto){
     classProto.renderViewModel = function(){
         var that = this;
         // Call parent method
-        _inherit.prototype.renderViewModel.apply(that, arguments);
+        classInherit.prototype.renderViewModel.apply(that, arguments);
         // Init form saving
         if(that.params['remember']){
             // Page unload event

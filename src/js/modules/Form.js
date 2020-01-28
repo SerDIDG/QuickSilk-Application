@@ -25,9 +25,7 @@ function(params){
     App.AbstractModule.apply(that, arguments);
 });
 
-cm.getConstructor('Mod.Form', function(classConstructor, className, classProto){
-    var _inherit = classProto._inherit;
-
+cm.getConstructor('Mod.Form', function(classConstructor, className, classProto, classInherit){
     classProto.onConstructStart = function(){
         var that = this;
         // Variables
@@ -68,7 +66,7 @@ cm.getConstructor('Mod.Form', function(classConstructor, className, classProto){
     classProto.renderViewModel = function(){
         var that = this;
         // Call parent method
-        _inherit.prototype.renderViewModel.apply(that, arguments);
+        classInherit.prototype.renderViewModel.apply(that, arguments);
         // Init form saving
         if(that.params['remember']){
             // Page unload event
