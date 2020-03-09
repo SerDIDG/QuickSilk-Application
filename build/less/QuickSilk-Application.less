@@ -1,4 +1,4 @@
-/*! ************ QuickSilk-Application v3.27.14 (2020-01-28 20:55) ************ */
+/*! ************ QuickSilk-Application v3.28.0 (2020-03-09 21:36) ************ */
 .svg__app__logo { background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20id%3D%22logo.svg%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2250%22%20height%3D%2224%22%20viewBox%3D%220%200%2050%2024%22%3E%20%20%3Cdefs%3E%20%20%20%20%3Cstyle%3E%20%20%20%20%20%20.cls-1%20%7B%20%20%20%20%20%20%20%20fill%3A%20%23F27C21%3B%20%20%20%20%20%20%7D%20%20%20%20%20%20.cls-1%2C%20.cls-2%20%7B%20%20%20%20%20%20%20%20fill-rule%3A%20evenodd%3B%20%20%20%20%20%20%7D%20%20%20%20%20%20.cls-2%20%7B%20%20%20%20%20%20%20%20fill%3A%20%23fff%3B%20%20%20%20%20%20%7D%20%20%20%20%3C%2Fstyle%3E%20%20%3C%2Fdefs%3E%20%20%3Cpath%20id%3D%22_3%22%20data-name%3D%223%22%20class%3D%22cls-1%22%20d%3D%22M35%2C24l8.58-12L35%2C0h6.429L50%2C12l-8.58%2C12H35Z%22%2F%3E%20%20%3Cpath%20id%3D%22_2%22%20data-name%3D%222%22%20class%3D%22cls-2%22%20d%3D%22M28%2C24L19.425%2C12%2C28%2C0H21.575L13%2C12l8.58%2C12H28Z%22%2F%3E%20%20%3Cpath%20id%3D%22_1%22%20data-name%3D%221%22%20class%3D%22cls-2%22%20d%3D%22M15%2C24L6.425%2C12%2C15%2C0H8.575L0%2C12l8.58%2C12H15Z%22%2F%3E%3C%2Fsvg%3E"); }
 .svg__app__menu-dropdown { background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20id%3D%22menu-dropdown.svg%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2212%22%20height%3D%227%22%20viewBox%3D%220%200%2012%207%22%3E%20%20%3Cdefs%3E%20%20%20%20%3Cstyle%3E%20%20%20%20%20%20.cls-1%20%7B%20%20%20%20%20%20%20%20fill%3A%20%23fff%3B%20%20%20%20%20%20%20%20fill-rule%3A%20evenodd%3B%20%20%20%20%20%20%7D%20%20%20%20%3C%2Fstyle%3E%20%20%3C%2Fdefs%3E%20%20%3Cpath%20class%3D%22cls-1%22%20d%3D%22M12%2C0L6%2C4.787%2C0%2C0V2.212L6%2C7l6-4.79V0Z%22%2F%3E%3C%2Fsvg%3E"); }
 
@@ -42,7 +42,7 @@
 // /* *** BLOCK *** */
 
 @AppIcon-Block-Size: 90px;
-@AppIcon-Block-Names: default anchor button column menu divider spacer zone workingarea content logo googlemap tabs search blogcontent blogcategories blogroll blogblock blogarchive blogcalendar image imagegallery slider videogallery forum forum_build comment twitter socialmedia socialmedia_rating socialmedia_share login registration memberdirectory memberwidget filegridlist filegridlistwidget webexmeetings events eventscalendar latestevents flickr languageswitcher d3 rss breadcrumb breadcrumbs form_builder rollover-tabs;
+@AppIcon-Block-Names: default anchor button column menu divider spacer zone workingarea content logo googlemap tabs search blogcontent blogcategories blogroll blogblock blogarchive blogcalendar image imagegallery slider videogallery forum forum_build comment twitter socialmedia socialmedia_rating socialmedia_share login registration memberdirectory memberwidget filegridlist filegridlistwidget webexmeetings events eventscalendar latestevents flickr languageswitcher d3 rss breadcrumb breadcrumbs form_builder rollover-tabs mobile-menu;
 
 @AppIcon-Block-default: 0;
 @AppIcon-Block-anchor: 1;
@@ -93,6 +93,7 @@
 @AppIcon-Block-button: 42;
 @AppIcon-Block-form_builder: 56;
 @AppIcon-Block-rollover-tabs: 57;
+@AppIcon-Block-mobile-menu: 3;
 
 @AppIcon-Block-Element-Names: button column content divider spacer input text password hidden select checkbox radiobutton textarea wysiwyg multicheckbox captcha imagebrowser fileuploader datepicker timepicker;
 
@@ -121,7 +122,7 @@
 // /* ******* VARIABLES ******* */
 // /* ************************************************ */
 
-@AppVersion: '3.27.14';
+@AppVersion: '3.28.0';
 
 // /* ******* PATH ******* */
 
@@ -467,6 +468,16 @@
 
 @AppMod-Menu-Vertical-Indent: @AppMod-Menu-Default-Indent;
 @AppMod-Menu-Vertical-ChildIndent: @CmIndent-Medium;
+
+// /* ******* MOBILE MENU ******* */
+
+@AppMod-MobileMenu-AdaptiveFrom: @CmUI-AdaptiveFrom;
+@AppMod-MobileMenu-Overlay: @CmUI-Overlay-Light;
+@AppMod-MobileMenu-Duration: @CmUI-Transition-DurationLong;
+@AppMod-MobileMenu-Background: @CmColor-Background;
+@AppMod-MobileMenu-Sidebar-Width: 480px;
+@AppMod-MobileMenu-Sidebar-IconIndent: @CmIndent-XSmall;
+@AppMod-MobileMenu-Dropdown-Indent: 4px;
 
 // /* ******* HIDDEN TABS ******* */
 
@@ -6835,6 +6846,265 @@ html {
 
     .app-mod__menu {
         display: none !important;
+    }
+
+}
+.module__mobile-menu {
+    position: relative;
+
+    > .buttons {
+        margin: 0;
+
+        &.pull-left {
+            text-align: left;
+        }
+
+        &.pull-center{
+            text-align: center;
+        }
+
+        &.pull-right {
+            text-align: right;
+        }
+
+        &.pull-justify {
+            text-align: center;
+
+            .button {
+                .button.is-box;
+            }
+        }
+
+        .icon {
+            img {
+                display: block;
+            }
+        }
+    }
+
+    .module__mobile-menu__container {
+        display: none;
+    }
+
+    &.is-hide {
+        > .buttons {
+            .icon.hide {
+                display: none;
+            }
+        }
+    }
+
+    &.is-show {
+        > .buttons {
+            .icon.show {
+                display: none;
+            }
+        }
+    }
+}
+
+/* ****** THEMES ****** */
+
+.module__mobile-menu__container {
+    &.view--sidebar {
+        position: fixed;
+        z-index: 100;
+        .mx__position(0, 0, 0, 0);
+        .mx__transition(all, @AppMod-MobileMenu-Duration);
+
+        &::before {
+            display: block;
+            position: absolute;
+            z-index: 1;
+            background: @AppMod-MobileMenu-Overlay;
+            content: '';
+            .mx__position(0, 0, 0, 0);
+            .mx__transition(all, @CmUI-Transition-Duration);
+        }
+
+        > .inner {
+            width: 100%;
+            max-width: @AppMod-MobileMenu-Sidebar-Width;
+            position: absolute;
+            z-index: 2;
+            background: @AppMod-MobileMenu-Background;
+            .mx__transition(all, @AppMod-MobileMenu-Duration, @CmUI-MotionAsymmetric);
+
+            > .icon {
+                .icon.linked;
+                position: absolute;
+                z-index: 2;
+                padding: @CmIndent-XXXSmall;
+                background: @AppMod-MobileMenu-Background;
+                border-radius: 100%;
+
+                img {
+                    display: block;
+                }
+            }
+
+            > .zone {
+                .cm__scroll-y-a;
+                .cm__scrollbar;
+                width: 100%;
+                height: 100%;
+                position: relative;
+                z-index: 1;
+            }
+        }
+
+        &.is-show {
+            visibility: visible;
+
+            &::before {
+                opacity: 1;
+            }
+        }
+
+        &.is-hide {
+            visibility: hidden;
+
+            &::before {
+                opacity: 0;
+            }
+        }
+
+        .app__zone {
+            &::before {
+                .mx__position(0, 0, 0, 0);
+            }
+        }
+    }
+
+    &.view--sidebar-left {
+        &:extend(.module__mobile-menu__container.view--sidebar all);
+
+        > .inner {
+            box-shadow: @CmUI-Shadow-Right;
+            .mx__position(0, auto, 0, 0);
+
+            > .icon {
+                .mx__position(@AppMod-MobileMenu-Sidebar-IconIndent, @AppMod-MobileMenu-Sidebar-IconIndent, auto, auto);
+            }
+        }
+
+        &.is-show {
+            > .inner {
+                .mx__transform(translateX(0));
+            }
+        }
+
+        &.is-hide {
+            > .inner {
+                .mx__transform(translateX(-100%));
+            }
+        }
+    }
+
+    &.view--sidebar-right {
+        &:extend(.module__mobile-menu__container.view--sidebar all);
+
+        > .inner {
+            box-shadow: @CmUI-Shadow-Left;
+            .mx__position(0, 0, 0, auto);
+
+            > .icon {
+                .mx__position(@AppMod-MobileMenu-Sidebar-IconIndent, @AppMod-MobileMenu-Sidebar-IconIndent, auto, auto);
+            }
+        }
+
+        &.is-show {
+            > .inner {
+                .mx__transform(translateX(0));
+            }
+        }
+
+        &.is-hide {
+            > .inner {
+                .mx__transform(translateX(100%));
+            }
+        }
+    }
+
+    &.view--dropdown {
+        .mx__transition(all, @AppMod-MobileMenu-Duration, @CmUI-MotionAsymmetric);
+
+        > .inner {
+            .pt__box;
+            margin-top: @AppMod-MobileMenu-Dropdown-Indent;
+            padding: 0;
+
+            > .icon {
+                display: none;
+            }
+        }
+
+        &.is-show {
+            opacity: 1;
+        }
+
+        &.is-hide {
+            opacity: 0;
+        }
+    }
+
+    &.view--dropdown-overlap {
+        &:extend(.module__mobile-menu__container.view--dropdown all);
+        position: absolute;
+        .mx__position(100%, 0, auto, 0);
+    }
+}
+
+/* ******* STATES ******* */
+
+html {
+    &.is-topmenu {
+        .module__mobile-menu__container {
+            &.view--sidebar,
+            &.view--sidebar-left,
+            &.view--sidebar-right {
+                top: @AppTopMenu-Height;
+            }
+        }
+    }
+
+    &.is-editor--expanded {
+        .module__mobile-menu__container {
+            &.view--sidebar,
+            &.view--sidebar-left,
+            &.view--sidebar-right {
+                left: @AppSidebar-WidthExpanded;
+            }
+        }
+    }
+
+    &.is-editor--collapsed {
+        .module__mobile-menu__container {
+            &.view--sidebar,
+            &.view--sidebar-left,
+            &.view--sidebar-right {
+                left: @AppSidebar-WidthCollapsed;
+            }
+        }
+    }
+}
+
+/* ******* ADAPTIVE ******* */
+
+@media only screen and (max-width : @AppMod-MobileMenu-AdaptiveFrom) {
+
+    html.is-adaptive {
+        .module__mobile-menu__container {
+            &.view--sidebar,
+            &.view--sidebar-left,
+            &.view--sidebar-right {
+                left: 0;
+
+                > .inner {
+                    max-width: none;
+                }
+            }
+        }
     }
 
 }

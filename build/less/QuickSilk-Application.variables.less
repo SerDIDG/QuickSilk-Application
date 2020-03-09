@@ -39,7 +39,7 @@
 // /* ******* MAGPIE UI: VARIABLES ******* */
 // /* ************************************************ */
 
-@CmVersion: '3.36.52';
+@CmVersion: '3.36.55';
 @CmProtocol: '';
 
 // /* ******* PATH ******* */
@@ -1045,7 +1045,7 @@
 // /* *** BLOCK *** */
 
 @AppIcon-Block-Size: 90px;
-@AppIcon-Block-Names: default anchor button column menu divider spacer zone workingarea content logo googlemap tabs search blogcontent blogcategories blogroll blogblock blogarchive blogcalendar image imagegallery slider videogallery forum forum_build comment twitter socialmedia socialmedia_rating socialmedia_share login registration memberdirectory memberwidget filegridlist filegridlistwidget webexmeetings events eventscalendar latestevents flickr languageswitcher d3 rss breadcrumb breadcrumbs form_builder rollover-tabs;
+@AppIcon-Block-Names: default anchor button column menu divider spacer zone workingarea content logo googlemap tabs search blogcontent blogcategories blogroll blogblock blogarchive blogcalendar image imagegallery slider videogallery forum forum_build comment twitter socialmedia socialmedia_rating socialmedia_share login registration memberdirectory memberwidget filegridlist filegridlistwidget webexmeetings events eventscalendar latestevents flickr languageswitcher d3 rss breadcrumb breadcrumbs form_builder rollover-tabs mobile-menu;
 
 @AppIcon-Block-default: 0;
 @AppIcon-Block-anchor: 1;
@@ -1096,6 +1096,7 @@
 @AppIcon-Block-button: 42;
 @AppIcon-Block-form_builder: 56;
 @AppIcon-Block-rollover-tabs: 57;
+@AppIcon-Block-mobile-menu: 3;
 
 @AppIcon-Block-Element-Names: button column content divider spacer input text password hidden select checkbox radiobutton textarea wysiwyg multicheckbox captcha imagebrowser fileuploader datepicker timepicker;
 
@@ -1124,7 +1125,7 @@
 // /* ******* VARIABLES ******* */
 // /* ************************************************ */
 
-@AppVersion: '3.27.14';
+@AppVersion: '3.28.0';
 
 // /* ******* PATH ******* */
 
@@ -1470,6 +1471,16 @@
 
 @AppMod-Menu-Vertical-Indent: @AppMod-Menu-Default-Indent;
 @AppMod-Menu-Vertical-ChildIndent: @CmIndent-Medium;
+
+// /* ******* MOBILE MENU ******* */
+
+@AppMod-MobileMenu-AdaptiveFrom: @CmUI-AdaptiveFrom;
+@AppMod-MobileMenu-Overlay: @CmUI-Overlay-Light;
+@AppMod-MobileMenu-Duration: @CmUI-Transition-DurationLong;
+@AppMod-MobileMenu-Background: @CmColor-Background;
+@AppMod-MobileMenu-Sidebar-Width: 480px;
+@AppMod-MobileMenu-Sidebar-IconIndent: @CmIndent-XSmall;
+@AppMod-MobileMenu-Dropdown-Indent: 4px;
 
 // /* ******* HIDDEN TABS ******* */
 

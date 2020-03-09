@@ -1,0 +1,259 @@
+.module__mobile-menu {
+    position: relative;
+
+    > .buttons {
+        margin: 0;
+
+        &.pull-left {
+            text-align: left;
+        }
+
+        &.pull-center{
+            text-align: center;
+        }
+
+        &.pull-right {
+            text-align: right;
+        }
+
+        &.pull-justify {
+            text-align: center;
+
+            .button {
+                .button.is-box;
+            }
+        }
+
+        .icon {
+            img {
+                display: block;
+            }
+        }
+    }
+
+    .module__mobile-menu__container {
+        display: none;
+    }
+
+    &.is-hide {
+        > .buttons {
+            .icon.hide {
+                display: none;
+            }
+        }
+    }
+
+    &.is-show {
+        > .buttons {
+            .icon.show {
+                display: none;
+            }
+        }
+    }
+}
+
+/* ****** THEMES ****** */
+
+.module__mobile-menu__container {
+    &.view--sidebar {
+        position: fixed;
+        z-index: 100;
+        .mx__position(0, 0, 0, 0);
+        .mx__transition(all, @AppMod-MobileMenu-Duration);
+
+        &::before {
+            display: block;
+            position: absolute;
+            z-index: 1;
+            background: @AppMod-MobileMenu-Overlay;
+            content: '';
+            .mx__position(0, 0, 0, 0);
+            .mx__transition(all, @CmUI-Transition-Duration);
+        }
+
+        > .inner {
+            width: 100%;
+            max-width: @AppMod-MobileMenu-Sidebar-Width;
+            position: absolute;
+            z-index: 2;
+            background: @AppMod-MobileMenu-Background;
+            .mx__transition(all, @AppMod-MobileMenu-Duration, @CmUI-MotionAsymmetric);
+
+            > .icon {
+                .icon.linked;
+                position: absolute;
+                z-index: 2;
+                padding: @CmIndent-XXXSmall;
+                background: @AppMod-MobileMenu-Background;
+                border-radius: 100%;
+
+                img {
+                    display: block;
+                }
+            }
+
+            > .zone {
+                .cm__scroll-y-a;
+                .cm__scrollbar;
+                width: 100%;
+                height: 100%;
+                position: relative;
+                z-index: 1;
+            }
+        }
+
+        &.is-show {
+            visibility: visible;
+
+            &::before {
+                opacity: 1;
+            }
+        }
+
+        &.is-hide {
+            visibility: hidden;
+
+            &::before {
+                opacity: 0;
+            }
+        }
+
+        .app__zone {
+            &::before {
+                .mx__position(0, 0, 0, 0);
+            }
+        }
+    }
+
+    &.view--sidebar-left {
+        &:extend(.module__mobile-menu__container.view--sidebar all);
+
+        > .inner {
+            box-shadow: @CmUI-Shadow-Right;
+            .mx__position(0, auto, 0, 0);
+
+            > .icon {
+                .mx__position(@AppMod-MobileMenu-Sidebar-IconIndent, @AppMod-MobileMenu-Sidebar-IconIndent, auto, auto);
+            }
+        }
+
+        &.is-show {
+            > .inner {
+                .mx__transform(translateX(0));
+            }
+        }
+
+        &.is-hide {
+            > .inner {
+                .mx__transform(translateX(-100%));
+            }
+        }
+    }
+
+    &.view--sidebar-right {
+        &:extend(.module__mobile-menu__container.view--sidebar all);
+
+        > .inner {
+            box-shadow: @CmUI-Shadow-Left;
+            .mx__position(0, 0, 0, auto);
+
+            > .icon {
+                .mx__position(@AppMod-MobileMenu-Sidebar-IconIndent, @AppMod-MobileMenu-Sidebar-IconIndent, auto, auto);
+            }
+        }
+
+        &.is-show {
+            > .inner {
+                .mx__transform(translateX(0));
+            }
+        }
+
+        &.is-hide {
+            > .inner {
+                .mx__transform(translateX(100%));
+            }
+        }
+    }
+
+    &.view--dropdown {
+        .mx__transition(all, @AppMod-MobileMenu-Duration, @CmUI-MotionAsymmetric);
+
+        > .inner {
+            .pt__box;
+            margin-top: @AppMod-MobileMenu-Dropdown-Indent;
+            padding: 0;
+
+            > .icon {
+                display: none;
+            }
+        }
+
+        &.is-show {
+            opacity: 1;
+        }
+
+        &.is-hide {
+            opacity: 0;
+        }
+    }
+
+    &.view--dropdown-overlap {
+        &:extend(.module__mobile-menu__container.view--dropdown all);
+        position: absolute;
+        .mx__position(100%, 0, auto, 0);
+    }
+}
+
+/* ******* STATES ******* */
+
+html {
+    &.is-topmenu {
+        .module__mobile-menu__container {
+            &.view--sidebar,
+            &.view--sidebar-left,
+            &.view--sidebar-right {
+                top: @AppTopMenu-Height;
+            }
+        }
+    }
+
+    &.is-editor--expanded {
+        .module__mobile-menu__container {
+            &.view--sidebar,
+            &.view--sidebar-left,
+            &.view--sidebar-right {
+                left: @AppSidebar-WidthExpanded;
+            }
+        }
+    }
+
+    &.is-editor--collapsed {
+        .module__mobile-menu__container {
+            &.view--sidebar,
+            &.view--sidebar-left,
+            &.view--sidebar-right {
+                left: @AppSidebar-WidthCollapsed;
+            }
+        }
+    }
+}
+
+/* ******* ADAPTIVE ******* */
+
+@media only screen and (max-width : @AppMod-MobileMenu-AdaptiveFrom) {
+
+    html.is-adaptive {
+        .module__mobile-menu__container {
+            &.view--sidebar,
+            &.view--sidebar-left,
+            &.view--sidebar-right {
+                left: 0;
+
+                > .inner {
+                    max-width: none;
+                }
+            }
+        }
+    }
+
+}
