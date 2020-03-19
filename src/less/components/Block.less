@@ -116,17 +116,22 @@
 
 /* *** BLOCK *** */
 
-.app__block {
-    > .background {
-        position: absolute;
-        z-index: 1;
-        .mx__position(0, 0, 0, 0);
+.app__block__background {
+    position: absolute;
+    z-index: 1;
+    .mx__position(0, 0, 0, 0);
 
-        > .inner {
-            width: 100%;
-            height: 100%;
-            object-fit: none;
-        }
+    .background__color,
+    .background__image,
+    .background__video {
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        .mx__position(0, 0, 0, 0);
+    }
+
+    .background__video {
+        object-fit: none;
     }
 }
 
