@@ -1,0 +1,179 @@
+.mod__flip-cards {
+    > .inner {
+        position: relative;
+
+        > .zone {
+            height: 100%;
+            position: relative;
+        }
+    }
+
+    &.is-not-editing {
+        > .inner {
+            > .zone {
+                overflow: hidden;
+            }
+
+            > .zone--internal {
+                position: absolute;
+                .mx__position(0, 0, 0, 0);
+            }
+        }
+    }
+
+    &.is-editable {
+        .pt__box;
+        padding: @CmIndent-XSmall;
+
+        > .inner {
+            > .zone {
+                .cm__box;
+                margin-bottom: @CmIndent-XSmall;
+            }
+        }
+    }
+
+    &.effect--flip {
+        perspective: 1000px;
+
+        > .inner {
+            transform-style: preserve-3d;
+            .mx__transition(transform, @CmUI-Transition-DurationLong);
+
+            > .zone {
+                .mx__backface-visibility(hidden);
+                .mx__transition(opacity, @CmUI-Transition-DurationLong);
+            }
+
+            > .zone--internal {
+                transform: rotateY(180deg);
+                opacity: 0;
+            }
+        }
+
+        &:hover,
+        &.active {
+            > .inner {
+                transform: rotateY(180deg);
+
+                > .zone--external {
+                    opacity: 0;
+                }
+
+                > .zone--internal {
+                    opacity: 1;
+                }
+            }
+        }
+    }
+
+    &.effect--flip-vertical {
+        perspective: 1000px;
+
+        > .inner {
+            transform-style: preserve-3d;
+            .mx__transition(transform, @CmUI-Transition-DurationLong);
+
+            > .zone {
+                .mx__backface-visibility(hidden);
+                .mx__transition(opacity, @CmUI-Transition-DurationLong);
+            }
+
+            > .zone--internal {
+                transform: rotateX(180deg);
+                opacity: 0;
+            }
+        }
+
+        &:hover,
+        &.active {
+            > .inner {
+                transform: rotateX(180deg);
+
+                > .zone--external {
+                    opacity: 0;
+                }
+
+                > .zone--internal {
+                    opacity: 1;
+                }
+            }
+        }
+    }
+
+    &.effect--fade {
+        > .inner {
+            > .zone {
+                .mx__transition(opacity, @CmUI-Transition-DurationLong);
+            }
+
+            > .zone--internal {
+                opacity: 0;
+            }
+        }
+
+        &:hover,
+        &.active {
+            > .inner {
+                > .zone--external {
+                    opacity: 0;
+                }
+
+                > .zone--internal {
+                    opacity: 1;
+                }
+            }
+        }
+    }
+
+    &.effect--fade-grow {
+        > .inner {
+            overflow: hidden;
+
+            > .zone {
+                .mx__transition(all, @CmUI-Transition-DurationLong);
+            }
+
+            > .zone--internal {
+                opacity: 0;
+                .mx__transform(scale(1.1));
+            }
+        }
+
+        &:hover,
+        &.active {
+            > .inner {
+                > .zone--external {
+                    opacity: 0;
+                    .mx__transform(scale(1.1));
+                }
+
+                > .zone--internal {
+                    opacity: 1;
+                    .mx__transform(scale(1));
+                }
+            }
+        }
+    }
+
+    &.effect--none {
+        > .inner {
+            > .zone--internal {
+                opacity: 0;
+            }
+        }
+
+        &:hover,
+        &.active {
+            > .inner {
+                > .zone--external {
+                    opacity: 0;
+                }
+
+                > .zone--internal {
+                    opacity: 1;
+                }
+            }
+        }
+    }
+}

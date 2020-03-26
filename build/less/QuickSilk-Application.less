@@ -1,4 +1,4 @@
-/*! ************ QuickSilk-Application v3.30.0 (2020-03-19 21:04) ************ */
+/*! ************ QuickSilk-Application v3.31.0 (2020-03-26 21:37) ************ */
 .svg__app__logo { background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20id%3D%22logo.svg%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2250%22%20height%3D%2224%22%20viewBox%3D%220%200%2050%2024%22%3E%20%20%3Cdefs%3E%20%20%20%20%3Cstyle%3E%20%20%20%20%20%20.cls-1%20%7B%20%20%20%20%20%20%20%20fill%3A%20%23F27C21%3B%20%20%20%20%20%20%7D%20%20%20%20%20%20.cls-1%2C%20.cls-2%20%7B%20%20%20%20%20%20%20%20fill-rule%3A%20evenodd%3B%20%20%20%20%20%20%7D%20%20%20%20%20%20.cls-2%20%7B%20%20%20%20%20%20%20%20fill%3A%20%23fff%3B%20%20%20%20%20%20%7D%20%20%20%20%3C%2Fstyle%3E%20%20%3C%2Fdefs%3E%20%20%3Cpath%20id%3D%22_3%22%20data-name%3D%223%22%20class%3D%22cls-1%22%20d%3D%22M35%2C24l8.58-12L35%2C0h6.429L50%2C12l-8.58%2C12H35Z%22%2F%3E%20%20%3Cpath%20id%3D%22_2%22%20data-name%3D%222%22%20class%3D%22cls-2%22%20d%3D%22M28%2C24L19.425%2C12%2C28%2C0H21.575L13%2C12l8.58%2C12H28Z%22%2F%3E%20%20%3Cpath%20id%3D%22_1%22%20data-name%3D%221%22%20class%3D%22cls-2%22%20d%3D%22M15%2C24L6.425%2C12%2C15%2C0H8.575L0%2C12l8.58%2C12H15Z%22%2F%3E%3C%2Fsvg%3E"); }
 .svg__app__menu-dropdown { background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20id%3D%22menu-dropdown.svg%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2212%22%20height%3D%227%22%20viewBox%3D%220%200%2012%207%22%3E%20%20%3Cdefs%3E%20%20%20%20%3Cstyle%3E%20%20%20%20%20%20.cls-1%20%7B%20%20%20%20%20%20%20%20fill%3A%20%23fff%3B%20%20%20%20%20%20%20%20fill-rule%3A%20evenodd%3B%20%20%20%20%20%20%7D%20%20%20%20%3C%2Fstyle%3E%20%20%3C%2Fdefs%3E%20%20%3Cpath%20class%3D%22cls-1%22%20d%3D%22M12%2C0L6%2C4.787%2C0%2C0V2.212L6%2C7l6-4.79V0Z%22%2F%3E%3C%2Fsvg%3E"); }
 
@@ -122,7 +122,7 @@
 // /* ******* VARIABLES ******* */
 // /* ************************************************ */
 
-@AppVersion: '3.30.0';
+@AppVersion: '3.31.0';
 
 // /* ******* PATH ******* */
 
@@ -5619,6 +5619,185 @@ html {
 /* ******* MODULES: EVENTS WIDGET ******* */
 
 .app-mod__events-widget {
+}
+.mod__flip-cards {
+    > .inner {
+        position: relative;
+
+        > .zone {
+            height: 100%;
+            position: relative;
+        }
+    }
+
+    &.is-not-editing {
+        > .inner {
+            > .zone {
+                overflow: hidden;
+            }
+
+            > .zone--internal {
+                position: absolute;
+                .mx__position(0, 0, 0, 0);
+            }
+        }
+    }
+
+    &.is-editable {
+        .pt__box;
+        padding: @CmIndent-XSmall;
+
+        > .inner {
+            > .zone {
+                .cm__box;
+                margin-bottom: @CmIndent-XSmall;
+            }
+        }
+    }
+
+    &.effect--flip {
+        perspective: 1000px;
+
+        > .inner {
+            transform-style: preserve-3d;
+            .mx__transition(transform, @CmUI-Transition-DurationLong);
+
+            > .zone {
+                .mx__backface-visibility(hidden);
+                .mx__transition(opacity, @CmUI-Transition-DurationLong);
+            }
+
+            > .zone--internal {
+                transform: rotateY(180deg);
+                opacity: 0;
+            }
+        }
+
+        &:hover,
+        &.active {
+            > .inner {
+                transform: rotateY(180deg);
+
+                > .zone--external {
+                    opacity: 0;
+                }
+
+                > .zone--internal {
+                    opacity: 1;
+                }
+            }
+        }
+    }
+
+    &.effect--flip-vertical {
+        perspective: 1000px;
+
+        > .inner {
+            transform-style: preserve-3d;
+            .mx__transition(transform, @CmUI-Transition-DurationLong);
+
+            > .zone {
+                .mx__backface-visibility(hidden);
+                .mx__transition(opacity, @CmUI-Transition-DurationLong);
+            }
+
+            > .zone--internal {
+                transform: rotateX(180deg);
+                opacity: 0;
+            }
+        }
+
+        &:hover,
+        &.active {
+            > .inner {
+                transform: rotateX(180deg);
+
+                > .zone--external {
+                    opacity: 0;
+                }
+
+                > .zone--internal {
+                    opacity: 1;
+                }
+            }
+        }
+    }
+
+    &.effect--fade {
+        > .inner {
+            > .zone {
+                .mx__transition(opacity, @CmUI-Transition-DurationLong);
+            }
+
+            > .zone--internal {
+                opacity: 0;
+            }
+        }
+
+        &:hover,
+        &.active {
+            > .inner {
+                > .zone--external {
+                    opacity: 0;
+                }
+
+                > .zone--internal {
+                    opacity: 1;
+                }
+            }
+        }
+    }
+
+    &.effect--fade-grow {
+        > .inner {
+            overflow: hidden;
+
+            > .zone {
+                .mx__transition(all, @CmUI-Transition-DurationLong);
+            }
+
+            > .zone--internal {
+                opacity: 0;
+                .mx__transform(scale(1.1));
+            }
+        }
+
+        &:hover,
+        &.active {
+            > .inner {
+                > .zone--external {
+                    opacity: 0;
+                    .mx__transform(scale(1.1));
+                }
+
+                > .zone--internal {
+                    opacity: 1;
+                    .mx__transform(scale(1));
+                }
+            }
+        }
+    }
+
+    &.effect--none {
+        > .inner {
+            > .zone--internal {
+                opacity: 0;
+            }
+        }
+
+        &:hover,
+        &.active {
+            > .inner {
+                > .zone--external {
+                    opacity: 0;
+                }
+
+                > .zone--internal {
+                    opacity: 1;
+                }
+            }
+        }
+    }
 }
 /* ******* MODULES: FORUM ******* */
 

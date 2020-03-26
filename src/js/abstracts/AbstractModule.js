@@ -12,7 +12,8 @@ cm.define('App.AbstractModule', {
         'renderStructure' : false,
         'embedStructureOnRender' : false,
         'controllerEvents' : true,
-        'customEvents' : true
+        'customEvents' : true,
+        'isEditing' : null
     }
 },
 function(params){
@@ -43,6 +44,20 @@ cm.getConstructor('App.AbstractModule', function(classConstructor, className, cl
         var that = this;
         cm.customEvent.remove(that.params['node'], 'enableEditable', that.enableEditingHandler);
         cm.customEvent.remove(that.params['node'], 'disableEditable', that.disableEditingHandler);
+    };
+
+    classProto.renderViewModel = function(){
+        var that = this;
+        // Force editing mode on initialisation
+        if(cm.isBoolean(that.params['isEditing'])){
+            if(that.params['isEditing']){
+                that.enableEditing();
+            }else{
+                that.disableEditing();
+            }
+        }
+        that.triggerEvent('onRenderViewModel');
+        return that;
     };
 
     /*** PUBLIC ***/
