@@ -14,6 +14,7 @@ cm.getConstructor('Module.FlipCards', function(classConstructor, className, clas
     classProto.onConstructStart = function(){
         var that = this;
         that.isFlipped = false;
+        that.isMouseOver = false;
         that.perspective = 0;
         that.nodes = {
             'container' : cm.node('div'),
@@ -38,8 +39,25 @@ cm.getConstructor('Module.FlipCards', function(classConstructor, className, clas
         // Call parent method - renderViewModel
         classInherit.prototype.renderViewModel.apply(that, arguments);
         // View
-        cm.addEvent(that.nodes.container, 'click', that.toggleHandler);
-        cm.addEvent(that.nodes.container, 'mouseover', that.setPerspectiveHandler);
+        cm.addEvent(that.nodes.container, 'mouseover', function(e){
+            var target = cm.getEventTarget(e);
+            if(cm.isParent(that.nodes.container, target, true)){
+                that.isMouseOver = true;
+                that.show();
+            }
+        });
+        cm.addEvent(that.nodes.container, 'mouseout', function(e){
+            var target = cm.getRelatedTarget(e);
+            if(!cm.isParent(that.nodes.container, target, true)){
+                that.isMouseOver = false;
+                that.hide();
+            }
+        });
+        cm.addEvent(that.nodes.container, 'click', function(e){
+            if(!that.isFlipped || that.isFlipped && !that.isMouseOver){
+                that.toggle();
+            }
+        });
     };
 
     classProto.setPerspective = function(){
@@ -56,15 +74,32 @@ cm.getConstructor('Module.FlipCards', function(classConstructor, className, clas
         return that;
     };
 
-    classProto.toggle = function(){
+    classProto.show = function(){
         var that = this;
-        that.setPerspective();
         if(!that.isFlipped){
             that.isFlipped = true;
+            that.setPerspective();
             cm.addClass(that.nodes.container, 'active');
-        }else{
+        }
+        return that;
+    };
+
+    classProto.hide = function(){
+        var that = this;
+        if(that.isFlipped){
             that.isFlipped = false;
+            that.setPerspective();
             cm.removeClass(that.nodes.container, 'active');
+        }
+        return that;
+    };
+
+    classProto.toggle = function(){
+        var that = this;
+        if(!that.isFlipped){
+            that.show();
+        }else{
+            that.hide();
         }
         return that;
     };
