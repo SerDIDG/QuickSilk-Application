@@ -1,11 +1,11 @@
-/*! ************ QuickSilk-Application v3.31.2 (2020-03-27 22:31) ************ */
+/*! ************ QuickSilk-Application v3.31.3 (2020-03-30 17:16) ************ */
 
 // /* ************************************************ */
 // /* ******* QUICKSILK: COMMON ******* */
 // /* ************************************************ */
 
 var App = {
-    '_version' : '3.31.2',
+    '_version' : '3.31.3',
     '_assetsUrl' : [window.location.protocol, window.location.hostname].join('//'),
     'Elements': {},
     'Nodes' : {},
@@ -10654,14 +10654,17 @@ cm.getConstructor('Module.FlipCards', function(classConstructor, className, clas
 
     classProto.renderViewModel = function(){
         var that = this;
-        // Call parent method - renderViewModel
-        classInherit.prototype.renderViewModel.apply(that, arguments);
-        // View
         cm.addEvent(that.nodes.container, 'pointerover', that.onPointerOverHandler);
         cm.addEvent(that.nodes.container, 'pointerout', that.onPointerOutHandler);
         cm.addEvent(that.nodes.container, 'mouseover', that.onPointerOverHandler);
         cm.addEvent(that.nodes.container, 'mouseout', that.onPointerOutHandler);
         cm.addEvent(document.body, 'pointerdown', that.onBodyClickHandler);
+        if(that.params['isEditing']){
+            that.enableEditing();
+        }else{
+            that.disableEditing();
+        }
+        that.triggerEvent('onRenderViewModel');
     };
 
     classProto.onPointerOver = function(e){

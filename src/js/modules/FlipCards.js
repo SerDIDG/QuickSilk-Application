@@ -43,14 +43,17 @@ cm.getConstructor('Module.FlipCards', function(classConstructor, className, clas
 
     classProto.renderViewModel = function(){
         var that = this;
-        // Call parent method - renderViewModel
-        classInherit.prototype.renderViewModel.apply(that, arguments);
-        // View
         cm.addEvent(that.nodes.container, 'pointerover', that.onPointerOverHandler);
         cm.addEvent(that.nodes.container, 'pointerout', that.onPointerOutHandler);
         cm.addEvent(that.nodes.container, 'mouseover', that.onPointerOverHandler);
         cm.addEvent(that.nodes.container, 'mouseout', that.onPointerOutHandler);
         cm.addEvent(document.body, 'pointerdown', that.onBodyClickHandler);
+        if(that.params['isEditing']){
+            that.enableEditing();
+        }else{
+            that.disableEditing();
+        }
+        that.triggerEvent('onRenderViewModel');
     };
 
     classProto.onPointerOver = function(e){
