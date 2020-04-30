@@ -1,23 +1,20 @@
 App._Blocks = {};
 
 cm.define('App.Block', {
-    'modules' : [
-        'Params',
-        'Events',
-        'DataNodes',
-        'DataConfig',
-        'Stack'
-    ],
+    'extend' : 'Com.AbstractController',
     'events' : [
-        'onRenderStart',
-        'onRender',
-        'onRedraw',
         'onRemove',
         'enableEditing',
         'disableEditing'
     ],
     'params' : {
-        'node' : cm.node('div'),
+        'renderStructure' : false,
+        'embedStructureOnRender' : false,
+        'removeOnDestruct' : true,
+        'controllerEvents' : true,
+        'customEvents' : false,
+        'resizeEvent' : true,
+        'scrollEvent' : true,
         'type' : 'template-manager',            // template-manager | form-manager | mail
         'instanceId' : false,
         'positionId' : 0,
@@ -29,6 +26,8 @@ cm.define('App.Block', {
         'visible' : true,
         'removable' : true,
         'sticky' : false,
+        'animated' : false,
+        'effect' : 'none',                      // https://daneden.github.io/animate.css/
         'editorName' : 'app-editor',
         'templateName' : 'app-template',
         'templateController' : 'Template'
@@ -36,47 +35,48 @@ cm.define('App.Block', {
 },
 function(params){
     var that = this;
+    // Call parent class construct in current context
+    Com.AbstractController.apply(that, arguments);
+});
 
-    that.isTemplateRequired = false;
-    that.isDummy = false;
-    that.isRemoved = false;
-    that.isEditing = null;
-    that.styleObject = null;
-    that.dimensions = null;
 
-    that.components = {};
-    that.nodes = {
-        'container' : cm.node('div'),
-        'block' : {
+cm.getConstructor('App.Block', function(classConstructor, className, classProto, classInherit){
+    classProto.onConstructStart = function(){
+        var that = this;
+        // Variables
+        that.nodes = {
             'container' : cm.node('div'),
-            'inner' : cm.node('div'),
-            'drag' : [],
-            'menu' : {
-                'edit' : cm.node('div'),
-                'duplicate' : cm.node('div'),
-                'delete' : cm.node('div')
+            'block' : {
+                'container' : cm.node('div'),
+                'inner' : cm.node('div'),
+                'drag' : [],
+                'menu' : {
+                    'edit' : cm.node('div'),
+                    'duplicate' : cm.node('div'),
+                    'delete' : cm.node('div')
+                }
             }
-        }
+        };
+        that.isTemplateRequired = false;
+        that.isDummy = false;
+        that.isRemoved = false;
+        that.isEditing = null;
+        that.isProcessed = false;
+        that.styleObject = null;
+        that.dimensions = null;
+        that.pageDimensions = {};
+        that.index = null;
+        that.node = null;
+        that.zone = null;
+        that.zones = [];
+        // Binds
+        that.constructZoneHandler = that.constructZone.bind(that);
+        that.animProcessHandler = that.animProcess.bind(that);
     };
-    that.index = null;
-    that.node = null;
-    that.zone = null;
-    that.zones = [];
 
-    var init = function(){
-        that.setParams(params);
-        that.convertEvents(that.params['events']);
-        that.getDataNodes(that.params['node']);
-        that.getDataConfig(that.params['node']);
-        validateParams();
-        that.triggerEvent('onRenderStart');
-        render();
-        that.addToStack(that.params['node']);
-        that.triggerEvent('onRender');
-    };
-
-    var validateParams = function(){
-        var index;
+    classProto.onValidateParamsEnd = function(){
+        var that = this;
+        that.node = that.params['node'];
         // Find parent zone
         if(cm.isNumber(that.params['instanceId']) || cm.isString(that.params['instanceId'])){
             that.params['name'] = [that.params['type'], that.params['instanceId'], that.params['positionId']].join('_');
@@ -85,76 +85,89 @@ function(params){
             that.params['name'] = [that.params['type'], that.params['positionId']].join('_');
             that.params['zoneName'] = [that.params['type'], that.params['parentPositionId'], that.params['zone']].join('_');
         }
-        if(index = that.params['node'].getAttribute('data-index')){
+        // Index
+        var index = that.node.getAttribute('data-index');
+        if(!cm.isEmpty(index)){
             that.params['index'] = parseInt(index);
             that.params['node'].removeAttribute('data-index');
         }
         that.index = that.params['index'];
-        // Export
+        // Animation
+        if(that.params['animated']){
+            that.params['animated'] = !(cm.isEmpty(that.params['effect']) || that.params['effect'] === 'none');
+        }
+        // Export to global array
         App._Blocks[that.params['name']] = that;
     };
 
-    var render = function(){
-        that.node = that.params['node'];
+    classProto.onDestructStart = function(){
+        var that = this;
+        // Unset block from zone and editor
+        that.destructZone(that.zone);
+        that.destructEditor(that.components['editor']);
+        while(that.zones.length){
+            that.zones[0].remove();
+        }
+        // Delete from global array
+        delete App._Blocks[that.params['name']];
+    };
+
+    classProto.onSetEvents = function(){
+        var that = this;
+        cm.customEvent.add(that.node, 'redraw', that.redrawHandler);
+    };
+
+    classProto.onUnsetEvents = function(){
+        var that = this;
+        cm.customEvent.remove(that.node, 'redraw', that.redrawHandler);
+    };
+
+    classProto.onRedraw = function(){
+        var that = this;
+        // Update dimensions
+        that.getDimensions();
+        // Editing states
+        if(that.isEditing){
+            that.redrawOnEditing();
+        }else{
+            that.redrawOnNormal();
+        }
+    };
+
+    classProto.onScroll = function(){
+        var that = this;
+        if(!that.isEditing){
+            that.animProcess();
+        }
+    };
+
+    /*** VIEW MODEL ***/
+
+    classProto.renderViewModel = function(){
+        var that = this;
+        // Call parent method - renderViewModel
+        classInherit.prototype.renderViewModel.apply(that, arguments);
         // Process Template
-        getTemplate();
+        that.getTemplate();
         // Process Editor and parent zone
         cm.find('App.Editor', that.params['editorName'], null, function(classObject){
-            new cm.Finder('App.Zone', that.params['zoneName'], null, constructZone);
-            constructEditor(classObject);
+            new cm.Finder('App.Zone', that.params['zoneName'], null, that.constructZoneHandler);
+            that.constructEditor(classObject);
         });
-        // Set events
-        cm.addEvent(window, 'resize', that.redraw);
-        cm.customEvent.add(that.node, 'redraw', that.redraw);
     };
 
-    var constructZone = function(classObject){
-        if(classObject){
-            that.zone = classObject;
-            that.zone.addBlock(that, that.index);
-        }
-    };
+    /*** REDRAW ***/
 
-    var destructZone = function(classObject){
-        if(classObject){
-            that.zone = classObject;
-            that.zone.removeBlock(that);
-            that.zone = null;
-        }
-    };
-
-    var constructEditor = function(classObject){
-        if(classObject){
-            that.components['editor'] = classObject;
-            that.components['editor'].addBlock(that, that.index);
-        }
-    };
-
-    var destructEditor = function(classObject){
-        if(classObject){
-            that.components['editor'] = classObject;
-            that.components['editor'].removeBlock(that);
-        }
-    };
-
-    var getTemplate = function(){
-        if(!that.components['template']){
-            that.components['template']= cm.reducePath(that.params['templateController'], window);
-            if(!that.components['template']){
-                cm.find('App.Template', that.params['templateName'], null, function(classObject){
-                    that.components['template'] = classObject;
-                });
-            }
-        }
-    };
-
-    var redrawOnNormal = function(){
-        var heightIndent, topIndent, bottomIndent;
+    classProto.redrawOnNormal = function(){
+        var that = this,
+            heightIndent,
+            topIndent,
+            bottomIndent;
         // Sticky block
         if(that.params['sticky']){
             cm.addClass(that.node, 'is-sticky');
             // Get template controller
-            getTemplate();
+            that.getTemplate();
             // Calculate
             if(that.components['template']){
                 heightIndent =
@@ -174,9 +187,14 @@ function(params){
                 that.nodes['block']['container'].style.maxHeight = heightIndent + 'px';
             }
         }
+        // Animations
+        if(that.params['animated']){
+            that.animEnable();
+        }
     };
 
-    var redrawOnEditing = function(){
+    classProto.redrawOnEditing = function(){
+        var that = this;
         // Sticky block
         if(that.params['sticky']){
             cm.removeClass(that.node, 'is-sticky');
@@ -185,29 +203,150 @@ function(params){
             that.node.style.bottom = '';
             that.nodes['block']['container'].style.maxHeight = '';
         }
-    };
-
-    /* ******* PUBLIC ******* */
-
-    that.redraw = function(){
-        // Update dimensions
-        that.getDimensions();
-        // Editing states
-        if(that.isEditing){
-            redrawOnEditing();
-        }else{
-            redrawOnNormal();
+        // Animations
+        if(that.params['animated']){
+            that.animDisable();
         }
     };
 
-    that.register = function(classObject){
-        var zone = App._Zones[that.params['zoneName']];
-        constructZone(zone);
-        constructEditor(classObject);
+    /* ******* ANIMATIONS ******* */
+
+    classProto.animEnable = function(){
+        var that = this;
+        cm.addClass(that.nodes['block']['container'], 'cm-animate');
+        cm.addClass(that.nodes['block']['container'], ['pre', that.params['effect']].join('-'));
+        that.animRestore();
+        that.animProcess();
+        return that;
+    }
+
+    classProto.animDisable = function(){
+        var that = this;
+        cm.removeClass(that.nodes['block']['container'], 'cm-animate');
+        cm.removeClass(that.nodes['block']['container'], ['pre', that.params['effect']].join('-'));
+        cm.removeClass(that.nodes['block']['container'], ['animated', that.params['effect']].join(' '));
         return that;
     };
 
-    that.enableEditing = function(){
+    classProto.animProcess = function(){
+        var that = this;
+        if(!that.isProcessed){
+            that.getDimensions();
+            that.getPageDimensions();
+            // Rules for different block sizes.
+            if(that.dimensions['offset']['height'] < that.pageDimensions['winHeight']){
+                // Rules for block, which size is smaller than page's.
+                if(
+                    that.dimensions['offset']['top'] >= 0 &&
+                    that.dimensions['offset']['bottom'] <= that.pageDimensions['winHeight']
+                ){
+                    that.animSet();
+                }
+            }else{
+                // Rules for block, which size is larger than page's.
+                if(
+                    (that.dimensions['offset']['top'] < 0 && that.dimensions['bottom'] >= that.pageDimensions['winHeight'] / 2) ||
+                    (that.dimensions['offset']['bottom'] > that.pageDimensions['winHeight'] && that.dimensions['offset']['top'] <= that.pageDimensions['winHeight'] / 2)
+                ){
+                    that.animSet();
+                }
+            }
+        }
+    };
+
+    classProto.animRestore = function(){
+        var that = this;
+        that.isProcessed = false;
+        cm.removeClass(that.nodes['block']['container'], ['animated', that.params['effect']].join(' '));
+    };
+
+    classProto.animSet = function(){
+        var that = this;
+        that.isProcessed = true;
+        cm.addClass(that.nodes['block']['container'], ['animated', that.params['effect']].join(' '));
+    };
+
+    /*** ZONES ***/
+
+    classProto.addZone = function(item){
+        var that = this;
+        that.zones.push(item);
+        return that;
+    };
+
+    classProto.removeZone = function(zone){
+        var that = this;
+        cm.arrayRemove(that.zones, zone);
+        return that;
+    };
+
+    classProto.setZone = function(zone, index){
+        var that = this;
+        that.index = index;
+        that.destructZone(that.zone);
+        that.constructZone(zone);
+        return that;
+    };
+
+    classProto.unsetZone = function(){
+        var that = this;
+        that.destructZone(that.zone);
+        return that;
+    };
+
+    classProto.constructZone = function(classObject){
+        var that = this;
+        if(classObject){
+            that.zone = classObject;
+            that.zone.addBlock(that, that.index);
+        }
+    };
+
+    classProto.destructZone = function(classObject){
+        var that = this;
+        if(classObject){
+            that.zone = classObject;
+            that.zone.removeBlock(that);
+            that.zone = null;
+        }
+    };
+
+    /*** EDITOR ***/
+
+    classProto.constructEditor = function(classObject){
+        var that = this;
+        if(classObject){
+            that.components['editor'] = classObject;
+            that.components['editor'].addBlock(that, that.index);
+        }
+    };
+
+    classProto.destructEditor = function(classObject){
+        var that = this;
+        if(classObject){
+            that.components['editor'] = classObject;
+            that.components['editor'].removeBlock(that);
+        }
+    };
+
+    /*** TEMPLATE ***/
+
+    classProto.getTemplate = function(){
+        var that = this;
+        if(!that.components['template']){
+            that.components['template']= cm.reducePath(that.params['templateController'], window);
+            if(!that.components['template']){
+                cm.find('App.Template', that.params['templateName'], null, function(classObject){
+                    that.components['template'] = classObject;
+                });
+            }
+        }
+    };
+
+    /*** EDITING ***/
+
+    classProto.enableEditing = function(){
+        var that = this;
         if(!cm.isBoolean(that.isEditing) || !that.isEditing){
             that.isEditing = true;
             cm.addClass(that.node, 'is-editing');
@@ -231,7 +370,8 @@ function(params){
         return that;
     };
 
-    that.disableEditing = function(){
+    classProto.disableEditing = function(){
+        var that = this;
         if(!cm.isBoolean(that.isEditing) || that.isEditing){
             that.isEditing = false;
             cm.removeClass(that.node, 'is-editing');
@@ -257,54 +397,28 @@ function(params){
         return that;
     };
 
-    that.remove = function(){
+    /******* PUBLIC *******/
+
+    classProto.register = function(classObject){
+        var that = this,
+            zone = App._Zones[that.params['zoneName']];
+        that.constructZone(zone);
+        that.constructEditor(classObject);
+        return that;
+    };
+
+    classProto.remove = function(){
+        var that = this;
         if(!that.isRemoved){
             that.isRemoved = true;
-            // Unset events
-            cm.removeEvent(window, 'resize', that.redraw);
-            cm.customEvent.remove(that.node, 'redraw', that.redraw);
-            // Unset block from zone and editor
-            destructZone(that.zone);
-            destructEditor(that.components['editor']);
-            while(that.zones.length){
-                that.zones[0].remove();
-            }
-            cm.customEvent.trigger(that.node, 'destruct', {
-                'direction' : 'child',
-                'self' : false
-            });
-            // Delete
-            delete App._Blocks[that.params['name']];
-            that.removeFromStack();
-            cm.remove(that.node);
+            that.destruct();
             that.triggerEvent('onRemove');
         }
         return that;
     };
 
-    that.addZone = function(item){
-        that.zones.push(item);
-        return that;
-    };
-
-    that.removeZone = function(zone){
-        cm.arrayRemove(that.zones, zone);
-        return that;
-    };
-
-    that.setZone = function(zone, index){
-        that.index = index;
-        destructZone(that.zone);
-        constructZone(zone);
-        return that;
-    };
-
-    that.unsetZone = function(){
-        destructZone(that.zone);
-        return that;
-    };
-
-    that.getIndex = function(){
+    classProto.getIndex = function(){
+        var that = this;
         if(that.zone){
             that.index = that.zone.getBlockIndex(that);
             return that.index;
@@ -312,33 +426,39 @@ function(params){
         return null;
     };
 
-    that.getLower = function(){
-        var index = that.getIndex();
+    classProto.getLower = function(){
+        var that = this,
+            index = that.getIndex();
         return that.zone.getBlock(index + 1) || null;
     };
 
-    that.getUpper = function(){
-        var index = that.getIndex();
+    classProto.getUpper = function(){
+        var that = this,
+            index = that.getIndex();
         return that.zone.getBlock(index - 1) || null;
     };
 
-    that.getDragNodes = function(){
-        var nodes = [];
+    classProto.getDragNodes = function(){
+        var that = this,
+            nodes = [];
         cm.forEach(that.nodes['block']['drag'], function(item){
             nodes.push(item['container']);
         });
         return nodes;
     };
 
-    that.getMenuNodes = function(){
+    classProto.getMenuNodes = function(){
+        var that = this;
         return that.nodes['block']['menu'];
     };
 
-    that.getInnerNode = function(){
+    classProto.getInnerNode = function(){
+        var that = this;
         return that.nodes['block']['inner'];
     };
 
-    that.getDimensions = function(){
+    classProto.getDimensions = function(){
+        var that = this;
         if(!that.styleObject){
             that.styleObject = cm.getStyleObject(that.node);
         }
@@ -346,10 +466,15 @@ function(params){
         return that.dimensions;
     };
 
-    that.updateDimensions = function(){
+    classProto.updateDimensions = function(){
+        var that = this;
         that.dimensions = cm.getNodeOffset(that.node, that.styleObject, that.dimensions);
         return that.dimensions;
     };
 
-    init();
+    classProto.getPageDimensions = function(){
+        var that = this;
+        that.pageDimensions = cm.getPageSize();
+        return that.pageDimensions;
+    };
 });
