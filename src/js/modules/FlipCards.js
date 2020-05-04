@@ -34,20 +34,31 @@ cm.getConstructor('Module.FlipCards', function(classConstructor, className, clas
     classProto.onEnableEditing = function(){
         var that = this;
         cm.removeClass(that.nodes.container, ['effect', that.params.effect].join('--'));
+        if(cm.hasPointerEvent){
+            cm.removeEvent(that.nodes.container, 'pointerover', that.onPointerOverHandler);
+            cm.removeEvent(that.nodes.container, 'pointerout', that.onPointerOutHandler);
+            cm.removeEvent(document.body, 'pointerdown', that.onBodyClickHandler);
+        }else{
+            cm.removeEvent(that.nodes.container, 'mouseover', that.onPointerOverHandler);
+            cm.removeEvent(that.nodes.container, 'mouseout', that.onPointerOutHandler);
+        }
     };
 
     classProto.onDisableEditing = function(){
         var that = this;
         cm.addClass(that.nodes.container, ['effect', that.params.effect].join('--'));
+        if(cm.hasPointerEvent){
+            cm.addEvent(that.nodes.container, 'pointerover', that.onPointerOverHandler);
+            cm.addEvent(that.nodes.container, 'pointerout', that.onPointerOutHandler);
+            cm.addEvent(document.body, 'pointerdown', that.onBodyClickHandler);
+        }else{
+            cm.addEvent(that.nodes.container, 'mouseover', that.onPointerOverHandler);
+            cm.addEvent(that.nodes.container, 'mouseout', that.onPointerOutHandler);
+        }
     };
 
     classProto.renderViewModel = function(){
         var that = this;
-        cm.addEvent(that.nodes.container, 'pointerover', that.onPointerOverHandler);
-        cm.addEvent(that.nodes.container, 'pointerout', that.onPointerOutHandler);
-        cm.addEvent(that.nodes.container, 'mouseover', that.onPointerOverHandler);
-        cm.addEvent(that.nodes.container, 'mouseout', that.onPointerOutHandler);
-        cm.addEvent(document.body, 'pointerdown', that.onBodyClickHandler);
         if(that.params['isEditing']){
             that.enableEditing();
         }else{
@@ -59,12 +70,9 @@ cm.getConstructor('Module.FlipCards', function(classConstructor, className, clas
     classProto.onPointerOver = function(e){
         var that = this;
         cm.preventDefault(e);
-        if(e.type === 'pointerover'){
-            cm.removeEvent(that.nodes.container, 'mouseover', that.onPointerOverHandler);
-        }
         var target = cm.getEventTarget(e);
         if(cm.isParent(that.nodes.container, target, true)){
-            if(e.pointerType === 'mouse'){
+            if(cm.isUndefined(e.pointerType) || e.pointerType === 'mouse'){
                 that.show();
             }else{
                 that.toggle();
@@ -75,10 +83,7 @@ cm.getConstructor('Module.FlipCards', function(classConstructor, className, clas
     classProto.onPointerOut = function(e){
         var that = this;
         cm.preventDefault(e);
-        if(e.type === 'pointerout'){
-            cm.removeEvent(that.nodes.container, 'mouseout', that.onPointerOutHandler);
-        }
-        if(e.pointerType === 'mouse'){
+        if(cm.isUndefined(e.pointerType) || e.pointerType === 'mouse'){
             var target = cm.getRelatedTarget(e);
             if(!cm.isParent(that.nodes.container, target, true)){
                 that.hide();
@@ -88,11 +93,9 @@ cm.getConstructor('Module.FlipCards', function(classConstructor, className, clas
 
     classProto.onBodyClick = function(e){
         var that = this;
-        if(e.pointerType !== 'mouse'){
-            var target = cm.getEventTarget(e);
-            if(!cm.isParent(that.nodes.container, target, true)){
-                that.hide();
-            }
+        var target = cm.getEventTarget(e);
+        if(!cm.isParent(that.nodes.container, target, true)){
+            that.hide();
         }
     };
 
