@@ -1,11 +1,11 @@
-/*! ************ QuickSilk-Application v3.31.7 (2020-05-04 22:47) ************ */
+/*! ************ QuickSilk-Application v3.31.8 (2020-06-01 19:26) ************ */
 
 // /* ************************************************ */
 // /* ******* QUICKSILK: COMMON ******* */
 // /* ************************************************ */
 
 var App = {
-    '_version' : '3.31.7',
+    '_version' : '3.31.8',
     '_assetsUrl' : [window.location.protocol, window.location.hostname].join('//'),
     'Elements': {},
     'Nodes' : {},
@@ -10248,14 +10248,7 @@ function(params){
     App.AbstractModuleElement.apply(that, arguments);
 });
 
-cm.getConstructor('Mod.ElementCheckbox', function(classConstructor, className, classProto){
-    var _inherit = classProto._inherit;
-
-    classProto.validateValue = function(){
-        var that = this;
-        return that.get();
-    };
-
+cm.getConstructor('Mod.ElementCheckbox', function(classConstructor, className, classProto, classInherit){
     classProto.get = function(){
         var that = this;
         return that.nodes['input'].checked;
@@ -10303,9 +10296,7 @@ function(params){
     App.AbstractModuleElement.apply(that, arguments);
 });
 
-cm.getConstructor('Mod.ElementMultiCheckbox', function(classConstructor, className, classProto){
-    var _inherit = classProto._inherit;
-
+cm.getConstructor('Mod.ElementMultiCheckbox', function(classConstructor, className, classProto, classInherit){
     classProto.getMultiple = function(){
         var that = this,
             values = [];
@@ -10386,9 +10377,7 @@ function(params){
     App.AbstractModuleElement.apply(that, arguments);
 });
 
-cm.getConstructor('Mod.ElementRadioButton', function(classConstructor, className, classProto){
-    var _inherit = classProto._inherit;
-
+cm.getConstructor('Mod.ElementRadioButton', function(classConstructor, className, classProto, classInherit){
     classProto.getMultiple = function(){
         var that = this,
             value = '';

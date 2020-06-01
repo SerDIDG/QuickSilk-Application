@@ -10,14 +10,7 @@ function(params){
     App.AbstractModuleElement.apply(that, arguments);
 });
 
-cm.getConstructor('Mod.ElementCheckbox', function(classConstructor, className, classProto){
-    var _inherit = classProto._inherit;
-
-    classProto.validateValue = function(){
-        var that = this;
-        return that.get();
-    };
-
+cm.getConstructor('Mod.ElementCheckbox', function(classConstructor, className, classProto, classInherit){
     classProto.get = function(){
         var that = this;
         return that.nodes['input'].checked;

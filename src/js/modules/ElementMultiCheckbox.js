@@ -10,9 +10,7 @@ function(params){
     App.AbstractModuleElement.apply(that, arguments);
 });
 
-cm.getConstructor('Mod.ElementMultiCheckbox', function(classConstructor, className, classProto){
-    var _inherit = classProto._inherit;
-
+cm.getConstructor('Mod.ElementMultiCheckbox', function(classConstructor, className, classProto, classInherit){
     classProto.getMultiple = function(){
         var that = this,
             values = [];
