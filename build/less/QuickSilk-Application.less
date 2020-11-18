@@ -1,4 +1,4 @@
-/*! ************ QuickSilk-Application v3.31.9 (2020-10-22 20:19) ************ */
+/*! ************ QuickSilk-Application v3.32.0 (2020-11-18 20:00) ************ */
 .svg__app__logo { background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20id%3D%22logo.svg%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2250%22%20height%3D%2224%22%20viewBox%3D%220%200%2050%2024%22%3E%20%20%3Cdefs%3E%20%20%20%20%3Cstyle%3E%20%20%20%20%20%20.cls-1%20%7B%20%20%20%20%20%20%20%20fill%3A%20%23F27C21%3B%20%20%20%20%20%20%7D%20%20%20%20%20%20.cls-1%2C%20.cls-2%20%7B%20%20%20%20%20%20%20%20fill-rule%3A%20evenodd%3B%20%20%20%20%20%20%7D%20%20%20%20%20%20.cls-2%20%7B%20%20%20%20%20%20%20%20fill%3A%20%23fff%3B%20%20%20%20%20%20%7D%20%20%20%20%3C%2Fstyle%3E%20%20%3C%2Fdefs%3E%20%20%3Cpath%20id%3D%22_3%22%20data-name%3D%223%22%20class%3D%22cls-1%22%20d%3D%22M35%2C24l8.58-12L35%2C0h6.429L50%2C12l-8.58%2C12H35Z%22%2F%3E%20%20%3Cpath%20id%3D%22_2%22%20data-name%3D%222%22%20class%3D%22cls-2%22%20d%3D%22M28%2C24L19.425%2C12%2C28%2C0H21.575L13%2C12l8.58%2C12H28Z%22%2F%3E%20%20%3Cpath%20id%3D%22_1%22%20data-name%3D%221%22%20class%3D%22cls-2%22%20d%3D%22M15%2C24L6.425%2C12%2C15%2C0H8.575L0%2C12l8.58%2C12H15Z%22%2F%3E%3C%2Fsvg%3E"); }
 .svg__app__menu-dropdown { background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20id%3D%22menu-dropdown.svg%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2212%22%20height%3D%227%22%20viewBox%3D%220%200%2012%207%22%3E%20%20%3Cdefs%3E%20%20%20%20%3Cstyle%3E%20%20%20%20%20%20.cls-1%20%7B%20%20%20%20%20%20%20%20fill%3A%20%23fff%3B%20%20%20%20%20%20%20%20fill-rule%3A%20evenodd%3B%20%20%20%20%20%20%7D%20%20%20%20%3C%2Fstyle%3E%20%20%3C%2Fdefs%3E%20%20%3Cpath%20class%3D%22cls-1%22%20d%3D%22M12%2C0L6%2C4.787%2C0%2C0V2.212L6%2C7l6-4.79V0Z%22%2F%3E%3C%2Fsvg%3E"); }
 
@@ -42,87 +42,150 @@
 // /* *** BLOCK *** */
 
 @AppIcon-Block-Size: 90px;
-@AppIcon-Block-Names: default anchor button column menu divider spacer zone workingarea content logo googlemap tabs search blogcontent blogcategories blogroll blogblock blogarchive blogcalendar image imagegallery slider videogallery forum forum_build comment twitter socialmedia socialmedia_rating socialmedia_share login registration memberdirectory memberwidget filegridlist filegridlistwidget webexmeetings events eventscalendar latestevents flickr languageswitcher d3 rss breadcrumb breadcrumbs form_builder rollover-tabs mobile-menu;
+@AppIcon-Block-Indent: 24px;
+
+// /* Column 1 */
+@AppIcon-Block-Names-Column1: default zone workingarea column element_column divider element_divider spacer element_spacer menu dashboard mobile-menu tabs rollover-tabs sticky flip-cards structure-block spoiler;
 
 @AppIcon-Block-default: 0;
-@AppIcon-Block-anchor: 1;
+@AppIcon-Block-zone: 1;
+@AppIcon-Block-workingarea: 1;
 @AppIcon-Block-column: 2;
-@AppIcon-Block-menu: 3;
-@AppIcon-Block-divider: 4;
-@AppIcon-Block-spacer: 5;
-@AppIcon-Block-zone: 6;
-@AppIcon-Block-workingarea: 6;
-@AppIcon-Block-content: 7;
-@AppIcon-Block-logo: 8;
-@AppIcon-Block-googlemap: 9;
-@AppIcon-Block-tabs: 10;
-@AppIcon-Block-search: 11;
-@AppIcon-Block-blogcontent: 12;
-@AppIcon-Block-blogcategories: 13;
-@AppIcon-Block-blogroll: 14;
-@AppIcon-Block-blogblock: 15;
-@AppIcon-Block-blogarchive: 16;
-@AppIcon-Block-blogcalendar: 17;
-@AppIcon-Block-image: 18;
-@AppIcon-Block-imagegallery: 19;
-@AppIcon-Block-slider: 20;
-@AppIcon-Block-videogallery: 21;
-@AppIcon-Block-forum: 22;
-@AppIcon-Block-forum_build: 23;
-@AppIcon-Block-comment: 24;
-@AppIcon-Block-twitter: 25;
-@AppIcon-Block-socialmedia: 26;
-@AppIcon-Block-socialmedia_rating: 26;
-@AppIcon-Block-socialmedia_share: 26;
-@AppIcon-Block-login: 27;
-@AppIcon-Block-registration: 28;
-@AppIcon-Block-memberdirectory: 29;
-@AppIcon-Block-memberwidget: 30;
-@AppIcon-Block-filegridlist: 31;
-@AppIcon-Block-filegridlistwidget: 32;
-@AppIcon-Block-webexmeetings: 33;
-@AppIcon-Block-events: 34;
-@AppIcon-Block-eventscalendar: 35;
-@AppIcon-Block-latestevents: 36;
-@AppIcon-Block-flickr: 37;
-@AppIcon-Block-languageswitcher: 38;
-@AppIcon-Block-d3: 39;
-@AppIcon-Block-rss: 40;
-@AppIcon-Block-breadcrumb: 41;
-@AppIcon-Block-breadcrumbs: 41;
-@AppIcon-Block-button: 42;
-@AppIcon-Block-form_builder: 56;
-@AppIcon-Block-rollover-tabs: 57;
-@AppIcon-Block-mobile-menu: 3;
+@AppIcon-Block-element_column: 2;
+@AppIcon-Block-divider: 3;
+@AppIcon-Block-element_divider: 3;
+@AppIcon-Block-spacer: 4;
+@AppIcon-Block-element_spacer: 4;
+@AppIcon-Block-menu: 5;
+@AppIcon-Block-mobile-menu: 5;
+@AppIcon-Block-dashboard: 5;
+@AppIcon-Block-tabs: 6;
+@AppIcon-Block-rollover-tabs: 7;
+@AppIcon-Block-sticky: 8;
+@AppIcon-Block-flip-cards: 9;
+@AppIcon-Block-structure-block: 10;
+@AppIcon-Block-spoiler: 11;
 
-@AppIcon-Block-Element-Names: button column content divider spacer input text password hidden select checkbox radiobutton textarea wysiwyg multicheckbox captcha imagebrowser fileuploader datepicker timepicker;
+// /* Column 2 */
+@AppIcon-Block-Names-Column2: search login registration content element_content anchor googlemap languageswitcher rss breadcrumb breadcrumbs form_builder;
 
-@AppIcon-Block-Element-button: 42;
-@AppIcon-Block-Element-column: 2;
-@AppIcon-Block-Element-content: 7;
-@AppIcon-Block-Element-divider: 4;
-@AppIcon-Block-Element-spacer: 5;
-@AppIcon-Block-Element-input: 43;
-@AppIcon-Block-Element-text: 43;
-@AppIcon-Block-Element-password: 44;
-@AppIcon-Block-Element-hidden: 45;
-@AppIcon-Block-Element-select: 46;
-@AppIcon-Block-Element-checkbox: 47;
-@AppIcon-Block-Element-radiobutton: 48;
-@AppIcon-Block-Element-multicheckbox: 49;
-@AppIcon-Block-Element-textarea: 50;
-@AppIcon-Block-Element-wysiwyg: 51;
-@AppIcon-Block-Element-captcha: 52;
-@AppIcon-Block-Element-imagebrowser: 53;
-@AppIcon-Block-Element-fileuploader: 53;
-@AppIcon-Block-Element-timepicker: 54;
-@AppIcon-Block-Element-datepicker: 55;
+@AppIcon-Block-search: 0;
+@AppIcon-Block-login: 1;
+@AppIcon-Block-registration: 2;
+@AppIcon-Block-content: 3;
+@AppIcon-Block-element_content: 3;
+@AppIcon-Block-anchor: 4;
+@AppIcon-Block-googlemap: 5;
+@AppIcon-Block-languageswitcher: 6;
+@AppIcon-Block-rss: 7;
+@AppIcon-Block-breadcrumb: 8;
+@AppIcon-Block-breadcrumbs: 8;
+@AppIcon-Block-form_builder: 9;
+
+// /* Column 3 */
+@AppIcon-Block-Names-Column3: image imagegallery slider logocarousel videogallery logo;
+
+@AppIcon-Block-image: 0;
+@AppIcon-Block-imagegallery: 1;
+@AppIcon-Block-slider: 2;
+@AppIcon-Block-logocarousel: 2;
+@AppIcon-Block-videogallery: 3;
+@AppIcon-Block-logo: 4;
+
+// /* Column 4 */
+@AppIcon-Block-Names-Column4: blogcontent blogcategories blogroll blogblock blogarchive blogcalendar;
+
+@AppIcon-Block-blogcontent: 0;
+@AppIcon-Block-blogcategories: 1;
+@AppIcon-Block-blogroll: 2;
+@AppIcon-Block-blogblock: 3;
+@AppIcon-Block-blogarchive: 4;
+@AppIcon-Block-blogcalendar: 5;
+
+// /* Column 5 */
+@AppIcon-Block-Names-Column5: forum forum_build comment twitter socialmedia socialmedia_rating socialmedia_share social-aggregator memberdirectory memberwidget workinggroups faqmanager;
+
+@AppIcon-Block-forum: 0;
+@AppIcon-Block-forum_build: 1;
+@AppIcon-Block-comment: 2;
+@AppIcon-Block-twitter: 3;
+@AppIcon-Block-socialmedia: 4;
+@AppIcon-Block-socialmedia_rating: 4;
+@AppIcon-Block-socialmedia_share: 4;
+@AppIcon-Block-social-aggregator: 4;
+@AppIcon-Block-memberdirectory: 5;
+@AppIcon-Block-memberwidget: 6;
+@AppIcon-Block-workinggroups: 7;
+@AppIcon-Block-faqmanager: 8;
+
+// /* Column 6 */
+@AppIcon-Block-Names-Column6: events latestevents eventscalendar bigcalendar eventscategories calendarfilter;
+
+@AppIcon-Block-events: 0;
+@AppIcon-Block-latestevents: 1;
+@AppIcon-Block-eventscalendar: 2;
+@AppIcon-Block-bigcalendar: 3;
+@AppIcon-Block-eventscategories: 4;
+@AppIcon-Block-calendarfilter: 5;
+
+// /* Column 7 */
+@AppIcon-Block-Names-Column7: filegridlist filegridlistwidget listing-widget listing-pins listing-filter viewsubmission ecommerce-cart ecommerce-orders ecommerce-directory;
+
+@AppIcon-Block-filegridlist: 0;
+@AppIcon-Block-filegridlistwidget: 1;
+@AppIcon-Block-listing-widget: 2;
+@AppIcon-Block-listing-pins: 3;
+@AppIcon-Block-listing-filter: 4;
+@AppIcon-Block-viewsubmission: 5;
+@AppIcon-Block-ecommerce-cart: 6;
+@AppIcon-Block-ecommerce-orders: 7;
+@AppIcon-Block-ecommerce-directory: 8;
+
+// /* Column 8 */
+@AppIcon-Block-Names-Column8: button element_button element_input element_text element_password element_hidden element_select element_checkbox element_radiobutton element_multicheckbox element_timepicker element_datepicker;
+
+@AppIcon-Block-button: 0;
+@AppIcon-Block-element_button: 0;
+@AppIcon-Block-element_input: 1;
+@AppIcon-Block-element_text: 1;
+@AppIcon-Block-element_password: 2;
+@AppIcon-Block-element_hidden: 3;
+@AppIcon-Block-element_select: 4;
+@AppIcon-Block-element_checkbox: 5;
+@AppIcon-Block-element_radiobutton: 6;
+@AppIcon-Block-element_multicheckbox: 7;
+@AppIcon-Block-element_timepicker: 8;
+@AppIcon-Block-element_datepicker: 9;
+
+// /* Column 9 */
+@AppIcon-Block-Names-Column9: element_textarea element_wysiwyg element_captcha element_imagebrowser element_fileuploader element_multifield element_wizard;
+
+@AppIcon-Block-element_textarea: 0;
+@AppIcon-Block-element_wysiwyg: 1;
+@AppIcon-Block-element_captcha: 2;
+@AppIcon-Block-element_imagebrowser: 3;
+@AppIcon-Block-element_fileuploader: 3;
+@AppIcon-Block-element_multifield: 4;
+@AppIcon-Block-element_wizard: 5;
+
+// /* Column 10 */
+@AppIcon-Block-Names-Column10: d3 webexmeetings hubspot hubspot-blog hubspot-form klipfolio instagram flickr;
+
+@AppIcon-Block-d3: 0;
+@AppIcon-Block-webexmeetings: 1;
+@AppIcon-Block-hubspot: 2;
+@AppIcon-Block-hubspot-blog: 2;
+@AppIcon-Block-hubspot-form: 2;
+@AppIcon-Block-klipfolio: 3;
+@AppIcon-Block-instagram: 4;
+@AppIcon-Block-flickr: 5;
+
 
 // /* ************************************************ */
 // /* ******* VARIABLES ******* */
 // /* ************************************************ */
 
-@AppVersion: '3.31.9';
+@AppVersion: '3.32.0';
 
 // /* ******* PATH ******* */
 
@@ -2244,29 +2307,121 @@ html {
         //width: @AppBlock-Dummy-IconSize;
         height: @AppBlock-Dummy-IconSize;
         margin: 0 auto;
+        position: relative;
+        overflow: hidden;
         border-radius: @AppBlock-Dummy-IconBorderRadius;
         background-repeat: no-repeat;
-        background-image: url("@{AppPath-Images}/components/block/Dark.svg");
-        background-position: 50% @AppIcon-Block-default;
         .mx__transition(background-color, @CmUI-Transition-Duration);
+
+        &:before {
+            width: 90px;
+            height: 90px;
+            display: block;
+            margin: auto;
+            position: absolute;
+            background-image: url("@{AppPath-Images}/components/block/Dark.svg");
+            background-position: -24px -24px;
+            content: '';
+            .mx__position(0, 0, 0, 0);
+        }
     }
 
     .icon {
-        .for(@AppIcon-Block-Names); .-each(@name) {
-            &.module-@{name} {
+        .for(@AppIcon-Block-Names-Column1); .-each(@name) {
+            &.module-@{name}:before {
                 @var: "AppIcon-Block-@{name}";
                 @rule: @@var;
-                background-position: 50% (-@rule * @AppIcon-Block-Size);
+                background-position: -24px (-(@rule * (@AppIcon-Block-Size + @AppIcon-Block-Indent) + @AppIcon-Block-Indent));
             }
         }
     }
 
     .icon {
-        .for(@AppIcon-Block-Element-Names); .-each(@name) {
-            &.module-element_@{name} {
-                @var: "AppIcon-Block-Element-@{name}";
+        .for(@AppIcon-Block-Names-Column2); .-each(@name) {
+            &.module-@{name}:before {
+                @var: "AppIcon-Block-@{name}";
                 @rule: @@var;
-                background-position: 50% (-@rule * @AppIcon-Block-Size);
+                background-position: -138px (-(@rule * (@AppIcon-Block-Size + @AppIcon-Block-Indent) + @AppIcon-Block-Indent));
+            }
+        }
+    }
+
+    .icon {
+        .for(@AppIcon-Block-Names-Column3); .-each(@name) {
+            &.module-@{name}:before {
+                @var: "AppIcon-Block-@{name}";
+                @rule: @@var;
+                background-position: -252px (-(@rule * (@AppIcon-Block-Size + @AppIcon-Block-Indent) + @AppIcon-Block-Indent));
+            }
+        }
+    }
+
+    .icon {
+        .for(@AppIcon-Block-Names-Column4); .-each(@name) {
+            &.module-@{name}:before {
+                @var: "AppIcon-Block-@{name}";
+                @rule: @@var;
+                background-position: -366px (-(@rule * (@AppIcon-Block-Size + @AppIcon-Block-Indent) + @AppIcon-Block-Indent));
+            }
+        }
+    }
+
+    .icon {
+        .for(@AppIcon-Block-Names-Column5); .-each(@name) {
+            &.module-@{name}:before {
+                @var: "AppIcon-Block-@{name}";
+                @rule: @@var;
+                background-position: -480px (-(@rule * (@AppIcon-Block-Size + @AppIcon-Block-Indent) + @AppIcon-Block-Indent));
+            }
+        }
+    }
+
+    .icon {
+        .for(@AppIcon-Block-Names-Column6); .-each(@name) {
+            &.module-@{name}:before {
+                @var: "AppIcon-Block-@{name}";
+                @rule: @@var;
+                background-position: -594px (-(@rule * (@AppIcon-Block-Size + @AppIcon-Block-Indent) + @AppIcon-Block-Indent));
+            }
+        }
+    }
+
+    .icon {
+        .for(@AppIcon-Block-Names-Column7); .-each(@name) {
+            &.module-@{name}:before {
+                @var: "AppIcon-Block-@{name}";
+                @rule: @@var;
+                background-position: -708px (-(@rule * (@AppIcon-Block-Size + @AppIcon-Block-Indent) + @AppIcon-Block-Indent));
+            }
+        }
+    }
+
+    .icon {
+        .for(@AppIcon-Block-Names-Column8); .-each(@name) {
+            &.module-@{name}:before {
+                @var: "AppIcon-Block-@{name}";
+                @rule: @@var;
+                background-position: -822px (-(@rule * (@AppIcon-Block-Size + @AppIcon-Block-Indent) + @AppIcon-Block-Indent));
+            }
+        }
+    }
+
+    .icon {
+        .for(@AppIcon-Block-Names-Column9); .-each(@name) {
+            &.module-@{name}:before {
+                @var: "AppIcon-Block-@{name}";
+                @rule: @@var;
+                background-position: -936px (-(@rule * (@AppIcon-Block-Size + @AppIcon-Block-Indent) + @AppIcon-Block-Indent));
+            }
+        }
+    }
+
+    .icon {
+        .for(@AppIcon-Block-Names-Column10); .-each(@name) {
+            &.module-@{name}:before {
+                @var: "AppIcon-Block-@{name}";
+                @rule: @@var;
+                background-position: -1050px (-(@rule * (@AppIcon-Block-Size + @AppIcon-Block-Indent) + @AppIcon-Block-Indent));
             }
         }
     }

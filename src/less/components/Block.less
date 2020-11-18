@@ -189,29 +189,121 @@
         //width: @AppBlock-Dummy-IconSize;
         height: @AppBlock-Dummy-IconSize;
         margin: 0 auto;
+        position: relative;
+        overflow: hidden;
         border-radius: @AppBlock-Dummy-IconBorderRadius;
         background-repeat: no-repeat;
-        background-image: url("@{AppPath-Images}/components/block/Dark.svg");
-        background-position: 50% @AppIcon-Block-default;
         .mx__transition(background-color, @CmUI-Transition-Duration);
+
+        &:before {
+            width: 90px;
+            height: 90px;
+            display: block;
+            margin: auto;
+            position: absolute;
+            background-image: url("@{AppPath-Images}/components/block/Dark.svg");
+            background-position: -24px -24px;
+            content: '';
+            .mx__position(0, 0, 0, 0);
+        }
     }
 
     .icon {
-        .for(@AppIcon-Block-Names); .-each(@name) {
-            &.module-@{name} {
+        .for(@AppIcon-Block-Names-Column1); .-each(@name) {
+            &.module-@{name}:before {
                 @var: "AppIcon-Block-@{name}";
                 @rule: @@var;
-                background-position: 50% (-@rule * @AppIcon-Block-Size);
+                background-position: -24px (-(@rule * (@AppIcon-Block-Size + @AppIcon-Block-Indent) + @AppIcon-Block-Indent));
             }
         }
     }
 
     .icon {
-        .for(@AppIcon-Block-Element-Names); .-each(@name) {
-            &.module-element_@{name} {
-                @var: "AppIcon-Block-Element-@{name}";
+        .for(@AppIcon-Block-Names-Column2); .-each(@name) {
+            &.module-@{name}:before {
+                @var: "AppIcon-Block-@{name}";
                 @rule: @@var;
-                background-position: 50% (-@rule * @AppIcon-Block-Size);
+                background-position: -138px (-(@rule * (@AppIcon-Block-Size + @AppIcon-Block-Indent) + @AppIcon-Block-Indent));
+            }
+        }
+    }
+
+    .icon {
+        .for(@AppIcon-Block-Names-Column3); .-each(@name) {
+            &.module-@{name}:before {
+                @var: "AppIcon-Block-@{name}";
+                @rule: @@var;
+                background-position: -252px (-(@rule * (@AppIcon-Block-Size + @AppIcon-Block-Indent) + @AppIcon-Block-Indent));
+            }
+        }
+    }
+
+    .icon {
+        .for(@AppIcon-Block-Names-Column4); .-each(@name) {
+            &.module-@{name}:before {
+                @var: "AppIcon-Block-@{name}";
+                @rule: @@var;
+                background-position: -366px (-(@rule * (@AppIcon-Block-Size + @AppIcon-Block-Indent) + @AppIcon-Block-Indent));
+            }
+        }
+    }
+
+    .icon {
+        .for(@AppIcon-Block-Names-Column5); .-each(@name) {
+            &.module-@{name}:before {
+                @var: "AppIcon-Block-@{name}";
+                @rule: @@var;
+                background-position: -480px (-(@rule * (@AppIcon-Block-Size + @AppIcon-Block-Indent) + @AppIcon-Block-Indent));
+            }
+        }
+    }
+
+    .icon {
+        .for(@AppIcon-Block-Names-Column6); .-each(@name) {
+            &.module-@{name}:before {
+                @var: "AppIcon-Block-@{name}";
+                @rule: @@var;
+                background-position: -594px (-(@rule * (@AppIcon-Block-Size + @AppIcon-Block-Indent) + @AppIcon-Block-Indent));
+            }
+        }
+    }
+
+    .icon {
+        .for(@AppIcon-Block-Names-Column7); .-each(@name) {
+            &.module-@{name}:before {
+                @var: "AppIcon-Block-@{name}";
+                @rule: @@var;
+                background-position: -708px (-(@rule * (@AppIcon-Block-Size + @AppIcon-Block-Indent) + @AppIcon-Block-Indent));
+            }
+        }
+    }
+
+    .icon {
+        .for(@AppIcon-Block-Names-Column8); .-each(@name) {
+            &.module-@{name}:before {
+                @var: "AppIcon-Block-@{name}";
+                @rule: @@var;
+                background-position: -822px (-(@rule * (@AppIcon-Block-Size + @AppIcon-Block-Indent) + @AppIcon-Block-Indent));
+            }
+        }
+    }
+
+    .icon {
+        .for(@AppIcon-Block-Names-Column9); .-each(@name) {
+            &.module-@{name}:before {
+                @var: "AppIcon-Block-@{name}";
+                @rule: @@var;
+                background-position: -936px (-(@rule * (@AppIcon-Block-Size + @AppIcon-Block-Indent) + @AppIcon-Block-Indent));
+            }
+        }
+    }
+
+    .icon {
+        .for(@AppIcon-Block-Names-Column10); .-each(@name) {
+            &.module-@{name}:before {
+                @var: "AppIcon-Block-@{name}";
+                @rule: @@var;
+                background-position: -1050px (-(@rule * (@AppIcon-Block-Size + @AppIcon-Block-Indent) + @AppIcon-Block-Indent));
             }
         }
     }
