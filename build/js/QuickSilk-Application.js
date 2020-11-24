@@ -1,11 +1,11 @@
-/*! ************ QuickSilk-Application v3.32.1 (2020-11-19 21:34) ************ */
+/*! ************ QuickSilk-Application v3.33.0 (2020-11-24 21:59) ************ */
 
 // /* ************************************************ */
 // /* ******* QUICKSILK: COMMON ******* */
 // /* ************************************************ */
 
 var App = {
-    '_version' : '3.32.1',
+    '_version' : '3.33.0',
     '_assetsUrl' : [window.location.protocol, window.location.hostname].join('//'),
     'Elements': {},
     'Nodes' : {},
@@ -10396,6 +10396,54 @@ cm.getConstructor('Mod.ElementRadioButton', function(classConstructor, className
         });
     };
 });
+cm.define('Mod.ElementReCaptcha', {
+    'extend' : 'App.AbstractModuleElement',
+    'params' : {
+        'memorable' : false,
+        'validate' : false,
+        'sitekey' : null
+    }
+},
+function(params){
+    var that = this;
+    // Call parent class construct
+    App.AbstractModuleElement.apply(that, arguments);
+});
+
+cm.getConstructor('Mod.ElementReCaptcha', function(classConstructor, className, classProto, classInherit){
+    classProto.renderViewModel = function(){
+        var that = this;
+        // Call parent method
+        classInherit.prototype.renderViewModel.apply(that, arguments);
+        // Init recaptcha
+        that.nodes['input'] = that.nodes['field'].querySelector('.g-recaptcha');
+        that.params['sitekey'] = that.nodes['input'].getAttribute('data-sitekey');
+        if(window.grecaptcha){
+            that.components['captcha'] = window.grecaptcha;
+            that.components['captcha'].ready(function(){
+                try{
+                    that._widgetId = that.components['captcha'].render(that.nodes['input'], {'sitekey': that.params['sitekey']});
+                }catch(e){
+                    cm.errorLog({
+                        'name' : that._name['full'],
+                        'type' : 'attention',
+                        'message' : e
+                    });
+                }
+            });
+        }
+    };
+
+    classProto.get = function(){
+        var that = this,
+            value;
+        if(that.components['captcha']){
+            value = that.components['captcha'].getResponse(that._widgetId);
+        }
+        return value;
+    };
+});
+
 cm.define('Mod.ElementSelect', {
     'extend' : 'App.AbstractModuleElement',
     'params' : {
