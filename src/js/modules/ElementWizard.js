@@ -7,6 +7,10 @@ cm.define('Mod.ElementWizard', {
         'onValidate'
     ],
     'params' : {
+        'scrollNode' : 'document.body',
+        'scrollDuration' : 'cm._config.animDurationLong',
+        'topMenuName' : 'app-topmenu',
+        'templateName' : 'app-template',
         'duration' : 'cm._config.animDuration',
         'delay' : 'cm._config.hideDelay',
         'active' : null,
@@ -24,9 +28,7 @@ function(params){
     App.AbstractModule.apply(that, arguments);
 });
 
-cm.getConstructor('Mod.ElementWizard', function(classConstructor, className, classProto){
-    var _inherit = classProto._inherit;
-
+cm.getConstructor('Mod.ElementWizard', function(classConstructor, className, classProto, classInherit){
     classProto.onConstructStart = function(){
         var that = this;
         // Variables
@@ -63,6 +65,18 @@ cm.getConstructor('Mod.ElementWizard', function(classConstructor, className, cla
 
     classProto.renderViewModel = function(){
         var that = this;
+        // Init scroll
+        that.components['scroll'] = new cm.Animation(that.params['scrollNode']);
+        // Get TopMenu
+        new cm.Finder('App.TopMenu', that.params['topMenuName'], null, function(classObject){
+            that.components['topMenu'] = classObject;
+            that.topMenuParams = that.components['topMenu'].getParams();
+        });
+        // Get Template
+        new cm.Finder('App.Template', that.params['templateName'], null, function(classObject){
+            that.components['template'] = classObject;
+            that.templateParams = that.components['template'].getParams();
+        });
         // Process Tabset
         that.processTabset();
         that.processTabs();
@@ -204,6 +218,7 @@ cm.getConstructor('Mod.ElementWizard', function(classConstructor, className, cla
         if(that.validateTab() && that.currentTab['index'] > 0){
             var index = that.currentTab['index'] - 1;
             that.setTabByIndex(index);
+            that.scrollToTop();
         }
     };
 
@@ -213,6 +228,7 @@ cm.getConstructor('Mod.ElementWizard', function(classConstructor, className, cla
         if(that.validateTab() && that.currentTab['index'] < that.tabsCount - 1){
             var index = that.currentTab['index'] + 1;
             that.setTabByIndex(index);
+            that.scrollToTop();
         }
     };
 
@@ -263,6 +279,7 @@ cm.getConstructor('Mod.ElementWizard', function(classConstructor, className, cla
         cm.forEach(that.tabs, function(item){
             if(isValid && !that.validateTab(item)){
                 that.setTabByIndex(item['index']);
+                that.scrollToTop();
                 isValid = false;
             }
         });
@@ -270,5 +287,30 @@ cm.getConstructor('Mod.ElementWizard', function(classConstructor, className, cla
             'valid' : isValid
         });
         return isValid;
+    };
+
+    classProto.scrollToTop = function(){
+        var that = this,
+            rect = cm.getOffsetRect(that.nodes['container']),
+            page = cm.getRect(window),
+            expectedTop = rect.offset.top - 16,
+            inRange;
+        // Add top menu gape
+        if(that.components['topMenu']){
+            page.top += that.components['topMenu'].getDimensions('height');
+            expectedTop -= that.components['topMenu'].getDimensions('height');
+        }
+        // Add template's fixed header gape
+        if(that.components['template'] && that.templateParams['header']['fixed']){
+            page.top += that.components['template'].getHeaderDimensions('height');
+            expectedTop -= that.components['template'].getHeaderDimensions('height');
+        }
+        // Check range
+        inRange = rect.top > page.top && rect.top < page.bottom;
+        expectedTop = Math.max(expectedTop, 0);
+        if(!inRange){
+            that.components['scroll'].go({'style' : {'docScrollTop' : expectedTop}, 'duration' : that.params['scrollDuration'], 'anim' : 'smooth'});
+        }
+        return that;
     };
 });
