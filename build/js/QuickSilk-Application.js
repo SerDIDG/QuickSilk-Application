@@ -1,11 +1,11 @@
-/*! ************ QuickSilk-Application v3.33.2 (2021-01-11 20:12) ************ */
+/*! ************ QuickSilk-Application v3.33.3 (2021-04-06 21:05) ************ */
 
 // /* ************************************************ */
 // /* ******* QUICKSILK: COMMON ******* */
 // /* ************************************************ */
 
 var App = {
-    '_version' : '3.33.2',
+    '_version' : '3.33.3',
     '_assetsUrl' : [window.location.protocol, window.location.hostname].join('//'),
     'Elements': {},
     'Nodes' : {},
@@ -10418,8 +10418,24 @@ cm.getConstructor('Mod.ElementReCaptcha', function(classConstructor, className, 
         // Init recaptcha
         that.nodes['input'] = that.nodes['field'].querySelector('.g-recaptcha');
         that.params['sitekey'] = that.nodes['input'].getAttribute('data-sitekey');
-        if(window.grecaptcha){
-            that.components['captcha'] = window.grecaptcha;
+        if('grecaptcha' in window){
+            that.setCaptchaComponent(window.grecaptcha);
+        }
+    };
+
+    classProto.get = function(){
+        var that = this,
+            value;
+        if(that.components['captcha']){
+            value = that.components['captcha'].getResponse(that._widgetId);
+        }
+        return value;
+    };
+
+    classProto.setCaptchaComponent = function(recaptcha){
+        var that = this;
+        if(typeof recaptcha !== 'undefined'){
+            that.components['captcha'] = recaptcha;
             that.components['captcha'].ready(function(){
                 try{
                     that._widgetId = that.components['captcha'].render(that.nodes['input'], {'sitekey': that.params['sitekey']});
@@ -10432,15 +10448,7 @@ cm.getConstructor('Mod.ElementReCaptcha', function(classConstructor, className, 
                 }
             });
         }
-    };
-
-    classProto.get = function(){
-        var that = this,
-            value;
-        if(that.components['captcha']){
-            value = that.components['captcha'].getResponse(that._widgetId);
-        }
-        return value;
+        return that;
     };
 });
 
