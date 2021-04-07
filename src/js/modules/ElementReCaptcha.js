@@ -13,6 +13,14 @@ function(params){
 });
 
 cm.getConstructor('Mod.ElementReCaptcha', function(classConstructor, className, classProto, classInherit){
+    classProto.construct = function(){
+        var that = this;
+        // Variables
+        that.value = '';
+        // Call parent method
+        classInherit.prototype.construct.apply(that, arguments);
+    };
+
     classProto.renderViewModel = function(){
         var that = this;
         // Call parent method
@@ -20,9 +28,17 @@ cm.getConstructor('Mod.ElementReCaptcha', function(classConstructor, className, 
         // Init recaptcha
         that.nodes['input'] = that.nodes['field'].querySelector('.g-recaptcha');
         that.params['sitekey'] = that.nodes['input'].getAttribute('data-sitekey');
+        /*
         if('grecaptcha' in window){
             that.setCaptchaComponent(window.grecaptcha);
         }
+        */
+    };
+
+    classProto.set = function(value){
+        var that = this;
+        that.value = value;
+        return that;
     };
 
     classProto.get = function(){
@@ -30,6 +46,8 @@ cm.getConstructor('Mod.ElementReCaptcha', function(classConstructor, className, 
             value;
         if(that.components['captcha']){
             value = that.components['captcha'].getResponse(that._widgetId);
+        }else{
+            value = that.value;
         }
         return value;
     };
