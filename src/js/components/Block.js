@@ -224,7 +224,8 @@ cm.getConstructor('App.Block', function(classConstructor, className, classProto,
         var that = this;
         cm.removeClass(that.nodes['block']['container'], 'cm-animate');
         cm.removeClass(that.nodes['block']['container'], ['pre', that.params['effect']].join('-'));
-        cm.removeClass(that.nodes['block']['container'], ['animated', that.params['effect']].join(' '));
+        cm.removeClass(that.nodes['block']['container'], 'animate__animated');
+        cm.removeClass(that.nodes['block']['container'], ['animate', that.params['effect']].join('__'));
         return that;
     };
 
@@ -257,13 +258,15 @@ cm.getConstructor('App.Block', function(classConstructor, className, classProto,
     classProto.animRestore = function(){
         var that = this;
         that.isProcessed = false;
-        cm.removeClass(that.nodes['block']['container'], ['animated', that.params['effect']].join(' '));
+        cm.removeClass(that.nodes['block']['container'], 'animate__animated');
+        cm.removeClass(that.nodes['block']['container'], ['animate', that.params['effect']].join('__'));
     };
 
     classProto.animSet = function(){
         var that = this;
         that.isProcessed = true;
-        cm.addClass(that.nodes['block']['container'], ['animated', that.params['effect']].join(' '));
+        cm.addClass(that.nodes['block']['container'], 'animate__animated');
+        cm.addClass(that.nodes['block']['container'], ['animate', that.params['effect']].join('__'));
     };
 
     /*** ZONES ***/

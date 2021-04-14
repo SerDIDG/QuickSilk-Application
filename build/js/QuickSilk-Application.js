@@ -1,11 +1,11 @@
-/*! ************ QuickSilk-Application v3.33.4 (2021-04-07 21:37) ************ */
+/*! ************ QuickSilk-Application v3.33.5 (2021-04-13 20:31) ************ */
 
 // /* ************************************************ */
 // /* ******* QUICKSILK: COMMON ******* */
 // /* ************************************************ */
 
 var App = {
-    '_version' : '3.33.4',
+    '_version' : '3.33.5',
     '_assetsUrl' : [window.location.protocol, window.location.hostname].join('//'),
     'Elements': {},
     'Nodes' : {},
@@ -874,7 +874,8 @@ cm.getConstructor('App.Block', function(classConstructor, className, classProto,
         var that = this;
         cm.removeClass(that.nodes['block']['container'], 'cm-animate');
         cm.removeClass(that.nodes['block']['container'], ['pre', that.params['effect']].join('-'));
-        cm.removeClass(that.nodes['block']['container'], ['animated', that.params['effect']].join(' '));
+        cm.removeClass(that.nodes['block']['container'], 'animate__animated');
+        cm.removeClass(that.nodes['block']['container'], ['animate', that.params['effect']].join('__'));
         return that;
     };
 
@@ -907,13 +908,15 @@ cm.getConstructor('App.Block', function(classConstructor, className, classProto,
     classProto.animRestore = function(){
         var that = this;
         that.isProcessed = false;
-        cm.removeClass(that.nodes['block']['container'], ['animated', that.params['effect']].join(' '));
+        cm.removeClass(that.nodes['block']['container'], 'animate__animated');
+        cm.removeClass(that.nodes['block']['container'], ['animate', that.params['effect']].join('__'));
     };
 
     classProto.animSet = function(){
         var that = this;
         that.isProcessed = true;
-        cm.addClass(that.nodes['block']['container'], ['animated', that.params['effect']].join(' '));
+        cm.addClass(that.nodes['block']['container'], 'animate__animated');
+        cm.addClass(that.nodes['block']['container'], ['animate', that.params['effect']].join('__'));
     };
 
     /*** ZONES ***/
@@ -1128,6 +1131,7 @@ cm.getConstructor('App.Block', function(classConstructor, className, classProto,
         return that.pageDimensions;
     };
 });
+
 cm.define('App.Chart', {
     'extend' : 'Com.AbstractController',
     'params' : {
