@@ -119,11 +119,11 @@ cm.getConstructor('App.FontInput', function(classConstructor, className, classPr
         var that = this;
         if(config['line-height']){
             if(config['line-height'] !== 'normal'){
-                config['line-height'] = parseInt(config['line-height']);
+                config['line-height'] = parseFloat(config['line-height']);
             }
         }
         if(config['font-size']){
-            config['font-size'] = parseInt(config['font-size']);
+            config['font-size'] = parseFloat(config['font-size']);
         }
         if(config['font-weight']){
             if(that.params['styleBinds']['font-weight'][config['font-weight']]){
@@ -284,7 +284,7 @@ cm.getConstructor('App.FontInput', function(classConstructor, className, classPr
         var that = this;
         // Structure
         that.nodes['tooltip']['group2'].appendChild(
-            cm.node('li', {'class' : 'is-select medium'},
+            cm.node('li', {'class' : 'is-select size-default'},
                 that.nodes['tooltip']['font-family'] = cm.node('select', {'title' : that.lang('Font')})
             )
         );
@@ -322,7 +322,7 @@ cm.getConstructor('App.FontInput', function(classConstructor, className, classPr
         });
         // Select
         that.nodes['tooltip']['group2'].appendChild(
-            cm.node('li', {'class' : 'is-select medium'},
+            cm.node('li', {'class' : 'is-select size-medium'},
                 that.nodes['tooltip']['font-weight'] = cm.node('select', {'title' : that.lang('Weight')})
             )
         );
@@ -378,7 +378,7 @@ cm.getConstructor('App.FontInput', function(classConstructor, className, classPr
         var that = this;
         // Select
         that.nodes['tooltip']['group2'].appendChild(
-            cm.node('li', {'class' : 'is-select x-small'},
+            cm.node('li', {'class' : 'is-select size-xsmall'},
                 that.nodes['tooltip']['font-size'] = cm.node('select', {'title' : that.lang('Size')})
             )
         );
@@ -406,7 +406,7 @@ cm.getConstructor('App.FontInput', function(classConstructor, className, classPr
         var that = this;
         // Select
         that.nodes['tooltip']['group2'].appendChild(
-            cm.node('li', {'class' : 'is-select x-small'},
+            cm.node('li', {'class' : 'is-select size-xsmall'},
                 that.nodes['tooltip']['line-height'] = cm.node('select', {'title' : that.lang('Leading')})
             )
         );
