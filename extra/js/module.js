@@ -1,19 +1,15 @@
 cm.define('Module.Sample', {
-    'extend' : 'App.AbstractModule',
-    'params' : {
-        'renderStructure' : false,
-        'embedStructureOnRender' : false
+    'extend': 'App.AbstractModule',
+    'params': {
+        'renderStructure': false,
+        'embedStructureOnRender': false
     }
 },
-function(params){
-    var that = this;
-    // Call parent class construct
-    App.AbstractModule.apply(that, arguments);
+function(){
+    App.AbstractModule.apply(this, arguments);
 });
 
-cm.getConstructor('Module.Sample', function(classConstructor, className, classProto){
-    var _inherit = classProto._inherit;
-
+cm.getConstructor('Module.Sample', function(classConstructor, className, classProto, classInherit){
     classProto.construct = function(){
         var that = this;
         // Variables
@@ -21,10 +17,10 @@ cm.getConstructor('Module.Sample', function(classConstructor, className, classPr
         that.onDestructProcessHandler = that.onDestructProcess.bind(that);
         that.onRedrawHandler = that.onRedraw.bind(that);
         // Add events
-        that.addEvent('onDestructProcess', that.destructProcessHandler);
+        that.addEvent('onDestructProcess', that.onDestructProcessHandler);
         that.addEvent('onRedraw', that.onRedrawHandler);
         // Call parent method
-        _inherit.prototype.construct.apply(that, arguments);
+        classInherit.prototype.construct.apply(that, arguments);
         return that;
     };
 
@@ -43,7 +39,7 @@ cm.getConstructor('Module.Sample', function(classConstructor, className, classPr
     classProto.renderViewModel = function(){
         var that = this;
         // Call parent method - renderViewModel
-        _inherit.prototype.renderViewModel.apply(that, arguments);
+        classInherit.prototype.renderViewModel.apply(that, arguments);
         return that;
     };
 });
