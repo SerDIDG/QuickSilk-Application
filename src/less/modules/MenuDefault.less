@@ -312,6 +312,9 @@
 }
 
 .app-mod__menu--has-separator (@separator-width, @separator-height, @separator-background, @item-indent) {
+    @right_calc: (-(@item-indent + @separator-width) / 2);
+    @right: floor(@right_calc);
+
     > ul {
         > li {
             &:after {
@@ -338,7 +341,7 @@
                 }
 
                 &:after {
-                    right: floor(-(@item-indent + @separator-width) / 2);
+                    right: @right;
                 }
             }
         }
@@ -354,7 +357,7 @@
                 }
 
                 &:after {
-                    left: floor(-(@item-indent + @separator-width) / 2);
+                    left: @right;
                 }
             }
         }

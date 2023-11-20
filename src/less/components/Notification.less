@@ -1,8 +1,9 @@
 /* ******* COMPONENTS: NOTIFICATION ******* */
 
 .app__notification {
-    @paddingY: max(ceil((@AppNotification-Height - @CmFont-Base-LineHeight) / 2), 0px);
-    @heightInner: @AppNotification-Height - @paddingY * 2;
+    @paddingY_calc: ((@AppNotification-Height - @CmFont-Base-LineHeight) / 2);
+    @paddingY: max(ceil(@paddingY_calc), 0px);
+    @heightInner: (@AppNotification-Height - @paddingY * 2);
 
     position: fixed;
     z-index: 150;
@@ -17,7 +18,8 @@
         position: relative;
 
         > .icon {
-            @top: max(ceil((@AppNotification-Height - @CmSize-Medium) / 2), 0px);
+            @top_calc: ((@AppNotification-Height - @CmSize-Medium) / 2);
+            @top: max(ceil(@top_calc), 0px);
 
             .cm__size__medium;
             position: absolute;

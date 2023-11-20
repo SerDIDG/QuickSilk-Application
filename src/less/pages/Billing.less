@@ -8,7 +8,8 @@
     }
 
     label {
-        @padding: round((@CmForm-FieldHeight - @CmFont-Base-LineHeight) / 2);
+        @padding_calc: ((@CmForm-FieldHeight - @CmFont-Base-LineHeight) / 2);
+        @padding: round(@padding_calc);
         padding: 0;
         margin: 0 0 0 @CmIndent-XSmall;
         line-height: @CmForm-FieldHeight;
@@ -18,7 +19,8 @@
 
     input[type="radio"],
     input[type="checkbox"] {
-        @margin: floor((@CmForm-FieldHeight - 13px) / 2);
+        @margin_calc: ((@CmForm-FieldHeight - 13px) / 2);
+        @margin: floor(@margin_calc);
 
         margin: @margin 0 @margin 0;
         padding: 0;

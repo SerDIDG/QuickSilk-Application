@@ -2,6 +2,7 @@
     --pt-buttons--indent: @CmForm-ButtonsIndent;
 
     --pt-field--title-width: @CmForm-FieldTitleWidth;
+    --pt-field--title-indent: @CmForm-FieldIndent;
 }
 
 
@@ -38,6 +39,7 @@
 // /* ******* ANIMATED ******* */
 
 @CmIconIA-Spinner-BorderSize: 3px;
+@CmIconIA-Spinner-BorderSizeLarge: 6px;
 @CmIconIA-Spinner-DefaultBackground: @CmColor-Secondary-LightActive;
 @CmIconIA-Spinner-ActiveBackground: @CmColor-Primary-DarkDefault;
 
@@ -45,7 +47,7 @@
 // /* ******* MAGPIE UI: VARIABLES ******* */
 // /* ************************************************ */
 
-@CmVersion: '3.42.0';
+@CmVersion: '3.57.0';
 @CmProtocol: '';
 
 // /* ******* PATH ******* */
@@ -125,7 +127,9 @@
 @CmUI-TooltipWidth: 320px;
 @CmUI-ColumnIndent: @CmIndent-Medium;
 @CmUI-BoxIndent: @CmIndent-Medium;
+
 @CmUI-GoogleFont: "Open+Sans";
+@CmUI-GoogleFont-Enable: true;
 @CmUI-GoogleFont-Weight: "100,300,400,600,700,800";
 
 // /* ************************************************ */
@@ -569,6 +573,8 @@
 @PtImage-Padding: @CmIndent-XXSmall;
 @PtImage-TitlePaddingTop: @CmIndent-XXXSmall;
 @PtImage-ButtonsIndent: @PtImage-Padding;
+@PtImage-ToolsMargin:  @CmIndent-XXXSmall;
+@PtImage-ToolsGap: @CmIndent-XXSmall;
 
 // /* ******* RANGE ******* */
 
@@ -752,24 +758,6 @@
 
 @LtComment-InnerIndent: @CmIndent-XXXSmall;
 
-// /* ******* FORUM ******* */
-
-@LtForum-AdaptiveFrom: @CmUI-AdaptiveFrom;
-@LtForum-PostBackground: @CmColor-Secondary-LightHighlight;
-@LtForum-PostBackgroundFeatured: @CmColor-Primary-LightHighlight;
-@LtForum-PostTitleBackground: @CmColor-Secondary-LightActive;
-@LtForum-PostLeftColumnSize: 150px + (@CmIndent-XSmall * 2);
-
-// /* ******* PROFILE ******* */
-
-@LtProfile-LeftColumn: 150px + (@CmIndent-XSmall * 2);
-
-// /* ******* POST ******* */
-
-@LtPost-Indent: @CmIndent-Large;
-@LtPost-Image-Size: 172px;
-@LtPost-Image-Indent: @CmIndent-Small;
-
 // /* ************************************************ */
 // /* ******* COMPONENTS ******* */
 // /* ************************************************ */
@@ -851,6 +839,12 @@
 
 @ComScaleTools-Item-Size: 38px;
 @ComScaleTools-Item-Indent: @CmIndent-XXXSmall;
+
+// /* ******* RANGE ******* */
+
+@ComRange-Bar-Height: @CmSize-XXSmall;
+@ComRange-Bar-Color: @CmColor-Secondary-LightActive;
+@ComRange-Range-Color: @CmColor-Primary-LightActiveHover;
 
 // /* ******* DATEPICKER ******* */
 
@@ -985,7 +979,8 @@
 
 @ComSelect-ListCount: 7;
 @ComSelect-MultiListCount: 5;
-@ComSelect-MaxHeight: @ComSelect-MultiListCount * (@CmFont-Base-LineHeight + @PtListingItems-Indent + @PtListingItems-PaddingY * 2) - @PtListingItems-Indent;
+@ComSelect-MultiListHeight: (@CmFont-Base-LineHeight + @PtListingItems-Indent + @PtListingItems-PaddingY * 2);
+@ComSelect-MaxHeight: @ComSelect-MultiListCount * @ComSelect-MultiListHeight - @PtListingItems-Indent;
 
 // /* ******* AUTOCOMPLETE ******* */
 
@@ -1013,6 +1008,11 @@
 
 @ComGalleryLayout-ArrowWidth: @CmIndent-Medium;
 @ComGalleryLayout-SizesCount: 12;
+
+// /* ******* GALLERY PREVIEW ******* */
+
+@ComGalleryPreview-SidebarWidth: 400px;
+@ComGalleryPreview-SidebarPadding: @CmIndent-Medium;
 
 // /* ******* SLIDER ******* */
 
@@ -1220,7 +1220,7 @@
 // /* ******* VARIABLES ******* */
 // /* ************************************************ */
 
-@AppVersion: '3.35.0';
+@AppVersion: '3.36.0';
 
 // /* ******* PATH ******* */
 
@@ -1359,6 +1359,24 @@
 // /* ************************************************ */
 // /* ******* LAYOUTS ******* */
 // /* ************************************************ */
+
+// /* ******* FORUM ******* */
+
+@LtForum-AdaptiveFrom: @CmUI-AdaptiveFrom;
+@LtForum-PostBackground: @CmColor-Secondary-LightHighlight;
+@LtForum-PostBackgroundFeatured: @CmColor-Primary-LightHighlight;
+@LtForum-PostTitleBackground: @CmColor-Secondary-LightActive;
+@LtForum-PostLeftColumnSize: 150px + (@CmIndent-XSmall * 2);
+
+// /* ******* PROFILE ******* */
+
+@LtProfile-LeftColumn: 150px + (@CmIndent-XSmall * 2);
+
+// /* ******* POST ******* */
+
+@LtPost-Indent: @CmIndent-Large;
+@LtPost-Image-Size: 172px;
+@LtPost-Image-Indent: @CmIndent-Small;
 
 // /* ******* TEMPLATES ******* */
 

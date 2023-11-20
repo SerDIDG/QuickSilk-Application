@@ -1,25 +1,30 @@
 {
   "name": "QuickSilk-Application",
-  "version": "3.35.0",
+  "version": "3.36.0",
   "description": "QuickSilk Application UI Library",
-  "license": "CC-BY-NC-SA-4.0",
+  "license": "UNLICENSED",
+  "scripts": {
+    "build": "grunt",
+    "optimize": "grunt optimize",
+    "watch": "grunt watcher"
+  },
   "dependencies": {
-    "chart.js": "^2.4.0",
-    "grunt-cli": "^0.1.13"
+    "grunt-cli": "^1.4.3"
   },
   "devDependencies": {
-    "grunt": "^0.4.5",
-    "grunt-contrib-clean": "^0.6.0",
-    "grunt-contrib-concat": "~0.5.1",
-    "grunt-contrib-copy": "^0.8.2",
-    "grunt-contrib-imagemin": "^1.0.0",
-    "grunt-contrib-uglify": "~0.5.0",
-    "grunt-contrib-watch": "~0.6.0",
+    "@lodder/time-grunt": "^4.0.0",
+    "grunt": "^1.6.1",
+    "grunt-contrib-clean": "^2.0.0",
+    "grunt-contrib-concat": "~2.1.0",
+    "grunt-contrib-copy": "^1.0.0",
+    "grunt-contrib-imagemin": "^4.0.0",
+    "grunt-contrib-uglify": "^5.0.0",
+    "grunt-contrib-watch": "~1.1.0",
     "grunt-less-imports": "^1.1.0",
-    "grunt-lessvars": "^0.3.0",
-    "grunt-replace": "^1.0.1",
-    "grunt-svg-css": "^0.2.8",
-    "load-grunt-tasks": "~3.3.0",
-    "time-grunt": "^1.2.2"
+    "grunt-lessvars": "^0.3.1",
+    "grunt-replace": "^2.0.1",
+    "grunt-svg-css": "^0.2.9",
+    "load-grunt-tasks": "^5.1.0",
+    "chart.js": "^2.4.0"
   }
 }
