@@ -10,10 +10,10 @@ cm.define('Module.WorkingArea', {
     'events' : [
         'onRenderStart',
         'onRender',
-        'enableEditing',
-        'disableEditing',
-        'enableEditable',
-        'disableEditable'
+        'onEnableEditing',
+        'onEnableEditable',
+        'onDisableEditing',
+        'onDisableEditable',
     ],
     'params' : {
         'node' : cm.node('div'),
@@ -107,8 +107,8 @@ function(params){
         if(!cm.isBoolean(that.isEditing) || !that.isEditing){
             that.isEditing = true;
             editState();
-            that.triggerEvent('enableEditing');
-            that.triggerEvent('enableEditable');
+            that.triggerEvent('onEnableEditing');
+            that.triggerEvent('onEnableEditable');
         }
         return that;
     };
@@ -117,8 +117,8 @@ function(params){
         if(!cm.isBoolean(that.isEditing) || that.isEditing){
             that.isEditing = false;
             defaultState();
-            that.triggerEvent('disableEditing');
-            that.triggerEvent('disableEditable');
+            that.triggerEvent('onDisableEditing');
+            that.triggerEvent('onDisableEditable');
         }
         return that;
     };

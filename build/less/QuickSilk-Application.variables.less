@@ -47,7 +47,7 @@
 // /* ******* MAGPIE UI: VARIABLES ******* */
 // /* ************************************************ */
 
-@CmVersion: '3.57.0';
+@CmVersion: '3.75.0';
 @CmProtocol: '';
 
 // /* ******* PATH ******* */
@@ -102,6 +102,8 @@
 @CmUI-Transition-DurationNone: 0ms;
 @CmUI-Transition-Delay-Hide: 300ms;
 @CmUI-MotionAsymmetric: cubic-bezier(.5,0,.15,1);
+@CmUI-MotionBounce: cubic-bezier(.5,.1,.4,1.3);
+@CmUI-Opacity-Transparent: 0.01;
 @CmUI-Opacity-Hover: 0.7;
 @CmUI-Shadow: 0 0 8px rgba(0, 0, 0, 0.15);
 @CmUI-ShadowLight: 0 0 2px rgba(0,0,0,0.2);
@@ -489,6 +491,7 @@
 @CmInput-ActiveBorder: @CmColor-BorderActive;
 @CmInput-DisabledBackground: @CmColor-Secondary-LightHighlight;
 @CmInput-DisableBorder: @CmColor-BorderDisabled;
+@CmInput-AccentColor: hsl(@CmColor-Primary, @CmColor-Primary-DarkSaturation, 40%);
 @CmTextarea-Height: 100px;
 @CmSelect-Size: 7;
 
@@ -566,6 +569,11 @@
 @PtLinks-Separator: '|';
 @PtLinks-Separator-Color: @CmFont-Base-Color;
 
+// /* ******* CHECK LINE ******* */
+
+@PtCheckLine-Gap: 0px;
+@PtCheckLine-HasHover-Gap: @CmBorder-Width;
+
 // /* ******* IMAGE ******* */
 
 @PtImage-Background: @CmColor-Secondary-LightHighlight;
@@ -595,6 +603,7 @@
 @PtListingItems-PaddingY: @PtList-PaddingY;
 @PtListingItems-PaddingX: @PtList-PaddingX;
 @PtListingItems-Indent: @PtList-Indent;
+@PtListingItems-GroupIndent: @CmIndent-XSmall;
 
 // /* ******* LISTING COUNTERS ******* */
 
@@ -1220,7 +1229,7 @@
 // /* ******* VARIABLES ******* */
 // /* ************************************************ */
 
-@AppVersion: '3.36.0';
+@AppVersion: '3.37.0';
 
 // /* ******* PATH ******* */
 

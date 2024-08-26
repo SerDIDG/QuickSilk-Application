@@ -12,10 +12,10 @@ cm.define('App.ModuleRolloverTabs', {
         'onRender',
         'onTabShow',
         'onTabHide',
-        'enableEditing',
-        'disableEditing',
-        'enableEditable',
-        'disableEditable'
+        'onEnableEditing',
+        'onEnableEditable',
+        'onDisableEditing',
+        'onDisableEditable',
     ],
     'params' : {
         'node' : cm.Node('div'),
@@ -315,8 +315,8 @@ function(params){
             cm.replaceClass(that.params['node'], 'is-not-editing', 'is-editing is-editable');
             that.components['tabset'].setByIndex(0);
             show();
-            that.triggerEvent('enableEditing');
-            that.triggerEvent('enableEditable');
+            that.triggerEvent('onEnableEditing');
+            that.triggerEvent('onEnableEditable');
         }
         return that;
     };
@@ -326,8 +326,8 @@ function(params){
             that.isEditing = false;
             cm.replaceClass(that.params['node'], 'is-editing is-editable', 'is-not-editing');
             hide();
-            that.triggerEvent('disableEditing');
-            that.triggerEvent('disableEditable');
+            that.triggerEvent('onDisableEditing');
+            that.triggerEvent('onDisableEditable');
         }
         return that;
     };

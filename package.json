@@ -1,12 +1,12 @@
 {
   "name": "QuickSilk-Application",
-  "version": "3.36.0",
+  "version": "3.37.0",
   "description": "QuickSilk Application UI Library",
   "license": "UNLICENSED",
   "scripts": {
     "build": "grunt",
     "optimize": "grunt optimize",
-    "watch": "grunt watcher"
+    "watch": "grunt && grunt watcher"
   },
   "dependencies": {
     "grunt-cli": "^1.4.3"

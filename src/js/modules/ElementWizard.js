@@ -93,7 +93,7 @@ cm.getConstructor('Mod.ElementWizard', function(classConstructor, className, cla
                 .addEvent('onTabHide', function(tabset, item){
                     that.triggerEvent('onTabHide', item);
                 })
-                .addEvent('onTabShowStart', function(tabset, item){
+                .addEvent('onTabChangeStart', function(tabset, item){
                     if(!that.isProcessing){
                         that.nodes['content-list'].style.overflow = 'hidden';
                         that.nodes['content-list'].style.height = that.nodes['content-list'].offsetHeight + 'px';

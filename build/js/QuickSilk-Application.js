@@ -1,11 +1,11 @@
-/*! ************ QuickSilk-Application v3.36.0 (2023-11-20 19:57) ************ */
+/*! ************ QuickSilk-Application v3.37.0 (2024-08-27 02:39) ************ */
 
 // /* ************************************************ */
 // /* ******* QUICKSILK: COMMON ******* */
 // /* ************************************************ */
 
 var App = {
-    '_version' : '3.36.0',
+    '_version' : '3.37.0',
     '_assetsUrl' : [window.location.protocol, window.location.hostname].join('//'),
     'Elements': {},
     'Nodes' : {},
@@ -21,60 +21,64 @@ var Module = {};
 cm._variables['%AppVersion%'] = 'App._version';
 cm._variables['%AppAssetsUrl%'] = 'App._assetsUrl';
 cm.define('App.AbstractModule', {
-    'extend' : 'Com.AbstractController',
-    'events' : [
-        'enableEditing',
-        'disableEditing',
-        'enableEditable',
-        'disableEditable',
+    'extend': 'Com.AbstractController',
+    'events': [
         'onEnableEditing',
-        'onDisableEditing'
+        'onEnableEditable',
+        'onDisableEditing',
+        'onDisableEditable',
+        'onToggleVisibility',
     ],
-    'params' : {
-        'renderStructure' : false,
-        'embedStructureOnRender' : false,
-        'controllerEvents' : true,
-        'customEvents' : true,
-        'isEditing' : null
+    'params': {
+        'renderStructure': false,
+        'embedStructureOnRender': false,
+        'controllerEvents': true,
+        'customEvents': true,
+        'isEditing': null,
     }
 },
-function(params){
-    var that = this;
-    // Call parent class construct
-    Com.AbstractController.apply(that, arguments);
+function () {
+    Com.AbstractController.apply(this, arguments);
 });
 
-cm.getConstructor('App.AbstractModule', function(classConstructor, className, classProto, classInherit){
-    classProto.construct = function(){
+cm.getConstructor('App.AbstractModule', function (classConstructor, className, classProto, classInherit) {
+    classProto.construct = function () {
         var that = this;
+
         // Variables
         that.isEditing = null;
+        that.isVisible = null;
+
         // Bind
         that.enableEditingHandler = that.enableEditing.bind(that);
         that.disableEditingHandler = that.disableEditing.bind(that);
+        that.toggleVisibilityEventHandler = that.toggleVisibilityEvent.bind(that);
+
         // Call parent method
         classInherit.prototype.construct.apply(that, arguments);
     };
 
-    classProto.onSetCustomEvents = function(){
+    classProto.onSetCustomEvents = function () {
         var that = this;
-        cm.customEvent.add(that.params['node'], 'enableEditable', that.enableEditingHandler);
-        cm.customEvent.add(that.params['node'], 'disableEditable', that.disableEditingHandler);
+        cm.customEvent.add(that.params.node, 'enableEditable', that.enableEditingHandler);
+        cm.customEvent.add(that.params.node, 'disableEditable', that.disableEditingHandler);
+        cm.customEvent.add(that.params.node, 'toggleVisibility', that.toggleVisibilityEventHandler);
     };
 
-    classProto.onUnsetCustomEvents = function(){
+    classProto.onUnsetCustomEvents = function () {
         var that = this;
-        cm.customEvent.remove(that.params['node'], 'enableEditable', that.enableEditingHandler);
-        cm.customEvent.remove(that.params['node'], 'disableEditable', that.disableEditingHandler);
+        cm.customEvent.remove(that.params.node, 'enableEditable', that.enableEditingHandler);
+        cm.customEvent.remove(that.params.node, 'disableEditable', that.disableEditingHandler);
+        cm.customEvent.remove(that.params.node, 'toggleVisibility', that.toggleVisibilityEventHandler);
     };
 
-    classProto.renderViewModel = function(){
+    classProto.renderViewModel = function () {
         var that = this;
         // Force editing mode on initialisation
-        if(cm.isBoolean(that.params['isEditing'])){
-            if(that.params['isEditing']){
+        if (cm.isBoolean(that.params.isEditing)) {
+            if (that.params.isEditing) {
                 that.enableEditing();
-            }else{
+            } else {
                 that.disableEditing();
             }
         }
@@ -82,28 +86,42 @@ cm.getConstructor('App.AbstractModule', function(classConstructor, className, cl
         return that;
     };
 
+    classProto.toggleVisibilityEvent = function (event) {
+        var that = this;
+        that.toggleVisibility(event.state);
+    };
+
     /*** PUBLIC ***/
 
-    classProto.enableEditing = function(){
+    classProto.enableEditing = function () {
         var that = this;
-        if(!cm.isBoolean(that.isEditing) || !that.isEditing){
+        if (!cm.isBoolean(that.isEditing) || !that.isEditing) {
             that.isEditing = true;
-            cm.replaceClass(that.params['node'], 'is-not-editing', 'is-editing is-editable');
-            that.triggerEvent('enableEditing');
-            that.triggerEvent('enableEditable');
+            cm.replaceClass(that.params.node, 'is-not-editing', ['is-editing', 'is-editable']);
             that.triggerEvent('onEnableEditing');
+            that.triggerEvent('onEnableEditable');
         }
         return that;
     };
 
-    classProto.disableEditing = function(){
+    classProto.disableEditing = function () {
         var that = this;
-        if(!cm.isBoolean(that.isEditing) || that.isEditing){
+        if (!cm.isBoolean(that.isEditing) || that.isEditing) {
             that.isEditing = false;
-            cm.replaceClass(that.params['node'], 'is-editing is-editable', 'is-not-editing');
-            that.triggerEvent('disableEditing');
-            that.triggerEvent('disableEditable');
+            cm.replaceClass(that.params.node, ['is-editing', 'is-editable'], 'is-not-editing');
             that.triggerEvent('onDisableEditing');
+            that.triggerEvent('onDisableEditable');
+        }
+        return that;
+    };
+
+    classProto.toggleVisibility = function (state) {
+        var that = this;
+        if (!cm.isBoolean(that.isVisible) || that.isVisible !== state)  {
+            that.isVisible = state;
+            cm.toggleClass(that.node, 'is-visible', state);
+            cm.toggleClass(that.node, 'is-hidden', !state);
+            that.triggerEvent('onToggleVisibility', state);
         }
         return that;
     };
@@ -117,91 +135,97 @@ function(params){
     Com.AbstractController.apply(that, arguments);
 });
 cm.define('App.AbstractModuleElement', {
-    'extend' : 'App.AbstractModule',
-    'events' : [
+    'extend': 'App.AbstractModule',
+    'events': [
         'onChange',
         'onValidate'
     ],
-    'params' : {
-        'renderStructure' : false,
-        'embedStructureOnRender' : false,
-        'validate' : false,
-        'required' : false,
-        'pattern' : '^\\s*$',
-        'match' : false,
-        'targetController' : false,
-        'memorable' : true,             // prevent saving for elements like files or captcha
-        'remember' : false,             // save sel value lo local storage
-        'inputEvent' : 'input'
+    'params': {
+        'renderStructure': false,
+        'embedStructureOnRender': false,
+        'validate': false,
+        'validateHidden': false,
+        'required': false,
+        'pattern': '^\\s*$',
+        'match': false,
+        'targetController': false,
+        'memorable': true,             // prevent saving for elements like files or captcha
+        'remember': false,             // save sel value lo local storage
+        'inputEvent': 'input'
     }
 },
-function(params){
-    var that = this;
-    // Call parent class construct
-    App.AbstractModule.apply(that, arguments);
+function () {
+    App.AbstractModule.apply(this, arguments);
 });
 
-cm.getConstructor('App.AbstractModuleElement', function(classConstructor, className, classProto, classInherit){
-    classProto.construct = function(){
+cm.getConstructor('App.AbstractModuleElement', function (classConstructor, className, classProto, classInherit) {
+    classProto.construct = function () {
         var that = this;
+        
         // Variables
         that.nodes = {
-            'errors' : {}
+            'errors': {}
         };
+        
         // Bind
         that.changeEventHandler = that.changeEvent.bind(that);
+        
         // Call parent method
         classInherit.prototype.construct.apply(that, arguments);
     };
 
-    classProto.onConstructEnd = function(){
+    classProto.onConstructEnd = function () {
         var that = this;
+        
         // Restore value from local storage
         that.restoreLocalValue();
     };
 
-    classProto.renderViewModel = function(){
+    classProto.renderViewModel = function () {
         var that = this;
+        
         // Call parent method
         classInherit.prototype.renderViewModel.apply(that, arguments);
+        
         // Get controller
-        if(that.params['targetController']){
+        if (that.params['targetController']) {
             that.renderController();
-        }else if(!cm.isEmpty(that.nodes['inputs'])){
+        } else if (!cm.isEmpty(that.nodes.inputs)) {
             that.renderInputs();
-        }else if(that.nodes['input']){
-            that.renderInput(that.nodes['input']);
+        } else if (that.nodes.input) {
+            that.renderInput(that.nodes.input);
         }
+        
         // Prepare errors
-        cm.forEach(that.nodes['errors']['items'], function(item){
-            item['type'] = cm.getData(item['message'], 'type');
-            cm.addClass(item['message'], 'hidden margin-none');
+        cm.forEach(that.nodes.errors.items, function (item) {
+            item.type = cm.getData(item.message, 'type');
+            cm.addClass(item.message, 'hidden margin-none');
         });
     };
 
-    classProto.renderController = function(){
+    classProto.renderController = function () {
         var that = this;
-        cm.find(that.params['targetController'], that.params['name'], that.nodes['field'], function(classObject){
-            that.components['controller'] = classObject;
-            that.components['controller'].addEvent('onChange', that.changeEventHandler);
+        cm.find(that.params['targetController'], that.params['name'], that.nodes.field, function (classObject) {
+            that.components.controller = classObject;
+            that.components.controller.addEvent('onChange', that.changeEventHandler);
         });
     };
 
-    classProto.renderInputs = function(){
+    classProto.renderInputs = function () {
         var that = this;
-        cm.forEach(that.nodes['inputs'], function(nodes){
-            that.renderInput(nodes['input']);
+        cm.forEach(that.nodes.inputs, function (nodes) {
+            that.renderInput(nodes.input);
         });
     };
 
-    classProto.renderInput = function(node){
+    classProto.renderInput = function (node) {
         var that = this;
         cm.addEvent(node, that.params['inputEvent'], that.changeEventHandler);
     };
 
     /*** EVENTS ***/
 
-    classProto.changeEvent = function(){
+    classProto.changeEvent = function () {
         var that = this;
         var value = that.get();
         that.saveLocalValue();
@@ -210,61 +234,61 @@ cm.getConstructor('App.AbstractModuleElement', function(classConstructor, classN
 
     /*** DATA ***/
 
-    classProto.saveLocalValue = function(){
+    classProto.saveLocalValue = function () {
         var that = this;
-        if(that.params['memorable'] && that.params['remember']){
+        if (that.params.memorable && that.params['remember']) {
             var value = that.get();
             that.storageWrite('value', value);
         }
     };
 
-    classProto.restoreLocalValue = function(){
+    classProto.restoreLocalValue = function () {
         var that = this;
-        if(that.params['memorable'] && that.params['remember']){
+        if (that.params.memorable && that.params['remember']) {
             var value = that.storageRead('value');
-            if(!cm.isEmpty(value)){
+            if (!cm.isEmpty(value)) {
                 that.set(value);
             }
         }
     };
 
-    classProto.setMultiple = function(values){
+    classProto.setMultiple = function (values) {
         var that = this;
-        if(cm.isArray(value)){
-            cm.forEach(that.nodes['inputs'], function(nodes, i){
-                if(values[i]){
-                    nodes['input'].value = values[i];
+        if (cm.isArray(value)) {
+            cm.forEach(that.nodes.inputs, function (nodes, i) {
+                if (values[i]) {
+                    nodes.input.value = values[i];
                 }
             });
         }
     };
 
-    classProto.getMultiple = function(){
+    classProto.getMultiple = function () {
         var that = this,
             values = [];
-        cm.forEach(that.nodes['inputs'], function(nodes){
-            values.push(nodes['input'].value);
+        cm.forEach(that.nodes.inputs, function (nodes) {
+            values.push(nodes.input.value);
         });
         return values;
     };
 
-    classProto.validateValue = function(){
+    classProto.validateValue = function () {
         var that = this,
             data = {
-                'value' : that.get(),
-                'type' : null,
-                'valid' : true
+                'value': that.get(),
+                'type': null,
+                'valid': true
             };
-        if(that.params['required'] && cm.isEmpty(data['value'])){
-            data['type'] = 'required';
-            data['valid'] = false;
+        if (that.params.required && cm.isEmpty(data.value)) {
+            data.type = 'required';
+            data.valid = false;
             return data;
         }
-        if(that.params['validate'] && !cm.isEmpty(data['value']) && !cm.isEmpty(that.params['pattern'])){
-            data['type'] = that.params['pattern'];
-            data['regexp'] = new RegExp(that.params['pattern']);
-            data['valid'] = data['regexp'].test(data['value']);
-            data['valid'] = that.params['match']? data['valid'] : !data['valid'];
+        if (that.params.validate && !cm.isEmpty(data.value) && !cm.isEmpty(that.params.pattern)) {
+            data.type = that.params.pattern;
+            data.regexp = new RegExp(that.params.pattern);
+            data.valid = data.regexp.test(data.value);
+            data.valid = that.params.match ? data.valid : !data.valid;
             return data;
         }
         return data;
@@ -272,72 +296,78 @@ cm.getConstructor('App.AbstractModuleElement', function(classConstructor, classN
 
     /*** ERRORS ***/
 
-    classProto.showError = function(type){
+    classProto.showError = function (type) {
         var that = this;
-        cm.addClass(that.nodes['field'], 'error');
-        cm.removeClass(that.nodes['errors']['container'], 'hidden');
-        cm.forEach(that.nodes['errors']['items'], function(item){
-            if(type === item['type']){
-                cm.removeClass(item['message'], 'hidden');
-            }else{
-                cm.addClass(item['message'], 'hidden');
+        cm.addClass(that.nodes.field, 'error');
+        cm.removeClass(that.nodes.errors.container, 'hidden');
+        cm.forEach(that.nodes.errors.items, function (item) {
+            if (type === item.type) {
+                cm.removeClass(item.message, 'hidden');
+            } else {
+                cm.addClass(item.message, 'hidden');
             }
         });
         return that;
     };
 
-    classProto.hideError = function(){
+    classProto.hideError = function () {
         var that = this;
-        cm.removeClass(that.nodes['field'], 'error');
-        cm.addClass(that.nodes['errors']['container'], 'hidden');
-        cm.forEach(that.nodes['errors']['items'], function(item){
-            cm.addClass(item['message'], 'hidden');
+        cm.removeClass(that.nodes.field, 'error');
+        cm.addClass(that.nodes.errors.container, 'hidden');
+        cm.forEach(that.nodes.errors.items, function (item) {
+            cm.addClass(item.message, 'hidden');
         });
         return that;
     };
 
     /******* PUBLIC *******/
 
-    classProto.set = function(value){
+    classProto.set = function (value) {
         var that = this;
-        if(that.components['controller']){
-            that.components['controller'].set(value);
-        }else if(!cm.isEmpty(that.nodes['inputs'])){
+        if (that.components.controller) {
+            that.components.controller.set(value);
+        } else if (!cm.isEmpty(that.nodes.inputs)) {
             that.setMultiple(value);
-        }else{
-            that.nodes['input'].value = value;
+        } else {
+            that.nodes.input.value = value;
         }
         return that;
     };
 
-    classProto.get = function(){
+    classProto.get = function () {
         var that = this;
-        if(that.components['controller']){
-            return that.components['controller'].get();
+        if (that.components.controller) {
+            return that.components.controller.get();
         }
-        if(!cm.isEmpty(that.nodes['inputs'])){
+        if (!cm.isEmpty(that.nodes.inputs)) {
             return that.getMultiple();
         }
-        return that.nodes['input'].value;
+        return that.nodes.input.value;
     };
 
-    classProto.validate = function(){
-        var that = this,
-            data;
-        if(!that.params['required'] && !that.params['validate']){
+    classProto.validate = function () {
+        var that = this;
+
+        // Skip validation if the field is not required and not set to validate,
+        // or if it's not visible and validation is not required when hidden.
+        if (
+            (!that.params.required && !that.params.validate) ||
+            (!that.isVisible && !that.params.validateHidden)
+        ) {
             return true;
         }
-        data = that.validateValue();
-        if(data['valid']){
+        
+        var data = that.validateValue();
+        if (data.valid) {
             that.hideError();
-        }else{
-            that.showError(data['type']);
+        } else {
+            that.showError(data.type);
         }
         that.triggerEvent('onValidate', data);
-        return data['valid'];
+        return data.valid;
     };
 
-    classProto.clear = function(){
+    classProto.clear = function () {
         var that = this;
         that.hideError();
         return that;
@@ -651,59 +681,58 @@ App.FlowScenario = [{
 App._Blocks = {};
 
 cm.define('App.Block', {
-    'extend' : 'Com.AbstractController',
-    'events' : [
+    'extend': 'Com.AbstractController',
+    'events': [
         'onRemove',
-        'enableEditing',
-        'disableEditing'
+        'onEnableEditing',
+        'onDisableEditing',
+        'onToggleVisibility',
     ],
-    'params' : {
-        'renderStructure' : false,
-        'embedStructureOnRender' : false,
-        'removeOnDestruct' : true,
-        'controllerEvents' : true,
-        'customEvents' : false,
-        'resizeEvent' : true,
-        'scrollEvent' : true,
-        'type' : 'template-manager',            // template-manager | form-manager | mail
-        'instanceId' : false,
-        'positionId' : 0,
-        'zone' : 0,
-        'parentPositionId' : 0,
-        'layerId' : 0,
-        'index' : false,
-        'locked' : false,
-        'visible' : true,
-        'removable' : true,
-        'sticky' : false,
-        'animated' : false,
-        'effect' : 'none',                      // https://daneden.github.io/animate.css/
-        'editorName' : 'app-editor',
-        'templateName' : 'app-template',
-        'templateController' : 'Template'
+    'params': {
+        'renderStructure': false,
+        'embedStructureOnRender': false,
+        'removeOnDestruct': true,
+        'controllerEvents': true,
+        'customEvents': false,
+        'resizeEvent': true,
+        'scrollEvent': true,
+        'type': 'template-manager',             // template-manager | form-manager | mail
+        'instanceId': false,
+        'positionId': 0,
+        'zone': 0,
+        'parentPositionId': 0,
+        'layerId': 0,
+        'index': false,
+        'locked': false,                        // permanent state
+        'visible': true,                        // permanent state
+        'removable': true,
+        'sticky': false,
+        'animated': false,
+        'effect': 'none',                       // https://daneden.github.io/animate.css/
+        'editorName': 'app-editor',
+        'templateName': 'app-template',
+        'templateController': 'Template'
     }
 },
-function(params){
-    var that = this;
-    // Call parent class construct in current context
-    Com.AbstractController.apply(that, arguments);
+function () {
+    Com.AbstractController.apply(this, arguments);
 });
 
-
-cm.getConstructor('App.Block', function(classConstructor, className, classProto, classInherit){
-    classProto.onConstructStart = function(){
+cm.getConstructor('App.Block', function (classConstructor, className, classProto, classInherit) {
+    classProto.onConstructStart = function () {
         var that = this;
+
         // Variables
         that.nodes = {
-            'container' : cm.node('div'),
-            'block' : {
-                'container' : cm.node('div'),
-                'inner' : cm.node('div'),
-                'drag' : [],
-                'menu' : {
-                    'edit' : cm.node('div'),
-                    'duplicate' : cm.node('div'),
-                    'delete' : cm.node('div')
+            'container': cm.node('div'),
+            'block': {
+                'container': cm.node('div'),
+                'inner': cm.node('div'),
+                'drag': [],
+                'menu': {
+                    'edit': cm.node('div'),
+                    'duplicate': cm.node('div'),
+                    'delete': cm.node('div')
                 }
             }
         };
@@ -711,6 +740,7 @@ cm.getConstructor('App.Block', function(classConstructor, className, classProto,
         that.isDummy = false;
         that.isRemoved = false;
         that.isEditing = null;
+        that.isVisible = null;
         that.isProcessed = false;
         that.styleObject = null;
         that.dimensions = null;
@@ -719,221 +749,238 @@ cm.getConstructor('App.Block', function(classConstructor, className, classProto,
         that.node = null;
         that.zone = null;
         that.zones = [];
+
         // Binds
         that.constructZoneHandler = that.constructZone.bind(that);
         that.animProcessHandler = that.animProcess.bind(that);
     };
 
-    classProto.onValidateParamsEnd = function(){
+    classProto.onValidateParamsEnd = function () {
         var that = this;
-        that.node = that.params['node'];
+        that.node = that.params.node;
+
         // Find parent zone
-        if(cm.isNumber(that.params['instanceId']) || cm.isString(that.params['instanceId'])){
-            that.params['name'] = [that.params['type'], that.params['instanceId'], that.params['positionId']].join('_');
-            that.params['zoneName'] = [that.params['type'], that.params['instanceId'], that.params['parentPositionId'], that.params['zone']].join('_');
-        }else{
-            that.params['name'] = [that.params['type'], that.params['positionId']].join('_');
-            that.params['zoneName'] = [that.params['type'], that.params['parentPositionId'], that.params['zone']].join('_');
+        if (cm.isNumber(that.params.instanceId) || cm.isString(that.params.instanceId)) {
+            that.params.name = [that.params['type'], that.params.instanceId, that.params.positionId].join('_');
+            that.params.zoneName = [that.params['type'], that.params.instanceId, that.params.parentPositionId, that.params['zone']].join('_');
+        } else {
+            that.params.name = [that.params['type'], that.params.positionId].join('_');
+            that.params.zoneName = [that.params['type'], that.params.parentPositionId, that.params['zone']].join('_');
         }
+
         // Index
         var index = that.node.getAttribute('data-index');
-        if(!cm.isEmpty(index)){
-            that.params['index'] = parseInt(index);
-            that.params['node'].removeAttribute('data-index');
+        if (!cm.isEmpty(index)) {
+            that.params.index = parseInt(index);
+            that.params.node.removeAttribute('data-index');
         }
-        that.index = that.params['index'];
+        that.index = that.params.index;
+
         // Animation
-        if(that.params['animated']){
-            that.params['animated'] = !(cm.isEmpty(that.params['effect']) || that.params['effect'] === 'none');
+        if (that.params.animated) {
+            that.params.animated = !(cm.isEmpty(that.params.effect) || that.params.effect === 'none');
         }
+
         // Export to global array
-        App._Blocks[that.params['name']] = that;
+        App._Blocks[that.params.name] = that;
     };
 
-    classProto.onDestructStart = function(){
+    classProto.onDestructStart = function () {
         var that = this;
+
         // Unset block from zone and editor
         that.destructZone(that.zone);
-        that.destructEditor(that.components['editor']);
-        while(that.zones.length){
+        that.destructEditor(that.components.editor);
+        while (that.zones.length) {
             that.zones[0].remove();
         }
+
         // Delete from global array
-        delete App._Blocks[that.params['name']];
+        delete App._Blocks[that.params.name];
     };
 
-    classProto.onSetEvents = function(){
+    classProto.onSetEvents = function () {
         var that = this;
         cm.customEvent.add(that.node, 'redraw', that.redrawHandler);
     };
 
-    classProto.onUnsetEvents = function(){
+    classProto.onUnsetEvents = function () {
         var that = this;
         cm.customEvent.remove(that.node, 'redraw', that.redrawHandler);
     };
 
-    classProto.onRedraw = function(){
+    classProto.onRedraw = function () {
         var that = this;
+
         // Update dimensions
         that.getDimensions();
+
         // Editing states
-        if(that.isEditing){
+        if (that.isEditing) {
             that.redrawOnEditing();
-        }else{
+        } else {
             that.redrawOnNormal();
         }
     };
 
-    classProto.onScroll = function(){
+    classProto.onScroll = function () {
         var that = this;
-        if(!that.isEditing){
+        if (!that.isEditing) {
             that.animProcess();
         }
     };
 
     /*** VIEW MODEL ***/
 
-    classProto.renderViewModel = function(){
+    classProto.renderViewModel = function () {
         var that = this;
+
         // Call parent method - renderViewModel
         classInherit.prototype.renderViewModel.apply(that, arguments);
+
         // Process Template
         that.getTemplate();
+
         // Process Editor and parent zone
-        cm.find('App.Editor', that.params['editorName'], null, function(classObject){
-            new cm.Finder('App.Zone', that.params['zoneName'], null, that.constructZoneHandler);
+        cm.find('App.Editor', that.params['editorName'], null, function (classObject) {
+            new cm.Finder('App.Zone', that.params.zoneName, null, that.constructZoneHandler);
             that.constructEditor(classObject);
         });
     };
 
     /*** REDRAW ***/
 
-    classProto.redrawOnNormal = function(){
+    classProto.redrawOnNormal = function () {
         var that = this,
             heightIndent,
             topIndent,
             bottomIndent;
+
         // Sticky block
-        if(that.params['sticky']){
+        if (that.params.sticky) {
             cm.addClass(that.node, 'is-sticky');
             // Get template controller
             that.getTemplate();
             // Calculate
-            if(that.components['template']){
+            if (that.components.template) {
                 heightIndent =
                     cm.getPageSize('winHeight') -
                     that.dimensions['margin']['top'] -
                     that.dimensions['margin']['bottom'] -
-                    (that.components['template'].getTopMenuDimensions('height') || 0) -
-                    (that.components['template'].getFixedHeaderHeight() || 0);
+                    (that.components.template.getTopMenuDimensions('height') || 0) -
+                    (that.components.template.getFixedHeaderHeight() || 0);
                 topIndent =
                     that.dimensions['margin']['top'] +
-                    (that.components['template'].getTopMenuDimensions('height') || 0) +
-                    (that.components['template'].getFixedHeaderHeight() || 0);
+                    (that.components.template.getTopMenuDimensions('height') || 0) +
+                    (that.components.template.getFixedHeaderHeight() || 0);
                 bottomIndent = that.dimensions['margin']['bottom'];
                 // Set
                 that.node.style.top = topIndent + 'px';
                 that.node.style.bottomIndent = bottomIndent + 'px';
-                that.nodes['block']['container'].style.maxHeight = heightIndent + 'px';
+                that.nodes.block.container.style.maxHeight = heightIndent + 'px';
             }
         }
+
         // Animations
-        if(that.params['animated']){
+        if (that.params.animated) {
             that.animEnable();
         }
     };
 
-    classProto.redrawOnEditing = function(){
+    classProto.redrawOnEditing = function () {
         var that = this;
+
         // Sticky block
-        if(that.params['sticky']){
+        if (that.params.sticky) {
             cm.removeClass(that.node, 'is-sticky');
             // Clear
             that.node.style.top = '';
             that.node.style.bottom = '';
-            that.nodes['block']['container'].style.maxHeight = '';
+            that.nodes.block.container.style.maxHeight = '';
         }
+
         // Animations
-        if(that.params['animated']){
+        if (that.params.animated) {
             that.animDisable();
         }
     };
 
     /* ******* ANIMATIONS ******* */
 
-    classProto.animEnable = function(){
+    classProto.animEnable = function () {
         var that = this;
-        cm.addClass(that.nodes['block']['container'], 'cm-animate');
-        cm.addClass(that.nodes['block']['container'], ['pre', that.params['effect']].join('-'));
+        cm.addClass(that.nodes.block.container, 'cm-animate');
+        cm.addClass(that.nodes.block.container, ['pre', that.params.effect].join('-'));
         that.animRestore();
         that.animProcess();
         return that;
     }
 
-    classProto.animDisable = function(){
+    classProto.animDisable = function () {
         var that = this;
-        cm.removeClass(that.nodes['block']['container'], 'cm-animate');
-        cm.removeClass(that.nodes['block']['container'], ['pre', that.params['effect']].join('-'));
-        cm.removeClass(that.nodes['block']['container'], 'animate__animated');
-        cm.removeClass(that.nodes['block']['container'], ['animate', that.params['effect']].join('__'));
+        cm.removeClass(that.nodes.block.container, 'cm-animate');
+        cm.removeClass(that.nodes.block.container, ['pre', that.params.effect].join('-'));
+        cm.removeClass(that.nodes.block.container, 'animate__animated');
+        cm.removeClass(that.nodes.block.container, ['animate', that.params.effect].join('__'));
         return that;
     };
 
-    classProto.animProcess = function(){
+    classProto.animProcess = function () {
         var that = this;
-        if(!that.isProcessed){
+        if (!that.isProcessed) {
             that.getDimensions();
             that.getPageDimensions();
+
             // Rules for different block sizes.
-            if(that.dimensions['offset']['height'] < that.pageDimensions['winHeight']){
+            if (that.dimensions['offset']['height'] < that.pageDimensions['winHeight']) {
                 // Rules for block, which size is smaller than page's.
-                if(
+                if (
                     that.dimensions['offset']['top'] >= 0 &&
                     that.dimensions['offset']['bottom'] <= that.pageDimensions['winHeight']
-                ){
+                ) {
                     that.animSet();
                 }
-            }else{
+            } else {
                 // Rules for block, which size is larger than page's.
-                if(
+                if (
                     (that.dimensions['offset']['top'] < 0 && that.dimensions['bottom'] >= that.pageDimensions['winHeight'] / 2) ||
                     (that.dimensions['offset']['bottom'] > that.pageDimensions['winHeight'] && that.dimensions['offset']['top'] <= that.pageDimensions['winHeight'] / 2)
-                ){
+                ) {
                     that.animSet();
                 }
             }
         }
     };
 
-    classProto.animRestore = function(){
+    classProto.animRestore = function () {
         var that = this;
         that.isProcessed = false;
-        cm.removeClass(that.nodes['block']['container'], 'animate__animated');
-        cm.removeClass(that.nodes['block']['container'], ['animate', that.params['effect']].join('__'));
+        cm.removeClass(that.nodes.block.container, 'animate__animated');
+        cm.removeClass(that.nodes.block.container, ['animate', that.params.effect].join('__'));
     };
 
-    classProto.animSet = function(){
+    classProto.animSet = function () {
         var that = this;
         that.isProcessed = true;
-        cm.addClass(that.nodes['block']['container'], 'animate__animated');
-        cm.addClass(that.nodes['block']['container'], ['animate', that.params['effect']].join('__'));
+        cm.addClass(that.nodes.block.container, 'animate__animated');
+        cm.addClass(that.nodes.block.container, ['animate', that.params.effect].join('__'));
     };
 
     /*** ZONES ***/
 
-    classProto.addZone = function(item){
+    classProto.addZone = function (item) {
         var that = this;
         that.zones.push(item);
         return that;
     };
 
-    classProto.removeZone = function(zone){
+    classProto.removeZone = function (zone) {
         var that = this;
         cm.arrayRemove(that.zones, zone);
         return that;
     };
 
-    classProto.setZone = function(zone, index){
+    classProto.setZone = function (zone, index) {
         var that = this;
         that.index = index;
         that.destructZone(that.zone);
@@ -941,23 +988,23 @@ cm.getConstructor('App.Block', function(classConstructor, className, classProto,
         return that;
     };
 
-    classProto.unsetZone = function(){
+    classProto.unsetZone = function () {
         var that = this;
         that.destructZone(that.zone);
         return that;
     };
 
-    classProto.constructZone = function(classObject){
+    classProto.constructZone = function (classObject) {
         var that = this;
-        if(classObject){
+        if (classObject) {
             that.zone = classObject;
             that.zone.addBlock(that, that.index);
         }
     };
 
-    classProto.destructZone = function(classObject){
+    classProto.destructZone = function (classObject) {
         var that = this;
-        if(classObject){
+        if (classObject) {
             that.zone = classObject;
             that.zone.removeBlock(that);
             that.zone = null;
@@ -966,31 +1013,31 @@ cm.getConstructor('App.Block', function(classConstructor, className, classProto,
 
     /*** EDITOR ***/
 
-    classProto.constructEditor = function(classObject){
+    classProto.constructEditor = function (classObject) {
         var that = this;
-        if(classObject){
-            that.components['editor'] = classObject;
-            that.components['editor'].addBlock(that, that.index);
+        if (classObject) {
+            that.components.editor = classObject;
+            that.components.editor.addBlock(that, that.index);
         }
     };
 
-    classProto.destructEditor = function(classObject){
+    classProto.destructEditor = function (classObject) {
         var that = this;
-        if(classObject){
-            that.components['editor'] = classObject;
-            that.components['editor'].removeBlock(that);
+        if (classObject) {
+            that.components.editor = classObject;
+            that.components.editor.removeBlock(that);
         }
     };
 
     /*** TEMPLATE ***/
 
-    classProto.getTemplate = function(){
+    classProto.getTemplate = function () {
         var that = this;
-        if(!that.components['template']){
-            that.components['template']= cm.reducePath(that.params['templateController'], window);
-            if(!that.components['template']){
-                cm.find('App.Template', that.params['templateName'], null, function(classObject){
-                    that.components['template'] = classObject;
+        if (!that.components.template) {
+            that.components.template = cm.reducePath(that.params.templateController, window);
+            if (!that.components.template) {
+                cm.find('App.Template', that.params.templateName, null, function (classObject) {
+                    that.components.template = classObject;
                 });
             }
         }
@@ -998,71 +1045,69 @@ cm.getConstructor('App.Block', function(classConstructor, className, classProto,
 
     /*** EDITING ***/
 
-    classProto.enableEditing = function(){
+    classProto.enableEditing = function () {
         var that = this;
-        if(!cm.isBoolean(that.isEditing) || !that.isEditing){
+        if (!cm.isBoolean(that.isEditing) || !that.isEditing) {
             that.isEditing = true;
             cm.addClass(that.node, 'is-editing');
-            cm.replaceClass(that.node, 'is-hidden', 'is-visible');
-            if(!that.params['locked']){
+            if (!that.params.locked) {
                 cm.addClass(that.node, 'is-editable');
                 cm.customEvent.trigger(that.node, 'enableEditable', {
-                    'direction' : 'child',
-                    'self' : false
+                    'direction': 'child',
+                    'self': false
                 });
             }
-            cm.removeClass(that.nodes['block']['container'], 'cm__animate');
-            // Redraw
-            that.redraw();
             cm.customEvent.trigger(that.node, 'enableEditing', {
-                'direction' : 'child',
-                'self' : false
+                'direction': 'child',
+                'self': false
             });
-            that.triggerEvent('enableEditing');
+            that.triggerEvent('onEnableEditing');
+
+            // Set visibility and redraw
+            cm.removeClass(that.nodes.block.container, 'cm__animate');
+            that.toggleVisibility(true);
         }
         return that;
     };
 
-    classProto.disableEditing = function(){
+    classProto.disableEditing = function () {
         var that = this;
-        if(!cm.isBoolean(that.isEditing) || that.isEditing){
+        if (!cm.isBoolean(that.isEditing) || that.isEditing) {
             that.isEditing = false;
             cm.removeClass(that.node, 'is-editing');
-            if(!that.params['visible']){
-                cm.replaceClass(that.node, 'is-visible', 'is-hidden');
-            }
-            if(!that.params['locked']){
+            if (!that.params.locked) {
                 cm.removeClass(that.node, 'is-editable');
                 cm.customEvent.trigger(that.node, 'disableEditable', {
-                    'direction' : 'child',
-                    'self' : false
+                    'direction': 'child',
+                    'self': false
                 });
             }
-            cm.addClass(that.nodes['block']['container'], 'cm__animate');
-            // Redraw
-            that.redraw();
             cm.customEvent.trigger(that.node, 'disableEditing', {
-                'direction' : 'child',
-                'self' : false
+                'direction': 'child',
+                'self': false
             });
-            that.triggerEvent('disableEditing');
+            that.triggerEvent('onDisableEditing');
+
+            // Set visibility and redraw
+            cm.addClass(that.nodes.block.container, 'cm__animate');
+            that.toggleVisibility(that.params.visible);
         }
         return that;
     };
 
     /******* PUBLIC *******/
 
-    classProto.register = function(classObject){
+    classProto.register = function (classObject) {
         var that = this,
-            zone = App._Zones[that.params['zoneName']];
+            zone = App._Zones[that.params.zoneName];
         that.constructZone(zone);
         that.constructEditor(classObject);
         return that;
     };
 
-    classProto.remove = function(){
+    classProto.remove = function () {
         var that = this;
-        if(!that.isRemoved){
+        if (!that.isRemoved) {
             that.isRemoved = true;
             that.destruct();
             that.triggerEvent('onRemove');
@@ -1070,65 +1115,82 @@ cm.getConstructor('App.Block', function(classConstructor, className, classProto,
         return that;
     };
 
-    classProto.getIndex = function(){
+    classProto.getIndex = function () {
         var that = this;
-        if(that.zone){
+        if (that.zone) {
             that.index = that.zone.getBlockIndex(that);
             return that.index;
         }
         return null;
     };
 
-    classProto.getLower = function(){
+    classProto.getLower = function () {
         var that = this,
             index = that.getIndex();
         return that.zone.getBlock(index + 1) || null;
     };
 
-    classProto.getUpper = function(){
+    classProto.getUpper = function () {
         var that = this,
             index = that.getIndex();
         return that.zone.getBlock(index - 1) || null;
     };
 
-    classProto.getDragNodes = function(){
+    classProto.getDragNodes = function () {
         var that = this,
             nodes = [];
-        cm.forEach(that.nodes['block']['drag'], function(item){
-            nodes.push(item['container']);
+        cm.forEach(that.nodes.block['drag'], function (item) {
+            nodes.push(item.container);
         });
         return nodes;
     };
 
-    classProto.getMenuNodes = function(){
+    classProto.getMenuNodes = function () {
         var that = this;
-        return that.nodes['block']['menu'];
+        return that.nodes.block['menu'];
     };
 
-    classProto.getInnerNode = function(){
+    classProto.getInnerNode = function () {
         var that = this;
-        return that.nodes['block']['inner'];
+        return that.nodes.block['inner'];
     };
 
-    classProto.getDimensions = function(){
+    classProto.getDimensions = function () {
         var that = this;
-        if(!that.styleObject){
+        if (!that.styleObject) {
             that.styleObject = cm.getStyleObject(that.node);
         }
         that.dimensions = cm.getNodeOffset(that.node, that.styleObject, null);
         return that.dimensions;
     };
 
-    classProto.updateDimensions = function(){
+    classProto.updateDimensions = function () {
         var that = this;
         that.dimensions = cm.getNodeOffset(that.node, that.styleObject, that.dimensions);
         return that.dimensions;
     };
 
-    classProto.getPageDimensions = function(){
+    classProto.getPageDimensions = function () {
         var that = this;
         that.pageDimensions = cm.getPageSize();
         return that.pageDimensions;
+    };
+
+    classProto.toggleVisibility = function (state) {
+        var that = this;
+        if (!cm.isBoolean(that.isVisible) || that.isVisible !== state)  {
+            that.isVisible = state;
+            cm.toggleClass(that.node, 'is-visible', state);
+            cm.toggleClass(that.node, 'is-hidden', !state);
+            cm.customEvent.trigger(that.node, 'toggleVisibility', {
+                'state': state,
+                'direction': 'child',
+                'self': false
+            });
+            that.triggerEvent('onToggleVisibility', state);
+            that.redraw();
+        }
+        return that;
     };
 });
 
@@ -8489,8 +8551,8 @@ cm.define('App.Template', {
         'onRender',
         'onRedraw',
         'onResize',
-        'enableEditing',
-        'disableEditing'
+        'onEnableEditing',
+        'onDisableEditing',
     ],
     'params' : {
         'node' : cm.node('div'),
@@ -8727,7 +8789,7 @@ function(params){
             that.isEditing = true;
             cm.addClass(that.nodes['container'], 'is-editing');
             that.redraw();
-            that.triggerEvent('enableEditing');
+            that.triggerEvent('onEnableEditing');
         }
         return that;
     };
@@ -8737,7 +8799,7 @@ function(params){
             that.isEditing = false;
             cm.removeClass(that.nodes['container'], 'is-editing');
             that.redraw();
-            that.triggerEvent('disableEditing');
+            that.triggerEvent('onDisableEditing');
         }
         return that;
     };
@@ -10613,7 +10675,7 @@ cm.getConstructor('Mod.ElementWizard', function(classConstructor, className, cla
                 .addEvent('onTabHide', function(tabset, item){
                     that.triggerEvent('onTabHide', item);
                 })
-                .addEvent('onTabShowStart', function(tabset, item){
+                .addEvent('onTabChangeStart', function(tabset, item){
                     if(!that.isProcessing){
                         that.nodes['content-list'].style.overflow = 'hidden';
                         that.nodes['content-list'].style.height = that.nodes['content-list'].offsetHeight + 'px';
@@ -11895,10 +11957,10 @@ cm.define('App.ModuleRolloverTabs', {
         'onRender',
         'onTabShow',
         'onTabHide',
-        'enableEditing',
-        'disableEditing',
-        'enableEditable',
-        'disableEditable'
+        'onEnableEditing',
+        'onEnableEditable',
+        'onDisableEditing',
+        'onDisableEditable',
     ],
     'params' : {
         'node' : cm.Node('div'),
@@ -12198,8 +12260,8 @@ function(params){
             cm.replaceClass(that.params['node'], 'is-not-editing', 'is-editing is-editable');
             that.components['tabset'].setByIndex(0);
             show();
-            that.triggerEvent('enableEditing');
-            that.triggerEvent('enableEditable');
+            that.triggerEvent('onEnableEditing');
+            that.triggerEvent('onEnableEditable');
         }
         return that;
     };
@@ -12209,8 +12271,8 @@ function(params){
             that.isEditing = false;
             cm.replaceClass(that.params['node'], 'is-editing is-editable', 'is-not-editing');
             hide();
-            that.triggerEvent('disableEditing');
-            that.triggerEvent('disableEditable');
+            that.triggerEvent('onDisableEditing');
+            that.triggerEvent('onDisableEditable');
         }
         return that;
     };
@@ -12262,10 +12324,10 @@ cm.define('Module.WorkingArea', {
     'events' : [
         'onRenderStart',
         'onRender',
-        'enableEditing',
-        'disableEditing',
-        'enableEditable',
-        'disableEditable'
+        'onEnableEditing',
+        'onEnableEditable',
+        'onDisableEditing',
+        'onDisableEditable',
     ],
     'params' : {
         'node' : cm.node('div'),
@@ -12359,8 +12421,8 @@ function(params){
         if(!cm.isBoolean(that.isEditing) || !that.isEditing){
             that.isEditing = true;
             editState();
-            that.triggerEvent('enableEditing');
-            that.triggerEvent('enableEditable');
+            that.triggerEvent('onEnableEditing');
+            that.triggerEvent('onEnableEditable');
         }
         return that;
     };
@@ -12369,8 +12431,8 @@ function(params){
         if(!cm.isBoolean(that.isEditing) || that.isEditing){
             that.isEditing = false;
             defaultState();
-            that.triggerEvent('disableEditing');
-            that.triggerEvent('disableEditable');
+            that.triggerEvent('onDisableEditing');
+            that.triggerEvent('onDisableEditable');
         }
         return that;
     };

@@ -11,8 +11,8 @@ cm.define('App.Template', {
         'onRender',
         'onRedraw',
         'onResize',
-        'enableEditing',
-        'disableEditing'
+        'onEnableEditing',
+        'onDisableEditing',
     ],
     'params' : {
         'node' : cm.node('div'),
@@ -249,7 +249,7 @@ function(params){
             that.isEditing = true;
             cm.addClass(that.nodes['container'], 'is-editing');
             that.redraw();
-            that.triggerEvent('enableEditing');
+            that.triggerEvent('onEnableEditing');
         }
         return that;
     };
@@ -259,7 +259,7 @@ function(params){
             that.isEditing = false;
             cm.removeClass(that.nodes['container'], 'is-editing');
             that.redraw();
-            that.triggerEvent('disableEditing');
+            that.triggerEvent('onDisableEditing');
         }
         return that;
     };
