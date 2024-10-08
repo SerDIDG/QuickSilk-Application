@@ -1,11 +1,11 @@
-/*! ************ QuickSilk-Application v3.37.0 (2024-08-27 02:39) ************ */
+/*! ************ QuickSilk-Application v3.37.1 (2024-10-08 22:17) ************ */
 
 // /* ************************************************ */
 // /* ******* QUICKSILK: COMMON ******* */
 // /* ************************************************ */
 
 var App = {
-    '_version' : '3.37.0',
+    '_version' : '3.37.1',
     '_assetsUrl' : [window.location.protocol, window.location.hostname].join('//'),
     'Elements': {},
     'Nodes' : {},
@@ -352,7 +352,7 @@ cm.getConstructor('App.AbstractModuleElement', function (classConstructor, class
         // or if it's not visible and validation is not required when hidden.
         if (
             (!that.params.required && !that.params.validate) ||
-            (!that.isVisible && !that.params.validateHidden)
+            (that.isVisible === false && !that.params.validateHidden)
         ) {
             return true;
         }
