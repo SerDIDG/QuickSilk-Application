@@ -296,18 +296,14 @@
                         }
                     }
 
-                    &:hover,
-                    &:active,
-                    &.active,
-                    &.is-show {
+                    &:is(:hover, :active, :focus-within, .active, .is-show) {
                         > .pt__menu-dropdown {
                             .pt__menu-dropdown--active;
                             .mx__transition(visibility opacity, @AppTopMenu-Dropdown-Duration);
                         }
                     }
 
-                    &:hover,
-                    &:active {
+                    &:is(:hover, :active) {
                         > a {
                             background-color: @AppTopMenu-HoverBackground;
                             color: @AppTopMenu-ColorHover;
