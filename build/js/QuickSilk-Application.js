@@ -1,11 +1,11 @@
-/*! ************ QuickSilk-Application v3.37.3 (2024-10-30 00:08) ************ */
+/*! ************ QuickSilk-Application v3.37.4 (2024-11-12 15:52) ************ */
 
 // /* ************************************************ */
 // /* ******* QUICKSILK: COMMON ******* */
 // /* ************************************************ */
 
 var App = {
-    '_version' : '3.37.3',
+    '_version' : '3.37.4',
     '_assetsUrl' : [window.location.protocol, window.location.hostname].join('//'),
     'Elements': {},
     'Nodes' : {},
@@ -11811,7 +11811,7 @@ cm.getConstructor('Module.MobileMenu', function(classConstructor, className, cla
     classProto.onConstructStart = function(){
         var that = this;
         // Variables
-        that.isVisible = false;
+        that.isMenuVisible = false;
         that.isProcessing = false;
         // Nodes
         that.nodes = {
@@ -11835,14 +11835,14 @@ cm.getConstructor('Module.MobileMenu', function(classConstructor, className, cla
         cm.addClass(that.nodes.menu, ['view', that.params.view].join('--'));
         cm.addClass(that.nodes.menu, 'is-hide');
         // Events
-        cm.addEvent(that.nodes.toggle, 'click', that.toggleHandler);
-        cm.addEvent(that.nodes.close, 'click', that.toggleHandler);
+        cm.click.add(that.nodes.toggle, that.toggleHandler);
+        cm.click.add(that.nodes.close, that.toggleHandler);
         cm.addEvent(that.nodes.menu, 'click', that.toggleMenuHandler);
     };
 
     classProto.toggle = function(){
         var that = this;
-        if(that.isVisible){
+        if(that.isMenuVisible){
             that.hide();
         }else{
             that.show();
@@ -11859,7 +11859,7 @@ cm.getConstructor('Module.MobileMenu', function(classConstructor, className, cla
 
     classProto.show = function(){
         var that = this;
-        if(!that.isVisible && !that.isProcessing){
+        if(!that.isMenuVisible && !that.isProcessing){
             that.isProcessing = true;
             // Start
             switch(that.params.view){
@@ -11878,6 +11878,19 @@ cm.getConstructor('Module.MobileMenu', function(classConstructor, className, cla
                     that.nodes.menu.style.overflow = 'hidden';
                     break;
             }
+            cm.addEvent(that.nodes.menu, 'transitionend', function onTransitionEnd(){
+                cm.removeEvent(that.nodes.menu, 'transitionend', onTransitionEnd);
+                switch(that.params.view){
+                    case 'dropdown':
+                    case 'dropdown-overlap':
+                        that.nodes.menu.style.height = 'auto';
+                        that.nodes.menu.style.overflow = 'visible';
+                        break;
+                }
+                that.isMenuVisible = true;
+                that.isProcessing = false;
+                that.triggerEvent('onShow');
+            });
             cm.onSchedule(function(){
                 cm.replaceClass(that.nodes.container, 'is-hide', 'is-show');
                 cm.replaceClass(that.nodes.menu, 'is-hide', 'is-show');
@@ -11887,26 +11900,13 @@ cm.getConstructor('Module.MobileMenu', function(classConstructor, className, cla
                         that.nodes.menu.style.height = that.nodes.menu.scrollHeight + 'px';
                         break;
                 }
-                cm.addEvent(that.nodes.menu, 'transitionend', function onTransitionEnd(){
-                    cm.removeEvent(that.nodes.menu, 'transitionend', onTransitionEnd);
-                    switch(that.params.view){
-                        case 'dropdown':
-                        case 'dropdown-overlap':
-                            that.nodes.menu.style.height = 'auto';
-                            that.nodes.menu.style.overflow = 'visible';
-                            break;
-                    }
-                    that.isVisible = true;
-                    that.isProcessing = false;
-                    that.triggerEvent('onShow');
-                });
             });
         }
     };
 
     classProto.hide = function(){
         var that = this;
-        if(that.isVisible && !that.isProcessing){
+        if(that.isMenuVisible && !that.isProcessing){
             that.isProcessing = true;
             // Process
             switch(that.params.view){
@@ -11916,6 +11916,21 @@ cm.getConstructor('Module.MobileMenu', function(classConstructor, className, cla
                     that.nodes.menu.style.overflow = 'hidden';
                     break;
             }
+            var time = Date.now();
+            cm.addEvent(that.nodes.menu, 'transitionend', function onTransitionEnd(){
+                cm.removeEvent(that.nodes.menu, 'transitionend', onTransitionEnd);
+                that.nodes.menu.style.display = 'none';
+                switch(that.params.view){
+                    case 'fullscreen':
+                    case 'sidebar-right':
+                    case 'sidebar-left':
+                        cm.appendChild(that.nodes.menu, that.nodes.container);
+                        break;
+                }
+                that.isMenuVisible = false;
+                that.isProcessing = false;
+                that.triggerEvent('onHide');
+            });
             cm.onSchedule(function(){
                 cm.replaceClass(that.nodes.container, 'is-show', 'is-hide');
                 cm.replaceClass(that.nodes.menu, 'is-show', 'is-hide');
@@ -11925,20 +11940,6 @@ cm.getConstructor('Module.MobileMenu', function(classConstructor, className, cla
                         that.nodes.menu.style.height = '0px';
                         break;
                 }
-                cm.addEvent(that.nodes.menu, 'transitionend', function onTransitionEnd(){
-                    cm.removeEvent(that.nodes.menu, 'transitionend', onTransitionEnd);
-                    that.nodes.menu.style.display = 'none';
-                    switch(that.params.view){
-                        case 'fullscreen':
-                        case 'sidebar-right':
-                        case 'sidebar-left':
-                            cm.appendChild(that.nodes.menu, that.nodes.container);
-                            break;
-                    }
-                    that.isVisible = false;
-                    that.isProcessing = false;
-                    that.triggerEvent('onHide');
-                });
             });
         }
     };
@@ -12033,11 +12034,11 @@ function(params){
         // Process Tabset
         cm.getConstructor('Com.TabsetHelper', function(classConstructor, className){
             that.components['tabset'] = new classConstructor(that.params[className])
-                .addEvent('onTabHide', function(tabset, item){
+                .addEvent('onTabHideEnd', function(tabset, item){
                     that.triggerEvent('onTabHide', item);
                 })
-                .addEvent('onTabShowStart', function(tabset, item){
-                    // If not in editing and tab does not contains any blocks, do not show it
+                .addEvent('onTabChangeStart', function(tabset, item){
+                    // If not in editing and tab does not contain any blocks, do not show it
                     if(!that.params['showEmptyTab'] && !that.isEditing && that.components['tabset'].isTabEmpty(item['id'])){
                         hide(item);
                     }else{
@@ -12056,7 +12057,7 @@ function(params){
                         that.nodes['content-list'].style.overflow = 'visible';
                     }, that.params['duration']);
                 })
-                .addEvent('onTabShow', function(tabset, item){
+                .addEvent('onTabShowEnd', function(tabset, item){
                     that.nodes['content-list'].style.height = item['tab']['container'].offsetHeight + 'px';
                     that.nodes['menu-label'].innerHTML = item['title'];
                     that.triggerEvent('onTabShow', item);
@@ -12095,10 +12096,10 @@ function(params){
     var processTabs = function(){
         that.tabs = that.components['tabset'].getTabs();
         cm.forEach(that.tabs, function(item){
-            cm.addEvent(item['label']['link'], 'click', function(e){
+            cm.click.add(item['label']['link'], function(e){
                 if(
-                    that.isEditing
-                    || (that.params['event'] === 'click' && that.components['tabset'].get() !== item['id'])
+                    that.isEditing ||
+                    (that.params['event'] === 'click' && that.components['tabset'].get() !== item['id'])
                 ){
                     cm.preventDefault(e);
                 }
@@ -12185,7 +12186,7 @@ function(params){
     };
 
     var show = function(item){
-        item = that.components['tabset'].getCurrentTab() || item;
+        item = item || that.components['tabset'].getCurrentTab();
         if(item && (that.params['showEmptyTab'] || that.isEditing || !that.components['tabset'].isTabEmpty(item['id']))){
             // Set position
             that.redraw();

@@ -88,11 +88,11 @@ function(params){
         // Process Tabset
         cm.getConstructor('Com.TabsetHelper', function(classConstructor, className){
             that.components['tabset'] = new classConstructor(that.params[className])
-                .addEvent('onTabHide', function(tabset, item){
+                .addEvent('onTabHideEnd', function(tabset, item){
                     that.triggerEvent('onTabHide', item);
                 })
-                .addEvent('onTabShowStart', function(tabset, item){
-                    // If not in editing and tab does not contains any blocks, do not show it
+                .addEvent('onTabChangeStart', function(tabset, item){
+                    // If not in editing and tab does not contain any blocks, do not show it
                     if(!that.params['showEmptyTab'] && !that.isEditing && that.components['tabset'].isTabEmpty(item['id'])){
                         hide(item);
                     }else{
@@ -111,7 +111,7 @@ function(params){
                         that.nodes['content-list'].style.overflow = 'visible';
                     }, that.params['duration']);
                 })
-                .addEvent('onTabShow', function(tabset, item){
+                .addEvent('onTabShowEnd', function(tabset, item){
                     that.nodes['content-list'].style.height = item['tab']['container'].offsetHeight + 'px';
                     that.nodes['menu-label'].innerHTML = item['title'];
                     that.triggerEvent('onTabShow', item);
@@ -150,10 +150,10 @@ function(params){
     var processTabs = function(){
         that.tabs = that.components['tabset'].getTabs();
         cm.forEach(that.tabs, function(item){
-            cm.addEvent(item['label']['link'], 'click', function(e){
+            cm.click.add(item['label']['link'], function(e){
                 if(
-                    that.isEditing
-                    || (that.params['event'] === 'click' && that.components['tabset'].get() !== item['id'])
+                    that.isEditing ||
+                    (that.params['event'] === 'click' && that.components['tabset'].get() !== item['id'])
                 ){
                     cm.preventDefault(e);
                 }
@@ -240,7 +240,7 @@ function(params){
     };
 
     var show = function(item){
-        item = that.components['tabset'].getCurrentTab() || item;
+        item = item || that.components['tabset'].getCurrentTab();
         if(item && (that.params['showEmptyTab'] || that.isEditing || !that.components['tabset'].isTabEmpty(item['id']))){
             // Set position
             that.redraw();

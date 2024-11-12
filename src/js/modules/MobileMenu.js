@@ -19,7 +19,7 @@ cm.getConstructor('Module.MobileMenu', function(classConstructor, className, cla
     classProto.onConstructStart = function(){
         var that = this;
         // Variables
-        that.isVisible = false;
+        that.isMenuVisible = false;
         that.isProcessing = false;
         // Nodes
         that.nodes = {
@@ -43,14 +43,14 @@ cm.getConstructor('Module.MobileMenu', function(classConstructor, className, cla
         cm.addClass(that.nodes.menu, ['view', that.params.view].join('--'));
         cm.addClass(that.nodes.menu, 'is-hide');
         // Events
-        cm.addEvent(that.nodes.toggle, 'click', that.toggleHandler);
-        cm.addEvent(that.nodes.close, 'click', that.toggleHandler);
+        cm.click.add(that.nodes.toggle, that.toggleHandler);
+        cm.click.add(that.nodes.close, that.toggleHandler);
         cm.addEvent(that.nodes.menu, 'click', that.toggleMenuHandler);
     };
 
     classProto.toggle = function(){
         var that = this;
-        if(that.isVisible){
+        if(that.isMenuVisible){
             that.hide();
         }else{
             that.show();
@@ -67,7 +67,7 @@ cm.getConstructor('Module.MobileMenu', function(classConstructor, className, cla
 
     classProto.show = function(){
         var that = this;
-        if(!that.isVisible && !that.isProcessing){
+        if(!that.isMenuVisible && !that.isProcessing){
             that.isProcessing = true;
             // Start
             switch(that.params.view){
@@ -86,6 +86,19 @@ cm.getConstructor('Module.MobileMenu', function(classConstructor, className, cla
                     that.nodes.menu.style.overflow = 'hidden';
                     break;
             }
+            cm.addEvent(that.nodes.menu, 'transitionend', function onTransitionEnd(){
+                cm.removeEvent(that.nodes.menu, 'transitionend', onTransitionEnd);
+                switch(that.params.view){
+                    case 'dropdown':
+                    case 'dropdown-overlap':
+                        that.nodes.menu.style.height = 'auto';
+                        that.nodes.menu.style.overflow = 'visible';
+                        break;
+                }
+                that.isMenuVisible = true;
+                that.isProcessing = false;
+                that.triggerEvent('onShow');
+            });
             cm.onSchedule(function(){
                 cm.replaceClass(that.nodes.container, 'is-hide', 'is-show');
                 cm.replaceClass(that.nodes.menu, 'is-hide', 'is-show');
@@ -95,26 +108,13 @@ cm.getConstructor('Module.MobileMenu', function(classConstructor, className, cla
                         that.nodes.menu.style.height = that.nodes.menu.scrollHeight + 'px';
                         break;
                 }
-                cm.addEvent(that.nodes.menu, 'transitionend', function onTransitionEnd(){
-                    cm.removeEvent(that.nodes.menu, 'transitionend', onTransitionEnd);
-                    switch(that.params.view){
-                        case 'dropdown':
-                        case 'dropdown-overlap':
-                            that.nodes.menu.style.height = 'auto';
-                            that.nodes.menu.style.overflow = 'visible';
-                            break;
-                    }
-                    that.isVisible = true;
-                    that.isProcessing = false;
-                    that.triggerEvent('onShow');
-                });
             });
         }
     };
 
     classProto.hide = function(){
         var that = this;
-        if(that.isVisible && !that.isProcessing){
+        if(that.isMenuVisible && !that.isProcessing){
             that.isProcessing = true;
             // Process
             switch(that.params.view){
@@ -124,6 +124,21 @@ cm.getConstructor('Module.MobileMenu', function(classConstructor, className, cla
                     that.nodes.menu.style.overflow = 'hidden';
                     break;
             }
+            var time = Date.now();
+            cm.addEvent(that.nodes.menu, 'transitionend', function onTransitionEnd(){
+                cm.removeEvent(that.nodes.menu, 'transitionend', onTransitionEnd);
+                that.nodes.menu.style.display = 'none';
+                switch(that.params.view){
+                    case 'fullscreen':
+                    case 'sidebar-right':
+                    case 'sidebar-left':
+                        cm.appendChild(that.nodes.menu, that.nodes.container);
+                        break;
+                }
+                that.isMenuVisible = false;
+                that.isProcessing = false;
+                that.triggerEvent('onHide');
+            });
             cm.onSchedule(function(){
                 cm.replaceClass(that.nodes.container, 'is-show', 'is-hide');
                 cm.replaceClass(that.nodes.menu, 'is-show', 'is-hide');
@@ -133,20 +148,6 @@ cm.getConstructor('Module.MobileMenu', function(classConstructor, className, cla
                         that.nodes.menu.style.height = '0px';
                         break;
                 }
-                cm.addEvent(that.nodes.menu, 'transitionend', function onTransitionEnd(){
-                    cm.removeEvent(that.nodes.menu, 'transitionend', onTransitionEnd);
-                    that.nodes.menu.style.display = 'none';
-                    switch(that.params.view){
-                        case 'fullscreen':
-                        case 'sidebar-right':
-                        case 'sidebar-left':
-                            cm.appendChild(that.nodes.menu, that.nodes.container);
-                            break;
-                    }
-                    that.isVisible = false;
-                    that.isProcessing = false;
-                    that.triggerEvent('onHide');
-                });
             });
         }
     };
