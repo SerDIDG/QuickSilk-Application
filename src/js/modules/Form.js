@@ -184,7 +184,7 @@ cm.getConstructor('Mod.Form', function(classConstructor, className, classProto, 
 
     classProto.keypressEvent = function(e){
         var that = this;
-        if(cm.isFormInputFocused() && cm.isKey(e, 'enter')){
+        if(cm.isFormInputFocused() && e.code === 'Enter'){
             cm.preventDefault(e);
         }
     };

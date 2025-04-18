@@ -1,11 +1,11 @@
-/*! ************ QuickSilk-Application v3.37.4 (2024-11-12 15:52) ************ */
+/*! ************ QuickSilk-Application v3.37.5 (2025-04-18 08:24) ************ */
 
 // /* ************************************************ */
 // /* ******* QUICKSILK: COMMON ******* */
 // /* ************************************************ */
 
 var App = {
-    '_version' : '3.37.4',
+    '_version' : '3.37.5',
     '_assetsUrl' : [window.location.protocol, window.location.hostname].join('//'),
     'Elements': {},
     'Nodes' : {},
@@ -6594,14 +6594,14 @@ cm.define('App.Panel', {
         'get' : {                                       // Get dialog content ajax
             'type' : 'json',
             'method' : 'GET',
-            'url' : '',                                 // Request URL. Variables: %baseUrl%, %callback%.
-            'params' : ''                               // Params object. Variables: %baseUrl%, %callback%.
+            'url' : '',                                 // Request URL. Variables: %baseUrl%, %port%, %callback%.
+            'params' : ''                               // Params object. Variables: %baseUrl%, %port%, %callback%.
         },
         'post' : {                                      // Submit form ajax
             'type' : 'json',
             'method' : 'POST',
-            'url' : '',                                 // Request URL. Variables: %baseUrl%, %callback%.
-            'params' : ''                               // Params object. Variables: %baseUrl%, %callback%.
+            'url' : '',                                 // Request URL. Variables: %baseUrl%, %port%, %callback%.
+            'params' : ''                               // Params object. Variables: %baseUrl%, %port%, %callback%.
         },
         'Com.Request' : {
             'wrapContent' : true,
@@ -7090,7 +7090,7 @@ cm.getConstructor('App.Panel', function(classConstructor, className, classProto)
 
     classProto.windowKeydown = function(e){
         var that = this;
-        if(cm.isKeyCode(e.keyCode, 'escape')){
+        if(e.code === 'Escape'){
             that.close();
         }
         return that;
@@ -11238,7 +11238,7 @@ cm.getConstructor('Mod.Form', function(classConstructor, className, classProto, 
 
     classProto.keypressEvent = function(e){
         var that = this;
-        if(cm.isFormInputFocused() && cm.isKey(e, 'enter')){
+        if(cm.isFormInputFocused() && e.code === 'Enter'){
             cm.preventDefault(e);
         }
     };
@@ -11329,15 +11329,11 @@ cm.define('Module.LogoCarousel', {
         'stopOnHover' : true
     }
 },
-function(params){
-    var that = this;
-    // Call parent class construct
-    App.AbstractModule.apply(that, arguments);
+function(){
+    App.AbstractModule.apply(this, arguments);
 });
 
-cm.getConstructor('Module.LogoCarousel', function(classConstructor, className, classProto){
-    var _inherit = classProto._inherit;
-
+cm.getConstructor('Module.LogoCarousel', function(classConstructor, className, classProto, classInherit){
     classProto.construct = function(){
         var that = this;
         // Variables
@@ -11363,7 +11359,7 @@ cm.getConstructor('Module.LogoCarousel', function(classConstructor, className, c
         that.addEvent('onDestructProcess', that.onDestructProcessHandler);
         that.addEvent('onRedraw', that.onRedrawHandler);
         // Call parent method
-        _inherit.prototype.construct.apply(that, arguments);
+        classInherit.prototype.construct.apply(that, arguments);
         return that;
     };
 
@@ -11400,7 +11396,7 @@ cm.getConstructor('Module.LogoCarousel', function(classConstructor, className, c
     classProto.render = function(){
         var that = this;
         // Call parent method
-        _inherit.prototype.render.apply(that, arguments);
+        classInherit.prototype.render.apply(that, arguments);
         // Start
         that.redraw();
         return that;
@@ -11409,7 +11405,7 @@ cm.getConstructor('Module.LogoCarousel', function(classConstructor, className, c
     classProto.renderViewModel = function(){
         var that = this;
         // Call parent method
-        _inherit.prototype.renderViewModel.apply(that, arguments);
+        classInherit.prototype.renderViewModel.apply(that, arguments);
         // Items
         that.items = cm.clone(that.nodes['items']);
         that.itemsLength = that.items.length;

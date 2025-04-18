@@ -53,14 +53,14 @@ cm.define('App.Panel', {
         'get' : {                                       // Get dialog content ajax
             'type' : 'json',
             'method' : 'GET',
-            'url' : '',                                 // Request URL. Variables: %baseUrl%, %callback%.
-            'params' : ''                               // Params object. Variables: %baseUrl%, %callback%.
+            'url' : '',                                 // Request URL. Variables: %baseUrl%, %port%, %callback%.
+            'params' : ''                               // Params object. Variables: %baseUrl%, %port%, %callback%.
         },
         'post' : {                                      // Submit form ajax
             'type' : 'json',
             'method' : 'POST',
-            'url' : '',                                 // Request URL. Variables: %baseUrl%, %callback%.
-            'params' : ''                               // Params object. Variables: %baseUrl%, %callback%.
+            'url' : '',                                 // Request URL. Variables: %baseUrl%, %port%, %callback%.
+            'params' : ''                               // Params object. Variables: %baseUrl%, %port%, %callback%.
         },
         'Com.Request' : {
             'wrapContent' : true,
@@ -549,7 +549,7 @@ cm.getConstructor('App.Panel', function(classConstructor, className, classProto)
 
     classProto.windowKeydown = function(e){
         var that = this;
-        if(cm.isKeyCode(e.keyCode, 'escape')){
+        if(e.code === 'Escape'){
             that.close();
         }
         return that;

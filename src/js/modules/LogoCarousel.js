@@ -10,15 +10,11 @@ cm.define('Module.LogoCarousel', {
         'stopOnHover' : true
     }
 },
-function(params){
-    var that = this;
-    // Call parent class construct
-    App.AbstractModule.apply(that, arguments);
+function(){
+    App.AbstractModule.apply(this, arguments);
 });
 
-cm.getConstructor('Module.LogoCarousel', function(classConstructor, className, classProto){
-    var _inherit = classProto._inherit;
-
+cm.getConstructor('Module.LogoCarousel', function(classConstructor, className, classProto, classInherit){
     classProto.construct = function(){
         var that = this;
         // Variables
@@ -44,7 +40,7 @@ cm.getConstructor('Module.LogoCarousel', function(classConstructor, className, c
         that.addEvent('onDestructProcess', that.onDestructProcessHandler);
         that.addEvent('onRedraw', that.onRedrawHandler);
         // Call parent method
-        _inherit.prototype.construct.apply(that, arguments);
+        classInherit.prototype.construct.apply(that, arguments);
         return that;
     };
 
@@ -81,7 +77,7 @@ cm.getConstructor('Module.LogoCarousel', function(classConstructor, className, c
     classProto.render = function(){
         var that = this;
         // Call parent method
-        _inherit.prototype.render.apply(that, arguments);
+        classInherit.prototype.render.apply(that, arguments);
         // Start
         that.redraw();
         return that;
@@ -90,7 +86,7 @@ cm.getConstructor('Module.LogoCarousel', function(classConstructor, className, c
     classProto.renderViewModel = function(){
         var that = this;
         // Call parent method
-        _inherit.prototype.renderViewModel.apply(that, arguments);
+        classInherit.prototype.renderViewModel.apply(that, arguments);
         // Items
         that.items = cm.clone(that.nodes['items']);
         that.itemsLength = that.items.length;
