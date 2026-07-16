@@ -1,11 +1,11 @@
-/*! ************ QuickSilk-Application v3.38.0 (2026-07-16 22:25) ************ */
+/*! ************ QuickSilk-Application v3.38.1 (2026-07-16 23:17) ************ */
 
 // /* ************************************************ */
 // /* ******* QUICKSILK: COMMON ******* */
 // /* ************************************************ */
 
 var App = {
-    '_version' : '3.38.0',
+    '_version' : '3.38.1',
     '_assetsUrl' : [window.location.protocol, window.location.hostname].join('//'),
     'Elements': {},
     'Nodes' : {},
@@ -8777,11 +8777,11 @@ function(params) {
         const rules = [];
 
         // Header styles
-        rules.push(`--header-height: ${that.offsets.header}px`);
-        rules.push(`--header2-height: ${that.offsets.header2}px`);
+        rules.push(`--header-height: ${that.isEditing ? 0 : that.offsets.header}px`);
+        rules.push(`--header2-height: ${that.isEditing ? 0 : that.offsets.header2}px`);
 
         // Footer styles
-        rules.push(`--footer-height: ${that.offsets.footer}px`);
+        rules.push(`--footer-height: ${that.isEditing ? 0 : that.offsets.footer}px`);
 
         // Replace stylesheet
         if (!that.nodes.stylesheet) {

@@ -237,11 +237,11 @@ function(params) {
         const rules = [];
 
         // Header styles
-        rules.push(`--header-height: ${that.offsets.header}px`);
-        rules.push(`--header2-height: ${that.offsets.header2}px`);
+        rules.push(`--header-height: ${that.isEditing ? 0 : that.offsets.header}px`);
+        rules.push(`--header2-height: ${that.isEditing ? 0 : that.offsets.header2}px`);
 
         // Footer styles
-        rules.push(`--footer-height: ${that.offsets.footer}px`);
+        rules.push(`--footer-height: ${that.isEditing ? 0 : that.offsets.footer}px`);
 
         // Replace stylesheet
         if (!that.nodes.stylesheet) {
