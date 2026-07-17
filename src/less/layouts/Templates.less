@@ -135,6 +135,7 @@
         .info {
             position: static;
             padding: @CmIndent-Medium;
+            min-height: 130px;
             opacity: 1;
 
             > .inner {
@@ -193,7 +194,7 @@
     }
 }
 
-.pt__progressbar {
+.mod__signup__progressbar {
     display: grid;
     grid-template-columns: repeat(5, 1fr);
     gap: 10px;
@@ -203,11 +204,93 @@
 
     span {
         height: 5px;
-        background: #e6e6e6;
+        background: @CmColor-Border;
         border-radius: 99px;
 
         &.active {
-            background: #000; 
+            background: @CmColor-Primary-DarkDefault; 
         }
     }
+}
+
+.mod__step {
+    display: none;
+
+    &.active {
+        display: block;
+    }
+}
+
+.mod__review-list {
+    border: @CmInput-BorderWidth @CmInput-BorderStyle @CmInput-DefaultBorder;
+    padding: @CmIndent-Large;
+    background: #fff;
+    border-radius: @CmBorder-Radius;
+
+    .review-row {
+        display: flex;
+        justify-content: space-between;
+        border-bottom: @CmInput-BorderWidth @CmInput-BorderStyle @CmInput-DefaultBorder;
+        padding: @CmIndent-Small 0;
+        gap: @CmIndent-Medium;
+
+        &:last-child {
+            border-bottom: 0;
+        }
+
+        span {
+            &:first-child {
+                color: @CmFont-Base-Hint-Color;
+            }
+
+            &:last-child {
+                font-weight: 700;
+                text-align: right;
+            }
+        }
+    }
+}
+
+.mod__loading {
+    text-align: center;
+    border: @CmInput-BorderWidth @CmInput-BorderStyle @CmInput-DefaultBorder;
+    padding: @CmIndent-XLarge;
+    border-radius: @CmBorder-Radius;
+}
+
+.mod__loader {
+    width: 54px;
+    height: 54px;
+    border: 4px solid #eee;
+    border-top-color: #000;
+    border-radius: 50%;
+    margin: 0 auto @CmIndent-Medium;
+    animation: spin-loader 1s linear infinite;
+}
+
+@keyframes spin-loader { to { .mx__transform(rotate(360deg)); } }
+
+.mod__loading-list {
+    margin-top: @CmIndent-Medium;
+    text-align: left;
+
+    .loading-row {
+        @padding_calc: (@CmSize-XLarge - @CmFont-Base-LineHeight) / 2;
+        @padding: max(ceil((@padding_calc)), 0px);
+
+        min-height: @CmSize-XLarge;
+        padding: @padding @CmButton-PaddingX;
+        margin: 0 0 @CmIndent-Small;
+        border: @CmInput-BorderWidth @CmInput-BorderStyle @CmInput-DefaultBorder;
+        border-radius: @CmBorder-Radius;
+
+        &:last-child {
+            margin: 0;
+        }
+    }
+}
+
+.success-icon {
+    color: @CmColor-Success-DarkDefault;
+    font-weight: 700;
 }
