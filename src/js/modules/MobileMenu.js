@@ -1,7 +1,9 @@
 cm.define('Module.MobileMenu', {
     extend: 'App.AbstractModule',
     events: [
+        'onShowStart',
         'onShow',
+        'onHideStart',
         'onHide',
     ],
     params: {
@@ -15,7 +17,7 @@ function() {
 
 cm.getConstructor('Module.MobileMenu', function(classConstructor, className, classProto, classInherit) {
     classProto.onConstructStart = function() {
-        var that = this;
+        const that = this;
 
         // Variables
         that.isMenuVisible = false;
@@ -35,7 +37,7 @@ cm.getConstructor('Module.MobileMenu', function(classConstructor, className, cla
     };
 
     classProto.renderViewModel = function() {
-        var that = this;
+        const that = this;
 
         // Call parent method
         classInherit.prototype.renderViewModel.apply(that, arguments);
@@ -53,7 +55,7 @@ cm.getConstructor('Module.MobileMenu', function(classConstructor, className, cla
     };
 
     classProto.toggle = function() {
-        var that = this;
+        const that = this;
         if (that.isMenuVisible) {
             that.hide();
         } else {
@@ -62,15 +64,15 @@ cm.getConstructor('Module.MobileMenu', function(classConstructor, className, cla
     };
 
     classProto.toggleMenu = function(e) {
-        var that = this,
-            target = cm.getEventTarget(e);
+        const that = this;
+        const target = cm.getEventTarget(e);
         if (target === that.nodes.menu) {
             that.toggle();
         }
     };
 
     classProto.show = function() {
-        var that = this;
+        const that = this;
         if (that.isMenuVisible || that.isProcessing) return;
 
         that.isProcessing = true;
@@ -111,6 +113,7 @@ cm.getConstructor('Module.MobileMenu', function(classConstructor, className, cla
         });
 
         cm.onSchedule(function() {
+            that.triggerEvent('onShowStart');
             cm.replaceClass(that.nodes.container, 'is-hide', 'is-show');
             cm.replaceClass(that.nodes.menu, 'is-hide', 'is-show');
             switch (that.params.view) {
@@ -123,7 +126,7 @@ cm.getConstructor('Module.MobileMenu', function(classConstructor, className, cla
     };
 
     classProto.hide = function() {
-        var that = this;
+        const that = this;
         if (!that.isMenuVisible || that.isProcessing) return;
 
         that.isProcessing = true;
@@ -155,6 +158,7 @@ cm.getConstructor('Module.MobileMenu', function(classConstructor, className, cla
         });
 
         cm.onSchedule(function() {
+            that.triggerEvent('onHideStart');
             cm.replaceClass(that.nodes.container, 'is-show', 'is-hide');
             cm.replaceClass(that.nodes.menu, 'is-show', 'is-hide');
             switch (that.params.view) {
