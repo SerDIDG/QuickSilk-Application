@@ -1,10 +1,9 @@
 cm.define('Mod.ElementPassword', {
     'extend' : 'App.AbstractModuleElement',
     'params' : {
-    }
+        'targetController' : 'Com.InputPassword',
+    },
 },
-function(params){
-    var that = this;
-    // Call parent class construct
-    App.AbstractModuleElement.apply(that, arguments);
+function(){
+    App.AbstractModuleElement.apply(this, arguments);
 });

@@ -3,13 +3,11 @@ cm.define('Mod.ElementReCaptcha', {
     'params' : {
         'memorable' : false,
         'validate' : false,
-        'sitekey' : null
-    }
+        'sitekey' : null,
+    },
 },
-function(params){
-    var that = this;
-    // Call parent class construct
-    App.AbstractModuleElement.apply(that, arguments);
+function(){
+    App.AbstractModuleElement.apply(this, arguments);
 });
 
 cm.getConstructor('Mod.ElementReCaptcha', function(classConstructor, className, classProto, classInherit){

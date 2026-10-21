@@ -7,8 +7,6 @@ cm.define('App.ImageInput', {
         'fileUploaderConstructor' : 'App.FileUploaderContainer'
     }
 },
-function(params){
-    var that = this;
-    // Call parent class construct
-    Com.ImageInput.apply(that, arguments);
+function(){
+    Com.ImageInput.apply(this, arguments);
 });

@@ -19,3 +19,10 @@ var Module = {};
 
 cm._variables['%AppVersion%'] = 'App._version';
 cm._variables['%AppAssetsUrl%'] = 'App._assetsUrl';
+
+/* ******* COMPONENTS ******* */
+
+cm.setParams('Com.InputPassword', {
+    iconVisible: ['icon', 'medium', 'linked', 'background-size--field-half', 'svg__eye-border'],
+    iconHidden: ['icon', 'medium', 'linked', 'background-size--field-half', 'svg__eye-off-border'],
+});

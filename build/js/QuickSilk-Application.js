@@ -1,11 +1,11 @@
-/*! ************ QuickSilk-Application v3.39.1 (2026-08-03 19:44) ************ */
+/*! ************ QuickSilk-Application v3.40.0 (2026-10-21 23:36) ************ */
 
 // /* ************************************************ */
 // /* ******* QUICKSILK: COMMON ******* */
 // /* ************************************************ */
 
 var App = {
-    '_version' : '3.39.1',
+    '_version' : '3.40.0',
     '_assetsUrl' : [window.location.protocol, window.location.hostname].join('//'),
     'Elements': {},
     'Nodes' : {},
@@ -20,6 +20,13 @@ var Module = {};
 
 cm._variables['%AppVersion%'] = 'App._version';
 cm._variables['%AppAssetsUrl%'] = 'App._assetsUrl';
+
+/* ******* COMPONENTS ******* */
+
+cm.setParams('Com.InputPassword', {
+    iconVisible: ['icon', 'medium', 'linked', 'background-size--field-half', 'svg__eye-border'],
+    iconHidden: ['icon', 'medium', 'linked', 'background-size--field-half', 'svg__eye-off-border'],
+});
 cm.define('App.AbstractModule', {
     'extend': 'Com.AbstractController',
     'events': [
@@ -5666,10 +5673,8 @@ cm.define('App.ImageInput', {
         'fileUploaderConstructor' : 'App.FileUploaderContainer'
     }
 },
-function(params){
-    var that = this;
-    // Call parent class construct
-    Com.ImageInput.apply(that, arguments);
+function(){
+    Com.ImageInput.apply(this, arguments);
 });
 cm.define('App.LivePreviewContent', {
     'extend' : 'Com.AbstractController',
@@ -10473,12 +10478,11 @@ cm.getConstructor('Mod.ElementMultiField', function(classConstructor, className,
 cm.define('Mod.ElementPassword', {
     'extend' : 'App.AbstractModuleElement',
     'params' : {
-    }
+        'targetController' : 'Com.InputPassword',
+    },
 },
-function(params){
-    var that = this;
-    // Call parent class construct
-    App.AbstractModuleElement.apply(that, arguments);
+function(){
+    App.AbstractModuleElement.apply(this, arguments);
 });
 cm.define('Mod.ElementRadioButton', {
     'extend' : 'App.AbstractModuleElement',
@@ -10486,10 +10490,8 @@ cm.define('Mod.ElementRadioButton', {
         'inputEvent' : 'change'
     }
 },
-function(params){
-    var that = this;
-    // Call parent class construct
-    App.AbstractModuleElement.apply(that, arguments);
+function(){
+    App.AbstractModuleElement.apply(this, arguments);
 });
 
 cm.getConstructor('Mod.ElementRadioButton', function(classConstructor, className, classProto, classInherit){
@@ -10516,13 +10518,11 @@ cm.define('Mod.ElementReCaptcha', {
     'params' : {
         'memorable' : false,
         'validate' : false,
-        'sitekey' : null
-    }
+        'sitekey' : null,
+    },
 },
-function(params){
-    var that = this;
-    // Call parent class construct
-    App.AbstractModuleElement.apply(that, arguments);
+function(){
+    App.AbstractModuleElement.apply(this, arguments);
 });
 
 cm.getConstructor('Mod.ElementReCaptcha', function(classConstructor, className, classProto, classInherit){
@@ -10588,45 +10588,35 @@ cm.getConstructor('Mod.ElementReCaptcha', function(classConstructor, className, 
 cm.define('Mod.ElementSelect', {
     'extend' : 'App.AbstractModuleElement',
     'params' : {
-        'targetController' : 'Com.Select'
-    }
+        'targetController' : 'Com.Select',
+    },
 },
-function(params){
-    var that = this;
-    // Call parent class construct
-    App.AbstractModuleElement.apply(that, arguments);
+function(){
+    App.AbstractModuleElement.apply(this, arguments);
 });
 cm.define('Mod.ElementText', {
     'extend' : 'App.AbstractModuleElement',
-    'params' : {
-    }
+    'params' : {},
 },
-function(params){
-    var that = this;
-    // Call parent class construct
-    App.AbstractModuleElement.apply(that, arguments);
+function(){
+    App.AbstractModuleElement.apply(this, arguments);
 });
 cm.define('Mod.ElementTextArea', {
     'extend' : 'App.AbstractModuleElement',
-    'params' : {
-    }
+    'params' : {},
 },
-function(params){
-    var that = this;
-    // Call parent class construct
-    App.AbstractModuleElement.apply(that, arguments);
+function(){
+    App.AbstractModuleElement.apply(this, arguments);
 });
 cm.define('Mod.ElementTimePicker', {
     'extend' : 'App.AbstractModuleElement',
     'params' : {
         'targetController' : 'Com.TimeSelect',
-        'pattern' : /^(00-00-00)$/
-    }
+        'pattern' : /^(00-00-00)$/,
+    },
 },
-function(params){
-    var that = this;
-    // Call parent class construct
-    App.AbstractModuleElement.apply(that, arguments);
+function(){
+    App.AbstractModuleElement.apply(this, arguments);
 });
 cm.define('Mod.ElementWizard', {
     'extend' : 'App.AbstractModule',

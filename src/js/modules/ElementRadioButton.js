@@ -4,10 +4,8 @@ cm.define('Mod.ElementRadioButton', {
         'inputEvent' : 'change'
     }
 },
-function(params){
-    var that = this;
-    // Call parent class construct
-    App.AbstractModuleElement.apply(that, arguments);
+function(){
+    App.AbstractModuleElement.apply(this, arguments);
 });
 
 cm.getConstructor('Mod.ElementRadioButton', function(classConstructor, className, classProto, classInherit){
